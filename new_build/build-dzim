@@ -1,0 +1,17 @@
+#!/bin/sh
+
+VERSION="1.2.9_beta"
+rm -rf php && cp ../dzim/php   ./ -R
+mkdir release
+
+chmod +x build-basic
+./build-basic sc utf8
+chmod -x build-basic
+
+cd release
+zip -r dzim_$VERSION.zip webim
+mv *.zip ../
+cd .. && rm -rf release && rm -rf php
+
+rm -rf php
+

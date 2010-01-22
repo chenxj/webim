@@ -1,0 +1,46 @@
+#!/bin/sh
+rm -rf ./webim
+HOME=$PWD
+SRC=../home
+TARGET=./webim
+mkdir $TARGET
+
+cd $SRC/static_src/webapi/ && make
+cd $HOME
+cd $SRC   && make  static
+cd $HOME
+
+
+echo $SRC
+echo $TARGET
+
+cp $SRC/* $TARGET  -R
+
+java -jar yuicompressor-2.4.2.jar $TARGET/static/webim.css > $TARGET/static/webim.css
+java -jar yuicompressor-2.4.2.jar $TARGET/static/themes/redmond/ui.theme.css > $TARGET/static/themes/redmond/ui.theme.css
+
+echo "buiding 1"
+native2ascii -encoding utf-8 $TARGET/static/i18n/webim-en.js > temp.js
+java -jar yuicompressor-2.4.2.jar temp.js > $TARGET/static/i18n/webim-en.js
+
+echo "buiding 2"
+native2ascii -encoding utf-8 $TARGET/static/i18n/webim-zh-CN.js > temp.js
+java -jar yuicompressor-2.4.2.jar temp.js > $TARGET/static/i18n/webim-zh-CN.js
+
+
+echo "buiding 3"
+native2ascii -encoding utf-8 $TARGET/static/i18n/webim-zh-TW.js > temp.js
+java -jar yuicompressor-2.4.2.jar temp.js > $TARGET/static/i18n/webim-zh-TW.js
+
+echo "buiding 4"
+native2ascii -encoding utf-8 $TARGET/static/webim.all.js > temp.js
+java -jar yuicompressor-2.4.2.jar temp.js > $TARGET/static/webim.all.js
+
+
+
+rm temp.js
+cd $TARGET
+rm -rf static_src
+find . -type d -name ".svn" | xargs rm -rf
+
+

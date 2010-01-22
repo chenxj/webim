@@ -1,0 +1,26 @@
+.webim-menu {
+        padding:1em .5em;
+        overflow-x: hidden;
+        overflow-y: auto;
+	max-height: 300px;
+}
+* html .webim-menu{
+	height: expression(this.offsetHeight > 300 ? 300+'px' : 'auto');
+}
+.webim-menu .webim-menu-empty{
+
+}
+.webim-menu ul{
+        list-style: none;
+}
+.webim-menu ul li{
+        overflow: hidden;
+        padding: .4em 0;
+}
+.webim-menu ul li *{
+        cursor: pointer;
+        float: left;
+}
+.webim-menu ul li span{
+        padding: 0 .4em;
+}

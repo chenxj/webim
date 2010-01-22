@@ -1,0 +1,19 @@
+.webim-notification {
+        padding:1em .5em;
+        overflow-x: hidden;
+        overflow-y: auto;
+	max-height: 300px;
+}
+* html .webim-menu{
+	height: expression(this.offsetHeight > 300 ? 300+'px' : 'auto');
+}
+.webim-notification .webim-notification-empty{
+
+}
+.webim-notification ul{
+        list-style: none;
+}
+.webim-notification ul li{
+        overflow: hidden;
+        padding:.1em 0;
+}

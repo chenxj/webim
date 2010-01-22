@@ -4,13 +4,13 @@
 
 CREATE TABLE  webim_histories (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `send` tinyint(1) DEFAULT NULL,
-  `type` varchar(20) DEFAULT NULL,
+  `send` tinyint(1) ,
+  `type` varchar(20) ,
   `to` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `from` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `body` text,
-  `style` varchar(150) DEFAULT NULL,
-  `timestamp` double DEFAULT NULL,
+  `style` varchar(150) ,
+  `timestamp` double ,
   `todel` tinyint(1) NOT NULL DEFAULT '0',
   `fromdel` tinyint(1) NOT NULL DEFAULT '0',
   `uid` int(11) unsigned NOT NULL,

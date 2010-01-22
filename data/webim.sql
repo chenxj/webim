@@ -2,7 +2,7 @@
 -- webim database schema
 --
 
-CREATE TABLE  `webim_histories` (
+CREATE TABLE  webim_histories (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `send` tinyint(1) DEFAULT NULL,
   `type` varchar(20) DEFAULT NULL,
@@ -14,19 +14,19 @@ CREATE TABLE  `webim_histories` (
   `todel` tinyint(1) NOT NULL DEFAULT '0',
   `fromdel` tinyint(1) NOT NULL DEFAULT '0',
   `uid` int(11) unsigned NOT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
+  PRIMARY KEY (`id`) ,
   KEY `todel` (`todel`),
   KEY `fromdel` (`fromdel`),
   KEY `timestamp` (`timestamp`),
   KEY `to` (`to`),
   KEY `from` (`from`),
   KEY `send` (`send`)
-) ENGINE=MyISAM AUTO_INCREMENT=1000372 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM ;
 
-CREATE TABLE  `webim_setting` (
+CREATE TABLE  webim_setting (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `web` blob,
   `air` blob,
   `uid` mediumint(8) unsigned NOT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`) 
+) ENGINE=MyISAM ;

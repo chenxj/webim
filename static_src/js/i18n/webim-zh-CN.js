@@ -68,7 +68,8 @@ webim.ui.i18n.store('zh-CN',{
         "collapse": "收缩",
         "expand": "展开",
 	"friend":"好友",
-	"stranger":"陌生人"
+	"stranger":"陌生人",
+	"room":"群组"
 });
 webim.ui.i18n.store('zh-CN',{
 	"doing": "记录",

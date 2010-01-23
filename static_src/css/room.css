@@ -100,3 +100,7 @@
         display:none;
         position:absolute;
 }
+.webim-icon-room{
+	width:2em;
+	background-image:url(../images/icons/room.gif);
+}

@@ -31,9 +31,9 @@ app("room",{
 			title: i18n("room"),
 			icon: "room",
 			sticky: false,
-			onlyIcon: true,
 			isMinimize: true
 		}, "notification");
+		ui.window && ui.window.title(i18n("room"));
 
 		room.bind("join",function(info){
 			updateRoom(info);

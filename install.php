@@ -36,7 +36,8 @@ $sqlfile = S_ROOT.'./webim/data/webim.sql';
 if(!file_exists($sqlfile)) {
 	show_msg('./webim/data/webim.sql 数据库初始化文件不存在，请检查你的安装文件', 999);
 }
-$configfile = S_ROOT.'./config.php';
+$basic_configfile = S_ROOT.'./config.php';
+$webim_configfile = S_ROOT.'./webim/config.php';
 
 //variables
 $step = empty($_GET['step'])?0:intval($_GET['step']);
@@ -44,8 +45,13 @@ $action = empty($_GET['action'])?'':trim($_GET['action']);
 $nowarr = array('','','','');
 
 //检查config是否可写
-if(!@$fp = fopen($configfile, 'a')) {
-	show_msg("文件 $configfile 读写权限设置错误，请设置为可写，再执行安装程序");
+if(!@$fp = fopen($webim_configfile, 'a')) {
+	show_msg("文件 $webim_configfile 读写权限设置错误，请设置为可写，再执行安装程序");
+} else {
+	@fclose($fp);
+}
+if(!@$fp = fopen($basic_configfile, 'a')) {
+	show_msg("文件 $baisc_configfile 读写权限设置错误，请设置为可写，再执行安装程序");
 } else {
 	@fclose($fp);
 }
@@ -62,7 +68,8 @@ dbconnect();
 	if(empty($domain) || empty($apikey)) {
 		show_msg('网站域名和API KEY不能为空');
 	} else {
-		writeconfig($configfile,$domain,$apikey,$theme,$charset);
+		write_basic_config($basic_configfile,$domain,$apikey,$theme,$charset);
+        write_webim_config($webim_configfile);
 		//import webim/data/webim.sql
 	$newsql = file_get_contents($sqlfile);
 
@@ -208,17 +215,17 @@ END;
 
 	//import webim/data/webim.sql
 	$newsql = sreadfile($sqlfile);
-
+    
 	if($_SC['tablepre'] != 'uchome_') $newsql = str_replace('uchome_', $_SC['tablepre'], $newsql);
-
 	$tables = $sqls = array();
 	if($newsql) {
 		preg_match_all("/(CREATE TABLE ([a-z0-9\_\-`]+).+?\s*)(TYPE|ENGINE)+\=/is", $newsql, $mathes);
 		$sqls = $mathes[1];
 		$tables = $mathes[2];
+        var_dump($tables);
 	}
 	if(empty($tables)) {
-		show_msg("安装SQL语句获取失败，请确认SQL文件 $sqlfile 是否存在");
+		show_msg("安装SQL语句获取失败  ， 请确认SQL文件 $sqlfile 是否存在");
 	}
 
 	$heaptype = $_SGLOBAL['db']->version()>'4.1'?" ENGINE=MEMORY".(empty($_SC['dbcharset'])?'':" DEFAULT CHARSET=$_SC[dbcharset]" ):" TYPE=HEAP";
@@ -335,7 +342,7 @@ function show_header() {
 	<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=$_SC[charset]" />
-	<title> UCIM1.2.5透明幻想(Transparent Fantasy)版本程序安装 </title>
+	<title> UCIM2.0透明幻想(Transparent Fantasy)版本程序安装 </title>
 	<style type="text/css">
 	* {font-size:12px; font-family: Verdana, Arial, Helvetica, sans-serif; line-height: 1.5em; word-break: break-all; }
 	body { text-align:center; margin: 0; padding: 0; background: #F5FBFF; }
@@ -383,7 +390,7 @@ function show_header() {
 	</head>
 	<body id="append_parent">
 	<div class="bodydiv">
-	<h1>UCIM1.2.5版本程序安装 </h1>
+	<h1>UCIM2.0版本程序安装 </h1>
 	<div style="width:90%;margin:0 auto;">
 	<table id="menu">
 	<tr>
@@ -455,7 +462,7 @@ function insertconfig($s, $find, $replace) {
 	return $s;
 }
 //?><?php
-function writeconfig($file,$domain,$apikey,$theme,$charset) {
+function write_webim_config($file,$domain,$apikey,$theme,$charset) {
 $fp = fopen($file, 'r');
 		$configfile = fread($fp, filesize($file));
 		$configfile = trim($configfile);
@@ -477,6 +484,21 @@ $fp = fopen($file, 'r');
 			$configfile = insertconfig($configfile, '/\$_IMC\["groupchat"\] =\s*.*?;/i', '$_IMC["groupchat"] = true;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["emot"\] =\s*".*?";/i', '$_IMC["emot"] = "default";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["opacity"\] =\s*.*?;/i', '$_IMC["opacity"] = 80;');
+		$fp = fopen($file, 'w');
+		if(!($fp = @fopen($file, 'w'))) {
+			show_msg('请确认文件 webim/config.php 可写');
+		}
+		@fwrite($fp, trim($configfile));
+		@fclose($fp);
+	}
+function write_basic_config($file) {
+$fp = fopen($file, 'r');
+		$configfile = fread($fp, filesize($file));
+		$configfile = trim($configfile);
+		$configfile = substr($configfile, -2) == '?>' ? substr($configfile, 0, -2) : $configfile;
+		fclose($fp);
+
+			$configfile = insertconfig($configfile, '.*', 'include_once("webim/config.php");');
 		$fp = fopen($file, 'w');
 		if(!($fp = @fopen($file, 'w'))) {
 			show_msg('请确认文件 config.php 可写');

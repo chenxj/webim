@@ -1,6 +1,6 @@
 PREFIX = .
 STATIC_DIR = ${PREFIX}/static
-STATIC_SRC_DIR = ${PREFIX}/static_src/webapi/dist
+STATIC_SRC_DIR = ${PREFIX}/static_src/dist
 
 STATIC_SRC_FILES = ${STATIC_SRC_DIR}/images \
 		   ${STATIC_SRC_DIR}/assets \

@@ -56,7 +56,6 @@ $setting = json_encode(setting());
 		imUI = new webim.ui(null,{menu: menu});
 		im = imUI.im;
 		layout = imUI.layout;
-                imUI.addApp("chatlink");
                 imUI.addApp("room");
 		body.appendChild(layout.element);
                 setTimeout(function(){imUI.initSound(soundUrls)},1000);

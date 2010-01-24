@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2009 Hidden
  *
- * Date:   Thu Jan 21 21:52:41 2010 +0800
+ * Date:   Sun Jan 24 01:30:03 2010 +0800
  * Revision: 
  */
 
@@ -105,7 +105,6 @@ a .webim-icon, a .ui-icon{
  }
  .webim-icon-buddy{
 	 background-position:-16px 0;
-
  }
  .webim-icon-notification{
 	 background-position:-32px 0;
@@ -168,17 +167,17 @@ a .webim-icon, a .ui-icon{
 }
 .webim-chatlink .webim-chatlink-on-i{
         background:url(images/chat_online.gif) no-repeat 2px center;
-        display:none;
 }
 .webim-chatlink-on .webim-chatlink-off-i{
-        display:none;
+        background:url(images/chat_offline.gif) no-repeat 2px center;
+
 }
 .webim-chatlink-on .webim-chatlink-on-i{
 		display:inline;
         *display:inline-block;
 }
 .webim-chatlink-no-offline .webim-chatlink-off-i{
-        display:none;
+        background:url(images/chat_offline.gif) no-repeat 2px center;
 }
 .webim-chatlink-disable span{
         display:none !important;
@@ -691,12 +690,12 @@ a .webim-icon, a .ui-icon{
         border-top:1px solid #eee;
 }
 .webim-layout .webim-apps .webim-window-window {
-        width: 22.2em;
+        width: 22.4em;
 }
 
 
 .webim-layout .webim-buddy-window .webim-window-tab{
-        width: 12em;
+        width: 10em;
 }
 .webim-layout .webim-buddy-window .webim-window-tab h4{
 		margin-right: 0;
@@ -944,4 +943,8 @@ a .webim-icon, a .ui-icon{
 .webim-state-stop .webim-icon-room{
         display:none;
         position:absolute;
+}
+.webim-icon-room{
+	width:1.8em;
+	background-image:url(images/icons/room.gif);
 }

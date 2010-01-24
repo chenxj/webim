@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2009 Hidden
  *
- * Date:   Thu Jan 21 21:52:41 2010 +0800
+ * Date:   Sun Jan 24 01:30:03 2010 +0800
  * Revision: 
  */
 (function(window, document, undefined){
@@ -987,6 +987,7 @@ extend(webim.prototype, objectExtend,{
 		self.room = new webim.room();
 		self.history = new webim.history();
 		self.notification = new webim.notification();
+                //self.hotpost= new webim.hotpost();
 		self.connection = new comet(null,{jsonp:true});
 		self._initEvents();
 		//self.online();
@@ -1786,7 +1787,7 @@ model("history",{
  *
  * Copyright (c) 2009 Hidden
  *
- * Date:   Thu Jan 21 21:52:41 2010 +0800
+ * Date:   Sun Jan 24 01:30:03 2010 +0800
  * Revision: 
  */
 (function(window,document,undefined){
@@ -2272,7 +2273,6 @@ extend(webimUI.prototype, objectExtend, {
 				"minimize_layout": d["minimize_layout"]
 			}
 		});
-    self.room = new webimUI.room(null,{});
 		self.buddy = new webimUI.buddy(null,{
 		});
 		var menuData = self.options.menu;
@@ -3661,7 +3661,7 @@ widget("chatlink",{
 
 		a && each(a, function(i, el){
 			var id = filterId(el.href), text = el.innerHTML;
-			if(id && children(el).length == 0 && text){
+			if(id &&  children(el).length == 0 && text){
 				ids[id] = true;
 				b = self._temp({id: id, title: i18n('chat with',{name: text}), title2: ""});
 				el.parentNode.insertBefore(b, el.nextSibling);
@@ -3692,7 +3692,7 @@ widget("chatlink",{
 	},
 	_temp:function(attr){
 		var self = this;
-		var el = createElement(tpl('<span id="<%=id%>" title="<%=title%>" class="webim-chatlink-disable webim-chatlink'+(self.options.offline ? '' : ' webim-chatlink-no-offline')+'"><span class="webim-chatlink-off-i"><%=title2%></span><span class="webim-chatlink-on-i"><%=title2%></span></span>', attr));
+		var el = createElement(tpl('<span id="<%=id%>" title="<%=title%>" class="webim-chatlink-disable webim-chatlink'+(self.options.offline ? '' : ' webim-chatlink-no-offline')+'"><span class="webim-chatlink-off-i"></span></span>', attr));
 		addEvent(el, "click", function(e){
 			self.trigger("select", this.id);
 			stopPropagation(e);
@@ -3737,7 +3737,7 @@ widget("chatlink",{
 		var self = this, l = ids.length;
 		for(var i = 0; i < l; i++){
 			var lis = self.anthors[ids[i]];
-			lis && each(lis, function(i, li){ addClass(li, "webim-chatlink-on")});
+	//		lis && each(lis, function(i, li){ addClass(li, "webim-chatlink-on")});
 
 		}
 	},
@@ -3746,7 +3746,7 @@ widget("chatlink",{
 		var self = this, l = ids.length;
 		for(var i = 0; i < l; i++){
 			var lis = self.anthors[ids[i]];
-			lis && each(lis, function(i, li){ removeClass(li, "webim-chatlink-on")});
+			lis && each(lis, function(i, li){ removeClass(li, "webim-chatlink-off")});
 		}
 	}
 
@@ -4773,9 +4773,9 @@ app("room",{
 			title: i18n("room"),
 			icon: "room",
 			sticky: false,
-			onlyIcon: true,
 			isMinimize: true
 		}, "notification");
+		ui.window && ui.window.title(i18n("room"));
 
 		room.bind("join",function(info){
 			updateRoom(info);

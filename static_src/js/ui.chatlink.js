@@ -62,7 +62,7 @@ widget("chatlink",{
 
 		a && each(a, function(i, el){
 			var id = filterId(el.href), text = el.innerHTML;
-			if(id && children(el).length == 0 && text){
+			if(id &&  children(el).length == 0 && text){
 				ids[id] = true;
 				b = self._temp({id: id, title: i18n('chat with',{name: text}), title2: ""});
 				el.parentNode.insertBefore(b, el.nextSibling);
@@ -93,7 +93,7 @@ widget("chatlink",{
 	},
 	_temp:function(attr){
 		var self = this;
-		var el = createElement(tpl('<span id="<%=id%>" title="<%=title%>" class="webim-chatlink-disable webim-chatlink'+(self.options.offline ? '' : ' webim-chatlink-no-offline')+'"><span class="webim-chatlink-off-i"><%=title2%></span><span class="webim-chatlink-on-i"><%=title2%></span></span>', attr));
+		var el = createElement(tpl('<span id="<%=id%>" title="<%=title%>" class="webim-chatlink-disable webim-chatlink'+(self.options.offline ? '' : ' webim-chatlink-no-offline')+'"><span class="webim-chatlink-off-i"></span></span>', attr));
 		addEvent(el, "click", function(e){
 			self.trigger("select", this.id);
 			stopPropagation(e);
@@ -138,7 +138,7 @@ widget("chatlink",{
 		var self = this, l = ids.length;
 		for(var i = 0; i < l; i++){
 			var lis = self.anthors[ids[i]];
-			lis && each(lis, function(i, li){ addClass(li, "webim-chatlink-on")});
+	//		lis && each(lis, function(i, li){ addClass(li, "webim-chatlink-on")});
 
 		}
 	},
@@ -147,7 +147,7 @@ widget("chatlink",{
 		var self = this, l = ids.length;
 		for(var i = 0; i < l; i++){
 			var lis = self.anthors[ids[i]];
-			lis && each(lis, function(i, li){ removeClass(li, "webim-chatlink-on")});
+			lis && each(lis, function(i, li){ removeClass(li, "webim-chatlink-off")});
 		}
 	}
 

@@ -67,8 +67,10 @@ webim.ui.i18n.store('zh-CN',{
         "empty hotpost":"\u7a7a",
         "collapse": "\u6536\u7f29",
         "expand": "\u5c55\u5f00",
+	"empty room":"\u5c1a\u65e0\u7fa4\u7ec4",
 	"friend":"\u597d\u53cb",
-	"stranger":"\u964c\u751f\u4eba"
+	"stranger":"\u964c\u751f\u4eba",
+	"room":"\u7fa4\u7ec4"
 });
 webim.ui.i18n.store('zh-CN',{
 	"doing": "\u8bb0\u5f55",

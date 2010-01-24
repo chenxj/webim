@@ -67,6 +67,7 @@ webim.ui.i18n.store('zh-CN',{
         "empty hotpost":"空",
         "collapse": "收缩",
         "expand": "展开",
+	"empty room":"尚无群组",
 	"friend":"好友",
 	"stranger":"陌生人",
 	"room":"群组"

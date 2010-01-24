@@ -64,7 +64,9 @@ webim.ui.i18n.store('zh-CN',{
         "collapse": "收縮",
         "expand": "展開",
 	"friend":"好友",
-	"stranger":"陌生人"
+	"stranger":"陌生人",
+	"room":"群組",
+	"empty room":"尚無群組"
 });
 webim.ui.i18n.store('zh-CN',{
 	"doing": "記錄",

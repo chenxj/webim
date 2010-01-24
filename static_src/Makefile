@@ -8,7 +8,6 @@ SRC_DIR = ${PREFIX}
 CSS_SRC_DIR = ${SRC_DIR}/css
 JS_SRC_DIR = ${SRC_DIR}/js
 I18N_SRC_DIR = ${SRC_DIR}/js/i18n
-
 IMAGE_SRC_DIR = ${SRC_DIR}/images
 THEME_SRC_DIR = ${SRC_DIR}/themes
 ASSET_SRC_DIR = ${SRC_DIR}/assets

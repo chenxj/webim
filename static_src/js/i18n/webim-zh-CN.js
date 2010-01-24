@@ -1,4 +1,5 @@
-﻿webim.ui.i18n.locale = 'zh-CN';
+
+webim.ui.i18n.locale = 'zh-CN';
 webim.ui.i18n.store('zh-CN',{
         "dt:monthdate": "{{month}}{{date}}日",
         "dt:today": "今天",
@@ -23,15 +24,15 @@ webim.ui.i18n.store('zh-CN',{
         "dt:saturday": "星期六",
         "dt:sunday": "星期天"
     });
-    	
+    
 webim.ui.i18n.store('zh-CN',{
-	"close":"关闭",
-	"minimize":"最小化",
-	"maximize":"最大化",
-	"restore":"还原",
+        "close":"关闭",
+        "minimize":"最小化",
+        "maximize":"最大化",
+        "restore":"还原",
         "setting":"设置",
         "notification":"通知",
-	"hotpost":"热帖",
+        "hotpost":"热帖",
         "chat":"聊天",
         "group":"群组",
         "menu":"工具栏",
@@ -44,11 +45,11 @@ webim.ui.i18n.store('zh-CN',{
         "buddy offline notice": "{{name}}已离线，您所发送的消息{{name}}将在下次登录时收到",
         "input notice": "这里输入消息，Enter键发送",
         "clear history notice": "聊天历史记录已清除",
-	"typing":" 正在输入...",
-	"inputing":" 正在输入...",
-	"chat with":"和{{name}}聊天",
-	"chat with me":"和我聊天",
-	"new message":"有新消息",
+        "typing":" 正在输入...",
+        "inputing":" 正在输入...",
+        "chat with":"和{{name}}聊天",
+        "chat with me":"和我聊天",
+        "new message":"有新消息",
         "connect error":"连接失败",
         "disconnect":"连接断开",
         "online error":"登录失败",
@@ -56,26 +57,26 @@ webim.ui.i18n.store('zh-CN',{
         "buddy_sticky": "保持聊天窗口始终打开",
         "msg_auto_pop": "新消息时自动弹出聊天窗口",
         "minimize_layout": "收缩工具条",
-	"emot":"表情",
-	"clear history":"清除历史记录",
-	"blocked": "已屏蔽",
-	"block group": "屏蔽来自{{name}}的消息",
-	"unblock group": "取消屏蔽",
+        "emot":"表情",
+        "clear history":"清除历史记录",
+        "blocked": "已屏蔽",
+        "block group": "屏蔽来自{{name}}的消息",
+        "unblock group": "取消屏蔽",
         "empty buddy": "没有好友在线",
         "empty menu": "没有工具",
         "empty notification": "空",
         "empty hotpost":"空",
         "collapse": "收缩",
         "expand": "展开",
-	"empty room":"尚无群组",
-	"friend":"好友",
-	"stranger":"陌生人",
-	"room":"群组"
+        "empty room":"尚无群组",
+        "friend":"好友",
+        "stranger":"陌生人",
+        "room":"群组"
 });
 webim.ui.i18n.store('zh-CN',{
-	"doing": "记录",
-	"album": "相册",
-	"blog": "日志",
-	"thread": "群组",
-	"share": "分享"
+        "doing": "记录",
+        "album": "相册",
+        "blog": "日志",
+        "thread": "群组",
+        "share": "分享"
 });

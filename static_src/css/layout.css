@@ -327,10 +327,13 @@
         left: auto;
 }
 * html  .webim-layout-minimize .webim-ui{
-	display: inline;
 }
 * html  .webim-layout-minimize .webim-layout-r{
 	float: left;
+}
+* html .webim-layout-minimize .webim-shortcut{
+	float:auto;
+	width:1em;
 }
 /* end */
 .webim-state-stop{
@@ -342,3 +345,4 @@
 }
 .webim-state-stop .webim-pannels{
 }
+

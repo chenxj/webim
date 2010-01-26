@@ -15,16 +15,15 @@ ASSET_SRC_DIR = ${SRC_DIR}/assets
 CSS_BASE_FILES = ${CSS_SRC_DIR}/core.css\
 	${CSS_SRC_DIR}/ui.core.css\
 	${CSS_SRC_DIR}/icons.css\
-	${CSS_SRC_DIR}/emot.css\
-	${CSS_SRC_DIR}/chatlink.css\
-	${CSS_SRC_DIR}/notification.css\
+	${CSS_SRC_DIR}/layout.css\
 	${CSS_SRC_DIR}/setting.css\
+	${CSS_SRC_DIR}/notification.css\
 	${CSS_SRC_DIR}/buddy.css\
+	${CSS_SRC_DIR}/room.css\
+	${CSS_SRC_DIR}/emot.css\
 	${CSS_SRC_DIR}/chat.css\
 	${CSS_SRC_DIR}/menu.css\
-	${CSS_SRC_DIR}/history.css\
-	${CSS_SRC_DIR}/layout.css\
-	${CSS_SRC_DIR}/room.css\
+	${CSS_SRC_DIR}/chatlink.css\
 
 
 IM = ${SRC_DIR}/im/dist/webim.js

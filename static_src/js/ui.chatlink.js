@@ -25,6 +25,9 @@ app("chatlink",{
 			ui.addChat(id);
 			ui.layout.focusChat(id);
 		});
+		im.bind("go",function(data){
+			chatlink.online(mapIds(data));
+		});
 		im.buddy.bind("online",function(data){
 			chatlink.online(mapIds(data));
 		}).bind("onlineDelay",function(data){
@@ -138,7 +141,7 @@ widget("chatlink",{
 		var self = this, l = ids.length;
 		for(var i = 0; i < l; i++){
 			var lis = self.anthors[ids[i]];
-	//		lis && each(lis, function(i, li){ addClass(li, "webim-chatlink-on")});
+			lis && each(lis, function(i, li){ addClass(li, "webim-chatlink-on")});
 
 		}
 	},

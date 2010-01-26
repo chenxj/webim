@@ -79,7 +79,6 @@ UI_MIN_ALL_JS = ${DIST_DIR}/webim.all.min.js
 
 
 all: dist copy min i18n 
-	cd im && $(MAKE)
 	@@echo "webim build complete."
 
 dist:

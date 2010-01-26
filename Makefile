@@ -11,13 +11,12 @@ all: submake static
 	@@echo "complete."
 
 submake:
-	cd static_src && $(MAKE)
 static: 
 	@@mkdir -p ${STATIC_DIR}
 	@@cp ${STATIC_SRC_FILES} ${STATIC_DIR} -r
 	@@cp ${STATIC_SRC_DIR}/webim.css ${STATIC_DIR}/webim.css
 	@@cp ${STATIC_SRC_DIR}/webim.min.css ${STATIC_DIR}/webim.min.css
-	@@cp ${STATIC_SRC_DIR}/webim.all.min.js ${STATIC_DIR}/webim.all.js
+	@@cp ${STATIC_SRC_DIR}/webim.all.js ${STATIC_DIR}/webim.all.js
 	@@cp ${STATIC_SRC_DIR}/webim.all.min.js ${STATIC_DIR}/webim.all.min.js
 
 debug:  submake

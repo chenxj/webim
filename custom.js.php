@@ -57,6 +57,7 @@ $setting = json_encode(setting());
 		im = imUI.im;
 		layout = imUI.layout;
                 imUI.addApp("room");
+                //imUI.addApp("chatlink");
 		body.appendChild(layout.element);
                 setTimeout(function(){imUI.initSound(soundUrls)},1000);
 		im.bind("ready",ready).bind("go",go).bind("stop",stop);
@@ -75,6 +76,7 @@ $setting = json_encode(setting());
 		}).bind("offline",function(data){
 			chatlink.offline(mapIds(data));
 		});
+		layout.apps["chatlink"] = chatlink;
 		im.setStranger(chatlink.idsArray());
 		im.autoOnline() && im.online();
 	}

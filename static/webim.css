@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2009 Hidden
  *
- * Date:   Sun Jan 24 01:30:03 2010 +0800
+ * Date:   Tue Jan 26 14:59:18 2010 +0800
  * Revision: 
  */
 
@@ -136,368 +136,6 @@ a .webim-icon, a .ui-icon{
  .webim-icon-hotpost{
 	 background-image:url(images/icons/hotpost.jpg);
  }
-.webim-emot{
-        display: none;
-}
-.webim-emot-show{
-        display: block;
-}
-.webim-emot ul{
-        padding: .2em;
-        list-style:none;
-}
-.webim-emot ul li{
-        float: left;
-        cursor: pointer;
-}
-.webim-chat .webim-emot{
-        position: absolute;
-        bottom: 0;
-        border-left-width: 0;
-        border-right-width: 0;
-        width: 100%;
-}
-.webim-chatlink span{
-        cursor:pointer;
-        padding-left: 1.2em;
-        *display:inline-block;
-}
-.webim-chatlink .webim-chatlink-off-i{
-        background:url(images/chat_offline.gif) no-repeat 2px center;
-}
-.webim-chatlink .webim-chatlink-on-i{
-        background:url(images/chat_online.gif) no-repeat 2px center;
-}
-.webim-chatlink-on .webim-chatlink-off-i{
-        background:url(images/chat_offline.gif) no-repeat 2px center;
-
-}
-.webim-chatlink-on .webim-chatlink-on-i{
-		display:inline;
-        *display:inline-block;
-}
-.webim-chatlink-no-offline .webim-chatlink-off-i{
-        background:url(images/chat_offline.gif) no-repeat 2px center;
-}
-.webim-chatlink-disable span{
-        display:none !important;
-}
-.webim-notification {
-        padding:1em .5em;
-        overflow-x: hidden;
-        overflow-y: auto;
-	max-height: 300px;
-}
-* html .webim-menu{
-	height: expression(this.offsetHeight > 300 ? 300+'px' : 'auto');
-}
-.webim-notification .webim-notification-empty{
-
-}
-.webim-notification ul{
-        list-style: none;
-}
-.webim-notification ul li{
-        overflow: hidden;
-        padding:.1em 0;
-}
-/*
- * widget setting
- */
-#webim-setting{
-        padding: 1em 0;
-        width:20em;
-
-}
-#webim-setting ul{
-	list-style: none;
-}
-#webim-setting ul li{
-        margin: .5em 1em;
-}
-#webim-setting ul li input{
-        vertical-align: middle;
-}
-
-#webim-setting ul li label{
-        padding-left: .2em;
-}
-.webim-setting-offline{
-  float:right;
-  position:absolute;
-  bottom:.5em;
-  left:18em;
-}
-.webim-setting-online{
-  auto:left;
-  float:right;
-  position:absolute;
-  bottom:.5em;
-  left:18em;
-}
-#webim-buddy{
-        padding: .3em 0;
-
-}
-#webim-buddy .webim-buddy-search{
-        padding: 0em 1.6em 0em 0em;
-        margin: .3em .5em .5em;
-        display: none;
-        
-}
-#webim-buddy .webim-buddy-search input{
-        border: none;
-        background: none;
-	display: block;
-	width:95%;
-        padding: .2em;
-	/*
-	*/
-}
-#webim-buddy .webim-buddy-search em{
-        float: right;
-	display: inline;
-        margin: .1em -1.5em 0 0;
-}
-#webim-buddy .webim-buddy-online{
-        padding: 1em;
-        text-align: center;
-        display: none;
-}
-
-#webim-buddy .webim-buddy-online a{
-        padding: 1em 2em;
-}
-#webim-buddy .webim-buddy-content{
-        padding: .2em .5em 0;
-        position:relative;
-}
-/*fuck ie6  why ?*/
-* html  #webim-buddy .webim-buddy-content{
-        position: fixed;
-}
-
-#webim-buddy.webim-buddy-scroll .webim-buddy-content{
-        height: 25em;
-        overflow-y: auto;
-}
-#webim-buddy.webim-buddy-scroll .webim-buddy-search{
-        display: block;
-}
-
-#webim-buddy .webim-buddy-offline{
-        display: none;
-	float: right;
-	/*
-        position: absolute;
-        top: .3em;
-        right: .5em;
-	*/
-}
-#webim-buddy .webim-buddy-empty{
-        display: none;
-        padding: 0 0 1em;
-}
-
-#webim-buddy .webim-buddy-offline a{
-}
-#webim-buddy ul{
-	list-style: none;
-}
-#webim-buddy ul h4{
-        background:none;
-        font-weight: normal;
-        border-width: 0;
-        border-bottom-width: 1px;
-        padding: .2em .5em 0;
-}
-#webim-buddy ul li{
-}
-#webim-buddy ul li a{
-        display:block;
-        margin-left:3em;
-        padding: .3em 0;
-}
-#webim-buddy ul li a img{
-        display:block;
-        float:left;
-        margin-left: -2.5em;
-}
-/*fuck ie6  why ?*/
-* html  #webim-buddy ul li a img{
-        position: fixed;
-}
-#webim-buddy ul li a strong{
-        display: block;
-        font-weight: normal;
-}
-#webim-buddy ul li a span{
-        display: block;
-}
-.webim-state-stop .webim-buddy-window{
-        width:0;
-        display:none;
-        position:absolute;
-}
-
-/*webim user*/
-.webim .webim-user{
-        margin-left: 6em;
-}
-.webim .webim-user-pic{
-        float: left;
-        margin-left: -5.5em;
-        margin-top: -1.8em;
-}
-.webim .webim-user-pic img{
-}
-.webim .webim-user-status{
-        height: 3em;
-        display: block;
-}
-/**/
-.webim .webim-chat .webim-chat-header{
-	border-left-width:0;
-	border-right-width:0;
-}
-.webim .webim-chat-content{
-        height: 16em;
-        overflow-y:auto;
-        overflow-x:visible;
-        *background:url(about:blank);
-}
-.webim .webim-chat-status{
-        font-style: italic;
-        margin-left: .8em;
-
-}
-.webim .webim-chat .webim-chat-actions{
-        border-width:0;
-        border-top-width:1px;
-}
-.webim .webim-chat-t{
-        width:100%;
-        border-spacing:0;
-        border:0;
-}
-.webim .webim-chat-t em{
-        margin: .1em .2em;
-}
-.webim .webim-chat-input-wrap{
-}
-.webim .webim-chat-input{
-        border:none;
-        background: transparent;
-        overflow: auto;
-        width: 100%;
-        height: 3em;
-        padding: .3em 0 .2em;
-}
-.webim .webim-chat .webim-chat-notice{
-        border-right-width:0;
-        border-left-width:0;
-        display: none;
-        padding: 0 .5em;
-        position: relative;
-}
-.webim .webim-chat .webim-chat-notice-wrap{
-}
-.webim .webim-chat .webim-chat-tools{
-        padding: 0 .3em;
-        border-left-width: 0;
-        border-right-width: 0;
-}
-.webim .webim-chat-tools a, .webim .webim-chat-tools a em{
-        float: left;
-}
-.webim .webim-chat-tools a{
-        padding: .2em;
-}
-.webim .webim-chat-tool-content{
-        position: relative;
-        height:0;
-}
-
-/*member*/
-.webim .webim-member{
-	margin-top:  -.1em;
-	height: 16em;
-	width: 7em;
-	left: -7.1em;
-	position: absolute;
-}
-.webim .webim-chat .webim-member .webim-bgiframe{
-	top: -.1em;
-	left: -.1em;
-	width: 7.2em;
-	height: 16.2em;
-}
-.webim .webim-member ul{
-	height: 16em;
-	width: 7em;
-	position: absolute;
-        overflow-y:auto;
-        overflow-x:hidden;
-	list-style: none;
-}
-.webim .webim-member li{
-	margin: 0.1em 0.1em 0.1em 0.5em;
-}
-.webim-menu {
-        padding:1em .5em;
-        overflow-x: hidden;
-        overflow-y: auto;
-	max-height: 300px;
-}
-* html .webim-menu{
-	height: expression(this.offsetHeight > 300 ? 300+'px' : 'auto');
-}
-.webim-menu .webim-menu-empty{
-
-}
-.webim-menu ul{
-        list-style: none;
-}
-.webim-menu ul li{
-        overflow: hidden;
-        padding: .4em 0;
-}
-.webim-menu ul li *{
-        cursor: pointer;
-        float: left;
-}
-.webim-menu ul li span{
-        padding: 0 .4em;
-}
-.webim .webim-history-actions{
-        margin:0;
-        padding: .3em .5em 0;
-}
-.webim .webim-history-content{
-        margin: .3em .5em;
-}
-.webim .webim-history h5{
-        margin-top: .5em;
-        padding: 0 .4em;
-}
-.webim .webim-history h4{
-        border-top: 1px solid #eee;
-        margin-top: .1em;
-        padding: .2em .3em .1em;
-        font-weight: normal;
-}
-.webim .webim-history h4 span{
-        float: right;
-        padding .1em 0;
-        font-size: .8em;
-}
-.webim .webim-history p{
-        margin: .2em .3em;
-}
-.webim .webim-history *{
-		*background:url(about:blank);
-}
-
 /*theme extend*/
 
 .ui-widget{
@@ -827,10 +465,13 @@ a .webim-icon, a .ui-icon{
         left: auto;
 }
 * html  .webim-layout-minimize .webim-ui{
-	display: inline;
 }
 * html  .webim-layout-minimize .webim-layout-r{
 	float: left;
+}
+* html .webim-layout-minimize .webim-shortcut{
+	float:auto;
+	width:1em;
 }
 /* end */
 .webim-state-stop{
@@ -841,6 +482,164 @@ a .webim-icon, a .ui-icon{
         right:0;
 }
 .webim-state-stop .webim-pannels{
+}
+
+/*
+ * widget setting
+ */
+#webim-setting{
+        padding: 1em 0;
+        width:20em;
+
+}
+#webim-setting ul{
+	list-style: none;
+}
+#webim-setting ul li{
+        margin: .5em 1em;
+}
+#webim-setting ul li input{
+        vertical-align: middle;
+}
+
+#webim-setting ul li label{
+        padding-left: .2em;
+}
+.webim-setting-offline{
+  float:right;
+  position:absolute;
+  bottom:.5em;
+  left:18em;
+}
+.webim-setting-online{
+  auto:left;
+  float:right;
+  position:absolute;
+  bottom:.5em;
+  left:18em;
+}
+.webim-notification {
+        padding:1em .5em;
+        overflow-x: hidden;
+        overflow-y: auto;
+	max-height: 300px;
+}
+* html .webim-menu{
+	height: expression(this.offsetHeight > 300 ? 300+'px' : 'auto');
+}
+.webim-notification .webim-notification-empty{
+
+}
+.webim-notification ul{
+        list-style: none;
+}
+.webim-notification ul li{
+        overflow: hidden;
+        padding:.1em 0;
+}
+#webim-buddy{
+        padding: .3em 0;
+
+}
+#webim-buddy .webim-buddy-search{
+        padding: 0em 1.6em 0em 0em;
+        margin: .3em .5em .5em;
+        display: none;
+        
+}
+#webim-buddy .webim-buddy-search input{
+        border: none;
+        background: none;
+	display: block;
+	width:95%;
+        padding: .2em;
+	/*
+	*/
+}
+#webim-buddy .webim-buddy-search em{
+        float: right;
+	display: inline;
+        margin: .1em -1.5em 0 0;
+}
+#webim-buddy .webim-buddy-online{
+        padding: 1em;
+        text-align: center;
+        display: none;
+}
+
+#webim-buddy .webim-buddy-online a{
+        padding: 1em 2em;
+}
+#webim-buddy .webim-buddy-content{
+        padding: .2em .5em 0;
+        position:relative;
+}
+/*fuck ie6  why ?*/
+* html  #webim-buddy .webim-buddy-content{
+        position: fixed;
+}
+
+#webim-buddy.webim-buddy-scroll .webim-buddy-content{
+        height: 25em;
+        overflow-y: auto;
+}
+#webim-buddy.webim-buddy-scroll .webim-buddy-search{
+        display: block;
+}
+
+#webim-buddy .webim-buddy-offline{
+        display: none;
+	float: right;
+	/*
+        position: absolute;
+        top: .3em;
+        right: .5em;
+	*/
+}
+#webim-buddy .webim-buddy-empty{
+        display: none;
+        padding: 0 0 1em;
+}
+
+#webim-buddy .webim-buddy-offline a{
+}
+#webim-buddy ul{
+	list-style: none;
+}
+#webim-buddy ul h4{
+        background:none;
+        font-weight: normal;
+        border-width: 0;
+        border-bottom-width: 1px;
+        padding: .2em .5em 0;
+}
+#webim-buddy ul li{
+}
+#webim-buddy ul li a{
+        display:block;
+        margin-left:3em;
+        padding: .3em 0;
+}
+#webim-buddy ul li a img{
+        display:block;
+        float:left;
+        margin-left: -2.5em;
+}
+/*fuck ie6  why ?*/
+* html  #webim-buddy ul li a img{
+        position: fixed;
+}
+#webim-buddy ul li a strong{
+        display: block;
+        font-weight: normal;
+}
+#webim-buddy ul li a span{
+        display: block;
+}
+.webim-state-stop .webim-buddy-window{
+        width:0;
+        display:none;
+        position:absolute;
 }
 #webim-room{
         padding: .3em 0;
@@ -947,4 +746,180 @@ a .webim-icon, a .ui-icon{
 .webim-icon-room{
 	width:1.8em;
 	background-image:url(images/icons/room.gif);
+}
+.webim-emot{
+        display: none;
+}
+.webim-emot-show{
+        display: block;
+}
+.webim-emot ul{
+        padding: .2em;
+        list-style:none;
+}
+.webim-emot ul li{
+        float: left;
+        cursor: pointer;
+}
+.webim-chat .webim-emot{
+        position: absolute;
+        bottom: 0;
+        border-left-width: 0;
+        border-right-width: 0;
+        width: 100%;
+}
+
+/*webim user*/
+.webim .webim-user{
+        margin-left: 6em;
+}
+.webim .webim-user-pic{
+        float: left;
+        margin-left: -5.5em;
+        margin-top: -1.8em;
+}
+.webim .webim-user-pic img{
+}
+.webim .webim-user-status{
+        height: 3em;
+        display: block;
+}
+/**/
+.webim .webim-chat .webim-chat-header{
+	border-left-width:0;
+	border-right-width:0;
+}
+.webim .webim-chat-content{
+        height: 16em;
+        overflow-y:auto;
+        overflow-x:visible;
+        *background:url(about:blank);
+}
+.webim .webim-chat-status{
+        font-style: italic;
+        margin-left: .8em;
+
+}
+.webim .webim-chat .webim-chat-actions{
+        border-width:0;
+        border-top-width:1px;
+}
+.webim .webim-chat-t{
+        width:100%;
+        border-spacing:0;
+        border:0;
+}
+.webim .webim-chat-t em{
+        margin: .1em .2em;
+}
+.webim .webim-chat-input-wrap{
+}
+.webim .webim-chat-input{
+        border:none;
+        background: transparent;
+        overflow: auto;
+        width: 100%;
+        height: 3em;
+        padding: .3em 0 .2em;
+}
+.webim .webim-chat .webim-chat-notice{
+        border-right-width:0;
+        border-left-width:0;
+        display: none;
+        padding: 0 .5em;
+        position: relative;
+}
+.webim .webim-chat .webim-chat-notice-wrap{
+}
+.webim .webim-chat .webim-chat-tools{
+        padding: 0 .3em;
+        border-left-width: 0;
+        border-right-width: 0;
+}
+.webim .webim-chat-tools a, .webim .webim-chat-tools a em{
+        float: left;
+}
+.webim .webim-chat-tools a{
+        padding: .2em;
+}
+.webim .webim-chat-tool-content{
+        position: relative;
+        height:0;
+}
+
+/*member*/
+.webim .webim-member{
+	margin-top:  -.1em;
+	height: 16em;
+	width: 7em;
+	left: -7.1em;
+	position: absolute;
+}
+.webim .webim-chat .webim-member .webim-bgiframe{
+	top: -.1em;
+	left: -.1em;
+	width: 7.2em;
+	height: 16.2em;
+}
+.webim .webim-member ul{
+	height: 16em;
+	width: 7em;
+	position: absolute;
+        overflow-y:auto;
+        overflow-x:hidden;
+	list-style: none;
+}
+.webim .webim-member li{
+	margin: 0.1em 0.1em 0.1em 0.5em;
+}
+.webim-menu {
+        padding:1em .5em;
+        overflow-x: hidden;
+        overflow-y: auto;
+	max-height: 300px;
+}
+* html .webim-menu{
+	height: expression(this.offsetHeight > 300 ? 300+'px' : 'auto');
+}
+.webim-menu .webim-menu-empty{
+
+}
+.webim-menu ul{
+        list-style: none;
+}
+.webim-menu ul li{
+        overflow: hidden;
+        padding: .4em 0;
+}
+.webim-menu ul li *{
+        cursor: pointer;
+        float: left;
+}
+.webim-menu ul li span{
+        padding: 0 .4em;
+}
+.webim-chatlink span{
+        cursor:pointer;
+        padding-left: 1.2em;
+        *display:inline-block;
+}
+.webim-chatlink .webim-chatlink-off-i{
+        background:url(images/chat_offline.gif) no-repeat 2px center;
+}
+.webim-chatlink .webim-chatlink-on-i{
+        background:url(images/chat_online.gif) no-repeat 2px center;
+}
+.webim-chatlink-on .webim-chatlink-off-i{
+        background:url(images/chat_offline.gif) no-repeat 2px center;
+
+}
+.webim-chatlink-on .webim-chatlink-on-i{
+		display:inline;
+        *display:inline-block;
+}
+.webim-chatlink-no-offline .webim-chatlink-off-i{
+        background:url(images/chat_offline.gif) no-repeat 2px center;
+}
+.webim-chatlink-disable span{
+        display:none !important;
 }

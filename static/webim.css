@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2009 Hidden
  *
- * Date:   Tue Jan 26 14:59:18 2010 +0800
+ * Date:   Wed Jan 27 01:07:44 2010 +0800
  * Revision: 
  */
 
@@ -910,7 +910,7 @@ a .webim-icon, a .ui-icon{
         background:url(images/chat_online.gif) no-repeat 2px center;
 }
 .webim-chatlink-on .webim-chatlink-off-i{
-        background:url(images/chat_offline.gif) no-repeat 2px center;
+        background:url(images/chat_online.gif) no-repeat 2px center;
 
 }
 .webim-chatlink-on .webim-chatlink-on-i{
@@ -923,3 +923,32 @@ a .webim-icon, a .ui-icon{
 .webim-chatlink-disable span{
         display:none !important;
 }
+.webim .webim-history-actions{
+        margin:0;
+        padding: .3em .5em 0;
+}
+.webim .webim-history-content{
+        margin: .3em .5em;
+}
+.webim .webim-history h5{
+        margin-top: .5em;
+        padding: 0 .4em;
+}
+.webim .webim-history h4{
+        border-top: 1px solid #eee;
+        margin-top: .1em;
+        padding: .2em .3em .1em;
+        font-weight: normal;
+}
+.webim .webim-history h4 span{
+        float: right;
+        padding .1em 0;
+        font-size: .8em;
+}
+.webim .webim-history p{
+        margin: .2em .3em;
+}
+.webim .webim-history *{
+		*background:url(about:blank);
+}
+

@@ -25,9 +25,12 @@ app("chatlink",{
 			ui.addChat(id);
 			ui.layout.focusChat(id);
 		});
-		im.bind("go",function(data){
-			chatlink.online(mapIds(data));
+/*		im.bind("go",function(data){
+			chatlink.updateUI(data,"on");
 		});
+		im.bind("presence",function(data){
+			chatlink.updateUI(data,"new");
+		});*/
 		im.buddy.bind("online",function(data){
 			chatlink.online(mapIds(data));
 		}).bind("onlineDelay",function(data){
@@ -152,6 +155,8 @@ widget("chatlink",{
 			var lis = self.anthors[ids[i]];
 			lis && each(lis, function(i, li){ removeClass(li, "webim-chatlink-off")});
 		}
+	},
+	updateUI:function(ids,type){
 	}
 
 });

@@ -76,7 +76,6 @@ $setting = json_encode(setting());
 		}).bind("offline",function(data){
 			chatlink.offline(mapIds(data));
 		});
-		layout.apps["chatlink"] = chatlink;
 		im.setStranger(chatlink.idsArray());
 		im.autoOnline() && im.online();
 	}

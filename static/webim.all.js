@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2009 Hidden
  *
- * Date:   Tue Jan 26 14:59:18 2010 +0800
+ * Date:   Wed Jan 27 01:07:44 2010 +0800
  * Revision: 
  */
 (function(window, document, undefined){
@@ -1787,7 +1787,7 @@ model("history",{
  *
  * Copyright (c) 2009 Hidden
  *
- * Date:   Tue Jan 26 14:59:18 2010 +0800
+ * Date:   Wed Jan 27 01:07:44 2010 +0800
  * Revision: 
  */
 (function(window,document,undefined){
@@ -2445,7 +2445,7 @@ extend(webimUI.prototype, objectExtend, {
 		//message
 		im.bind("message",function(data){
 			var show = false,roomData = this.room.dataHash,
-          l = data.length, d, uid = im.data.user.id, id, c, online_ids = [], count = "+1";
+         			 l = data.length, d, uid = im.data.user.id, id, c, online_ids = [], count = "+1";
 			for(var i = 0; i < l; i++){
 				d = data[i];
 				id = d.to == uid ? d.from : d.to;
@@ -3625,6 +3625,12 @@ app("chatlink",{
 			ui.addChat(id);
 			ui.layout.focusChat(id);
 		});
+/*		im.bind("go",function(data){
+			chatlink.updateUI(data,"on");
+		});
+		im.bind("presence",function(data){
+			chatlink.updateUI(data,"new");
+		});*/
 		im.buddy.bind("online",function(data){
 			chatlink.online(mapIds(data));
 		}).bind("onlineDelay",function(data){
@@ -3749,6 +3755,8 @@ widget("chatlink",{
 			var lis = self.anthors[ids[i]];
 			lis && each(lis, function(i, li){ removeClass(li, "webim-chatlink-off")});
 		}
+	},
+	updateUI:function(ids,type){
 	}
 
 });

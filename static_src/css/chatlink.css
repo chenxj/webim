@@ -10,7 +10,7 @@
         background:url(../images/chat_online.gif) no-repeat 2px center;
 }
 .webim-chatlink-on .webim-chatlink-off-i{
-        background:url(../images/chat_offline.gif) no-repeat 2px center;
+        background:url(../images/chat_online.gif) no-repeat 2px center;
 
 }
 .webim-chatlink-on .webim-chatlink-on-i{

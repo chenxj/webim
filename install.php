@@ -68,8 +68,8 @@ dbconnect();
 	if(empty($domain) || empty($apikey)) {
 		show_msg('网站域名和API KEY不能为空');
 	} else {
-		write_basic_config($basic_configfile,$domain,$apikey,$theme,$charset);
-        write_webim_config($webim_configfile);
+		write_basic_config($basic_configfile);
+        write_webim_config($webim_configfile,$domain,$apikey,$theme,$charset);
 		//import webim/data/webim.sql
 	$newsql = file_get_contents($sqlfile);
 
@@ -191,12 +191,42 @@ END;
 					<td><input type="text" id="apikey" name="apikey" size="60" value="$apikey"></td>
 				</tr>
                 <tr>
-					<td>外观:</td>
-					<td><select id="theme" name="theme"><option value="yellow">yellow</option><option value="blue">blue</option></select></td>
-				</tr>
+                                     <td>外观:</td>
+                                     <td><select id="theme" name="theme">
+                                             <option value="flick">flick</option>
+                                             <option value="eggplant">eggplant</option>
+                                             <option value="base">base</option>
+                                             <option value="blitzer">blitzer</option>
+                                             <option value="dark-hive">dark-hive</option>
+                                             <option value="humanity">humanity</option>
+                                             <option value="pepper-grinder">mint-choc</option>
+                                             <option value="smoothness">smoothness</option>
+                                             <option value="start">start</option>
+                                             <option value="swanky-purse">swanky-purse</option>
+                                             <option value="black-tie">black-tie</option>
+                                             <option value="cupertino">cupertino</option>
+                                             <option value="dot-luv">dot-luv</option>
+                                             <option value="excite-bike">excite-bike</option>
+                                             <option value="le-frog">hot-sneaks</option>
+                                             <option value="overcast">overcast</option>
+                                             <option value="redmond">redmond</option>
+                                             <option value="south-street">south-street</option>
+                                             <option value="sunny">sunny</option>
+                                             <option value="trontastic">trontastic</option>
+                                            <option value="ui-darkness">ui-darkness</option>
+                                             <option value="ui-lightness">ui-lightness</option>
+                                            <option value="vader">vader</option>
+                                        </select>(推荐使用flick、eggplant)</td>  
+                                </tr>
+
 				<tr>
 					<td>语言&amp;编码:</td>
-					<td><select id="charset" name="charset"><option value="sc_gbk">简体中文（GBK）</option><option value="sc_utf8">简体中文（UTF-8）</option><option value="tc_big5">繁体中文（BIG5）</option><option value="tc_utf8">繁体中文（UTF-8）</option><option value="en_utf8">英文（UTF-8）</option></select>(选择与Discuz相同的编码)</td>
+                    <td><select id="charset" name="charset">
+                    <option value="zh-CN_gbk">简体中文（GBK）</option>
+                    <option value="zh-CN_utf8">简体中文（UTF-8）</option>
+                    <option value="zh-TW_big5">繁体中文（BIG5）</option>
+                    <option value="zh-TW_utf8">繁体中文（UTF-8）</option>
+                    <option value="en_utf8">英文（UTF-8）</option></select>(选择与Discuz相同的编码)</td>
 				</tr>
 			</tbody>
 		</table>
@@ -473,11 +503,11 @@ $fp = fopen($file, 'r');
 			$configfile = insertconfig($configfile, '/\$_IMC\["enable"\] =\s*.*?;/i', '$_IMC["enable"] = true;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["domain"\] =\s*".*?";/i', '$_IMC["domain"] = "'.$domain.'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["apikey"\] =\s*".*?";/i', '$_IMC["apikey"] = "'.$apikey.'";');
-			$configfile = insertconfig($configfile, '/\$_IMC\["imsvr"\] =\s*".*?";/i', '$_IMC["imsvr"] = "ucim.webim20.cn";');
+			$configfile = insertconfig($configfile, '/\$_IMC\["imsvr"\] =\s*".*?";/i', '$_IMC["imsvr"] = "www.nextim.cn";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["impost"\] =\s*.*?;/i', '$_IMC["impost"] = 9000;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["impoll"\] =\s*.*?;/i', '$_IMC["impoll"] = 8000;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["theme"\] =\s*".*?";/i', '$_IMC["theme"] = "'.$theme.'";');
-			$configfile = insertconfig($configfile, '/\$_IMC\["lang"\] =\s*".*?";/i', '$_IMC["lang"] = "'.substr($charset,0,2).'";');
+			$configfile = insertconfig($configfile, '/\$_IMC\["local"\] =\s*".*?";/i', '$_IMC["local"] = "'.substr($charset,0,5).'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["charset"\] =\s*".*?";/i', '$_IMC["charset"] = "'.$charset.'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["buddy_name"\] =\s*".*?";/i', '$_IMC["buddy_name"] = "username";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["channel_pre"\] =\s*.*?;/i', '$_IMC["channel_pre"] = 1000000;');

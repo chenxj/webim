@@ -187,6 +187,7 @@ function find_history($ids){
         }
         return $histories;
 }
+
 function setting(){
         global $_SGLOBAL,$_IMC,$space;
 	if(!empty($_SGLOBAL['supe_uid'])) {

@@ -309,10 +309,10 @@ END;
         '$template = webim_template($template);<br>}';
 	$msg = <<<EOF
 	<h2>请继续下述配置，完成安装:</h2>
-        <h3>1. 复制 <font color="red">webim/webim.htm</font> 到 <font color="red">./template/default/</font> </h3> 
+        <h3>1. 复制 <font color="red">webim/webim.htm</font> 到 <font color="red">./template/default/</font></h3>
         <h3>2. 修改文件<font color="red">./template/default/footer.htm</font></h3>
             <p>在“&lt;/body&gt;”前添加如下代码：<span  style="color:blue"><pre>
-            &lt;script src=&quot;webim/webim.js&quot;>&lt;/script&gt;
+                    &lt;!--{template webim}--&gt;
             </pre></span></p>
         <h3>3. 清除UCHome模板缓存</h3>
 	<p>删除UCHome根目录下./data/tpl_cache/中的模板缓存(或者通过UCenter的"更新缓存")</p>

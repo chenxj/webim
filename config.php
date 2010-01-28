@@ -5,8 +5,8 @@ $_IMC['enable']  	= true;
 $_IMC['domain']  	= 'localhost'; //Your site domain
 $_IMC['apikey']		= 'public'; //Webim apikey
 $_IMC['imsvr']  	= 'www.nextim.cn';//'58.31.93.48';'ucim.webim20.cn'; 
-$_IMC['impost'] 	= '9001'; 
-$_IMC['impoll']  	= '8001'; 
+$_IMC['impost'] 	= '9000'; 
+$_IMC['impoll']  	= '8000'; 
 
 $_IMC['version']	= "2.0.0pre";
 $_IMC['enable']		= true;//开启webim
@@ -25,4 +25,17 @@ $_IMC['channel_pre']= 1000000;
 $_IMC['buddy_name']	= 'username';
 $_IMC['emot']		= 'default';
 $_IMC["opacity"] = 80;//0-100
-?>
+
+$_IMC["enable"] = true;
+$_IMC["domain"] = "localhost";
+$_IMC["apikey"] = "public";
+$_IMC["imsvr"] = "www.nextim.cn";
+$_IMC["impost"] = 9000;
+$_IMC["impoll"] = 8000;
+$_IMC["theme"] = "flick";
+$_IMC["local"] = "zh-TW";
+$_IMC["charset"] = "zh-TW_utf8";
+$_IMC["buddy_name"] = "username";
+$_IMC["channel_pre"] = 1000000;
+$_IMC["groupchat"] = true;
+$_IMC["emot"] = "default";

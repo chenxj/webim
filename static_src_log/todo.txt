@@ -1,5 +1,0 @@
-将上线下线放到setting中，仿校内
-	分析原有上线下线原理，如果出现网络问题就自己下线的方法？扒扒看webim.js,customer.php.js
-	ajax.js，comet.js我觉得这种地方应该会有类似将上线失败bind到某个widget的行为。
-	怎么让下线后buddy消失
-	怎么让上线后

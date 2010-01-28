@@ -39,6 +39,11 @@ $setting = json_encode(setting());
 		load: path + "webim/histories.php",
 		clear: path + "webim/clear_history.php"
 	};
+    webim.room.defaults.urls = {
+                    member: path + "webim/members.php",
+                    join: path + "webim/join.php",
+                    leave: path + "webim/leave.php"
+    };
 	webim.buddy.defaults.url = path + "webim/buddies.php";
 	webim.notification.defaults.url = path + "webim/notifications.php";
 	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});

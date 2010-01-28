@@ -1,17 +1,20 @@
 #!/bin/sh
 
 VERSION="2.0"
-cp 
-rm -rf php && cp ../ucim/php   ./ -R
-mkdir release
+UCIM=../uchome
+NAME=nextim_uc_$VERSION
 
-chmod +x build-basic
-./build-basic sc utf8
-chmod -x build-basic
+rm -rf webim $NAME
 
-cd release
-zip -r ucim_$VERSION.zip webim
-mv *.zip ../
-cd .. && rm -rf release && rm -rf php
+echo "ucim dir is " $UCIM
+cp -R ../uchome webim 
 
+cd webim 
+make clean && make
+rm -rf static_src* Makefile
+cd ..
 
+mkdir $NAME
+mv webim $NAME/
+zip -r $NAME.zip $NAME
+rm -rf webim $NAME

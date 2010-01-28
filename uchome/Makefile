@@ -28,6 +28,7 @@ debug:  submake
 	@@echo "debug complete."
 
 clean:
+	find ./ -name  "dist" | xargs rm -rf
 	@@echo "Removing Distribution directory:" ${STATIC_DIR}
 	@@rm -rf ${STATIC_DIR}
 

@@ -1486,9 +1486,9 @@ model("buddy", {
 (function(){
 	model("room", {
 		urls:{
-			join: "/webim/join",
-			leave: "/webim/leave",
-			member: "/webim/members"
+			join: "/webim/join.php",
+			leave: "/webim/leave.php",
+			member: "/webim/members.php"
 		}
 	},{
 		_init: function(){

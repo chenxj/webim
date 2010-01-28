@@ -50,7 +50,7 @@ function imlog(ui){
 		imUI = new webim.ui(null,{menu: menu});
 		im = imUI.im;
 		layout = imUI.layout;
-		imUI.addApp("hotpost");
+		//imUI.addApp("hotpost");
 		imUI.addApp("chatlink");
 		imUI.addApp("room");
 		body.appendChild(layout.element);

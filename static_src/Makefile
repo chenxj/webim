@@ -24,6 +24,7 @@ CSS_BASE_FILES = ${CSS_SRC_DIR}/core.css\
 	${CSS_SRC_DIR}/chat.css\
 	${CSS_SRC_DIR}/menu.css\
 	${CSS_SRC_DIR}/chatlink.css\
+	${CSS_SRC_DIR}/history.css\
 
 
 IM = ${SRC_DIR}/im/dist/webim.js
@@ -79,7 +80,6 @@ UI_MIN_ALL_JS = ${DIST_DIR}/webim.all.min.js
 
 
 all: dist copy min i18n 
-	cd im && $(MAKE)
 	@@echo "webim build complete."
 
 dist:

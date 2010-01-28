@@ -25,7 +25,7 @@ $body = from_utf8($body);
 $columns = "`uid`,`send`,`to`,`from`,`style`,`body`,`timestamp`,`type`";
 $values_from = "'$from','1','$to','$from','$style','$body','$time','$type'";
 $values_to = "'$to','$send','$to','$from','$style','$body','$time','$type'";
-$_SGLOBAL['db']->query("INSERT INTO ".im_tname('histories')." ($columns) VALUES ($values_from),($values_to)");
+$_SGLOBAL['db']->query("INSERT INTO ".im_tname('histories')." ($columns) VALUES ($values_from)");
 
 $output = array();
 $output["success"] = $send;

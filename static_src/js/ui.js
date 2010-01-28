@@ -105,13 +105,13 @@ extend(webimUI.prototype, objectExtend, {
 		sound.init(urls || this.options.soundUrls);
 	},
 	_initEvents: function(){
-		var self = this, im = self.im, buddy = im.buddy, history = im.history, status = im.status, setting = im.setting, buddyUI = self.buddy, layout = self.layout, notificationUI = self.notification, settingUI = self.setting, room = im.room;
+		var self = this, im = self.im, buddy = im.buddy, history = im.history, status = im.status, setting = im.setting, buddyUI = self.buddy,chatlink = im.chatlink, layout = self.layout, notificationUI = self.notification, settingUI = self.setting, room = im.room;
 		//im events
 		im.bind("ready",function(){
 			layout.changeState("ready");
-      show(layout.app("room").window.element);
+      			show(layout.app("room").window.element);
 			buddyUI.online();
-      settingUI.online();
+      			settingUI.online();
 		}).bind("go",function(data){
 			layout.changeState("active");
 			layout.option("user", data.user);
@@ -122,13 +122,12 @@ extend(webimUI.prototype, objectExtend, {
 			setting.set(data.setting);
 		}).bind("stop", function(type){
 			layout.changeState("stop");
-      hide(layout.app("room").window.element);
-      layout.app("buddy").window.element;
+		        hide(layout.app("room").window.element);
 			type == "offline" && layout.removeAllChat();
 			layout.updateAllChat();
 			buddyUI.offline();
 			type && buddyUI.notice(type);
-      settingUI.offline();
+      			settingUI.offline();
 		});
 		//setting events
 		setting.bind("update",function(key, val){
@@ -155,6 +154,7 @@ extend(webimUI.prototype, objectExtend, {
     //handle 
     settingUI.bind("offline",function(){
       im.trigger("stop");
+      im.offline();
     });
     settingUI.bind("online",function(){
       im.trigger("ready");  
@@ -211,7 +211,7 @@ extend(webimUI.prototype, objectExtend, {
 		//message
 		im.bind("message",function(data){
 			var show = false,roomData = this.room.dataHash,
-          l = data.length, d, uid = im.data.user.id, id, c, online_ids = [], count = "+1";
+         			 l = data.length, d, uid = im.data.user.id, id, c, online_ids = [], count = "+1";
 			for(var i = 0; i < l; i++){
 				d = data[i];
 				id = d.to == uid ? d.from : d.to;
@@ -254,6 +254,7 @@ extend(webimUI.prototype, objectExtend, {
 			online = grep(data, grepOnline);
 			buddy.online(map(online, mapFrom), buddyUI.window.isMinimize());
 			buddy.offline(map(offline, mapFrom));
+			//chatlink.online(online);
 			online.length && buddyUI.notice("buddyOnline", online.pop()["nick"]);
 		});
 		im.bind("status",function(data){

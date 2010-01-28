@@ -160,6 +160,8 @@ function new_message_to_histroy(){
         $_SGLOBAL['db']->query("UPDATE ".im_tname('histories')." SET send=1 WHERE `uid`='$uid' AND send = 0");
 }
 
+//$uid = $space['uid'] : current user
+//$id : user communacated with current user 
 function find_history($ids){
         global $_SGLOBAL,$_IMC,$space;
         $uid = $space['uid'];
@@ -170,14 +172,18 @@ function find_history($ids){
                 $id = $ids[$i];
                 $list = array();
 		if(((int)$id) < $_IMC['room_id_pre']){
-                        $query = $_SGLOBAL['db']->query("SELECT * FROM ".im_tname('histories')." WHERE `uid`='$uid' and (`to`='$id' or `to`='$uid' ) and (`from`='$uid' or `from`='$id') and send = 1 ORDER BY timestamp DESC LIMIT 30");
+                        //$query = $_SGLOBAL['db']->query("SELECT * FROM ".im_tname('histories')." WHERE `uid`='$uid' and (`to`='$id' or `to`='$uid' ) and (`from`='$uid' or `from`='$id') and send = 1 ORDER BY timestamp DESC LIMIT 30");
+                          $query = $_SGLOBAL['db']->query("SELECT * FROM ".im_tname('histories')." WHERE (`from`='$id' and `to`='$uid' and `todel`!=1) or (`from`='$uid' and `to`='$id' and `fromdel`!=1) and send = 1 ORDER BY timestamp DESC LIMIT 30");
+             		//$query = $_SGLOBAL['db']->query("SELECT main.*, s.username, s.name FROM ".im_tname('histories')." main LEFT JOIN ".tname('space')." s ON s.uid=main.from WHERE (`to`='$id' and `todel`!=1) or (`from`='$id' and `fromdel`!=1) ORDER BY timestamp DESC LIMIT 30");
                         while ($value = $_SGLOBAL['db']->fetch_array($query)) {
                                 array_unshift($list,array('to'=>$value['to'],'from'=>$value['from'],'style'=>$value['style'],'body'=>to_utf8($value['body']),'timestamp'=>$value['timestamp'], 'type' =>$value['type'], 'new' => 0));
                         }
                 }else{
-             	        $query = $_SGLOBAL['db']->query("SELECT main.*, s.username, s.name FROM ".im_tname('histories')." main
-             	LEFT JOIN ".tname('space')." s ON s.uid=main.from
-             	 WHERE `to`='$id' ORDER BY timestamp DESC LIMIT 30");
+			$query = $_SGLOBAL['db']->query("SELECT main.*, s.username, s.name FROM ".im_tname('histories')." main LEFT JOIN ".tname('space')." s ON s.uid=main.from WHERE `to`='$id' ORDER BY timestamp DESC LIMIT 30");
+		//
+		//(`to`='$id' and `todel` != 1) sended to him
+		//(`from`='$id' and `fromdel` != 1) he sended 
+             	//$query = $_SGLOBAL['db']->query("SELECT main.*, s.username, s.name FROM ".im_tname('histories')." main LEFT JOIN ".tname('space')." s ON s.uid=main.from WHERE (`to`='$id' and `todel`!=1) or (`from`='$id' and `fromdel`!=1) ORDER BY timestamp DESC LIMIT 30");
                         while ($value = $_SGLOBAL['db']->fetch_array($query)) {
                                 $nick = nick($value); array_unshift($list,array('to'=>$value['to'],'nick'=>to_utf8($nick),'from'=>$value['from'],'style'=>$value['style'],'body'=>to_utf8($value['body']), 'type' => $value['type'], 'timestamp'=>$value['timestamp']));
              

@@ -14,6 +14,12 @@ if(empty($to)||empty($from)){
 	echo '{success:false}';exit();
 }
 
+if($type=='multicast'){
+    $to = $to + $_IMC['room_id_pre'];
+}
+
+
+
 $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
 $nick = to_unicode(to_utf8(nick($space)));
 $client->post('/messages', array('domain'=>$_IMC['domain'],'apikey'=>$_IMC['apikey'],'ticket' => $ticket,'nick'=>$nick, 'type'=> $type, 'to'=>$to,'body'=>to_unicode($body),'timestamp'=>(string)$time,'style'=>$style));

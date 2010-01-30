@@ -1,6 +1,6 @@
 <?php
 define('IN_UCHOME', TRUE);
-
+ 
 $_SGLOBAL = $_SCONFIG = $_SBLOCK = array();
 
 //uchome root 

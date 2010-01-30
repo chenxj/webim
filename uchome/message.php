@@ -1,7 +1,7 @@
 <?php 
 include_once('common.php');
 require 'http_client.php';
-
+ 
 $ticket = gp('ticket');
 $body = gp('body','');
 $style = gp('style','');

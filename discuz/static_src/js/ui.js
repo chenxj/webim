@@ -71,6 +71,7 @@ extend(webimUI.prototype, objectExtend, {
 			onlyIcon: true,
 			isMinimize: true
 		});
+
  		layout.addApp(self.setting, {
 			title: i18n("setting"),
 			icon: "setting",
@@ -105,7 +106,7 @@ extend(webimUI.prototype, objectExtend, {
 		sound.init(urls || this.options.soundUrls);
 	},
 	_initEvents: function(){
-		var self = this, im = self.im, buddy = im.buddy, history = im.history, status = im.status, setting = im.setting, buddyUI = self.buddy,chatlink = im.chatlink, layout = self.layout, notificationUI = self.notification, settingUI = self.setting, room = im.room;
+		var self = this, im = self.im, buddy = im.buddy,  history = im.history, status = im.status, setting = im.setting, buddyUI = self.buddy,chatlink = im.chatlink, layout = self.layout, notificationUI = self.notification, settingUI = self.setting, room = im.room;
 		//im events
 		im.bind("ready",function(){
 			layout.changeState("ready");

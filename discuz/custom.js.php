@@ -71,6 +71,7 @@ $setting = empty($setting) ? "{}" : $setting;
 		imUI = new webim.ui(null,{menu: menu});
 		im = imUI.im;
 		layout = imUI.layout;
+		imUI.addApp("hotpost");
                 imUI.addApp("room");
                 //imUI.addApp("chatlink");
 		body.appendChild(layout.element);

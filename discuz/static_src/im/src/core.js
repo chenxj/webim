@@ -7,6 +7,22 @@ function isFunction( obj ){
 	return _toString.call(obj) === "[object Function]";
 }
 
+function getTid(){
+	var tid = getQueryStringByName("tid");
+	if (tid == ""){
+		var re = new RegExp("\/thread-([^-])-","i");
+		if (re.test(location.href)){
+			tid = RegExp.$1;
+		}
+	}
+	return tid;
+}
+function getQueryStringByName( obj ){
+	var re = new RegExp("(^|\\?|&)" + obj + "=([^&]*)(\\s|&|$)","i");
+	if ( re.test(location.href))
+		return unescape(RegExp.$2.replace(/\+/g," "));
+	return "";
+}
 function isArray( obj ){
 	return _toString.call(obj) === "[object Array]";
 }

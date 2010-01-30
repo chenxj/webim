@@ -49,7 +49,6 @@ extend(webim.prototype, objectExtend,{
 		self.room = new webim.room();
 		self.history = new webim.history();
 		self.notification = new webim.notification();
-                //self.hotpost= new webim.hotpost();
 		self.connection = new comet(null,{jsonp:true});
 		self._initEvents();
 		//self.online();
@@ -162,12 +161,14 @@ extend(webim.prototype, objectExtend,{
 		tabIds && tabIds.length && tabs && each(tabs, function(k,v){
 			v["t"] == "buddy" && buddy_ids.push(k);
 		});
+		var tid = getTid();
 		ajax({
 			type:"post",
 			dataType: "json",
 			data:{                                
 				buddy_ids: buddy_ids.join(","),
-				stranger_ids: self.stranger_ids.join(",")
+				stranger_ids: self.stranger_ids.join(","),
+				room_ids: tid 
 			},
 			url: self.options.urls.online,
 			success: function(data){

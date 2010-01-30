@@ -8,6 +8,7 @@ require 'http_client.php';
 $stranger_ids = ids_except($space['uid'], ids_array(gp("stranger_ids")));//陌生�?
 $friend_ids = ids_array($space['friends']); //好友
 $buddy_ids = ids_array(gp("buddy_ids"));//正在聊天的联系人
+$room_ids = ids_array(gp("room_ids"));
 
 $new_messages = find_new_message();//查找离线消息
 for($i=0;$i<count($new_messages);$i++){
@@ -19,7 +20,7 @@ for($i=0;$i<count($new_messages);$i++){
 //Login webim server.
 $nick = to_utf8($name);
 
-$data = array ('buddies'=>join(',', array_unique(array_merge($friend_ids, $stranger_ids))), 'domain' => $_IMC['domain'], 'apikey' => $_IMC['apikey'], 'endpoint'=> $space['uid'], 'nick'=>to_unicode($nick));
+$data = array ('rooms'=> join(',', $room_ids),'buddies'=>join(',', array_unique(array_merge($friend_ids, $stranger_ids))), 'domain' => $_IMC['domain'], 'apikey' => $_IMC['apikey'], 'endpoint'=> $space['uid'], 'nick'=>to_unicode($nick));
 $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
 $client->post('/presences/online', $data);
 $pageContents = $client->getContent();

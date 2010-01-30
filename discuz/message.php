@@ -10,13 +10,20 @@ $send = gp('offline') == "1" ? false : true;
 $type = gp('type');
 $from = $space['uid'];
 $time = microtime(true)*1000;
+#$time = time();
 if(empty($to)||empty($from)){
 	echo '{success:false}';exit();
 }
+echo $time;
+#if($type=='multicast'){
+ #   $to = $to + $_IMC['room_id_pre'];
+#}
+
+
 
 $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
 $nick = to_unicode(to_utf8(nick($space)));
-$client->post('/messages', array('domain'=>$_IMC['domain'],'apikey'=>$_IMC['apikey'],'ticket' => $ticket,'nick'=>$nick, 'type'=> $type, 'to'=>$to,'body'=>to_unicode($body),'timestamp'=>(string)$time,'style'=>$style));
+$client->post('/messages', array('domain'=>$_IMC['domain'],'apikey'=>$_IMC['apikey'],'ticket' => $ticket,'nick'=>$nick, 'type'=> $type, 'to'=>$to,'body'=>to_unicode($body),'timestamp'=>$time,'style'=>$style));
 $pageContents = $client->getContent();
 
 //TODO:send => true if forward message successfully.
@@ -30,5 +37,6 @@ $_SGLOBAL['db']->query("INSERT INTO ".im_tname('histories')." ($columns) VALUES 
 $output = array();
 $output["success"] = $send;
 $output["msg"] = $pageContents;
+#$output['timestamp'] = time();
 echo json_encode($output);
 ?>

@@ -1,13 +1,15 @@
 <?php
 header("Content-type: application/javascript");
 include_once('common.php');
+if($ucappopen['UCHOME']){
 $menu = array(
-	array("title" => 'doing',"icon" =>"image/app/doing.gif","link" => "space.php?do=doing"),
-	array("title" => 'album',"icon" =>"image/app/album.gif","link" => "space.php?do=album"),
-	array("title" => 'blog',"icon" =>"image/app/blog.gif","link" => "space.php?do=blog"),
-	array("title" => 'thread',"icon" =>"image/app/mtag.gif","link" => "space.php?do=thread"),
-	array("title" => 'share',"icon" =>"image/app/share.gif","link" => "space.php?do=share")
+	array("title" => 'doing',"icon" =>$uchomeurl."/image/app/doing.gif","link" => $uchomeurl."/space.php?do=doing"),
+	array("title" => 'album',"icon" =>$uchomeurl."/image/app/album.gif","link" => $uchomeurl."/space.php?do=album"),
+	array("title" => 'blog',"icon" =>$uchomeurl."/image/app/blog.gif","link" => $uchomeurl."/space.php?do=blog"),
+	array("title" => 'thread',"icon" =>$uchomeurl."/image/app/mtag.gif","link" => $uchomeurl."/space.php?do=thread"),
+	array("title" => 'share',"icon" =>$uchomeurl."/image/app/share.gif","link" => $uchomeurl."/space.php?do=share")
 );
+}
 if($_SCONFIG['my_status']) {
 	if(is_array($_SGLOBAL['userapp'])) { 
 		foreach($_SGLOBAL['userapp'] as $value) { 
@@ -15,7 +17,15 @@ if($_SCONFIG['my_status']) {
 		}
 	}
 }
-$setting = json_encode(setting());
+if(!empty($_SGLOBAL['supe_uid'])) {
+	$setting  = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("SELECT * FROM ".im_tname('setting')." WHERE uid='$_SGLOBAL[supe_uid]'"));
+	if(empty($setting)){
+        $setting = array('uid'=>$space['uid'],'web'=>"");
+        $_SGLOBAL['db']->query("INSERT INTO ".im_tname('setting')." (uid,web) VALUES ($_SGLOBAL[supe_uid],'')");
+	}
+	$setting = $setting["web"];
+}
+$setting = empty($setting) ? "{}" : $setting;
 ?>
 
 //custom
@@ -39,6 +49,11 @@ $setting = json_encode(setting());
 		load: path + "webim/histories.php",
 		clear: path + "webim/clear_history.php"
 	};
+    webim.room.defaults.urls = {
+                    member: path + "webim/members.php",
+                    join: path + "webim/join.php",
+                    leave: path + "webim/leave.php"
+    };
 	webim.buddy.defaults.url = path + "webim/buddies.php";
 	webim.notification.defaults.url = path + "webim/notifications.php";
 	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});

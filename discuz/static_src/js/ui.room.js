@@ -145,6 +145,7 @@ widget("room",{
 		var self = this, li = self.li, id = info.id, ul = self.$.ul;
 		if(!li[id]){
 			if(!info.default_pic_url)info.default_pic_url = "";
+			if(info.url == undefined || info.url == "" )info.url = location.href;
 			var el = li[id] = createElement(tpl(self.options.tpl_li, info));
 			//self._updateInfo(el, info);
 			var a = el.firstChild;

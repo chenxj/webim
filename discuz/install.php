@@ -36,16 +36,24 @@ $sqlfile = S_ROOT.'./webim/data/webim.sql';
 if(!file_exists($sqlfile)) {
 	show_msg('./webim/data/webim.sql 数据库初始化文件不存在，请检查你的安装文件', 999);
 }
-$configfile = S_ROOT.'./config.inc.php';
+
+$basic_configfile = S_ROOT.'./config.inc.php';
+$webim_configfile = S_ROOT.'./webim/config.php';
 
 //variables
 $step = empty($_GET['step'])?0:intval($_GET['step']);
 $action = empty($_GET['action'])?'':trim($_GET['action']);
 $nowarr = array('','','','');
 
+
 //检查config是否可写
-if(!@$fp = fopen($configfile, 'a')) {
-	show_msg("文件 $configfile 读写权限设置错误，请设置为可写，再执行安装程序");
+if(!@$fp = fopen($webim_configfile, 'a')) {
+	show_msg("文件 $webim_configfile 读写权限设置错误，请设置为可写，再执行安装程序");
+} else {
+	@fclose($fp);
+}
+if(!@$fp = fopen($basic_configfile, 'a')) {
+	show_msg("文件 $baisc_configfile 读写权限设置错误，请设置为可写，再执行安装程序");
 } else {
 	@fclose($fp);
 }
@@ -62,7 +70,8 @@ if (submitcheck('ucimsubmit')) {
 	if(empty($domain) || empty($apikey)) {
 		show_msg('网站域名和API KEY不能为空');
 	} else {
-		writeconfig($configfile,$domain,$apikey,$theme,$local);
+		write_basic_config($basic_configfile);
+        write_webim_config($webim_configfile,$domain,$apikey,$theme,$charset);
 		//import webim/data/webim.sql
 	$newsql = file_get_contents($sqlfile);
 
@@ -180,10 +189,34 @@ END;
 					<td>API KEY:</td>
 					<td><input type="text" id="apikey" name="apikey" size="60" value="$apikey"></td>
 				</tr>
-				<!--<tr>
+				<tr>
 					<td>外观:</td>
-					<td><select id="theme" name="theme"><option value="yellow">yellow</option><option value="blue">blue</option></select></td>
-				</tr>-->
+                    <td><select id="theme" name="theme">
+                                             <option value="flick">flick</option>
+                                             <option value="eggplant">eggplant</option>
+                                             <option value="base">base</option>
+                                             <option value="blitzer">blitzer</option>
+                                             <option value="dark-hive">dark-hive</option>
+                                             <option value="humanity">humanity</option>
+                                             <option value="pepper-grinder">mint-choc</option>
+                                             <option value="smoothness">smoothness</option>
+                                             <option value="start">start</option>
+                                             <option value="swanky-purse">swanky-purse</option>
+                                             <option value="black-tie">black-tie</option>
+                                             <option value="cupertino">cupertino</option>
+                                             <option value="dot-luv">dot-luv</option>
+                                             <option value="excite-bike">excite-bike</option>
+                                             <option value="le-frog">hot-sneaks</option>
+                                             <option value="overcast">overcast</option>
+                                             <option value="redmond">redmond</option>
+                                             <option value="south-street">south-street</option>
+                                             <option value="sunny">sunny</option>
+                                             <option value="trontastic">trontastic</option>
+                                            <option value="ui-darkness">ui-darkness</option>
+                                             <option value="ui-lightness">ui-lightness</option>
+                                            <option value="vader">vader</option>
+                    </select>(推荐使用flick、eggplant)</td>
+				</tr>
 				<tr>
 					<td>语言:</td>
 					<td><select id="local" name="local"><option value="zh-CN">zh-CN</option><option value="zh-TW">zh-TW</option><option value="en">en</option></select></td>
@@ -268,7 +301,7 @@ END;
 	}
 } elseif ($step == 3) {
 	@touch(S_ROOT.'./forumdata/webiminstall.lock');
-	@include($configfile);
+	@include($basic_configfile);
 	$msg = <<<EOF
 	<h2>请继续下述配置，完成安装:</h2>
 	<h3>1. 修改文件<font color="red">./include/js/common.js</font></h3>
@@ -276,7 +309,7 @@ END;
 Array.prototype.push = function(value) {
 	this[this.length] = value;
 	return this.length;
-}</pre></span>修改为下述代码（如果没有修改过，大约为第56行）：<span  style="color:blue"><pre>
+}</pre></span>修改为下述代码（如果为上述代码 请跳过此步骤）：<span  style="color:blue"><pre>
 if(typeof Array.prototype.push === 'undefined') {
 	Array.prototype.push = function(value) {
 		this[this.length] = value;
@@ -486,7 +519,10 @@ function insertconfig($s, $find, $replace) {
 	return $s;
 }
 //?><?php
-function writeconfig($file,$domain,$apikey,$theme,$local) {
+//
+//
+
+function write_webim_config($file,$domain,$apikey,$theme,$charset) {
 $fp = fopen($file, 'r');
 		$configfile = fread($fp, filesize($file));
 		$configfile = trim($configfile);
@@ -497,18 +533,32 @@ $fp = fopen($file, 'r');
 			$configfile = insertconfig($configfile, '/\$_IMC\["enable"\] =\s*.*?;/i', '$_IMC["enable"] = true;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["domain"\] =\s*".*?";/i', '$_IMC["domain"] = "'.$domain.'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["apikey"\] =\s*".*?";/i', '$_IMC["apikey"] = "'.$apikey.'";');
-			$configfile = insertconfig($configfile, '/\$_IMC\["imsvr"\] =\s*".*?";/i', '$_IMC["imsvr"] = "dzim.webim20.cn";');
+			$configfile = insertconfig($configfile, '/\$_IMC\["imsvr"\] =\s*".*?";/i', '$_IMC["imsvr"] = "www.nextim.cn";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["impost"\] =\s*.*?;/i', '$_IMC["impost"] = 9000;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["impoll"\] =\s*.*?;/i', '$_IMC["impoll"] = 8000;');
-			$configfile = insertconfig($configfile, '/\$_IMC\["version"\] =\s*".*?";/i', '$_IMC["version"] = "2.0.0pre";');
-			$configfile = insertconfig($configfile, '/\$_IMC\["show_realname"\] =\s*.*?;/i', '$_IMC["show_realname"] = true;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["theme"\] =\s*".*?";/i', '$_IMC["theme"] = "'.$theme.'";');
-			$configfile = insertconfig($configfile, '/\$_IMC\["local"\] =\s*".*?";/i', '$_IMC["local"] = "'.$local.'";');
-			//$configfile = insertconfig($configfile, '/\$_IMC\["charset"\] =\s*".*?";/i', '$_IMC["charset"] = "'.$charset.'";');
+			$configfile = insertconfig($configfile, '/\$_IMC\["local"\] =\s*".*?";/i', '$_IMC["local"] = "'.substr($charset,0,5).'";');
+			$configfile = insertconfig($configfile, '/\$_IMC\["charset"\] =\s*".*?";/i', '$_IMC["charset"] = "'.$charset.'";');
+			$configfile = insertconfig($configfile, '/\$_IMC\["buddy_name"\] =\s*".*?";/i', '$_IMC["buddy_name"] = "username";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["room_id_pre"\] =\s*.*?;/i', '$_IMC["room_id_pre"] = 1000000;');
-			$configfile = insertconfig($configfile, '/\$_IMC\["enable_room"\] =\s*.*?;/i', '$_IMC["enable_room"] = false;');
+			$configfile = insertconfig($configfile, '/\$_IMC\["groupchat"\] =\s*.*?;/i', '$_IMC["groupchat"] = true;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["emot"\] =\s*".*?";/i', '$_IMC["emot"] = "default";');
-			//$configfile = insertconfig($configfile, '/\$_IMC\["opacity"\] =\s*.*?;/i', '$_IMC["opacity"] = 80;');
+			$configfile = insertconfig($configfile, '/\$_IMC\["opacity"\] =\s*.*?;/i', '$_IMC["opacity"] = 80;');
+		$fp = fopen($file, 'w');
+		if(!($fp = @fopen($file, 'w'))) {
+			show_msg('请确认文件 webim/config.php 可写');
+		}
+		@fwrite($fp, trim($configfile));
+		@fclose($fp);
+	}
+function write_basic_config($file) {
+$fp = fopen($file, 'r');
+		$configfile = fread($fp, filesize($file));
+		$configfile = trim($configfile);
+		$configfile = substr($configfile, -2) == '?>' ? substr($configfile, 0, -2) : $configfile;
+		fclose($fp);
+
+			$configfile = insertconfig($configfile, '.*', 'include_once("webim/config.php");');
 		$fp = fopen($file, 'w');
 		if(!($fp = @fopen($file, 'w'))) {
 			show_msg('请确认文件 config.inc.php 可写');
@@ -516,6 +566,8 @@ $fp = fopen($file, 'r');
 		@fwrite($fp, trim($configfile));
 		@fclose($fp);
 	}
+//
+
 function tname($name) {
 	global $tablepre;
 	return $tablepre.$name;

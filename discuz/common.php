@@ -244,6 +244,31 @@ function find_new_message(){
         }
         return $messages;
 }
+
+
+function find_room($tid){
+    global $_SGLOBAL,$_IMC,$space;
+	$rooms = array();
+	//uchome_mtag table
+//	$query = $_SGLOBAL['db']->query("SELECT t.tagid, t.membernum, t.tagname, t.pic
+//		FROM ".tname('threads')." main
+//		LEFT JOIN ".tname('mtag')." t ON t.tagid = main.tagid
+//		WHERE main.uid = '$space[uid]'");
+	$query = $_SGLOBAL['db']->query("SELECT subject
+		FROM ".tname('threads')." 
+		WHERE tid = '$tid'");
+	while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+		$subject = $value['subject'];
+		$id = (string)($_IMC['room_id_pre'] + $tid);
+		$eid = 'channel:'.$id.'@'.$_IMC['domain'];
+		$pic = empty($value['pic']) ? 'image/nologo.jpg' : $value['pic'];
+		$rooms[$id]=array('id'=>$id,'name'=> to_utf8($subject), 'pic_url'=>"", 'status'=>'','status_time'=>'');
+	}
+	return $rooms;
+}
+
+
+
 function new_message_to_histroy(){
         global $_SGLOBAL,$_IMC,$space;
         $uid = $space['uid'];

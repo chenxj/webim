@@ -56,6 +56,7 @@ $setting = empty($setting) ? "{}" : $setting;
     };
 	webim.buddy.defaults.url = path + "webim/buddies.php";
 	webim.notification.defaults.url = path + "webim/notifications.php";
+    webim.hotpost.defaults.url = "path" + "webim/hotpost.php";
 	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});
 	var soundUrls = {
 		lib: path + "webim/static/assets/sound.swf",

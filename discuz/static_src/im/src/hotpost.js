@@ -12,7 +12,7 @@ data
 */
 
 model("hotpost",{
-	url: "webim/hotpost"
+	url: "webim/hotpost.php"
 },{
 	grep: function(val, n){
 		return val && val.text;

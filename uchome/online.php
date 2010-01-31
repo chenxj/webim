@@ -50,6 +50,7 @@ if(is_object($rooms_num)){
 		$rooms[$key]['count'] = $value;
 	}
 }
+
 $output = array();
 $output['buddy_online_ids'] = join(",", $buddy_online_ids);
 $output['clientnum'] = $clientnum;

@@ -14,7 +14,6 @@ $time = microtime(true)*1000;
 if(empty($to)||empty($from)){
 	echo '{success:false}';exit();
 }
-echo $time;
 #if($type=='multicast'){
  #   $to = $to + $_IMC['room_id_pre'];
 #}
@@ -32,7 +31,7 @@ $body = from_utf8($body);
 $columns = "`uid`,`send`,`to`,`from`,`style`,`body`,`timestamp`,`type`";
 $values_from = "'$from','1','$to','$from','$style','$body','$time','$type'";
 $values_to = "'$to','$send','$to','$from','$style','$body','$time','$type'";
-$_SGLOBAL['db']->query("INSERT INTO ".im_tname('histories')." ($columns) VALUES ($values_from)");
+$_SGLOBAL['db']->query("INSERT INTO ".im_tname('histories')." ($columns) VALUES ($values_to)");
 
 $output = array();
 $output["success"] = $send;

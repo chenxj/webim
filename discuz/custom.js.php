@@ -42,7 +42,8 @@ $setting = empty($setting) ? "{}" : $setting;
 		offline:path + "webim/offline.php",
 		message:path + "webim/message.php",
 		refresh:path + "webim/refresh.php",
-		status:path + "webim/status.php"
+		status:path + "webim/status.php",
+		hotpost:path + "webim/hotpost.php"
 	};
 	webim.setting.defaults.url = path + "webim/setting.php";
 	webim.history.defaults.urls = {

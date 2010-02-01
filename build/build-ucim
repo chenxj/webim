@@ -1,16 +1,18 @@
 #!/bin/sh
 
 VERSION="2.0"
-UCIM=../uchome
+HOME=../uchome
 NAME=nextim_uc_$VERSION
 
 rm -rf webim $NAME
 
-echo "ucim dir is " $UCIM
-cp -R ../uchome webim 
+echo "ucim dir is " $HOME
+cp -R $HOME webim 
 
 cd webim 
 make clean && make
+rm static/webim.all.js
+rm static/webim.css
 rm -rf static_src* Makefile
 cd ..
 

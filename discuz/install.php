@@ -65,7 +65,7 @@ if (submitcheck('ucimsubmit')) {
 	$domain = trim($_POST['domain']);
 	$apikey = trim($_POST['apikey']);
 	$theme = trim($_POST['theme']);
-	$local = trim($_POST['local']);
+	$charset = trim($_POST['charset']);
 
 	if(empty($domain) || empty($apikey)) {
 		show_msg('网站域名和API KEY不能为空');
@@ -219,7 +219,13 @@ END;
 				</tr>
 				<tr>
 					<td>语言:</td>
-					<td><select id="local" name="local"><option value="zh-CN">zh-CN</option><option value="zh-TW">zh-TW</option><option value="en">en</option></select></td>
+                    <td><select id="charset" name="charset">
+                    <option value="zh-CN_gbk">简体中文（GBK）</option>
+                    <option value="zh-CN_utf8">简体中文（UTF-8）</option>
+                    <option value="zh-TW_big5">繁体中文（BIG5）</option>
+                    <option value="zh-TW_utf8">繁体中文（UTF-8）</option>
+                    <option value="en_utf8">英文（UTF-8）</option></select>(选择与Discuz相同的编码)</td>
+                    </td>
 				</tr>
 			</tbody>
 		</table>
@@ -533,7 +539,7 @@ $fp = fopen($file, 'r');
 			$configfile = insertconfig($configfile, '/\$_IMC\["enable"\] =\s*.*?;/i', '$_IMC["enable"] = true;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["domain"\] =\s*".*?";/i', '$_IMC["domain"] = "'.$domain.'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["apikey"\] =\s*".*?";/i', '$_IMC["apikey"] = "'.$apikey.'";');
-			$configfile = insertconfig($configfile, '/\$_IMC\["imsvr"\] =\s*".*?";/i', '$_IMC["imsvr"] = "www.nextim.cn";');
+			$configfile = insertconfig($configfile, '/\$_IMC\["imsvr"\] =\s*".*?";/i', '$_IMC["imsvr"] = "211.144.86.221";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["impost"\] =\s*.*?;/i', '$_IMC["impost"] = 80;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["impoll"\] =\s*.*?;/i', '$_IMC["impoll"] = 8000;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["theme"\] =\s*".*?";/i', '$_IMC["theme"] = "'.$theme.'";');

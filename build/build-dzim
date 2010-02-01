@@ -1,0 +1,22 @@
+#!/bin/sh
+
+VERSION="2.0"
+HOME=../discuz
+NAME=nextim_dz_$VERSION
+
+rm -rf webim $NAME
+
+echo "dzim dir is " $HOME
+cp -R $HOME webim 
+
+cd webim 
+make clean && make
+rm static/webim.all.js
+rm static/webim.css
+rm -rf static_src* Makefile
+cd ..
+
+mkdir $NAME
+mv webim $NAME/
+zip -r $NAME.zip $NAME
+rm -rf webim $NAME

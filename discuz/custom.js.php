@@ -9,6 +9,7 @@ $menu = array(
 	array("title" => 'thread',"icon" =>$uchomeurl."/image/app/mtag.gif","link" => $uchomeurl."/space.php?do=thread"),
 	array("title" => 'share',"icon" =>$uchomeurl."/image/app/share.gif","link" => $uchomeurl."/space.php?do=share")
 );
+
 }
 if($_SCONFIG['my_status']) {
 	if(is_array($_SGLOBAL['userapp'])) { 

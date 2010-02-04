@@ -1,4 +1,3 @@
-<?php
 header("Content-type: application/javascript");
 include_once('common.php');
 if($ucappopen['UCHOME']){

@@ -1,23 +1,39 @@
-ï»¿<?php
+<?php
 include_once('common.php');
 if(empty($space))exit();
 $name = nick($space);
 require 'http_client.php';
+$platform = gp('platform');
 
-$stranger_ids = ids_except($space['uid'], ids_array(gp("stranger_ids")));//é™Œç”Ÿäºº?
-$friend_ids = ids_array($space['friends']); //å¥½å‹
-$buddy_ids = ids_array(gp("buddy_ids"));//æ­£åœ¨èŠå¤©çš„è”ç³»äºº
+$stranger_ids = ids_except($space['uid'], ids_array(gp("stranger_ids")));//Ä°ÉúÈË
+$friend_ids = ids_array($space['friends']); //ºÃÓÑ
+$buddy_ids = ids_array(gp("buddy_ids"));//ÕýÔÚÁÄÌìµÄÁªÏµÈË
 
-$new_messages = find_new_message();//æŸ¥æ‰¾ç¦»çº¿æ¶ˆæ¯
+$new_messages = find_new_message();//²éÕÒÀëÏßÏûÏ¢
 for($i=0;$i<count($new_messages);$i++){
         $msg_uid = $new_messages[$i]["from"];
         array_push($buddy_ids, $msg_uid);
         array_push($stranger_ids, $msg_uid);
 }
+//Login webim server.
+$nick = to_utf8($name);
+if($platform == 'uchome'){
+	$setting = setting();
+}
 
 $block_list = is_array($setting->block_list) ? $setting->block_list : array();
-$rooms = find_room(gp("room_ids"));
-$room_ids = ids_array($room);
+switch($platform){
+case 'uchome':
+	$rooms = find_room();
+	$room_ids = array();
+	break;
+case 'discuz':
+	$rooms = find_room(gp("room_ids"));
+	$room_ids = ids_array($room);
+	break;
+default:
+	break;
+}
 foreach($rooms as $key => $value){
 	if(in_array($key, $block_list)){
 		$rooms[$key]['blocked'] = true;
@@ -25,11 +41,16 @@ foreach($rooms as $key => $value){
 		array_push($room_ids, $key);
 }
 
-//Login webim server.
-$nick = to_utf8($name);
-
-
+switch($platform){
+case 'uchome':
+$data = array ('rooms'=> join(',', $room_ids),'buddies'=>join(',', array_unique(array_merge($friend_ids, $buddy_ids, $stranger_ids))), 'domain' => $_IMC['domain'], 'apikey' => $_IMC['apikey'], 'endpoint'=> $space['uid'], 'nick'=>to_unicode($nick));
+break;
+case 'discuz':
 $data = array ('rooms'=> join(',', $room_ids),'buddies'=>join(',', array_unique(array_merge($friend_ids, $stranger_ids))), 'domain' => $_IMC['domain'], 'apikey' => $_IMC['apikey'], 'endpoint'=> $space['uid'], 'nick'=>to_unicode($nick));
+break;
+default:
+break;
+}
 $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
 $client->post('/presences/online', $data);
 $pageContents = $client->getContent();
@@ -40,11 +61,11 @@ if($client->status !="200"||empty($pageData->ticket)){
 }else
         $ticket = $pageData->ticket;
 if(empty($ticket)){
-        //ç™»å½•å¤±è´¥
+        //µÇÂ¼Ê§°Ü
         echo '{status: "'.$client->status.'", "errorMsg":"'.$pageContents.'"}';
         exit();
 }
-$buddy_online_ids = ids_array($pageData->buddies);//åœ¨çº¿å¥½å‹åˆ—è¡¨ids
+$buddy_online_ids = ids_array($pageData->buddies);//ÔÚÏßºÃÓÑÁÐ±íids
 $clientnum = $pageData->clientnum;
 $rooms_num = $pageData->roominfo;
 if(is_object($rooms_num)){
@@ -58,17 +79,17 @@ $output['buddy_online_ids'] = join(",", $buddy_online_ids);
 $output['clientnum'] = $clientnum;
 $output['server_time'] = microtime(true)*1000;
 
-$output['user']=array('id'=>$space['uid'], 'name'=>to_utf8($name), 'pic_url'=>avatar($space['uid'],'small',true), 'status'=>'', 'presence' => 'online', 'status_time'=>'', 'url'=>'space.php?uid='.$space['uid']);//ç”¨æˆ·ä¿¡æ¯
+$output['user']=array('id'=>$space['uid'], 'name'=>to_utf8($name), 'pic_url'=>avatar($space['uid'],'small',true), 'status'=>'', 'presence' => 'online', 'status_time'=>'', 'url'=>'space.php?uid='.$space['uid']);//ÓÃ»§ÐÅÏ¢
 
 $imserver = 'http://'.$_IMC['imsvr'].':'.$_IMC['impoll'];
-$output['connection'] = array('domain' => $_IMC['domain'], 'ticket'=>$ticket, 'server'=>$imserver);//æœåŠ¡å™¨è¿žæŽ?
+$output['connection'] = array('domain' => $_IMC['domain'], 'ticket'=>$ticket, 'server'=>$imserver);//·þÎñÆ÷Á¬½Ó
 
 $output['new_messages'] = $new_messages;
 $output['buddies'] = find_buddy($buddy_ids);
 $output['rooms'] = $rooms;
 $output['histories'] = find_history($buddy_ids);
 
-new_message_to_histroy(); //æ–°æ¶ˆæ¯è½¬åˆ°åŽ†å²è®°å½?
+new_message_to_histroy(); //ÐÂÏûÏ¢×ªµ½ÀúÊ·¼ÇÂ¼
 
 echo json_encode($output);
 ?>

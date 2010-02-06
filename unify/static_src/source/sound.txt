@@ -1,0 +1,11 @@
+	flash.system.Security.allowDomain("*");
+	import flash.media.Sound;
+	import flash.net.URLRequest;
+	import flash.external.ExternalInterface;
+	function playSound(url:String="sound.mp3"){
+		
+		var _sound:Sound = new Sound(new URLRequest(url));
+		_sound.play();
+		
+	}
+	ExternalInterface.addCallback("playSound",playSound);

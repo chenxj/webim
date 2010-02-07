@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2009 Hidden
  *
- * Date: 
+ * Date:   Sun Feb 7 16:31:45 2010 +0800
  * Revision: 
  */
 (function(window, document, undefined){
@@ -1787,7 +1787,7 @@ model("history",{
  *
  * Copyright (c) 2009 Hidden
  *
- * Date: 
+ * Date:   Sun Feb 7 16:31:45 2010 +0800
  * Revision: 
  */
 (function(window,document,undefined){

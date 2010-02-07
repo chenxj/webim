@@ -106,7 +106,7 @@ UC_UI_MIN_ALL_JS = ${DIST_DIR}/webim_uc.all.min.js
 
 
 
-all: submake dist copy dzim ucim i18n 
+all: submake dist copy dzim ucim i18n min 
 	@@echo "webim build complete."
 submake:
 	cd im && $(MAKE)

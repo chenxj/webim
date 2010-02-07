@@ -1,0 +1,106 @@
+#webim-room{
+        padding: .3em 0;
+
+}
+#webim-room .webim-room-search{
+        padding: 0em 1.6em 0em 0em;
+        margin: .3em .5em .5em;
+        display: none;
+}
+#webim-room .webim-room-search input{
+        border: none;
+        background: none;
+	display: block;
+	width:95%;
+        padding: .2em;
+	/*
+	*/
+}
+#webim-room .webim-room-search em{
+        float: right;
+	display: inline;
+        margin: .1em -1.5em 0 0;
+}
+#webim-room .webim-room-online{
+        padding: 1em;
+        text-align: center;
+        display: none;
+}
+
+#webim-room .webim-room-online a{
+        padding: 1em 2em;
+}
+#webim-room .webim-room-content{
+        padding: .2em .5em 0;
+        position:relative;
+}
+/*fuck ie6  why ?*/
+* html  #webim-room .webim-room-content{
+        position: fixed;
+}
+
+#webim-room.webim-room-scroll .webim-room-content{
+        height: 25em;
+        overflow-y: auto;
+}
+#webim-room.webim-room-scroll .webim-room-search{
+        display: block;
+}
+
+#webim-room .webim-room-offline{
+        display: none;
+	float: right;
+	/*
+        position: absolute;
+        top: .3em;
+        right: .5em;
+	*/
+}
+#webim-room .webim-room-empty{
+        display: none;
+        padding: 0 0 1em;
+}
+
+#webim-room .webim-room-offline a{
+}
+#webim-room ul{
+	list-style: none;
+}
+#webim-room ul h4{
+        background:none;
+        font-weight: normal;
+        border-width: 0;
+        border-bottom-width: 1px;
+        padding: .2em .5em 0;
+}
+#webim-room ul li{
+}
+#webim-room ul li a{
+        display:block;
+        margin-left:3em;
+        padding: .3em 0;
+}
+#webim-room ul li a img{
+        display:block;
+        float:left;
+        margin-left: -2.5em;
+}
+/*fuck ie6  why ?*/
+* html  #webim-room ul li a img{
+        position: fixed;
+}
+#webim-room ul li a strong{
+        display: block;
+        font-weight: normal;
+}
+#webim-room ul li a span{
+        display: block;
+}
+.webim-state-stop .webim-icon-room{
+        display:none;
+        position:absolute;
+}
+.webim-icon-room{
+	width:1.8em;
+	background-image:url(../images/icons/room.gif);
+}

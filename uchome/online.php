@@ -1,8 +1,9 @@
-<?php
+﻿<?php
 include_once('common.php');
 if(empty($space))exit();
 $name = nick($space);
 require 'http_client.php';
+$platform = gp('platform');
 
 $stranger_ids = ids_except($space['uid'], ids_array(gp("stranger_ids")));//陌生人
 $friend_ids = ids_array($space['friends']); //好友
@@ -14,20 +15,42 @@ for($i=0;$i<count($new_messages);$i++){
         array_push($buddy_ids, $msg_uid);
         array_push($stranger_ids, $msg_uid);
 }
-
 //Login webim server.
 $nick = to_utf8($name);
-$setting = setting();
+if($platform == 'uchome'){
+	$setting = setting();
+}
+
 $block_list = is_array($setting->block_list) ? $setting->block_list : array();
-$rooms = find_room();
-$room_ids = array();
+switch($platform){
+case 'uchome':
+	$rooms = find_room();
+	$room_ids = array();
+	break;
+case 'discuz':
+	$rooms = find_room(gp("room_ids"));
+	$room_ids = ids_array($room);
+	break;
+default:
+	break;
+}
 foreach($rooms as $key => $value){
 	if(in_array($key, $block_list)){
 		$rooms[$key]['blocked'] = true;
 	}else
 		array_push($room_ids, $key);
 }
+
+switch($platform){
+case 'uchome':
 $data = array ('rooms'=> join(',', $room_ids),'buddies'=>join(',', array_unique(array_merge($friend_ids, $buddy_ids, $stranger_ids))), 'domain' => $_IMC['domain'], 'apikey' => $_IMC['apikey'], 'endpoint'=> $space['uid'], 'nick'=>to_unicode($nick));
+break;
+case 'discuz':
+$data = array ('rooms'=> join(',', $room_ids),'buddies'=>join(',', array_unique(array_merge($friend_ids, $stranger_ids))), 'domain' => $_IMC['domain'], 'apikey' => $_IMC['apikey'], 'endpoint'=> $space['uid'], 'nick'=>to_unicode($nick));
+break;
+default:
+break;
+}
 $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
 $client->post('/presences/online', $data);
 $pageContents = $client->getContent();

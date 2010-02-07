@@ -1,0 +1,25 @@
+.webim-chatlink span{
+        cursor:pointer;
+        padding-left: 1.2em;
+        *display:inline-block;
+}
+.webim-chatlink .webim-chatlink-off-i{
+        background:url(../images/chat_offline.gif) no-repeat 2px center;
+}
+.webim-chatlink .webim-chatlink-on-i{
+        background:url(../images/chat_online.gif) no-repeat 2px center;
+}
+.webim-chatlink-on .webim-chatlink-off-i{
+        background:url(../images/chat_online.gif) no-repeat 2px center;
+
+}
+.webim-chatlink-on .webim-chatlink-on-i{
+		display:inline;
+        *display:inline-block;
+}
+.webim-chatlink-no-offline .webim-chatlink-off-i{
+        background:url(../images/chat_offline.gif) no-repeat 2px center;
+}
+.webim-chatlink-disable span{
+        display:none !important;
+}

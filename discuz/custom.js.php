@@ -1,4 +1,3 @@
-<?php
 header("Content-type: application/javascript");
 include_once('common.php');
 if($ucappopen['UCHOME']){
@@ -9,6 +8,7 @@ $menu = array(
 	array("title" => 'thread',"icon" =>$uchomeurl."/image/app/mtag.gif","link" => $uchomeurl."/space.php?do=thread"),
 	array("title" => 'share',"icon" =>$uchomeurl."/image/app/share.gif","link" => $uchomeurl."/space.php?do=share")
 );
+
 }
 if($_SCONFIG['my_status']) {
 	if(is_array($_SGLOBAL['userapp'])) { 
@@ -42,7 +42,8 @@ $setting = empty($setting) ? "{}" : $setting;
 		offline:path + "webim/offline.php",
 		message:path + "webim/message.php",
 		refresh:path + "webim/refresh.php",
-		status:path + "webim/status.php"
+		status:path + "webim/status.php",
+		hotpost:path + "webim/hotpost.php"
 	};
 	webim.setting.defaults.url = path + "webim/setting.php";
 	webim.history.defaults.urls = {

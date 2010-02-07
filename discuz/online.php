@@ -1,16 +1,14 @@
-<?php
+﻿<?php
 include_once('common.php');
 if(empty($space))exit();
 $name = nick($space);
-
 require 'http_client.php';
 
-$stranger_ids = ids_except($space['uid'], ids_array(gp("stranger_ids")));//陌生�?
+$stranger_ids = ids_except($space['uid'], ids_array(gp("stranger_ids")));//陌生人?
 $friend_ids = ids_array($space['friends']); //好友
 $buddy_ids = ids_array(gp("buddy_ids"));//正在聊天的联系人
 
-$new_messages = find_new_message();
-
+$new_messages = find_new_message();//查找离线消息
 for($i=0;$i<count($new_messages);$i++){
         $msg_uid = $new_messages[$i]["from"];
         array_push($buddy_ids, $msg_uid);
@@ -41,13 +39,11 @@ if($client->status !="200"||empty($pageData->ticket)){
         $ticket ="";
 }else
         $ticket = $pageData->ticket;
-
 if(empty($ticket)){
         //登录失败
         echo '{status: "'.$client->status.'", "errorMsg":"'.$pageContents.'"}';
         exit();
 }
-
 $buddy_online_ids = ids_array($pageData->buddies);//在线好友列表ids
 $clientnum = $pageData->clientnum;
 $rooms_num = $pageData->roominfo;
@@ -61,7 +57,6 @@ $output = array();
 $output['buddy_online_ids'] = join(",", $buddy_online_ids);
 $output['clientnum'] = $clientnum;
 $output['server_time'] = microtime(true)*1000;
-
 
 $output['user']=array('id'=>$space['uid'], 'name'=>to_utf8($name), 'pic_url'=>avatar($space['uid'],'small',true), 'status'=>'', 'presence' => 'online', 'status_time'=>'', 'url'=>'space.php?uid='.$space['uid']);//用户信息
 

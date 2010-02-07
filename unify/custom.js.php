@@ -16,11 +16,13 @@ if($_SCONFIG['my_status']) {
 	}
 }
 $setting = json_encode(setting());
+$platform = gp('platform');
 ?>
 
 //custom
 (function(webim){
 	var path = "";
+    var platform = "<?php echo $platform ?>";
 	path = document.location.href.split("/webim");
 	path = path.length > 1 ? (path[0] + "/") : "";
         var menu = webim.JSON.decode('<?php echo json_encode($menu) ?>');

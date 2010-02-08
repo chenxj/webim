@@ -14,3 +14,4 @@ $_IMC["room_id_pre"] = 1000000;
 $_IMC["groupchat"] = true;
 $_IMC["emot"] = "default";
 $_IMC["opacity"] = 80;
+$_IMC["file_path"] = "";

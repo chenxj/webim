@@ -1,16 +1,16 @@
 <?php
-define('IN_UCHOME', TRUE);
+//define('IN_UCHOME', TRUE);
 
 $_SGLOBAL = $_SCONFIG = $_SBLOCK = array();
 
-//uchome root 
+//安装平台根目录
 define('S_ROOT', substr(dirname(__FILE__), 0, -5));
 
 //timestamp
 $_SGLOBAL['timestamp'] = time();
 
-if(file_exists(S_ROOT.'./data/webiminstall.lock')) {
-	show_msg('您已经安装过UCIM,如果需要重新安装，请先删除文件 forumdata/webiminstall.lock', 999);
+if(file_exists(S_ROOT.'./data/webiminstall.lock') || file_exists(S_ROOT.'./forumdata/webiminstall.lock')) {
+	show_msg('您已经安装过WEBIM,如果需要重新安装，请先删除文件 webiminstall.lock', 999);
 }
 
 include_once(S_ROOT.'./config.php');

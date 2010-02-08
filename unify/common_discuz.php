@@ -3,6 +3,7 @@ error_reporting(E_ALL & ~E_NOTICE);
 //API DEFINE
 define('API_COMMFILE','../include/common.inc.php');//路径修改问题
 define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
+include_once("config.php");
 include_once( $_IMC['discuz_path'] . "/include/common.php");//common.inc.php  add byf free.wang
 include_once(IM_ROOT . "json.php");
 $_SGLOBAL['supe_uid'] = $discuz_uid;

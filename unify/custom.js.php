@@ -1,12 +1,21 @@
 <?php
 header("Content-type: application/javascript");
-include_once('common.php');
+$platform = $_GET['platform'];
+switch($platform){
+	case 'discuz':
+	include_once('common_discuz.php');
+	break;
+	case 'uchome':
+		include_once('common_uchome.php');
+		break;
+}
+
 $menu = array(
-	array("title" => 'doing',"icon" =>"image/app/doing.gif","link" => "space.php?do=doing"),
-	array("title" => 'album',"icon" =>"image/app/album.gif","link" => "space.php?do=album"),
-	array("title" => 'blog',"icon" =>"image/app/blog.gif","link" => "space.php?do=blog"),
-	array("title" => 'thread',"icon" =>"image/app/mtag.gif","link" => "space.php?do=thread"),
-	array("title" => 'share',"icon" =>"image/app/share.gif","link" => "space.php?do=share")
+	array("title" => 'doing',"icon" =>"image\app\doing.gif","link" => "space.php?do=doing"),
+	array("title" => 'album',"icon" =>"image\app\album.gif","link" => "space.php?do=album"),
+	array("title" => 'blog',"icon" =>"image\app\blog.gif","link" => "space.php?do=blog"),
+	array("title" => 'thread',"icon" =>"image\app\mtag.gif","link" => "space.php?do=thread"),
+	array("title" => 'share',"icon" =>"image\app\share.gif","link" => "space.php?do=share")
 );
 if($_SCONFIG['my_status']) {
 	if(is_array($_SGLOBAL['userapp'])) { 
@@ -16,16 +25,15 @@ if($_SCONFIG['my_status']) {
 	}
 }
 $setting = json_encode(setting());
-$platform = gp('platform');
+$url_path = $_IMC['url_path'];
 ?>
-
+ 
 //custom
 (function(webim){
-	var path = "";
-    	var platform = "<?php echo $platform ?>";
-	path = document.location.href.split("/webim");
+    var path = "<?php echo $url_path ?>";
+    var platform = "<?php echo $platform ?>";
 	path = path.length > 1 ? (path[0] + "/") : "";
-        var menu = webim.JSON.decode('<?php echo json_encode($menu) ?>');
+    var menu = webim.JSON.decode('<?php echo json_encode($menu) ?>');
 	webim.extend(webim.setting.defaults.data, webim.JSON.decode('<?php echo $setting ?>'));
 	var webim = window.webim, log = webim.log;
 	webim.defaults.urls = {

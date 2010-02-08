@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
 define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
-include_once(IM_ROOT . '../common.php');
+include_once('D:\\xampp\\htdocs\\home\\common.php');//Â·¾¶ÎÊÌâ
 include_once(IM_ROOT . "json.php");
 
 function _iconv($s,$t,$data){

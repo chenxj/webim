@@ -1,5 +1,13 @@
 <?php 
-include_once('common.php');
+$platform = $_GET['platform'];
+switch($platform){
+	case 'discuz':
+	include_once('common_discuz.php');
+	break;
+	case 'uchome':
+		include_once('common_uchome.php');
+		break;
+}
 include_once S_ROOT.'./uc_client/client.php';
 $page = max($page, 1);
 $action = !empty($action) ? $action : (isset($uid) || !empty($pmid) ? 'view' : '');

@@ -1,0 +1,4 @@
+uchome config.php 添加include，需要考虑路径
+discuz config.inc.php 同上
+htm 文件需要制定相应的路径
+custom.js.php 需要修改路径问题，问题变量 path

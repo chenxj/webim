@@ -1,20 +1,51 @@
 <?php
-define('IN_UCHOME', TRUE);
-
 $_SGLOBAL = $_SCONFIG = $_SBLOCK = array();
-
-//uchome root 
+//安装平台根目录
 define('S_ROOT', substr(dirname(__FILE__), 0, -5));
 
 //timestamp
 $_SGLOBAL['timestamp'] = time();
 
 if(file_exists(S_ROOT.'./data/webiminstall.lock')) {
-	show_msg('您已经安装过UCIM,如果需要重新安装，请先删除文件 forumdata/webiminstall.lock', 999);
+	show_msg('您已经安装过IM,如果需要重新安装，请先删除文件 webiminstall.lock', 999);
 }
 
-include_once(S_ROOT.'./config.php');
-include_once(S_ROOT.'./source/function_common.php');
+if(file_exists(S_ROOT.'./forumdata/webiminstall.lock')) {
+	show_msg('您已经安装过IM,如果需要重新安装，请先删除文件 webiminstall.lock', 999);
+}
+
+$platform = 0;
+if(file_exists(S_ROOT.'./data')){
+	$platform = 1;//uchome
+}else if(file_exists(S_ROOT.'./forumdata')){
+	$platform = 2;//discuz
+}
+
+list($url_path) = (explode('webim', "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']) );   //平台请求路径
+    $file_path = $_SERVER['DOCUMENT_ROOT'];;//$_ROOT 平台文件夹路径
+	$config_file_path = $file_path.'./webim/config.php';//IM 配置文件绝对路径
+	
+install($platform);
+
+function install($platform){
+global $_SC,$_SGLOBAL, $url_path, $file_path;
+switch($platform){
+	case 1:
+		define('IN_UCHOME', TRUE);
+		$basic_configfile = S_ROOT.'./config.php';
+		include_once(S_ROOT.'./config.php');
+		include_once(S_ROOT.'./source/function_common.php');
+		break;
+	case 2:
+		define('IN_DISCUZ', TRUE);
+		$basic_configfile = S_ROOT.'./config.inc.php';
+		include_once(S_ROOT.'./include/common.inc.php');
+		$_SC['gzipcompress'] = true;
+		$_SC['tablepre']=$tablepre;
+		$_SC['dbcharset']=$dbcharset;
+		$_SC['charset']='utf-8';
+		break;
+}
 
 //GPC filter
 if(!(get_magic_quotes_gpc())) {
@@ -36,7 +67,7 @@ $sqlfile = S_ROOT.'./webim/data/webim.sql';
 if(!file_exists($sqlfile)) {
 	show_msg('./webim/data/webim.sql 数据库初始化文件不存在，请检查你的安装文件', 999);
 }
-$basic_configfile = S_ROOT.'./config.php';
+
 $webim_configfile = S_ROOT.'./webim/config.php';
 
 //variables
@@ -56,15 +87,15 @@ if(!@$fp = fopen($basic_configfile, 'a')) {
 	@fclose($fp);
 }
 
-if (submitcheck('ucimsubmit')) {
+if (submitcheck('imsubmit')) {
 	//ucim install
 	$step = 1;
-dbconnect();
+    dbconnect();
 	$domain = trim($_POST['domain']);
 	$apikey = trim($_POST['apikey']);
 	$theme = trim($_POST['theme']);
 	$charset = trim($_POST['charset']);
-
+	
 	if(empty($domain) || empty($apikey)) {
 		show_msg('网站域名和API KEY不能为空');
 	} else {
@@ -92,12 +123,12 @@ dbconnect();
 			}		
 	}
 	$msg = <<<EOF
-	<h2>UCIM相关配置已经加入到UCHome根目录的config.php文件中,进入下一步:</h2>
+	<h2>IM相关配置已经加入到平台根目录的config.php文件中,进入下一步:</h2>
 	<b style="color:red">安装数据库</b><br>
 EOF;
 		if($tblexist)
 $msg .= <<<EOF
-	!检测到您以前安装过UCIM数据库，是否重新安装（将清除以前的数据）？<br />
+	!检测到您以前安装过IM数据库，是否重新安装（将清除以前的数据）？<br />
 重新安装<input onclick="this.checked=true;document.getElementById('useold0').checked=false;document.getElementById('nextstepa').href=nextsteph+'&useold=0'" id=useold1 type=checkbox value=0 name=useold  checked=checked>&nbsp;&nbsp;保留已有数据<input type=checkbox value=1 name=useold id=useold0 onclick="this.checked=true;document.getElementById('useold1').checked=false;document.getElementById('nextstepa').href=nextsteph+'&useold=1'">
 EOF;
 		show_msg($msg, ($step+1));
@@ -113,7 +144,7 @@ if(empty($step)) {
 	//检查权限设置
 	$checkok = true;
 	$perms = array();
-	if(!checkfdperm(S_ROOT.'./config.php', 1)) {
+	if(!checkfdperm($basic_configfile, 1)) {
 		$perms['config'] = '失败';
 		$checkok = false;
 	} else {
@@ -233,7 +264,7 @@ END;
 		<br>
 	</div>
 	<table class=button>
-	<tr><td><input type="submit" id="ucimsubmit" name="ucimsubmit" value="提交"></td></tr>
+	<tr><td><input type="submit" id="imsubmit" name="imsubmit" value="提交"></td></tr>
 	</table>
 	<input type="hidden" name="formhash" value="$formhash">
 	</form>
@@ -309,12 +340,13 @@ END;
         '$template = webim_template($template);<br>}';
 	$msg = <<<EOF
 	<h2>请继续下述配置，完成安装:</h2>
-        <h3>1. 复制 <font color="red">webim/webim.htm</font> 到 <font color="red">./template/default/</font></h3>
+        <h3>1. 复制 <font color="red">webim/webim_xxx.htm</font> 到 <font color="red">./template/default/</font></h3>
         <h3>2. 修改文件<font color="red">./template/default/footer.htm</font></h3>
             <p>在“&lt;/body&gt;”前添加如下代码：<span  style="color:blue"><pre>
-                    &lt;!--{template webim}--&gt;
+                    &lt;!--{template webim_xxx}--&gt;
             </pre></span></p>
-        <h3>3. 清除UCHome模板缓存</h3>
+		<h3>3. 在不同平台的配置文件中加入 include_once $config_file_path;
+        <h3>4. 清除UCHome模板缓存</h3>
 	<p>删除UCHome根目录下./data/tpl_cache/中的模板缓存(或者通过UCenter的"更新缓存")</p>
     <p style="text-align:center">
 	<table class=button>
@@ -324,6 +356,7 @@ END;
 EOF;
 	show_msg($msg, 999);
 }
+}//install end
 
 //check permission
 function checkfdperm($path, $isfile=0) {
@@ -492,8 +525,9 @@ function insertconfig($s, $find, $replace) {
 	}
 	return $s;
 }
-//?><?php
+
 function write_webim_config($file,$domain,$apikey,$theme,$charset) {
+global $url_path, $file_path;
 $fp = fopen($file, 'r');
 		$configfile = fread($fp, filesize($file));
 		$configfile = trim($configfile);
@@ -507,6 +541,8 @@ $fp = fopen($file, 'r');
 			$configfile = insertconfig($configfile, '/\$_IMC\["imsvr"\] =\s*".*?";/i', '$_IMC["imsvr"] = "www.nextim.cn";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["impost"\] =\s*.*?;/i', '$_IMC["impost"] = 9000;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["impoll"\] =\s*.*?;/i', '$_IMC["impoll"] = 8000;');
+			$configfile = insertconfig($configfile, '/\$_IMC\["url_path"\] =\s*.*?;/i', '$_IMC["url_path"] = $url_path;');
+			$configfile = insertconfig($configfile, '/\$_IMC\["file_path"\] =\s*.*?;/i', '$_IMC["file_path"] = $file_path;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["theme"\] =\s*".*?";/i', '$_IMC["theme"] = "'.$theme.'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["local"\] =\s*".*?";/i', '$_IMC["local"] = "'.substr($charset,0,5).'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["charset"\] =\s*".*?";/i', '$_IMC["charset"] = "'.$charset.'";');
@@ -523,13 +559,14 @@ $fp = fopen($file, 'r');
 		@fclose($fp);
 	}
 function write_basic_config($file) {
+global $config_file_path;
 $fp = fopen($file, 'r');
 		$configfile = fread($fp, filesize($file));
 		$configfile = trim($configfile);
 		$configfile = substr($configfile, -2) == '?>' ? substr($configfile, 0, -2) : $configfile;
 		fclose($fp);
 
-			$configfile = insertconfig($configfile, '.*', 'include_once("webim/config.php");');
+			$configfile = insertconfig($configfile, '.*', "include_once('".$config_file_path."');");
 		$fp = fopen($file, 'w');
 		if(!($fp = @fopen($file, 'w'))) {
 			show_msg('请确认文件 config.php 可写');
@@ -537,3 +574,4 @@ $fp = fopen($file, 'r');
 		@fwrite($fp, trim($configfile));
 		@fclose($fp);
 	}
+?>

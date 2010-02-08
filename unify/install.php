@@ -1,16 +1,16 @@
 <?php
-//define('IN_UCHOME', TRUE);
+define('IN_UCHOME', TRUE);
 
 $_SGLOBAL = $_SCONFIG = $_SBLOCK = array();
 
-//安装平台根目录
+//uchome root 
 define('S_ROOT', substr(dirname(__FILE__), 0, -5));
 
 //timestamp
 $_SGLOBAL['timestamp'] = time();
 
-if(file_exists(S_ROOT.'./data/webiminstall.lock') || file_exists(S_ROOT.'./forumdata/webiminstall.lock')) {
-	show_msg('您已经安装过WEBIM,如果需要重新安装，请先删除文件 webiminstall.lock', 999);
+if(file_exists(S_ROOT.'./data/webiminstall.lock')) {
+	show_msg('您已经安装过UCIM,如果需要重新安装，请先删除文件 forumdata/webiminstall.lock', 999);
 }
 
 include_once(S_ROOT.'./config.php');
@@ -59,11 +59,14 @@ if(!@$fp = fopen($basic_configfile, 'a')) {
 if (submitcheck('ucimsubmit')) {
 	//ucim install
 	$step = 1;
-dbconnect();
+    dbconnect();
 	$domain = trim($_POST['domain']);
 	$apikey = trim($_POST['apikey']);
 	$theme = trim($_POST['theme']);
 	$charset = trim($_POST['charset']);
+    
+    $url_path = ( explode('webim', "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']) )[0];   //平台请求路径
+    $file_path = $_ROOT   //平台文件夹路径
 
 	if(empty($domain) || empty($apikey)) {
 		show_msg('网站域名和API KEY不能为空');
@@ -504,9 +507,11 @@ $fp = fopen($file, 'r');
 			$configfile = insertconfig($configfile, '/\$_IMC\["enable"\] =\s*.*?;/i', '$_IMC["enable"] = true;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["domain"\] =\s*".*?";/i', '$_IMC["domain"] = "'.$domain.'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["apikey"\] =\s*".*?";/i', '$_IMC["apikey"] = "'.$apikey.'";');
-			$configfile = insertconfig($configfile, '/\$_IMC\["imsvr"\] =\s*".*?";/i', '$_IMC["imsvr"] = "211.144.86.221";');
-			$configfile = insertconfig($configfile, '/\$_IMC\["impost"\] =\s*.*?;/i', '$_IMC["impost"] = 80;');
+			$configfile = insertconfig($configfile, '/\$_IMC\["imsvr"\] =\s*".*?";/i', '$_IMC["imsvr"] = "www.nextim.cn";');
+			$configfile = insertconfig($configfile, '/\$_IMC\["impost"\] =\s*.*?;/i', '$_IMC["impost"] = 9000;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["impoll"\] =\s*.*?;/i', '$_IMC["impoll"] = 8000;');
+			$configfile = insertconfig($configfile, '/\$_IMC\["url_path"\] =\s*.*?;/i', '$_IMC["url_path"] = $url_path;');
+			$configfile = insertconfig($configfile, '/\$_IMC\["file_path"\] =\s*.*?;/i', '$_IMC["file_path"] = $file_path;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["theme"\] =\s*".*?";/i', '$_IMC["theme"] = "'.$theme.'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["local"\] =\s*".*?";/i', '$_IMC["local"] = "'.substr($charset,0,5).'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["charset"\] =\s*".*?";/i', '$_IMC["charset"] = "'.$charset.'";');

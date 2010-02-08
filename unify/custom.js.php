@@ -1,21 +1,13 @@
 <?php
+echo 1;
 header("Content-type: application/javascript");
-$platform = $_GET['platform'];
-switch($platform){
-	case 'discuz':
-	include_once('common_discuz.php');
-	break;
-	case 'uchome':
-		include_once('common_uchome.php');
-		break;
-}
-
+include_once('common.php');
 $menu = array(
-	array("title" => 'doing',"icon" =>"image\app\doing.gif","link" => "space.php?do=doing"),
-	array("title" => 'album',"icon" =>"image\app\album.gif","link" => "space.php?do=album"),
-	array("title" => 'blog',"icon" =>"image\app\blog.gif","link" => "space.php?do=blog"),
-	array("title" => 'thread',"icon" =>"image\app\mtag.gif","link" => "space.php?do=thread"),
-	array("title" => 'share',"icon" =>"image\app\share.gif","link" => "space.php?do=share")
+	array("title" => 'doing',"icon" =>"image/app/doing.gif","link" => "space.php?do=doing"),
+	array("title" => 'album',"icon" =>"image/app/album.gif","link" => "space.php?do=album"),
+	array("title" => 'blog',"icon" =>"image/app/blog.gif","link" => "space.php?do=blog"),
+	array("title" => 'thread',"icon" =>"image/app/mtag.gif","link" => "space.php?do=thread"),
+	array("title" => 'share',"icon" =>"image/app/share.gif","link" => "space.php?do=share")
 );
 if($_SCONFIG['my_status']) {
 	if(is_array($_SGLOBAL['userapp'])) { 
@@ -25,46 +17,47 @@ if($_SCONFIG['my_status']) {
 	}
 }
 $setting = json_encode(setting());
+$platform = gp("platform");
+$url_path = $_IMC['url_path'];
 ?>
- 
+
 //custom
 (function(webim){
-	var path = "";
+    var path = "<?php echo $url_path ?>";
     var platform = "<?php echo $platform ?>";
-	path = document.location.href.split("/webim");
 	path = path.length > 1 ? (path[0] + "/") : "";
-        var menu = webim.JSON.decode('<?php echo json_encode($menu) ?>');
+    var menu = webim.JSON.decode('<?php echo json_encode($menu) ?>');
 	webim.extend(webim.setting.defaults.data, webim.JSON.decode('<?php echo $setting ?>'));
 	var webim = window.webim, log = webim.log;
 	webim.defaults.urls = {
-		online: "http://localhost/home/webim/online.php?platform=" + platform,
-		online_list: "http://localhost/home/webim/online_list.php?platform=" + platform,
-		offline: "http://localhost/home/webim/offline.php?platform=" + platform,
-		message: "http://localhost/home/webim/message.php?platform=" + platform,
-		refresh: "http://localhost/home/webim/refresh.php?platform=" + platform,
-		status: "http://localhost/home/webim/status.php?platform=" + platform
+		online:path + "webim/online.php?platform=" + platform,
+		online_list:path + "webim/online_list.php?platform=" + platform,
+		offline:path + "webim/offline.php?platform=" + platform,
+		message:path + "webim/message.php?platform=" + platform,
+		refresh:path + "webim/refresh.php?platform=" + platform,
+		status:path + "webim/status.php?platform=" + platform
 	};
-	webim.setting.defaults.url = path + "http://localhost/home/webim/setting.php?platform=" + platform;
+	webim.setting.defaults.url = path + "webim/setting.php";
 	webim.history.defaults.urls = {
-		load: path + "http://localhost/home/webim/histories.php?platform=" + platform,
-		clear: path + "http://localhost/home/webim/clear_history.php?platform=" + platform
+		load: path + "webim/histories.php?platform=" + platform,
+		clear: path + "webim/clear_history.php?platform=" + platform
 	};
-    webim.room.defaults.urls = {
-                    member: path + "http://localhost/home/webim/members.php?platform=" + platform,
-                    join: path + "http://localhost/home/webim/join.php?platform=" + platform,
-                    leave: path + "http://localhost/home/webim/leave.php?platform=" + platform
-    };
-	webim.buddy.defaults.url = path + "http://localhost/home/webim/buddies.php?platform=" + platform;
-	webim.notification.defaults.url = path + "http://localhost/home/webim/notifications.php?platform=" + platform;
-	webim.ui.emot.init({"dir": path + "http://localhost/home/webim/static/images/emot/default"});
+    	webim.room.defaults.urls = {
+                    member: path + "webim/members.php?platform=" + platform,
+                    join: path + "webim/join.php?platform=" + platform,
+                    leave: path + "webim/leave.php?platform=" + platform
+    	};
+	webim.buddy.defaults.url = path + "webim/buddies.php?platform=" + platform;
+	webim.notification.defaults.url = path + "webim/notifications.php?platform=" + platform;
+	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});
 	var soundUrls = {
-		lib: path + "http://localhost/home/webim/static/assets/sound.swf",
-		msg: path + "http://localhost/home/webim/static/assets/sound/msg.mp3"
+		lib: path + "webim/static/assets/sound.swf",
+		msg: path + "webim/static/assets/sound/msg.mp3"
 	};
 	function mapIds(data){
 		return webim.map(data, function(v,i){ return v.id});
 	}
- 
+
 	var body , imUI, im, layout, chatlink;
 	function create(){
 		body = document.body;
@@ -72,6 +65,9 @@ $setting = json_encode(setting());
 		im = imUI.im;
 		layout = imUI.layout;
                 imUI.addApp("room");
+		if ( platform === "discuz" ){
+			imUI.addApp("hotpost");
+		}
                 //imUI.addApp("chatlink");
 		body.appendChild(layout.element);
                 setTimeout(function(){imUI.initSound(soundUrls)},1000);
@@ -106,5 +102,5 @@ $setting = json_encode(setting());
 	}
 	(document.body ? create() : webim.ui.ready(create));
 	webim.ui.ready(init);
- 
+
 })(webim);

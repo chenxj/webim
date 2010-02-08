@@ -1,20 +1,20 @@
 <?php
-define('IN_DISCUZ', TRUE);
+define('IN_UCHOME', TRUE);
+
 $_SGLOBAL = $_SCONFIG = $_SBLOCK = array();
+
 //uchome root 
 define('S_ROOT', substr(dirname(__FILE__), 0, -5));
+
 //timestamp
 $_SGLOBAL['timestamp'] = time();
 
-if(file_exists(S_ROOT.'forumdata/webiminstall.lock')) {
-	show_msg('您已经安装过DZIM,如果需要重新安装，请先删除文件 forumdata/webiminstall.lock', 999);
+if(file_exists(S_ROOT.'./data/webiminstall.lock')) {
+	show_msg('您已经安装过UCIM,如果需要重新安装，请先删除文件 forumdata/webiminstall.lock', 999);
 }
-include_once(S_ROOT.'include/common.inc.php');
-$_SC['gzipcompress'] = true;
-$_SC['tablepre']=$tablepre;
-$_SC['dbcharset']=$dbcharset;
-$_SC['charset']='utf-8';
 
+include_once(S_ROOT.'./config.php');
+include_once(S_ROOT.'./source/function_common.php');
 
 //GPC filter
 if(!(get_magic_quotes_gpc())) {
@@ -32,19 +32,17 @@ header("content-type:text/html; charset=utf-8");
 $formhash = formhash();
 
 $theurl = 'install.php';
-$sqlfile = S_ROOT.'webim/data/webim.sql';
+$sqlfile = S_ROOT.'./webim/data/webim.sql';
 if(!file_exists($sqlfile)) {
-	show_msg('webim/data/webim.sql 数据库初始化文件不存在，请检查你的安装文件', 999);
+	show_msg('./webim/data/webim.sql 数据库初始化文件不存在，请检查你的安装文件', 999);
 }
-
-$basic_configfile = S_ROOT.'config.inc.php';
-$webim_configfile = S_ROOT.'webim/config.php';
+$basic_configfile = S_ROOT.'./config.php';
+$webim_configfile = S_ROOT.'./webim/config.php';
 
 //variables
 $step = empty($_GET['step'])?0:intval($_GET['step']);
 $action = empty($_GET['action'])?'':trim($_GET['action']);
 $nowarr = array('','','','');
-
 
 //检查config是否可写
 if(!@$fp = fopen($webim_configfile, 'a')) {
@@ -61,7 +59,7 @@ if(!@$fp = fopen($basic_configfile, 'a')) {
 if (submitcheck('ucimsubmit')) {
 	//ucim install
 	$step = 1;
-
+dbconnect();
 	$domain = trim($_POST['domain']);
 	$apikey = trim($_POST['apikey']);
 	$theme = trim($_POST['theme']);
@@ -75,29 +73,32 @@ if (submitcheck('ucimsubmit')) {
 		//import webim/data/webim.sql
 	$newsql = file_get_contents($sqlfile);
 
-	//if($_SC['tablepre'] != 'webim_') $newsql = str_replace('webim_', $_SC['tablepre'], $newsql);
+	if($_SC['tablepre'] != 'uchome_') $newsql = str_replace('uchome_', $_SC['tablepre'], $newsql);
 
 	$tables = $sqls = array();
 	$tblexist = false;
 	if($newsql) {
-		$tablename = $_SC['tablepre'].'im_histories';
-
-				$tablestatus = $db->fetch_first("SHOW TABLE STATUS LIKE '$tablename'");
-				if($tablestatus){ 
+		preg_match_all("/(CREATE TABLE ([a-z0-9\_\-`]+).+?\s*)(TYPE|ENGINE)+\=/is", $newsql, $mathes);
+		$tables = $mathes[2];
+			foreach ($tables as $key => $tablename)
+			{
+				$tablestatus = mysql_fetch_assoc($_SGLOBAL['db']->query("SHOW TABLE STATUS LIKE '$tablename'"));
+				if($tablestatus){
 					$tblexist = true;
+					break;
 				}else{
 				$tblexist = false;
-				}	
+				}
+			}		
 	}
-	
 	$msg = <<<EOF
-	<h2>DZIM相关配置已经加入到论坛根目录的config.inc.php文件中,进入下一步:</h2>
-<b style="color:red">安装数据库</b><br>
+	<h2>UCIM相关配置已经加入到UCHome根目录的config.php文件中,进入下一步:</h2>
+	<b style="color:red">安装数据库</b><br>
 EOF;
-	if($tblexist)
+		if($tblexist)
 $msg .= <<<EOF
-	!检测到您以前安装过DZIM数据库，是否保留聊天数据？<br />
-保留<input type=checkbox value=1 name=useold id=useold0 onclick="this.checked=true;document.getElementById('useold1').checked=false;document.getElementById('nextstepa').href=nextsteph+'&useold=1'" checked=checked>&nbsp;&nbsp;清除<input onclick="this.checked=true;document.getElementById('useold0').checked=false;document.getElementById('nextstepa').href=nextsteph+'&useold=0'" id=useold1 type=checkbox value=0 name=useold >
+	!检测到您以前安装过UCIM数据库，是否重新安装（将清除以前的数据）？<br />
+重新安装<input onclick="this.checked=true;document.getElementById('useold0').checked=false;document.getElementById('nextstepa').href=nextsteph+'&useold=0'" id=useold1 type=checkbox value=0 name=useold  checked=checked>&nbsp;&nbsp;保留已有数据<input type=checkbox value=1 name=useold id=useold0 onclick="this.checked=true;document.getElementById('useold1').checked=false;document.getElementById('nextstepa').href=nextsteph+'&useold=1'">
 EOF;
 		show_msg($msg, ($step+1));
 		exit();
@@ -112,7 +113,7 @@ if(empty($step)) {
 	//检查权限设置
 	$checkok = true;
 	$perms = array();
-	if(!checkfdperm(S_ROOT.'./config.inc.php', 1)) {
+	if(!checkfdperm(S_ROOT.'./config.php', 1)) {
 		$perms['config'] = '失败';
 		$checkok = false;
 	} else {
@@ -133,11 +134,11 @@ if(empty($step)) {
 	</script>
 	<table class="showtable">
 	<tr><td>
-	<strong>DZIM是Discuz论坛最出色的、技术架构最先进的WEBIM插件!</strong><br>
-	<p>DZIM让您的Discuz论坛拥有校内网、同学网、Facebook一样出色的WEBIM!</p>
-	<p>专为Discuz7.0定制开发的WEBIM插件，采用与Facebook一样的标准HTML界面设计(没有任何Flash)，可以与Discuz7.0无缝整合，让论坛好友间自由的在线聊天，增加网站的用户粘合度。</p>
+	<strong>UCIM是UCHome社区最出色的、技术架构最先进的WEBIM插件!</strong><br>
+	<p>UCIM让您的UCHome网站拥有校内网、同学网、Facebook一样出色的WEBIM!</p>
+	<p>专为UCHome1.5定制开发的WEBIM插件，采用与Facebook一样的标准HTML界面设计(没有任何Flash)，可以与UCHOME1.5网站无缝整合，让UC好友间自由的在线聊天，增加网站的用户粘合度。</p>
 	<p>Facebook IM相似的技术架构，单服务器100,000并发用户支持，集群服务器1,000,000万并发用户支持，支持以SaaS服务模式提供，安装简单方便。 </p>
-	<a href="http://www.nextim.cn" target="_blank"><strong>您可以登录DZIM运营站了解详细</strong></a>
+	<a href="http://ucim.webim20.cn" target="_blank"><strong>您可以登录UCIM运营站了解详细</strong></a>
 	</td></tr>
 	</table>
 END;
@@ -147,8 +148,8 @@ END;
 	} else {
 		$domain = empty($_POST['domain']) ? '' : $_POST['domain'];
 		$apikey = empty($_POST['apikey']) ? '' : $_POST['apikey'];
-		$theme = empty($_POST['theme']) ? '' : $_POST['theme'];
-		$local = empty($_POST['local']) ? '' : $_POST['local'];
+        $theme = empty($_POST['theme']) ? '' : $_POST['theme'];
+		$charset = empty($_POST['charset']) ? '' : $_POST['charset'];
 		print <<<END
 		<form id="theform" method="post" action="$theurl?step=1">
 			<table class=button>
@@ -159,7 +160,7 @@ END;
 			<input type="hidden" name="domain" value="$domain" />
 			<input type="hidden" name="apikey" value="$apikey" />
 			<input type="hidden" name="theme" value="$theme" />
-			<input type="hidden" name="local" value="$local" />
+			<input type="hidden" name="charset" value="$charset" />
 			<input type="hidden" name="formhash" value="$formhash">
 		</form>
 END;
@@ -169,7 +170,7 @@ END;
 	show_header();
 	$domain = '';
 	$apikey= '';
-	$plus = '<tr><td id="msg2"> 配置网站域名和API KEY，您需要在<a href="http://www.nextim.cn">DZIM运营站点</a>注册并获得API KEY。 </td></tr>';
+	$plus = '<tr><td id="msg2"> 配置网站域名和API KEY，您需要在<a href="http://www.nextim.cn">UCIM运营站点</a>注册并获得API KEY。 </td></tr>';
 	print<<<END
 		<form id="theform" method="post" action="$theurl">
 		<div>
@@ -183,15 +184,15 @@ END;
 			<tbody>
 				<tr>
 					<td>网站域名:</td>
-					<td><input type="text" id="domain" name="domain" size="60" value="$domain"><br>例如：dzim.webim20.cn</td>
+					<td><input type="text" id="domain" name="domain" size="60" value="$domain"><br>例如：uchome.webim20.cn</td>
 				</tr>
 				<tr>
 					<td>API KEY:</td>
 					<td><input type="text" id="apikey" name="apikey" size="60" value="$apikey"></td>
 				</tr>
-				<tr>
-					<td>外观:</td>
-                    <td><select id="theme" name="theme">
+                <tr>
+                                     <td>外观:</td>
+                                     <td><select id="theme" name="theme">
                                              <option value="flick">flick</option>
                                              <option value="eggplant">eggplant</option>
                                              <option value="base">base</option>
@@ -215,17 +216,17 @@ END;
                                             <option value="ui-darkness">ui-darkness</option>
                                              <option value="ui-lightness">ui-lightness</option>
                                             <option value="vader">vader</option>
-                    </select>(推荐使用flick、eggplant)</td>
-				</tr>
+                                        </select>(推荐使用flick、eggplant)</td>  
+                                </tr>
+
 				<tr>
-					<td>语言:</td>
+					<td>语言&amp;编码:</td>
                     <td><select id="charset" name="charset">
                     <option value="zh-CN_gbk">简体中文（GBK）</option>
                     <option value="zh-CN_utf8">简体中文（UTF-8）</option>
                     <option value="zh-TW_big5">繁体中文（BIG5）</option>
                     <option value="zh-TW_utf8">繁体中文（UTF-8）</option>
                     <option value="en_utf8">英文（UTF-8）</option></select>(选择与Discuz相同的编码)</td>
-                    </td>
 				</tr>
 			</tbody>
 		</table>
@@ -234,106 +235,92 @@ END;
 	<table class=button>
 	<tr><td><input type="submit" id="ucimsubmit" name="ucimsubmit" value="提交"></td></tr>
 	</table>
-	<input type="hidden" name="formhash" value="$formhash"><input type="hidden" name="theme" value="redmond">
+	<input type="hidden" name="formhash" value="$formhash">
 	</form>
 END;
 	show_footer();
 } elseif ($step == 2) {
 
+	dbconnect();
+
 	//import webim/data/webim.sql
-	$newsql = file_get_contents($sqlfile);
-
-	//if($_SC['tablepre'] != 'webim_') $newsql = str_replace('webim_', $_SC['tablepre'], $newsql);
-
+	$newsql = sreadfile($sqlfile);
+    
+	if($_SC['tablepre'] != 'uchome_') $newsql = str_replace('uchome_', $_SC['tablepre'], $newsql);
 	$tables = $sqls = array();
 	if($newsql) {
 		preg_match_all("/(CREATE TABLE ([a-z0-9\_\-`]+).+?\s*)(TYPE|ENGINE)+\=/is", $newsql, $mathes);
 		$sqls = $mathes[1];
 		$tables = $mathes[2];
+        var_dump($tables);
 	}
 	if(empty($tables)) {
-		show_msg("安装SQL语句获取失败，请确认SQL文件 $sqlfile 是否存在");
+		show_msg("安装SQL语句获取失败  ， 请确认SQL文件 $sqlfile 是否存在");
 	}
 
-	$heaptype = mysql_get_server_info()>'4.1'?" ENGINE=MEMORY".(empty($_SC['dbcharset'])?'':" DEFAULT CHARSET=$_SC[dbcharset]" ):" TYPE=HEAP";
-	$myisamtype = mysql_get_server_info()>'4.1'?" ENGINE=MYISAM".(empty($_SC['dbcharset'])?'':" DEFAULT CHARSET=$_SC[dbcharset]" ):" TYPE=MYISAM";
+	$heaptype = $_SGLOBAL['db']->version()>'4.1'?" ENGINE=MEMORY".(empty($_SC['dbcharset'])?'':" DEFAULT CHARSET=$_SC[dbcharset]" ):" TYPE=HEAP";
+	$myisamtype = $_SGLOBAL['db']->version()>'4.1'?" ENGINE=MYISAM".(empty($_SC['dbcharset'])?'':" DEFAULT CHARSET=$_SC[dbcharset]" ):" TYPE=MYISAM";
 	$installok = true;
-	$msg='';
-    $useold=$_REQUEST['useold'];
+	$useold=$_REQUEST['useold'];
     $db_oldversion=true;
-    
+     if($useold){
+     $table_desc = $_SGLOBAL['db']->query("desc `".$_SC['tablepre']."im_histories`");
+	 while($col=mysql_fetch_assoc($table_desc)){if($col['Field']=='fromdel')$db_oldversion=false;}
+     if($db_oldversion){
+    	$sql="RENAME TABLE `".$_SC['tablepre']."im_histories` TO `".$_SC['tablepre']."im_histories_tmp`";
+   		$_SGLOBAL['db']->query($sql);
+   		} 
+    }
 	foreach ($tables as $key => $tablename) {
-    	//if(!$useold||(!$db->fetch_first("SHOW TABLE STATUS LIKE '$tablename'")))
-       // {
+    	if(!$useold||(!@mysql_fetch_assoc($_SGLOBAL['db']->query("SHOW TABLE STATUS LIKE '$tablename'"))))
+        {
             $sqltype = $myisamtype;
-            $db->query("DROP TABLE IF EXISTS $tablename");
-            if(!$query = $db->query($sqls[$key].$sqltype, 'SILENT')) {
+            $_SGLOBAL['db']->query("DROP TABLE IF EXISTS $tablename");
+            if(!$query = $_SGLOBAL['db']->query($sqls[$key].$sqltype, 'SILENT')) {
                 $installok = false;
                 break;
             }else{
             $msg.= "已经创建表($tablename)<br />";
             }
-      //  }
+        }
 	}
-    if($useold){
-    	$table_desc = $db->query("desc `".$_SC['tablepre']."im_histories`");
-	 	while($col=mysql_fetch_assoc($table_desc)){if($col['Field']=='fromdel')$db_oldversion=false;}
-     	if($db_oldversion)//`id`,`to` ,`from` ,`body` ,`style`,`timestamp` ,`todel`,`fromdel` ,`send` ,`type`
-   			$sql="insert into `webim_histories`(`id`,`to` ,`from` ,`body` ,`style`,`timestamp` ,`todel`,`fromdel` ,`send` ,`type`) (select `id`,`to` ,`from` ,`body` ,`style`,`timestamp`,0,0,1,'msg' from `".$_SC['tablepre']."im_histories`)";
-            else
-            $sql="insert into `webim_histories`(`id`,`to` ,`from` ,`body` ,`style`,`timestamp` ,`todel`,`fromdel` ,`send` ,`type`) (select `id`,`to` ,`from` ,`body` ,`style`,`timestamp`,`todel`,`fromdel`,1,'msg' from `".$_SC['tablepre']."im_histories`)";
-   			$db->query($sql); 
-    }
-    $db->query("DROP TABLE IF EXISTS `".$_SC['tablepre']."im_histories`");
-    $db->query("DROP TABLE IF EXISTS `".$_SC['tablepre']."im_config`");
-
-  /*  if($useold&&$db_oldversion){
+    if($useold&&$db_oldversion){
    	 	$sql="insert into `".$_SC['tablepre']."im_histories` (select *,0,0 from `".$_SC['tablepre']."im_histories_tmp`)";
-   		$db->query($sql); 
+   		$_SGLOBAL['db']->query($sql); 
 
     	$sql="drop table `".$_SC['tablepre']."im_histories_tmp`";
-   		$db->query($sql); 
-    }*/
+   		$_SGLOBAL['db']->query($sql); 
+    }
 	if(!$installok) {
 		show_msg("<font color=\"blue\">数据表 ($tablename) 自动安装失败</font><br />反馈: ".mysql_error()."<br /><br />请参照 $sqlfile 文件中的SQL文，自己手工安装数据库后，再继续进行安装操作<br /><br /><a href=\"?step=$step\">重试</a>");
 	} else {
-		/* $db->query("delete from ".tname('crons')." where filename='./../../webim/source/cron/cleanhis.php'");
+		$_SGLOBAL['db']->query("delete from ".tname('cron')." where filename='./../../webim/source/cron/cleanhis.php'");
         
         $datas = array(
 			"1, 'system', '清理历史聊天记录', './../../webim/source/cron/cleanhis.php', $_SGLOBAL[timestamp], $_SGLOBAL[timestamp], -1, -1, 4, '0'"
 		);
-		$db->query("INSERT INTO ".tname('crons')." (available, type, name, filename, lastrun, nextrun, weekday, day, hour, minute) VALUES (".implode('),(', $datas).")");*/
+		$_SGLOBAL['db']->query("INSERT INTO ".tname('cron')." (available, type, name, filename, lastrun, nextrun, weekday, day, hour, minute) VALUES (".implode('),(', $datas).")");
 		show_msg($msg.'<br /><b>数据表已经全部安装完成，进入下一步操作</b>', ($step+1));
 	}
 } elseif ($step == 3) {
-	@touch(S_ROOT.'./forumdata/webiminstall.lock');
-	@include($basic_configfile);
+	$tplcode = 'global $_SCOOKIE,$_IMC;<br>'.
+		'if($_IMC[\'enable\'] && $_SCOOKIE[\'auth\']) {<br>'.
+        'include_once(S_ROOT.\'./webim/webim_template.php\');<br>'.
+        '$template = webim_template($template);<br>}';
 	$msg = <<<EOF
 	<h2>请继续下述配置，完成安装:</h2>
-	<h3>1. 修改文件<font color="red">./include/js/common.js</font></h3>
-	<p>将<span  style="color:blue"><pre>
-Array.prototype.push = function(value) {
-	this[this.length] = value;
-	return this.length;
-}</pre></span>修改为下述代码（如果为上述代码 请跳过此步骤）：<span  style="color:blue"><pre>
-if(typeof Array.prototype.push === 'undefined') {
-	Array.prototype.push = function(value) {
-		this[this.length] = value;
-		return this.length;
-	}
-}</pre></span></p>
-   <h3>2. 复制webim.htm 到template/default/ 内,并修改文件<font color="red">./templates/default/footer.htm</font></h3>
-    <p>在&lt;/body&gt;前添加如下代码：<span  style="color:blue"><pre>
-    &lt;!--{template webim}--&gt;
-</pre></span></p>
-	<h3>3. 清除Discuz模板缓存</h3>
-	<p>删除Discuz根目录下./forumdata/templates/中的模板缓存(或者通过Discuz的"更新缓存")</p>
-	<p style="text-align:center">
+        <h3>1. 复制 <font color="red">webim/webim.htm</font> 到 <font color="red">./template/default/</font></h3>
+        <h3>2. 修改文件<font color="red">./template/default/footer.htm</font></h3>
+            <p>在“&lt;/body&gt;”前添加如下代码：<span  style="color:blue"><pre>
+                    &lt;!--{template webim}--&gt;
+            </pre></span></p>
+        <h3>3. 清除UCHome模板缓存</h3>
+	<p>删除UCHome根目录下./data/tpl_cache/中的模板缓存(或者通过UCenter的"更新缓存")</p>
+    <p style="text-align:center">
 	<table class=button>
 	<tr><td><a href="../"><input type="button" value="完成" style="cursor:pointer;" onclick="window.location.href='../'" /></a></td></tr>
 	</table>
 	</p>
-
 EOF;
 	show_msg($msg, 999);
 }
@@ -385,8 +372,8 @@ function show_header() {
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title> DZIM2.0.0pre版本程序安装</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=$_SC[charset]" />
+	<title> UCIM2.0透明幻想(Transparent Fantasy)版本程序安装 </title>
 	<style type="text/css">
 	* {font-size:12px; font-family: Verdana, Arial, Helvetica, sans-serif; line-height: 1.5em; word-break: break-all; }
 	body { text-align:center; margin: 0; padding: 0; background: #F5FBFF; }
@@ -434,7 +421,7 @@ function show_header() {
 	</head>
 	<body id="append_parent">
 	<div class="bodydiv">
-	<h1>DZIM2.0.0pre版本程序安装 </h1>
+	<h1>UCIM2.0版本程序安装 </h1>
 	<div style="width:90%;margin:0 auto;">
 	<table id="menu">
 	<tr>
@@ -452,7 +439,7 @@ function show_footer() {
 	print<<<END
 	</div>
 	<iframe id="phpframe" name="phpframe" width="0" height="0" marginwidth="0" frameborder="0" src="about:blank"></iframe>
-	<div id="footer">&copy; <a href="http://www.nextim.cn">NextIM.CN</a> Inc.2007-2009 <a href="http://dzim.webim20.cn">dzim.webim20.cn</a></div>
+	<div id="footer">&copy; <a href="www.nextim.cn">WEBIM20.CN</a> Inc.2007-2009 <a href="ucim.webim20.cn">ucim.webim20.cn</a></div>
 	</div>
 	<br>
 	</body>
@@ -496,26 +483,7 @@ END;
 	show_footer();
 	exit();
 }
-function saddslashes($string) {
-	if(is_array($string)) {
-		foreach($string as $key => $val) {
-			$string[$key] = saddslashes($val);
-		}
-	} else {
-		$string = addslashes($string);
-	}
-	return $string;
-}
-function obclean() {
-	global $_SC;
 
-	ob_end_clean();
-	if ($_SC['gzipcompress'] && function_exists('ob_gzhandler')) {
-		ob_start('ob_gzhandler');
-	} else {
-		ob_start();
-	}
-}
 function insertconfig($s, $find, $replace) {
 	if(preg_match($find, $s)) {
 		$s = preg_replace($find, $replace, $s);
@@ -525,9 +493,6 @@ function insertconfig($s, $find, $replace) {
 	return $s;
 }
 //?><?php
-//
-//
-
 function write_webim_config($file,$domain,$apikey,$theme,$charset) {
 $fp = fopen($file, 'r');
 		$configfile = fread($fp, filesize($file));
@@ -567,14 +532,8 @@ $fp = fopen($file, 'r');
 			$configfile = insertconfig($configfile, '.*', 'include_once("webim/config.php");');
 		$fp = fopen($file, 'w');
 		if(!($fp = @fopen($file, 'w'))) {
-			show_msg('请确认文件 config.inc.php 可写');
+			show_msg('请确认文件 config.php 可写');
 		}
 		@fwrite($fp, trim($configfile));
 		@fclose($fp);
 	}
-//
-
-function tname($name) {
-	global $tablepre;
-	return $tablepre.$name;
-}

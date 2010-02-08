@@ -37,29 +37,29 @@ $setting = json_encode(setting());
 	webim.extend(webim.setting.defaults.data, webim.JSON.decode('<?php echo $setting ?>'));
 	var webim = window.webim, log = webim.log;
 	webim.defaults.urls = {
-		online:path + "webim/online.php?platform=" + platform,
-		online_list:path + "webim/online_list.php?platform=" + platform,
-		offline:path + "webim/offline.php?platform=" + platform,
-		message:path + "webim/message.php?platform=" + platform,
-		refresh:path + "webim/refresh.php?platform=" + platform,
-		status:path + "webim/status.php?platform=" + platform
+		online: "http://localhost/home/webim/online.php?platform=" + platform,
+		online_list: "http://localhost/home/webim/online_list.php?platform=" + platform,
+		offline: "http://localhost/home/webim/offline.php?platform=" + platform,
+		message: "http://localhost/home/webim/message.php?platform=" + platform,
+		refresh: "http://localhost/home/webim/refresh.php?platform=" + platform,
+		status: "http://localhost/home/webim/status.php?platform=" + platform
 	};
-	webim.setting.defaults.url = path + "webim/setting.php?platform=" + platform;
+	webim.setting.defaults.url = path + "http://localhost/home/webim/setting.php?platform=" + platform;
 	webim.history.defaults.urls = {
-		load: path + "webim/histories.php?platform=" + platform,
-		clear: path + "webim/clear_history.php?platform=" + platform
+		load: path + "http://localhost/home/webim/histories.php?platform=" + platform,
+		clear: path + "http://localhost/home/webim/clear_history.php?platform=" + platform
 	};
     webim.room.defaults.urls = {
-                    member: path + "webim/members.php?platform=" + platform,
-                    join: path + "webim/join.php?platform=" + platform,
-                    leave: path + "webim/leave.php?platform=" + platform
+                    member: path + "http://localhost/home/webim/members.php?platform=" + platform,
+                    join: path + "http://localhost/home/webim/join.php?platform=" + platform,
+                    leave: path + "http://localhost/home/webim/leave.php?platform=" + platform
     };
-	webim.buddy.defaults.url = path + "webim/buddies.php?platform=" + platform;
-	webim.notification.defaults.url = path + "webim/notifications.php?platform=" + platform;
-	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});
+	webim.buddy.defaults.url = path + "http://localhost/home/webim/buddies.php?platform=" + platform;
+	webim.notification.defaults.url = path + "http://localhost/home/webim/notifications.php?platform=" + platform;
+	webim.ui.emot.init({"dir": path + "http://localhost/home/webim/static/images/emot/default"});
 	var soundUrls = {
-		lib: path + "webim/static/assets/sound.swf",
-		msg: path + "webim/static/assets/sound/msg.mp3"
+		lib: path + "http://localhost/home/webim/static/assets/sound.swf",
+		msg: path + "http://localhost/home/webim/static/assets/sound/msg.mp3"
 	};
 	function mapIds(data){
 		return webim.map(data, function(v,i){ return v.id});

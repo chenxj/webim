@@ -27,9 +27,10 @@ CSS_BASE_FILES = ${CSS_SRC_DIR}/core.css\
 	${CSS_SRC_DIR}/history.css\
 
 
-
-
 IM = ${SRC_DIR}/im/dist/webim.js
+DZ_IM = ${SRC_DIR}/im/dist/webim_dz.js
+UC_IM = ${SRC_DIR}/im/dist/webim_uc.js
+
 
 JS_BASE_FILES = ${JS_SRC_DIR}/core.js\
 	${JS_SRC_DIR}/date.js\
@@ -48,9 +49,6 @@ JS_BASE_FILES = ${JS_SRC_DIR}/core.js\
 	${JS_SRC_DIR}/ui.chat.js\
 	${JS_SRC_DIR}/ui.room.js\
 
-UC_JS_BASE_FILES = ${JS_BASE_FILES}
-DZ_JS_BASE_FILES = ${JS_BASE_FILES}
-
 UI_CSS_FILES = ${CSS_BASE_FILES}
 
 UC_UI_CSS_FILES = ${UI_CSS_FILES}
@@ -64,9 +62,29 @@ UI_JS_FILES = ${JS_SRC_DIR}/intro.js\
 UI_ALL_JS_FILES = ${IM}\
 	${UI_JS_FILES}\
 
-DZ_UI_ALL_JS_FILES = ${UI_ALL_JS_FILES}\
-			${JS_SRC_DIR}/ui.hotpost.js
-UC_UI_ALL_JS_FILES = ${UI_ALL_JS_FILES}
+DZ_UI_ALL_JS_FILES = ${DZ_IM}\
+		${JS_SRC_DIR}/intro.js\
+		     ${JS_SRC_DIR}/core.js\
+		${JS_SRC_DIR}/date.js\
+		${JS_SRC_DIR}/notice.js\
+		${JS_SRC_DIR}/i18n.js\
+		${JS_SRC_DIR}/ui.js\
+		${JS_SRC_DIR}/ui.window.js\
+		${JS_SRC_DIR}/ui.layout.js\
+		${JS_SRC_DIR}/ui.emot.js\
+		${JS_SRC_DIR}/ui.chatlink.js\
+		${JS_SRC_DIR}/ui.setting.js\
+		${JS_SRC_DIR}/ui.buddy.js\
+		${JS_SRC_DIR}/ui.notification.js\
+		${JS_SRC_DIR}/ui.history.js\
+		${JS_SRC_DIR}/ui.menu.js\
+		${JS_SRC_DIR}/ui.chat.js\
+		${JS_SRC_DIR}/ui.room.js\
+		${JS_SRC_DIR}/ui.hotpost.js\
+		${JS_SRC_DIR}/outro.js
+
+UC_UI_ALL_JS_FILES = ${UC_IM}\
+		     ${UI_JS_FILES}
 
 UI_VER = `cat ${SRC_DIR}/version.txt`
 #DATE=`svn info . | grep Date: | sed 's/.*: //g'`

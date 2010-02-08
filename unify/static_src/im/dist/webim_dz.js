@@ -1,14 +1,3 @@
-/*!
- * Webim v1.0.0pre
- * http://www.nextim.cn/
- *
- * Copyright (c) 2009 Hidden
- *
- * Date: 
- * Revision: 
- */
-(function(window, document, undefined){
-
 function now() {
 	return (new Date).getTime();
 }
@@ -1780,7 +1769,6 @@ model("history",{
 
 });
 
-})(window, document);
 /**/
 /*
 hotpost//

@@ -1,14 +1,3 @@
-/*!
- * Webim v1.0.0pre
- * http://www.nextim.cn/
- *
- * Copyright (c) 2009 Hidden
- *
- * Date:   Sun Feb 7 16:31:45 2010 +0800
- * Revision: 
- */
-(function(window, document, undefined){
-
 function now() {
 	return (new Date).getTime();
 }
@@ -1780,14 +1769,49 @@ model("history",{
 
 });
 
-})(window, document);
+/**/
+/*
+hotpost//
+attributes
+methods
+handle(data) //handle data and distribute events
+events
+data
+*/
+/*
+* {"from":"","text":"","link":""}
+*/
+
+model("hotpost",{
+	url: "webim/hotpost"
+},{
+	grep: function(val, n){
+		return val && val.text;
+	},
+	handle: function(data){
+		var self = this;
+		data = grep(makeArray(data), self.grep);
+		if(data.length)self.trigger("data", [data]);
+	},
+	load: function(){
+		var self = this, options = self.options;
+		ajax({
+			url: options.url,
+			cache: false,
+			dataType: "json",
+			context: self,
+			success: self.handle
+		});
+	}
+});
+
 /*!
  * Webim UI v2.1.0pre
  * http://www.nextim.cn/
  *
  * Copyright (c) 2009 Hidden
  *
- * Date:   Sun Feb 7 16:31:45 2010 +0800
+ * Date: 
  * Revision: 
  */
 (function(window,document,undefined){
@@ -4956,7 +4980,6 @@ widget("room",{
 	destroy: function(){
 	}
 });
-})(window, document);
 //
 /* ui.hotpost:
  *
@@ -4977,7 +5000,7 @@ widget("room",{
 app("hotpost",{
 	init: function(){
 		//hotpost start
-	/*	var model = new webim.hotpost();
+		var model = new webim.hotpost();
 		var widget = new webimUI.hotpost();
 		this.layout.addApp(widget, {
 			title: i18n("hotpost"),
@@ -4992,7 +5015,7 @@ app("hotpost",{
 		});
 		setTimeout(function(){
 			model.load();
-		}, 2000);*/
+		}, 2000);
 		//hotpost end
 	}
 });
@@ -5044,3 +5067,4 @@ widget("hotpost",{
         destroy: function(){
         }
 });
+})(window, document);

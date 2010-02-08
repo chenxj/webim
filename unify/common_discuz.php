@@ -1,9 +1,9 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
 //API DEFINE
-define('API_COMMFILE','include\\common.inc.php');//路径修改问题
+define('API_COMMFILE','../include/common.inc.php');//路径修改问题
 define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
-include_once('D:\\xampp\\htdocs\\bbs\\' . API_COMMFILE);//路径修改问题
+include_once('' . API_COMMFILE);//路径修改问题
 include_once(IM_ROOT . "json.php");
 $_SGLOBAL['supe_uid'] = $discuz_uid;
 $_SGLOBAL['db'] = $db;

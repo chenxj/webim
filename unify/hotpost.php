@@ -1,5 +1,13 @@
 <?php 
-include_once('common.php');
+$platform = $_GET['platform'];
+switch($platform){
+	case 'discuz':
+	include_once('common_discuz.php');
+	break;
+	case 'uchome':
+		include_once('common_uchome.php');
+		break;
+}
 /*//DISUCZ获取新贴SQL
 
 $query = $db->query("SELECT t.*, f.name FROM {$tablepre}threads t, {$tablepre}forums f WHERE t.fid<>'$fid' AND f.fid=t.fid AND f.fid not in (0) AND t.displayorder not in (-1,-2) ORDER BY t.dateline DESC LIMIT 0, 10");

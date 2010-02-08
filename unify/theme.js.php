@@ -1,5 +1,13 @@
 <?php 
-   include('common.php');
+$platform = $_GET['platform'];
+switch($platform){
+	case 'discuz':
+	include_once('common_discuz.php');
+	break;
+	case 'uchome':
+		include_once('common_uchome.php');
+		break;
+}
 
 $menu = array(
 	array("name" => $lang['menu_doing'],"icon" =>"image/app/doing.gif","link" => "space.php?do=doing","shortcut" => true ),

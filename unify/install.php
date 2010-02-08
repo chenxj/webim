@@ -14,29 +14,34 @@ if(file_exists(S_ROOT.'./forumdata/webiminstall.lock')) {
 	show_msg('您已经安装过IM,如果需要重新安装，请先删除文件 webiminstall.lock', 999);
 }
 
-$platform = 0;
-if(file_exists(S_ROOT.'./data')){
-	$platform = 1;//uchome
-}else if(file_exists(S_ROOT.'./forumdata')){
-	$platform = 2;//discuz
+function which_platform(){
+    /*
+     *  check the platform 
+     *  Uchome ? Discuz ?  PhpWind?
+     *
+     */
+    if(file_exists(S_ROOT.'./data')){
+        return "uchome";
+    }
+    else if(file_exists(S_ROOT.'./forumdata')){
+        return "discuz";
+    }
 }
 
 list($url_path) = (explode('webim', "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']) );   //平台请求路径
-    $file_path = $_SERVER['DOCUMENT_ROOT'];;//$_ROOT 平台文件夹路径
+    $file_path = $_SERVER['DOCUMENT_ROOT'];//$_ROOT 平台文件夹路径
 	$config_file_path = $file_path.'./webim/config.php';//IM 配置文件绝对路径
 	
-install($platform);
 
-function install($platform){
 global $_SC,$_SGLOBAL, $url_path, $file_path;
-switch($platform){
-	case 1:
+switch( which_platform() ){
+	case "uchome":
 		define('IN_UCHOME', TRUE);
 		$basic_configfile = S_ROOT.'./config.php';
 		include_once(S_ROOT.'./config.php');
 		include_once(S_ROOT.'./source/function_common.php');
 		break;
-	case 2:
+	case "discuz":
 		define('IN_DISCUZ', TRUE);
 		$basic_configfile = S_ROOT.'./config.inc.php';
 		include_once(S_ROOT.'./include/common.inc.php');
@@ -541,8 +546,6 @@ $fp = fopen($file, 'r');
 			$configfile = insertconfig($configfile, '/\$_IMC\["imsvr"\] =\s*".*?";/i', '$_IMC["imsvr"] = "www.nextim.cn";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["impost"\] =\s*.*?;/i', '$_IMC["impost"] = 9000;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["impoll"\] =\s*.*?;/i', '$_IMC["impoll"] = 8000;');
-			$configfile = insertconfig($configfile, '/\$_IMC\["url_path"\] =\s*.*?;/i', '$_IMC["url_path"] = $url_path;');
-			$configfile = insertconfig($configfile, '/\$_IMC\["file_path"\] =\s*.*?;/i', '$_IMC["file_path"] = $file_path;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["theme"\] =\s*".*?";/i', '$_IMC["theme"] = "'.$theme.'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["local"\] =\s*".*?";/i', '$_IMC["local"] = "'.substr($charset,0,5).'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["charset"\] =\s*".*?";/i', '$_IMC["charset"] = "'.$charset.'";');
@@ -551,6 +554,10 @@ $fp = fopen($file, 'r');
 			$configfile = insertconfig($configfile, '/\$_IMC\["groupchat"\] =\s*.*?;/i', '$_IMC["groupchat"] = true;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["emot"\] =\s*".*?";/i', '$_IMC["emot"] = "default";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["opacity"\] =\s*.*?;/i', '$_IMC["opacity"] = 80;');
+			$configfile = insertconfig($configfile, '/\$_IMC\["uchome_path"\] =\s*.*?;/i', '$_IMC["uchome_path"] = $uchome_path;');
+			$configfile = insertconfig($configfile, '/\$_IMC\["uchome_url"\] =\s*.*?;/i', '$_IMC["uchome_url"] = $uchome_url;');
+			$configfile = insertconfig($configfile, '/\$_IMC\["discuz_path"\] =\s*.*?;/i', '$_IMC["discuz_path"] = $discuz_path;');
+			$configfile = insertconfig($configfile, '/\$_IMC\["discuz_url"\] =\s*.*?;/i', '$_IMC["discuz_url"] = $discuz_url;');
 		$fp = fopen($file, 'w');
 		if(!($fp = @fopen($file, 'w'))) {
 			show_msg('请确认文件 webim/config.php 可写');

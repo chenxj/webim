@@ -1,7 +1,8 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
 define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
-include_once('D:\\xampp\\htdocs\\home\\common.php');//路径问题
+include_once('config.php');//配置文件
+include_once($_IMC['uchome_path'] . "/common.php"); // common.php  add by free.wang
 include_once(IM_ROOT . "json.php");
 
 function _iconv($s,$t,$data){

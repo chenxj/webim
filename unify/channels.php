@@ -1,5 +1,5 @@
 <?php
-include_once('common.php');
+include_once('common_discuz.php');
 $channels = array();
 //uchome_mtag table
 $query = $_SGLOBAL['db']->query("SELECT t.tagid, t.tagname, t.pic

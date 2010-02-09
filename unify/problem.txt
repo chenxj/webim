@@ -1,0 +1,5 @@
+﻿在windows平台下，由于目录的分隔符为 \ 所以在写如php文件时会出现错误，需要转义，若在Linux环境应无此问题
+install.php 粗略加入输入平台的地址的文本框以进行测试，结果良好，需细化处理，前端没搞定=，=
+custom.js.php 问题依旧，$_IMC['xxx_url']地址完全正确，如http://localhost/home/
+但是拼接之后会成这样http://localhost/home/h/webim/online.php?platform=uchome，注意中间那个 h
+未发现缘由

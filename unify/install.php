@@ -13,7 +13,14 @@ if(file_exists(S_ROOT.'./data/webiminstall.lock')) {
 if(file_exists(S_ROOT.'./forumdata/webiminstall.lock')) {
 	show_msg('您已经安装过IM,如果需要重新安装，请先删除文件 webiminstall.lock', 999);
 }
-
+/*
+$platform = 0;
+if(file_exists(S_ROOT.'./data')){
+	$platform = 1;//uchome
+}else if(file_exists(S_ROOT.'./forumdata')){
+	$platform = 2;//discuz
+}
+*/
 function which_platform(){
     /*
      *  check the platform 
@@ -28,20 +35,24 @@ function which_platform(){
     }
 }
 
-list($url_path) = (explode('webim', "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']) );   //平台请求路径
-    $file_path = $_SERVER['DOCUMENT_ROOT'];//$_ROOT 平台文件夹路径
-	$config_file_path = $file_path.'./webim/config.php';//IM 配置文件绝对路径
-	
+$url_path = $file_path = array();
+list($url_path[],$else) = explode('webim', "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']);   //平台请求路径
+$file_path[] = S_ROOT;//$_ROOT 平台文件夹路径
+//$config_file_path = $file_path[0].'./webim/config.php';//IM 配置文件绝对路径 已被 webim_configfile 替代
+$platform = which_platform();
 
-global $_SC,$_SGLOBAL, $url_path, $file_path;
-switch( which_platform() ){
-	case "uchome":
+//install($platform);
+
+//function install($platform){
+//global $_SC,$_SGLOBAL, $url_path, $file_path;
+switch($platform){
+	case 'uchome':
 		define('IN_UCHOME', TRUE);
 		$basic_configfile = S_ROOT.'./config.php';
 		include_once(S_ROOT.'./config.php');
 		include_once(S_ROOT.'./source/function_common.php');
 		break;
-	case "discuz":
+	case 'discuz':
 		define('IN_DISCUZ', TRUE);
 		$basic_configfile = S_ROOT.'./config.inc.php';
 		include_once(S_ROOT.'./include/common.inc.php');
@@ -93,13 +104,15 @@ if(!@$fp = fopen($basic_configfile, 'a')) {
 }
 
 if (submitcheck('imsubmit')) {
-	//ucim install
+	//install
 	$step = 1;
     dbconnect();
 	$domain = trim($_POST['domain']);
 	$apikey = trim($_POST['apikey']);
 	$theme = trim($_POST['theme']);
 	$charset = trim($_POST['charset']);
+	$url_path[] = trim($_POST['dz_url_path']);
+	$file_path[] = trim($_POST['dz_file_path']);
 	
 	if(empty($domain) || empty($apikey)) {
 		show_msg('网站域名和API KEY不能为空');
@@ -186,6 +199,8 @@ END;
 		$apikey = empty($_POST['apikey']) ? '' : $_POST['apikey'];
         $theme = empty($_POST['theme']) ? '' : $_POST['theme'];
 		$charset = empty($_POST['charset']) ? '' : $_POST['charset'];
+		$dz_url_path = empty($_POST['dz_url_path']) ? '' : $_POST['dz_url_path'];
+		$dz_file_path = empty($_POST['dz_file_path']) ? '' : $_POST['dz_url_path'];
 		print <<<END
 		<form id="theform" method="post" action="$theurl?step=1">
 			<table class=button>
@@ -197,6 +212,8 @@ END;
 			<input type="hidden" name="apikey" value="$apikey" />
 			<input type="hidden" name="theme" value="$theme" />
 			<input type="hidden" name="charset" value="$charset" />
+			<input type="hidden" name="dz_url_path" value="$dz_url_path" />
+			<input type="hidden" name="dz_file_path" value="$dz_file_path" />
 			<input type="hidden" name="formhash" value="$formhash">
 		</form>
 END;
@@ -262,7 +279,15 @@ END;
                     <option value="zh-CN_utf8">简体中文（UTF-8）</option>
                     <option value="zh-TW_big5">繁体中文（BIG5）</option>
                     <option value="zh-TW_utf8">繁体中文（UTF-8）</option>
-                    <option value="en_utf8">英文（UTF-8）</option></select>(选择与Discuz相同的编码)</td>
+                    <option value="en_utf8">英文（UTF-8）</option></select></td>
+				</tr>
+				<tr>
+					<td>DISCUZ本地文件路径(临时):</td>
+					<td><input type="text" id="dz_file_path" name="dz_file_path" size="60" value=""></td>
+				</tr>
+				<tr>
+					<td>DISCUZ URL路径(临时):</td>
+					<td><input type="text" id="dz_url_path" name="dz_url_path" size="60" value="http://"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -350,7 +375,7 @@ END;
             <p>在“&lt;/body&gt;”前添加如下代码：<span  style="color:blue"><pre>
                     &lt;!--{template webim_xxx}--&gt;
             </pre></span></p>
-		<h3>3. 在不同平台的配置文件中加入 include_once $config_file_path;
+		<h3>3. 在不同平台的配置文件中加入 include_once S_ROOT\webim\config.php;
         <h3>4. 清除UCHome模板缓存</h3>
 	<p>删除UCHome根目录下./data/tpl_cache/中的模板缓存(或者通过UCenter的"更新缓存")</p>
     <p style="text-align:center">
@@ -361,7 +386,7 @@ END;
 EOF;
 	show_msg($msg, 999);
 }
-}//install end
+//}//install end
 
 //check permission
 function checkfdperm($path, $isfile=0) {
@@ -532,7 +557,19 @@ function insertconfig($s, $find, $replace) {
 }
 
 function write_webim_config($file,$domain,$apikey,$theme,$charset) {
-global $url_path, $file_path;
+global $url_path, $file_path, $platform;
+if($platform == 'uchome'){
+	$uchome_path = $file_path[0];
+	$uchome_url = $url_path[0];
+	$discuz_path = $file_path[1];
+	$discuz_url = $url_path[1];
+}else if($platform == 'discuz'){
+	$uchome_path = $file_path[1];
+	$uchome_url = $url_path[1];
+	$discuz_path = $file_path[0];
+	$discuz_url = $url_path[0];
+}
+
 $fp = fopen($file, 'r');
 		$configfile = fread($fp, filesize($file));
 		$configfile = trim($configfile);
@@ -546,6 +583,8 @@ $fp = fopen($file, 'r');
 			$configfile = insertconfig($configfile, '/\$_IMC\["imsvr"\] =\s*".*?";/i', '$_IMC["imsvr"] = "www.nextim.cn";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["impost"\] =\s*.*?;/i', '$_IMC["impost"] = 9000;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["impoll"\] =\s*.*?;/i', '$_IMC["impoll"] = 8000;');
+			$configfile = insertconfig($configfile, '/\$_IMC\["url_path"\] =\s*.*?;/i', '$_IMC["url_path"] = "'.$url_path[0].'";');
+			//$configfile = insertconfig($configfile, '/\$_IMC\["file_path"\] =\s*.*?;/i', '$_IMC["file_path"] = "'.$file_path.'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["theme"\] =\s*".*?";/i', '$_IMC["theme"] = "'.$theme.'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["local"\] =\s*".*?";/i', '$_IMC["local"] = "'.substr($charset,0,5).'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["charset"\] =\s*".*?";/i', '$_IMC["charset"] = "'.$charset.'";');
@@ -554,10 +593,10 @@ $fp = fopen($file, 'r');
 			$configfile = insertconfig($configfile, '/\$_IMC\["groupchat"\] =\s*.*?;/i', '$_IMC["groupchat"] = true;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["emot"\] =\s*".*?";/i', '$_IMC["emot"] = "default";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["opacity"\] =\s*.*?;/i', '$_IMC["opacity"] = 80;');
-			$configfile = insertconfig($configfile, '/\$_IMC\["uchome_path"\] =\s*.*?;/i', '$_IMC["uchome_path"] = $uchome_path;');
-			$configfile = insertconfig($configfile, '/\$_IMC\["uchome_url"\] =\s*.*?;/i', '$_IMC["uchome_url"] = $uchome_url;');
-			$configfile = insertconfig($configfile, '/\$_IMC\["discuz_path"\] =\s*.*?;/i', '$_IMC["discuz_path"] = $discuz_path;');
-			$configfile = insertconfig($configfile, '/\$_IMC\["discuz_url"\] =\s*.*?;/i', '$_IMC["discuz_url"] = $discuz_url;');
+			$configfile = insertconfig($configfile, '/\$_IMC\["uchome_path"\] =\s*.*?;/i', '$_IMC["uchome_path"] = "'.$uchome_path.'";');
+			$configfile = insertconfig($configfile, '/\$_IMC\["uchome_url"\] =\s*.*?;/i', '$_IMC["uchome_url"] = "'.$uchome_url.'";');
+			$configfile = insertconfig($configfile, '/\$_IMC\["discuz_path"\] =\s*.*?;/i', '$_IMC["discuz_path"] = "'.$discuz_path.'";');
+			$configfile = insertconfig($configfile, '/\$_IMC\["discuz_url"\] =\s*.*?;/i', '$_IMC["discuz_url"] = "'.$discuz_url.'";');
 		$fp = fopen($file, 'w');
 		if(!($fp = @fopen($file, 'w'))) {
 			show_msg('请确认文件 webim/config.php 可写');
@@ -566,14 +605,14 @@ $fp = fopen($file, 'r');
 		@fclose($fp);
 	}
 function write_basic_config($file) {
-global $config_file_path;
+global $file_path;
 $fp = fopen($file, 'r');
 		$configfile = fread($fp, filesize($file));
 		$configfile = trim($configfile);
 		$configfile = substr($configfile, -2) == '?>' ? substr($configfile, 0, -2) : $configfile;
 		fclose($fp);
 
-			$configfile = insertconfig($configfile, '.*', "include_once('".$config_file_path."');");
+			$configfile = insertconfig($configfile, '.*', "include_once '".$file_path[0]."webim".DIRECTORY_SEPARATOR."config.php';");
 		$fp = fopen($file, 'w');
 		if(!($fp = @fopen($file, 'w'))) {
 			show_msg('请确认文件 config.php 可写');

@@ -5,9 +5,11 @@ $platform = $_GET['platform'];
 switch($platform){
 	case 'discuz':
 		include_once('common_discuz.php');
+		$url_path = $_IMC['discuz_url'];
 		break;
 	case 'uchome':
 		include_once('common_uchome.php');
+		$url_path = $_IMC['uchome_url'];
 		break;
 }
 
@@ -26,7 +28,7 @@ if($_SCONFIG['my_status']) {
 	}
 }
 $setting = json_encode(setting());
-$url_path = $_IMC['url_path'];
+
 ?>
  
 //custom

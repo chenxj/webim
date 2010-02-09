@@ -34,7 +34,9 @@ function which_platform(){
         return "discuz";
     }
 }
-
+///
+$display_name = '';//用于在安装界面显示用户需要输入路径的另一平台名称
+///
 $url_path = $file_path = array();
 list($url_path[],$else) = explode('webim', "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']);   //平台请求路径
 $file_path[] = S_ROOT;//$_ROOT 平台文件夹路径
@@ -51,6 +53,7 @@ switch($platform){
 		$basic_configfile = S_ROOT.'./config.php';
 		include_once(S_ROOT.'./config.php');
 		include_once(S_ROOT.'./source/function_common.php');
+		$display_name = 'DISCUZ';
 		break;
 	case 'discuz':
 		define('IN_DISCUZ', TRUE);
@@ -60,6 +63,7 @@ switch($platform){
 		$_SC['tablepre']=$tablepre;
 		$_SC['dbcharset']=$dbcharset;
 		$_SC['charset']='utf-8';
+		$display_name = 'UCHOME';
 		break;
 }
 
@@ -558,6 +562,10 @@ function insertconfig($s, $find, $replace) {
 
 function write_webim_config($file,$domain,$apikey,$theme,$charset) {
 global $url_path, $file_path, $platform;
+foreach($file_path as &$var){
+	$var = str_replace('\\', '/', $var);
+	$var = str_replace('//', '/', $var);
+}
 if($platform == 'uchome'){
 	$uchome_path = $file_path[0];
 	$uchome_url = $url_path[0];
@@ -583,7 +591,7 @@ $fp = fopen($file, 'r');
 			$configfile = insertconfig($configfile, '/\$_IMC\["imsvr"\] =\s*".*?";/i', '$_IMC["imsvr"] = "www.nextim.cn";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["impost"\] =\s*.*?;/i', '$_IMC["impost"] = 9000;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["impoll"\] =\s*.*?;/i', '$_IMC["impoll"] = 8000;');
-			$configfile = insertconfig($configfile, '/\$_IMC\["url_path"\] =\s*.*?;/i', '$_IMC["url_path"] = "'.$url_path[0].'";');
+			//$configfile = insertconfig($configfile, '/\$_IMC\["url_path"\] =\s*.*?;/i', '$_IMC["url_path"] = "'.$url_path[0].'";');
 			//$configfile = insertconfig($configfile, '/\$_IMC\["file_path"\] =\s*.*?;/i', '$_IMC["file_path"] = "'.$file_path.'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["theme"\] =\s*".*?";/i', '$_IMC["theme"] = "'.$theme.'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["local"\] =\s*".*?";/i', '$_IMC["local"] = "'.substr($charset,0,5).'";');

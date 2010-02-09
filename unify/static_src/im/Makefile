@@ -19,7 +19,7 @@ BASE_FILES = ${SRC_DIR}/core.js\
 	${SRC_DIR}/buddy.js\
 	${SRC_DIR}/room.js\
 	${SRC_DIR}/notification.js\
-	${SRC_DIR}/history.js \
+	${SRC_DIR}/history.js\
 
 
 WEBIM_FILES = ${SRC_DIR}/intro.js\
@@ -28,8 +28,21 @@ WEBIM_FILES = ${SRC_DIR}/intro.js\
 
 UC_WEBIM_FILES = ${WEBIM_FILES}
 
-DZ_WEBIM_FILES = ${WEBIM_FILES}\
-		 ${SRC_DIR}/hotpost.js \
+DZ_WEBIM_FILES = ${SRC_DIR}/core.js\
+	${SRC_DIR}/objectExtend.js\
+	${SRC_DIR}/ajax.js\
+	${SRC_DIR}/json.js\
+	${SRC_DIR}/comet.js\
+	${SRC_DIR}/cookie.js\
+	${SRC_DIR}/log.js\
+	${SRC_DIR}/webim.js\
+	${SRC_DIR}/setting.js\
+	${SRC_DIR}/status.js\
+	${SRC_DIR}/buddy.js\
+	${SRC_DIR}/room.js\
+	${SRC_DIR}/notification.js\
+	${SRC_DIR}/history.js\
+	${SRC_DIR}/hotpost.js\
 
 
 WEBIM_VER = `cat ${PREFIX}/version.txt`

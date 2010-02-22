@@ -115,8 +115,8 @@ if (submitcheck('imsubmit')) {
 	$apikey = trim($_POST['apikey']);
 	$theme = trim($_POST['theme']);
 	$charset = trim($_POST['charset']);
-	$url_path[] = trim($_POST['dz_url_path']);
-	$file_path[] = trim($_POST['dz_file_path']);
+	$url_path[] = trim($_POST['ext_url_path']);//
+	$file_path[] = trim($_POST['ext_file_path']);//为通过用户输入所获得的其他平台的地址，应根据用户具体情况进行定制
 	
 	if(empty($domain) || empty($apikey)) {
 		show_msg('网站域名和API KEY不能为空');
@@ -203,8 +203,8 @@ END;
 		$apikey = empty($_POST['apikey']) ? '' : $_POST['apikey'];
         $theme = empty($_POST['theme']) ? '' : $_POST['theme'];
 		$charset = empty($_POST['charset']) ? '' : $_POST['charset'];
-		$dz_url_path = empty($_POST['dz_url_path']) ? '' : $_POST['dz_url_path'];
-		$dz_file_path = empty($_POST['dz_file_path']) ? '' : $_POST['dz_url_path'];
+		$ext_url_path = empty($_POST['ext_url_path']) ? '' : $_POST['ext_url_path'];
+		$ext_file_path = empty($_POST['ext_file_path']) ? '' : $_POST['ext_file_path'];
 		print <<<END
 		<form id="theform" method="post" action="$theurl?step=1">
 			<table class=button>
@@ -216,8 +216,8 @@ END;
 			<input type="hidden" name="apikey" value="$apikey" />
 			<input type="hidden" name="theme" value="$theme" />
 			<input type="hidden" name="charset" value="$charset" />
-			<input type="hidden" name="dz_url_path" value="$dz_url_path" />
-			<input type="hidden" name="dz_file_path" value="$dz_file_path" />
+			<input type="hidden" name="ext_url_path" value="$ext_url_path" />
+			<input type="hidden" name="ext_file_path" value="$ext_file_path" />
 			<input type="hidden" name="formhash" value="$formhash">
 		</form>
 END;
@@ -287,11 +287,11 @@ END;
 				</tr>
 				<tr>
 					<td>DISCUZ本地文件路径(临时):</td>
-					<td><input type="text" id="dz_file_path" name="dz_file_path" size="60" value=""></td>
+					<td><input type="text" id="ext_file_path" name="ext_file_path" size="60" value=""></td>
 				</tr>
 				<tr>
 					<td>DISCUZ URL路径(临时):</td>
-					<td><input type="text" id="dz_url_path" name="dz_url_path" size="60" value="http://"></td>
+					<td><input type="text" id="ext_url_path" name="ext_url_path" size="60" value="http://"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -566,6 +566,7 @@ foreach($file_path as &$var){
 	$var = str_replace('\\', '/', $var);
 	$var = str_replace('//', '/', $var);
 }
+$install_url = $url_path[0];
 if($platform == 'uchome'){
 	$uchome_path = $file_path[0];
 	$uchome_url = $url_path[0];
@@ -605,6 +606,8 @@ $fp = fopen($file, 'r');
 			$configfile = insertconfig($configfile, '/\$_IMC\["uchome_url"\] =\s*.*?;/i', '$_IMC["uchome_url"] = "'.$uchome_url.'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["discuz_path"\] =\s*.*?;/i', '$_IMC["discuz_path"] = "'.$discuz_path.'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["discuz_url"\] =\s*.*?;/i', '$_IMC["discuz_url"] = "'.$discuz_url.'";');
+			$configfile = insertconfig($configfile, '/\$_IMC\["install_url"\] =\s*.*?;/i', '$_IMC["install_url"] = "'.$install_url.'";');
+
 		$fp = fopen($file, 'w');
 		if(!($fp = @fopen($file, 'w'))) {
 			show_msg('请确认文件 webim/config.php 可写');

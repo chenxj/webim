@@ -1,21 +1,18 @@
 <?php
 $_IMC = array();
 $_IMC["enable"] = true;
-$_IMC["domain"] = "localhost";
-$_IMC["apikey"] = "public";
-$_IMC["imsvr"] = "www.nextim.cn";
+$_IMC["domain"] = "oachen.com";
+$_IMC["apikey"] = "99d0b752-9631-4c17-a65e-0b81e239186b";
+$_IMC["imsvr"] = "211.144.86.221";
 $_IMC["impost"] = 9000;
 $_IMC["impoll"] = 8000;
 $_IMC["theme"] = "flick";
 $_IMC["local"] = "zh-CN";
-$_IMC["charset"] = "zh-CN_gbk";
+$_IMC["charset"] = "zh-CN_utf8";
 $_IMC["buddy_name"] = "username";
-$_IMC["room_id_pre"] = 1000000;
+$_IMC["channel_pre"] = 1000000;
 $_IMC["groupchat"] = true;
 $_IMC["emot"] = "default";
 $_IMC["opacity"] = 80;
-$_IMC["uchome_path"] = "/var/www/html/home/";
-$_IMC["uchome_url"] = "http://localhost/home/";
-$_IMC["discuz_path"] = "/var/www/html/bbs/";
-$_IMC["discuz_url"] = "http://localhost/bbs/";
-$_IMC["install_url"] = "http://localhost/home/";
+$_IMC["admin_ids"] = "1901, 1114";
+

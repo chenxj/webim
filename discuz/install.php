@@ -287,22 +287,10 @@ END;
     $db->query("DROP TABLE IF EXISTS `".$_SC['tablepre']."im_histories`");
     $db->query("DROP TABLE IF EXISTS `".$_SC['tablepre']."im_config`");
 
-  /*  if($useold&&$db_oldversion){
-   	 	$sql="insert into `".$_SC['tablepre']."im_histories` (select *,0,0 from `".$_SC['tablepre']."im_histories_tmp`)";
-   		$db->query($sql); 
-
-    	$sql="drop table `".$_SC['tablepre']."im_histories_tmp`";
-   		$db->query($sql); 
-    }*/
 	if(!$installok) {
 		show_msg("<font color=\"blue\">数据表 ($tablename) 自动安装失败</font><br />反馈: ".mysql_error()."<br /><br />请参照 $sqlfile 文件中的SQL文，自己手工安装数据库后，再继续进行安装操作<br /><br /><a href=\"?step=$step\">重试</a>");
 	} else {
-		/* $db->query("delete from ".tname('crons')." where filename='./../../webim/source/cron/cleanhis.php'");
-        
-        $datas = array(
-			"1, 'system', '清理历史聊天记录', './../../webim/source/cron/cleanhis.php', $_SGLOBAL[timestamp], $_SGLOBAL[timestamp], -1, -1, 4, '0'"
-		);
-		$db->query("INSERT INTO ".tname('crons')." (available, type, name, filename, lastrun, nextrun, weekday, day, hour, minute) VALUES (".implode('),(', $datas).")");*/
+		
 		show_msg($msg.'<br /><b>数据表已经全部安装完成，进入下一步操作</b>', ($step+1));
 	}
 } elseif ($step == 3) {

@@ -2,7 +2,27 @@
 $_SGLOBAL = $_SCONFIG = $_SBLOCK = array();
 //安装平台根目录
 define('S_ROOT', substr(dirname(__FILE__), 0, -5));
-
+$platform = which_platform();
+switch($platform){
+	case 'uchome':
+		define('IN_UCHOME', TRUE);
+		$basic_configfile = S_ROOT.'./config.php';
+		include_once(S_ROOT.'./config.php');
+		include_once(S_ROOT.'./source/function_common.php');
+		$display_name = 'DISCUZ';
+		break;
+	case 'discuz':
+		define('IN_DISCUZ', TRUE);
+		$basic_configfile = S_ROOT.'./config.inc.php';
+		include_once(S_ROOT.'./include/common.inc.php');
+		include_once('./discuz_function.php');
+		$_SC['gzipcompress'] = true;
+		$_SC['tablepre']=$tablepre;
+		$_SC['dbcharset']=$dbcharset;
+		$_SC['charset']='utf-8';
+		$display_name = 'UCHOME';
+		break;
+}
 //timestamp
 $_SGLOBAL['timestamp'] = time();
 
@@ -13,14 +33,7 @@ if(file_exists(S_ROOT.'./data/webiminstall.lock')) {
 if(file_exists(S_ROOT.'./forumdata/webiminstall.lock')) {
 	show_msg('您已经安装过IM,如果需要重新安装，请先删除文件 webiminstall.lock', 999);
 }
-/*
-$platform = 0;
-if(file_exists(S_ROOT.'./data')){
-	$platform = 1;//uchome
-}else if(file_exists(S_ROOT.'./forumdata')){
-	$platform = 2;//discuz
-}
-*/
+
 function which_platform(){
     /*
      *  check the platform 
@@ -34,34 +47,13 @@ function which_platform(){
         return "discuz";
     }
 }
-
+///
+$display_name = '';//用于在安装界面显示用户需要输入路径的另一平台名称
+///
 $url_path = $file_path = array();
 list($url_path[],$else) = explode('webim', "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']);   //平台请求路径
 $file_path[] = S_ROOT;//$_ROOT 平台文件夹路径
 //$config_file_path = $file_path[0].'./webim/config.php';//IM 配置文件绝对路径 已被 webim_configfile 替代
-$platform = which_platform();
-
-//install($platform);
-
-//function install($platform){
-//global $_SC,$_SGLOBAL, $url_path, $file_path;
-switch($platform){
-	case 'uchome':
-		define('IN_UCHOME', TRUE);
-		$basic_configfile = S_ROOT.'./config.php';
-		include_once(S_ROOT.'./config.php');
-		include_once(S_ROOT.'./source/function_common.php');
-		break;
-	case 'discuz':
-		define('IN_DISCUZ', TRUE);
-		$basic_configfile = S_ROOT.'./config.inc.php';
-		include_once(S_ROOT.'./include/common.inc.php');
-		$_SC['gzipcompress'] = true;
-		$_SC['tablepre']=$tablepre;
-		$_SC['dbcharset']=$dbcharset;
-		$_SC['charset']='utf-8';
-		break;
-}
 
 //GPC filter
 if(!(get_magic_quotes_gpc())) {
@@ -106,27 +98,31 @@ if(!@$fp = fopen($basic_configfile, 'a')) {
 if (submitcheck('imsubmit')) {
 	//install
 	$step = 1;
-    dbconnect();
+	if($platform == 'uchome'){
+    		dbconnect();
+	}
 	$domain = trim($_POST['domain']);
 	$apikey = trim($_POST['apikey']);
 	$theme = trim($_POST['theme']);
 	$charset = trim($_POST['charset']);
-	$url_path[] = trim($_POST['dz_url_path']);
-	$file_path[] = trim($_POST['dz_file_path']);
+	$url_path[] = trim($_POST['ext_url_path']);//
+	$file_path[] = trim($_POST['ext_file_path']);//为通过用户输入所获得的其他平台的地址，应根据用户具体情况进行定制
 	
 	if(empty($domain) || empty($apikey)) {
 		show_msg('网站域名和API KEY不能为空');
 	} else {
 		write_basic_config($basic_configfile);
-        write_webim_config($webim_configfile,$domain,$apikey,$theme,$charset);
+        	write_webim_config($webim_configfile,$domain,$apikey,$theme,$charset);
 		//import webim/data/webim.sql
 	$newsql = file_get_contents($sqlfile);
-
-	if($_SC['tablepre'] != 'uchome_') $newsql = str_replace('uchome_', $_SC['tablepre'], $newsql);
+	if($platform == 'uchome'){
+		if($_SC['tablepre'] != 'uchome_') $newsql = str_replace('uchome_', $_SC['tablepre'], $newsql);
+	}
 
 	$tables = $sqls = array();
 	$tblexist = false;
 	if($newsql) {
+		if($platform == 'uchome'){
 		preg_match_all("/(CREATE TABLE ([a-z0-9\_\-`]+).+?\s*)(TYPE|ENGINE)+\=/is", $newsql, $mathes);
 		$tables = $mathes[2];
 			foreach ($tables as $key => $tablename)
@@ -138,7 +134,18 @@ if (submitcheck('imsubmit')) {
 				}else{
 				$tblexist = false;
 				}
-			}		
+			}
+		}//uchome
+		else if($platform == 'discuz'){
+			$tablename = 'webim_histories';//$_SC['tablepre'].'im_histories';
+
+				$tablestatus = $db->fetch_first("SHOW TABLE STATUS LIKE '$tablename'");
+				if($tablestatus){ 
+					$tblexist = true;
+				}else{
+				$tblexist = false;
+				}
+		}
 	}
 	$msg = <<<EOF
 	<h2>IM相关配置已经加入到平台根目录的config.php文件中,进入下一步:</h2>
@@ -199,8 +206,8 @@ END;
 		$apikey = empty($_POST['apikey']) ? '' : $_POST['apikey'];
         $theme = empty($_POST['theme']) ? '' : $_POST['theme'];
 		$charset = empty($_POST['charset']) ? '' : $_POST['charset'];
-		$dz_url_path = empty($_POST['dz_url_path']) ? '' : $_POST['dz_url_path'];
-		$dz_file_path = empty($_POST['dz_file_path']) ? '' : $_POST['dz_url_path'];
+		$ext_url_path = empty($_POST['ext_url_path']) ? '' : $_POST['ext_url_path'];
+		$ext_file_path = empty($_POST['ext_file_path']) ? '' : $_POST['ext_file_path'];
 		print <<<END
 		<form id="theform" method="post" action="$theurl?step=1">
 			<table class=button>
@@ -212,8 +219,8 @@ END;
 			<input type="hidden" name="apikey" value="$apikey" />
 			<input type="hidden" name="theme" value="$theme" />
 			<input type="hidden" name="charset" value="$charset" />
-			<input type="hidden" name="dz_url_path" value="$dz_url_path" />
-			<input type="hidden" name="dz_file_path" value="$dz_file_path" />
+			<input type="hidden" name="ext_url_path" value="$ext_url_path" />
+			<input type="hidden" name="ext_file_path" value="$ext_file_path" />
 			<input type="hidden" name="formhash" value="$formhash">
 		</form>
 END;
@@ -283,11 +290,11 @@ END;
 				</tr>
 				<tr>
 					<td>DISCUZ本地文件路径(临时):</td>
-					<td><input type="text" id="dz_file_path" name="dz_file_path" size="60" value=""></td>
+					<td><input type="text" id="ext_file_path" name="ext_file_path" size="60" value=""></td>
 				</tr>
 				<tr>
 					<td>DISCUZ URL路径(临时):</td>
-					<td><input type="text" id="dz_url_path" name="dz_url_path" size="60" value="http://"></td>
+					<td><input type="text" id="ext_url_path" name="ext_url_path" size="60" value="http://"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -302,36 +309,64 @@ END;
 	show_footer();
 } elseif ($step == 2) {
 
+	if($platform == 'uchome'){
 	dbconnect();
-
-	//import webim/data/webim.sql
-	$newsql = sreadfile($sqlfile);
-    
+	$newsql = sreadfile($sqlfile);    
 	if($_SC['tablepre'] != 'uchome_') $newsql = str_replace('uchome_', $_SC['tablepre'], $newsql);
+	}else if($platform == 'discuz'){
+		$newsql = file_get_contents($sqlfile);
+	}
+
 	$tables = $sqls = array();
 	if($newsql) {
 		preg_match_all("/(CREATE TABLE ([a-z0-9\_\-`]+).+?\s*)(TYPE|ENGINE)+\=/is", $newsql, $mathes);
 		$sqls = $mathes[1];
 		$tables = $mathes[2];
+if($platform == 'uchome'){
         var_dump($tables);
+}
 	}
 	if(empty($tables)) {
 		show_msg("安装SQL语句获取失败  ， 请确认SQL文件 $sqlfile 是否存在");
 	}
-
+if($platform == 'uchome'){
 	$heaptype = $_SGLOBAL['db']->version()>'4.1'?" ENGINE=MEMORY".(empty($_SC['dbcharset'])?'':" DEFAULT CHARSET=$_SC[dbcharset]" ):" TYPE=HEAP";
 	$myisamtype = $_SGLOBAL['db']->version()>'4.1'?" ENGINE=MYISAM".(empty($_SC['dbcharset'])?'':" DEFAULT CHARSET=$_SC[dbcharset]" ):" TYPE=MYISAM";
 	$installok = true;
 	$useold=$_REQUEST['useold'];
     $db_oldversion=true;
+}else if($platform == 'discuz'){
+$heaptype = mysql_get_server_info()>'4.1'?" ENGINE=MEMORY".(empty($_SC['dbcharset'])?'':" DEFAULT CHARSET=$_SC[dbcharset]" ):" TYPE=HEAP";
+	$myisamtype = mysql_get_server_info()>'4.1'?" ENGINE=MYISAM".(empty($_SC['dbcharset'])?'':" DEFAULT CHARSET=$_SC[dbcharset]" ):" TYPE=MYISAM";
+	$installok = true;
+	$msg='';
+    $useold=$_REQUEST['useold'];
+    $db_oldversion=true;
+    
+	foreach ($tables as $key => $tablename) {
+    	//if(!$useold||(!$db->fetch_first("SHOW TABLE STATUS LIKE '$tablename'")))
+       // {
+            $sqltype = $myisamtype;
+            $db->query("DROP TABLE IF EXISTS $tablename");
+            if(!$query = $db->query($sqls[$key].$sqltype, 'SILENT')) {
+                $installok = false;
+                break;
+            }else{
+            $msg.= "已经创建表($tablename)<br />";
+            }
+      //  }
+	}
+}
+if($platform == 'uchome'){
      if($useold){
+
      $table_desc = $_SGLOBAL['db']->query("desc `".$_SC['tablepre']."im_histories`");
 	 while($col=mysql_fetch_assoc($table_desc)){if($col['Field']=='fromdel')$db_oldversion=false;}
      if($db_oldversion){
     	$sql="RENAME TABLE `".$_SC['tablepre']."im_histories` TO `".$_SC['tablepre']."im_histories_tmp`";
    		$_SGLOBAL['db']->query($sql);
-   		} 
-    }
+   		}
+	}
 	foreach ($tables as $key => $tablename) {
     	if(!$useold||(!@mysql_fetch_assoc($_SGLOBAL['db']->query("SHOW TABLE STATUS LIKE '$tablename'"))))
         {
@@ -363,11 +398,38 @@ END;
 		$_SGLOBAL['db']->query("INSERT INTO ".tname('cron')." (available, type, name, filename, lastrun, nextrun, weekday, day, hour, minute) VALUES (".implode('),(', $datas).")");
 		show_msg($msg.'<br /><b>数据表已经全部安装完成，进入下一步操作</b>', ($step+1));
 	}
+}else if($platform == 'discuz'){
+	if($useold){
+    	$table_desc = $db->query("desc `".$_SC['tablepre']."im_histories`");
+	 	while($col=mysql_fetch_assoc($table_desc)){if($col['Field']=='fromdel')$db_oldversion=false;}
+     	if($db_oldversion)//`id`,`to` ,`from` ,`body` ,`style`,`timestamp` ,`todel`,`fromdel` ,`send` ,`type`
+   			$sql="insert into `webim_histories`(`id`,`to` ,`from` ,`body` ,`style`,`timestamp` ,`todel`,`fromdel` ,`send` ,`type`) (select `id`,`to` ,`from` ,`body` ,`style`,`timestamp`,0,0,1,'msg' from `".$_SC['tablepre']."im_histories`)";
+            else
+            $sql="insert into `webim_histories`(`id`,`to` ,`from` ,`body` ,`style`,`timestamp` ,`todel`,`fromdel` ,`send` ,`type`) (select `id`,`to` ,`from` ,`body` ,`style`,`timestamp`,`todel`,`fromdel`,1,'msg' from `".$_SC['tablepre']."im_histories`)";
+   			$db->query($sql); 
+    }
+    $db->query("DROP TABLE IF EXISTS `".$_SC['tablepre']."im_histories`");
+    $db->query("DROP TABLE IF EXISTS `".$_SC['tablepre']."im_config`");
+
+	if(!$installok) {
+		show_msg("<font color=\"blue\">数据表 ($tablename) 自动安装失败</font><br />反馈: ".mysql_error()."<br /><br />请参照 $sqlfile 文件中的SQL文，自己手工安装数据库后，再继续进行安装操作<br /><br /><a href=\"?step=$step\">重试</a>");
+	} else {
+		
+		show_msg($msg.'<br /><b>数据表已经全部安装完成，进入下一步操作</b>', ($step+1));
+	}
+}
 } elseif ($step == 3) {
+	if($platform == 'uchome'){
 	$tplcode = 'global $_SCOOKIE,$_IMC;<br>'.
 		'if($_IMC[\'enable\'] && $_SCOOKIE[\'auth\']) {<br>'.
         'include_once(S_ROOT.\'./webim/webim_template.php\');<br>'.
         '$template = webim_template($template);<br>}';
+	@touch(S_ROOT.'./data/webiminstall.lock');
+	@include($basic_configfile);
+	}else if($platform == 'discuz'){
+	@touch(S_ROOT.'./forumdata/webiminstall.lock');
+	@include($basic_configfile);
+	}
 	$msg = <<<EOF
 	<h2>请继续下述配置，完成安装:</h2>
         <h3>1. 复制 <font color="red">webim/webim_xxx.htm</font> 到 <font color="red">./template/default/</font></h3>
@@ -558,6 +620,11 @@ function insertconfig($s, $find, $replace) {
 
 function write_webim_config($file,$domain,$apikey,$theme,$charset) {
 global $url_path, $file_path, $platform;
+foreach($file_path as &$var){
+	$var = str_replace('\\', '/', $var);
+	$var = str_replace('//', '/', $var);
+}
+$install_url = $url_path[0];
 if($platform == 'uchome'){
 	$uchome_path = $file_path[0];
 	$uchome_url = $url_path[0];
@@ -583,7 +650,7 @@ $fp = fopen($file, 'r');
 			$configfile = insertconfig($configfile, '/\$_IMC\["imsvr"\] =\s*".*?";/i', '$_IMC["imsvr"] = "www.nextim.cn";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["impost"\] =\s*.*?;/i', '$_IMC["impost"] = 80;');
 			$configfile = insertconfig($configfile, '/\$_IMC\["impoll"\] =\s*.*?;/i', '$_IMC["impoll"] = 8000;');
-			$configfile = insertconfig($configfile, '/\$_IMC\["url_path"\] =\s*.*?;/i', '$_IMC["url_path"] = "'.$url_path[0].'";');
+			//$configfile = insertconfig($configfile, '/\$_IMC\["url_path"\] =\s*.*?;/i', '$_IMC["url_path"] = "'.$url_path[0].'";');
 			//$configfile = insertconfig($configfile, '/\$_IMC\["file_path"\] =\s*.*?;/i', '$_IMC["file_path"] = "'.$file_path.'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["theme"\] =\s*".*?";/i', '$_IMC["theme"] = "'.$theme.'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["local"\] =\s*".*?";/i', '$_IMC["local"] = "'.substr($charset,0,5).'";');
@@ -597,6 +664,8 @@ $fp = fopen($file, 'r');
 			$configfile = insertconfig($configfile, '/\$_IMC\["uchome_url"\] =\s*.*?;/i', '$_IMC["uchome_url"] = "'.$uchome_url.'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["discuz_path"\] =\s*.*?;/i', '$_IMC["discuz_path"] = "'.$discuz_path.'";');
 			$configfile = insertconfig($configfile, '/\$_IMC\["discuz_url"\] =\s*.*?;/i', '$_IMC["discuz_url"] = "'.$discuz_url.'";');
+			$configfile = insertconfig($configfile, '/\$_IMC\["install_url"\] =\s*.*?;/i', '$_IMC["install_url"] = "'.$install_url.'";');
+
 		$fp = fopen($file, 'w');
 		if(!($fp = @fopen($file, 'w'))) {
 			show_msg('请确认文件 webim/config.php 可写');

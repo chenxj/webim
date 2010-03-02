@@ -1,0 +1,9 @@
+install.php 文件合并后已经可以完成安装了，现在由于整合，需要用户输入其他平台的url和文件地址/路径，所以就想在前端安装时，提示用户输入。
+install.php 中设置有$display_name变量，可以直接使用，其值为需要用户输入路径的平台名称，回自动设置好。 
+$ext_url_path，$ext_file_path这两个是接受用户输入地址的变量，请你把前端的界面完善一下，我有个测试用的界面，大体就那个意思，你可以安装走一眼。
+安装结束后，要提示用户在其他平台的配置文件中加入im的配置文件的include
+discuz的配置文件为config.inc.php
+uchome的配置文件为config.php
+im配置文件的位置可以通过 S_ROOT.'webim/config.php' 或 $webim_configfile 得到
+安装平台的配置文件已经在安装时自动修改
+template的修改同原来webim_xxx.htm

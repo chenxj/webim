@@ -173,13 +173,14 @@ function find_history($ids){
                 $list = array();
 		if(((int)$id) < $_IMC['room_id_pre']){
                         //$query = $_SGLOBAL['db']->query("SELECT * FROM ".im_tname('histories')." WHERE `uid`='$uid' and (`to`='$id' or `to`='$uid' ) and (`from`='$uid' or `from`='$id') and send = 1 ORDER BY timestamp DESC LIMIT 30");
-                          $query = $_SGLOBAL['db']->query("SELECT * FROM ".im_tname('histories')." WHERE (`from`='$id' and `to`='$uid' and `todel`!=1) or (`from`='$uid' and `to`='$id' and `fromdel`!=1) and send = 1 ORDER BY timestamp DESC LIMIT 30");
+                          $query = $_SGLOBAL['db']->query("SELECT * FROM ".im_tname('histories')." WHERE (`from`='$id' and `to`='$uid' and `todel`!=1) or (`from`='$uid' and `to`='$id' and `fromdel`!=1) or (`type`='broadcast') and send = 1 ORDER BY timestamp DESC LIMIT 30");
              		//$query = $_SGLOBAL['db']->query("SELECT main.*, s.username, s.name FROM ".im_tname('histories')." main LEFT JOIN ".tname('space')." s ON s.uid=main.from WHERE (`to`='$id' and `todel`!=1) or (`from`='$id' and `fromdel`!=1) ORDER BY timestamp DESC LIMIT 30");
                         while ($value = $_SGLOBAL['db']->fetch_array($query)) {
                                 array_unshift($list,array('to'=>$value['to'],'from'=>$value['from'],'style'=>$value['style'],'body'=>to_utf8($value['body']),'timestamp'=>$value['timestamp'], 'type' =>$value['type'], 'new' => 0));
                         }
         }else{
-//            $id = $id+$_IMC['room_id_pre'];
+            
+            $id = $id+$_IMC['channel_pre']; //add by free.wang
 			$query = $_SGLOBAL['db']->query("SELECT main.*, s.username, s.name FROM ".im_tname('histories')." main LEFT JOIN ".tname('space')." s ON s.uid=main.from WHERE `to`='$id' ORDER BY timestamp DESC LIMIT 30");
 		//
 		//(`to`='$id' and `todel` != 1) sended to him
@@ -206,6 +207,20 @@ function setting(){
 		$setting = $setting["web"];
 	}
 	return json_decode(empty($setting) ? "{}" : $setting);
+}
+/*
+ * Search $content in array $arr.
+ * @$arr : array.
+ * @$content : item.
+ * @return : return true if found or false.
+ */
+function ArraySearch($arr, $content){
+	foreach($arr as $item){
+		if($item === $content){
+			return true;
+		}
+	}
+	return false;
 }
 //当设置UC_DIR为相对路径时，避免取不到头像
 if(!empty($_SCONFIG['uc_dir'])&& (substr($_SCONFIG['uc_dir'],0,2)=='./'||substr($_SCONFIG['uc_dir'],0,3)=='../'))

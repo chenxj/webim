@@ -10,6 +10,7 @@ $send = gp('offline') == "1" ? false : true;
 $type = gp('type');
 $from = $space['uid'];
 $time = microtime(true)*1000;
+//change by chenxj
 if($type != "broadcast" &&  (empty($to)||empty($from))){
 	echo '{success:false}';exit();
 }

@@ -110,7 +110,7 @@ $setting = json_encode(setting());
 		chatlink.disable();
 		chatlink.offline(chatlink.idsArray());
 	}
-	(document.body ? create() : webim.ui.ready(create));
-	webim.ui.ready(init);
+	setTimeout(function(){(document.body ? create() : webim.ui.ready(create))},1000);
+	setTimeout(function(){webim.ui.ready(init)},1000);
 
 })(webim);

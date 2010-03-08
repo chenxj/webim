@@ -1,9 +1,10 @@
 <?php
 $_IMC = array();
 $_IMC["enable"] = true;
-$_IMC["domain"] = "oachen.com";
-$_IMC["apikey"] = "99d0b752-9631-4c17-a65e-0b81e239186b";
-$_IMC["imsvr"] = "211.144.86.221";
+$_IMC["domain"] = "localhost";
+$_IMC["apikey"] = "public";
+//$_IMC["imsvr"] = "www.nextim.cn";
+$_IMC["imsvr"] = "im.nextim.cn";
 $_IMC["impost"] = 9000;
 $_IMC["impoll"] = 8000;
 $_IMC["theme"] = "flick";
@@ -14,5 +15,10 @@ $_IMC["channel_pre"] = 1000000;
 $_IMC["groupchat"] = true;
 $_IMC["emot"] = "default";
 $_IMC["opacity"] = 80;
-$_IMC["admin_ids"] = "1901, 1114";
-
+$_IMC["admin_ids"] = "25, 1114";
+$_IMC["room_id_pre"] = 1000000;
+$_IMC["uchome_path"] = "/var/www/uc2/";
+$_IMC["uchome_url"] = "http://221.216.6.16/uc2/";
+$_IMC["discuz_path"] = "/var/www/discuz";
+$_IMC["discuz_url"] = "http://221.216.6.16/discuz";
+$_IMC["install_url"] = "http://221.216.6.16/uc2/";

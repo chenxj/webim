@@ -25,6 +25,7 @@ widget("buddy",{
         template: '<div id="webim-buddy" class="webim-buddy">\
                         <div id=":search" class="webim-buddy-search ui-state-default ui-corner-all"><em class="ui-icon ui-icon-search"></em><input id=":searchInput" type="text" value="" /></div>\
                         <div class="webim-buddy-content">\
+				<div id=":broadcast" class="webim-broadcast"><a class="ui-helper-clearfix" rel="9" href="#"><img width="25" src=""><span><%=broadcast%></span></a></div>\
                                 <div id=":empty" class="webim-buddy-empty"><%=empty buddy%></div>\
                                 <ul id=":ul"></ul>\
                         </div>\
@@ -44,7 +45,7 @@ widget("buddy",{
 		//self._initEvents();
 	},
 	_initEvents: function(){
-		var self = this, $ = self.$, search = $.search, input = $.searchInput, placeholder = i18n("search buddy"), activeClass = "ui-state-active";
+		var self = this, $ = self.$, search = $.search, broadcast = $.broadcast,input = $.searchInput, placeholder = i18n("search buddy"), activeClass = "ui-state-active";
 		addEvent(search.firstChild, "click",function(){
 			input.focus();
 		});
@@ -76,6 +77,11 @@ widget("buddy",{
 			self.trigger("offline");
 		});
     */
+		//broadcast 
+		addEvent(broadcast.firstChild,"click",function(e){
+			preventDefault(e);
+			self.trigger("broadcastselect");	
+		});
 
 	},
 	_titleCount: function(){

@@ -180,6 +180,8 @@ extend(webimUI.prototype, objectExtend, {
 			self.addChat(info.id, {type: "buddy"});
 		}).bind("online",function(){
 			im.online();
+		}).bind("broadcastselect",function(e){
+			self.addBroadcast(e);
 		});
 		buddyUI.window.bind("displayStateChange",function(type){
 			if(type != "minimize")buddy.loadDelay();
@@ -217,14 +219,21 @@ extend(webimUI.prototype, objectExtend, {
 				id = d.to == uid ? d.from : d.to;
 				if(!d["new"])online_ids.push(id);
 				c = layout.chat(id);
-				c && c.status("");//clear status
+				c && isFunction(c.status) && c.status("");//clear status
 				if(!c){	
-           var titlename = (d.type === "unicast")?d.nick:roomData[id].name;
-           if (d.type === "unicast"){
-				 	    self.addChat(id, null, null, titlename);
-          }else{
-              self.addChat(id,{type:"room"});  
-          }
+				   var titlename = "";
+				   if (d.type === "broadcast"){
+				   //	titlename = 
+				   }else{
+			           	titlename = (d.type === "unicast")?d.nick:roomData[id].name;
+				   }
+           			   if (d.type === "unicast"){
+				   	self.addChat(id, null, null, titlename);
+          			   }else if (d.type === "broadcast"){
+				   	self.addBroadcast(id,null,null,titlename);
+	  			   }else{
+			              self.addChat(id,{type:"room"});  
+          			}
 				  c = layout.chat(id);
 			  }
 				c && setting.get("msg_auto_pop") && !layout.activeTabId && layout.focusChat(id);
@@ -314,6 +323,18 @@ extend(webimUI.prototype, objectExtend, {
 		p && (layout.prevCount = p) && layout._fitUI();
 		a && layout.focusChat(a);
 		// status end
+	},
+	addBroadcast: function(){
+		var self = this,layout = self.layout,im = self.im,h = self.im.history,u = im.data.user,isadmin = (im.admin == u.id);
+		var _info = {id:0,name:"站长广播",isadmin:isadmin};
+		if (layout.chat(0))return;
+		layout.addBroadcast(_info,extend({user:u,history:h,block:true,emot:false,clearHistory:false,member:false,msgType:"broadcast"},{name:"站长广播"}), null);
+		var broadcast = layout.chat(0);
+		broadcast.bind("sendMsg",function(msg){
+			im.sendMsg(msg);		
+			h.handle(msg);
+		});
+
 	},
 	addChat: function(id, options, winOptions, name){
 		var self = this, layout = self.layout, im = self.im, history = self.im.history, buddy = im.buddy, room = im.room;
@@ -473,6 +494,7 @@ function widget(name, defaults, prototype){
 		self.className = "webim-" + name;
 		self.options = extend({}, m['defaults'], options);
 
+		isFunction(self._preInit) && self._preInit();
 		//template
 		self.element = element || (self.template && createElement(self.template())) || ( self.options.template && createElement(tpl(self.options.template)));
 		if(self.element){

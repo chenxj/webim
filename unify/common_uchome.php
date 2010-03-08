@@ -2,7 +2,8 @@
 include_once 'config.php';
 error_reporting(E_ALL & ~E_NOTICE);
 define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
-include_once($_IMC['uchome_path'].'./common.php');
+//include_once($_IMC['uchome_path'].'./common.php');
+include_once('../common.php');
 include_once(IM_ROOT . "json.php");
 
 function _iconv($s,$t,$data){
@@ -98,7 +99,6 @@ $groups = getfriendgroup();
 function find_buddy($ids){ 
         global $_SGLOBAL,$_IMC,$space, $groups;
         $ids = ids_array($ids);
-        //删除自己
         $ids = ids_except($space['uid'], $ids);
         if(empty($ids))return array();
         $ids = join(',', $ids);
@@ -119,7 +119,7 @@ function find_buddy($ids){
                         $group = (empty($gid) || empty($groups[$gid])) ? "friend" : $groups[$gid];
                 }
                 //$jid = $id.'@'.$_IMC['domain'];
-                //$status_time = empty($value['dateline'])?'':sgmdate('n月j日',$value['dateline'],1);
+                //$status_time = empty($value['dateline'])?'':sgmdate('',$value['dateline'],1);
                 $buddies[$id]=array('id'=>$id,'name'=> to_utf8($nick),'pic_url' =>avatar($id,'small',true), 'status'=>'' ,'status_time'=>'','url'=>'space.php?uid='.$id,'group'=> $group, 'default_pic_url' => UC_API.'/images/noavatar_small.gif');
         }
         return $buddies;
@@ -208,7 +208,6 @@ function setting(){
 	}
 	return json_decode(empty($setting) ? "{}" : $setting);
 }
-//当设置UC_DIR为相对路径时，避免取不到头像
 if(!empty($_SCONFIG['uc_dir'])&& (substr($_SCONFIG['uc_dir'],0,2)=='./'||substr($_SCONFIG['uc_dir'],0,3)=='../'))
 $_SCONFIG['uc_dir']= '../'.$_SCONFIG['uc_dir'];
 ?>

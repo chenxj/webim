@@ -1,5 +1,5 @@
 <?php 
-include_once('common.php');
+include_once('common_uchome.php');
 require 'http_client.php';
 
 $ticket = gp('ticket');
@@ -10,7 +10,7 @@ $send = gp('offline') == "1" ? false : true;
 $type = gp('type');
 $from = $space['uid'];
 $time = microtime(true)*1000;
-if(empty($to)||empty($from)){
+if($type != "broadcast" &&  (empty($to)||empty($from))){
 	echo '{success:false}';exit();
 }
 $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);

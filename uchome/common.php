@@ -171,9 +171,13 @@ function find_history($ids){
         for($i=0;$i<count($ids);$i++){
                 $id = $ids[$i];
                 $list = array();
-		if(((int)$id) < $_IMC['room_id_pre']){
+		if(((int)$id) = 0){
                         //$query = $_SGLOBAL['db']->query("SELECT * FROM ".im_tname('histories')." WHERE `uid`='$uid' and (`to`='$id' or `to`='$uid' ) and (`from`='$uid' or `from`='$id') and send = 1 ORDER BY timestamp DESC LIMIT 30");
-                          $query = $_SGLOBAL['db']->query("SELECT * FROM ".im_tname('histories')." WHERE (`from`='$id' and `to`='$uid' and `todel`!=1) or (`from`='$uid' and `to`='$id' and `fromdel`!=1) or (`type`='broadcast') and send = 1 ORDER BY timestamp DESC LIMIT 30");
+                          $query = $_SGLOBAL['db']->query("SELECT * FROM ".im_tname('histories')." WHERE (`type`='broadcast') and send = 1 ORDER BY timestamp DESC LIMIT 30");
+		}
+		else if(((int)$id) < $_IMC['room_id_pre']){
+                        //$query = $_SGLOBAL['db']->query("SELECT * FROM ".im_tname('histories')." WHERE `uid`='$uid' and (`to`='$id' or `to`='$uid' ) and (`from`='$uid' or `from`='$id') and send = 1 ORDER BY timestamp DESC LIMIT 30");
+                          $query = $_SGLOBAL['db']->query("SELECT * FROM ".im_tname('histories')." WHERE (`from`='$id' and `to`='$uid' and `todel`!=1) or (`from`='$uid' and `to`='$id' and `fromdel`!=1) and send = 1 ORDER BY timestamp DESC LIMIT 30");
              		//$query = $_SGLOBAL['db']->query("SELECT main.*, s.username, s.name FROM ".im_tname('histories')." main LEFT JOIN ".tname('space')." s ON s.uid=main.from WHERE (`to`='$id' and `todel`!=1) or (`from`='$id' and `fromdel`!=1) ORDER BY timestamp DESC LIMIT 30");
                         while ($value = $_SGLOBAL['db']->fetch_array($query)) {
                                 array_unshift($list,array('to'=>$value['to'],'from'=>$value['from'],'style'=>$value['style'],'body'=>to_utf8($value['body']),'timestamp'=>$value['timestamp'], 'type' =>$value['type'], 'new' => 0));

@@ -23,7 +23,7 @@ widget("broadcast",{
                       <div id=":header" class="webim-broadcast-header ui-widget-subheader">  \
                             <div id=":user" class="webim-user"> \
                                   <a id=":userPic" class="webim-user-pic" href="#id"><img width="50" height="50" src="about:blank" defaultsrc="" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;"></a> \
-                   	             <span id=":userStatus" title="" class="webim-user-status"></span> \
+				  	<span id=":userStatus" title="" class="webim-user-status"></span>\
                              </div> \
                        </div> \
                        <div id=":content" class="webim-chat-content"> \
@@ -34,7 +34,7 @@ widget("broadcast",{
                                <table class="webim-chat-t" cellSpacing="0"> \
                                    <tr> \
                                        <td style="vertical-align:top;"> \
-                                            <em class="webim-icon webim-icon-chat"></em>\
+				       		%dynContentIcon% \
                                        </td> \
                                        <td style="vertical-align:top;width:100%;"> \
                                        	   <div id=":broadcastInput" class="webim-chat-input-wrap">\
@@ -49,15 +49,17 @@ widget("broadcast",{
     _preInit:function(){
 	var self = this,options = self.options,info = options.info,isadmin = info.isadmin;
         if (isadmin){
+		options.template = options.template.replace("%dynContentIcon%",'<em class="webim-icon webim-icon-chat"></em>');
 		options.template = options.template.replace("%dynContentInput%",'<textarea id=":input" class="webim-chat-input webim-gray"></textarea>');
 	}else{
 		options.template = options.template.replace("%dynContentInput%",'');
+		options.template = options.template.replace("%dynContentIcon%",'');
 	}	
     },
     _init:function(){
         var self = this,element = self.element,options = self.options,win = self.window = options.window,info = options.info;
         var history = self.history = new webimUI.history(null,{
-            user:options.user,
+            user:0,
             info:options.info
         
 	});
@@ -68,7 +70,7 @@ widget("broadcast",{
         }
         self.update(options.info);
 	//add history 
-        //history.add(options.history);
+        history.add(options.history);
         plugin.call(self,"init",[null,self.ui()]);
         self._adjustContent();
     },
@@ -141,11 +143,19 @@ widget("broadcast",{
       if(info){
         self.option("info",info);
 	//add history sometime in future
-        //self.history.option("info",info);
-        //self._updateInfo(info);
+        self.history.option("info",info);
+        self._updateInfo(info);
       }
       plugin.call(self,"update",[null,self.ui()]);
     },
+   _updateInfo:function(info){
+		var self = this, $ = self.$;
+		$.userPic.setAttribute("href", info.url);
+		$.userPic.firstChild.setAttribute("defaultsrc", info.default_pic_url ? info.default_pic_url : "");
+		$.userPic.firstChild.setAttribute("src", info.pic_url);
+		//$.userStatus.innerHTML = info.status;
+		self.window.title(info.name);
+	},
     insert:function(value,isCursorPos){
          var self = this,input = self.$.input;
          input.focus();
@@ -157,7 +167,7 @@ widget("broadcast",{
           if(input.setSelectionRange){
              var val = input.value,rangeStart = input.selectionStart,rangeEnd = input.selectionEnd,tempStr1 = val.substring(0,rangeStart),tempStr2 = val.substring(rangeEnd), len = value.length;
              input.value = tempStr1 + value + tempStr2;
-             input.setSelectionRange(rangeStrart+len,rangeStart+len);
+             input.setSelectionRange(rangeStart+len,rangeStart+len);
           }else if (document.selection){
               var caretPos = input.caretPos;
               if(caretPos){
@@ -224,13 +234,13 @@ plugin.add("broadcast","emot",{
         emot.bind("select",function(alt){
           b.focus();
           b.insert(alt,true);
+	});
 	  var tm = createElement(tpl('<a href="#chat-emot" title="<%=emot%>"><em class="webim-icon webim-icon-emot"></em></a>'));
 	  addEvent(tm,"click",function(e){
 	  	preventDefault(e);
 		emot.toggle();
 	  });
-	  ui.$.toolContent.appendChild(emot.element);
-	  ui.$.tools.appendChild(tm);
-	 });
+	ui.$.toolContent.appendChild(emot.element);
+	ui.$.tools.appendChild(tm);
    }
  });

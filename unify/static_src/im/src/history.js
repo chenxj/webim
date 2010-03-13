@@ -32,7 +32,7 @@ model("history",{
 			//for(var i in addData){
 			v = addData[i];
 			id = v.to == userId ? v.from : v.to;
-			if(id){
+			if(id != undefined){
 				cache[id] = cache[id] || [];
 				cache[id].push(v);
 			}

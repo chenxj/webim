@@ -223,7 +223,7 @@ extend(webimUI.prototype, objectExtend, {
 				if(!c){	
 				   var titlename = "";
 				   if (d.type === "broadcast"){
-				   //	titlename = 
+				   	titlename = "站长广播";
 				   }else{
 			           	titlename = (d.type === "unicast")?d.nick:roomData[id].name;
 				   }
@@ -234,7 +234,7 @@ extend(webimUI.prototype, objectExtend, {
 	  			   }else{
 			              self.addChat(id,{type:"room"});  
           			}
-				  c = layout.chat(id);
+			 	c = layout.chat(id);
 			  }
 				c && setting.get("msg_auto_pop") && !layout.activeTabId && layout.focusChat(id);
 				c.window.notifyUser("information", count);
@@ -317,24 +317,44 @@ extend(webimUI.prototype, objectExtend, {
 		a = status.get("a");
 
 		tabIds && tabIds.length && tabs && each(tabs, function(k,v){
-			self.addChat(k, {type: v["t"]}, { isMinimize: true});
-			layout.chat(k).window.notifyUser("information", v["n"]);
+			//broadcast
+			if (k == 0 || k === "0"){
+			//when the type is broadcast ,don't show
+				//self.addBroadcast(k,{type:"broadcast"},{isMinimize:true});
+
+			}
+			else{
+				self.addChat(k, {type: v["t"]}, { isMinimize: true});
+				layout.chat(k).window.notifyUser("information", v["n"]);
+			}
 		});
 		p && (layout.prevCount = p) && layout._fitUI();
 		a && layout.focusChat(a);
 		// status end
 	},
 	addBroadcast: function(){
-		var self = this,layout = self.layout,im = self.im,h = self.im.history,u = im.data.user,isadmin = (im.admin == u.id);
-		var _info = {id:0,name:"站长广播",isadmin:isadmin};
+		var self = this,layout = self.layout,im = self.im,history = self.im.history,u = im.data.user,isadmin =self._isAdmin(u.id);
+		var _info = {id:0,name:tpl("<%=broadcast%>"),isadmin:isadmin};
 		if (layout.chat(0))return;
-		layout.addBroadcast(_info,extend({user:u,history:h,block:true,emot:false,clearHistory:false,member:false,msgType:"broadcast"},{name:"站长广播"}), null);
+		var h = history.get(0);
+		if(!h)history.load('0');
+		layout.addBroadcast(_info,extend({user:u,history:h,block:true,emot:isadmin,clearHistory:true,member:false,msgType:"broadcast"},{name:tpl("<%=broadcast%>")}), null);
 		var broadcast = layout.chat(0);
 		broadcast.bind("sendMsg",function(msg){
 			im.sendMsg(msg);		
-			h.handle(msg);
+			history.handle(msg);
 		});
+		
 
+	},
+	_isAdmin:function(id){
+		var self = this,im = self.im,ids = im.admins;
+       		for (var i = 0; i < ids.length; i++){
+			if(id == ids[i]){
+				return true;
+			}
+		}		
+		return false; 
 	},
 	addChat: function(id, options, winOptions, name){
 		var self = this, layout = self.layout, im = self.im, history = self.im.history, buddy = im.buddy, room = im.room;

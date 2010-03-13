@@ -12,7 +12,6 @@ BASE_FILES = ${SRC_DIR}/core.js\
 	${SRC_DIR}/json.js\
 	${SRC_DIR}/comet.js\
 	${SRC_DIR}/cookie.js\
-	${SRC_DIR}/log.js\
 	${SRC_DIR}/webim.js\
 	${SRC_DIR}/setting.js\
 	${SRC_DIR}/status.js\
@@ -34,7 +33,6 @@ DZ_WEBIM_FILES = ${SRC_DIR}/core.js\
 	${SRC_DIR}/json.js\
 	${SRC_DIR}/comet.js\
 	${SRC_DIR}/cookie.js\
-	${SRC_DIR}/log.js\
 	${SRC_DIR}/webim.js\
 	${SRC_DIR}/setting.js\
 	${SRC_DIR}/status.js\

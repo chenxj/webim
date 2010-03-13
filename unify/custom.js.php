@@ -38,7 +38,7 @@ $setting = json_encode(setting());
 
     var menu = webim.JSON.decode('<?php echo json_encode($menu) ?>');
 	webim.extend(webim.setting.defaults.data, webim.JSON.decode('<?php echo $setting ?>'));
-	var webim = window.webim, log = webim.log;
+	var webim = window.webim;
 	webim.defaults.urls = {
 		online:path + "webim/online.php?platform=" + platform,
 		online_list:path + "webim/online_list.php?platform=" + platform,
@@ -73,6 +73,8 @@ $setting = json_encode(setting());
 		body = document.body;
 		imUI = new webim.ui(null,{menu: menu});
 		im = imUI.im;
+		var adminids = "<?php $_IMC['admini_ds'] ?>";
+		im.admins = adminids?adminids.split(","):"";
 		layout = imUI.layout;
                 imUI.addApp("room");
 		if ( platform === "discuz" ){

@@ -58,7 +58,7 @@ $setting = json_encode(setting());
                     leave: path + "webim/leave.php?platform=" + platform
     	};
 	webim.buddy.defaults.url = path + "webim/buddies.php?platform=" + platform;
-	webim.notification.defaults.url = path + "webim/notifications.php?platform=" + platform;
+	//webim.notification.defaults.url = path + "webim/notifications.php?platform=" + platform;
 	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});
 	var soundUrls = {
 		lib: path + "webim/static/assets/sound.swf",
@@ -73,7 +73,7 @@ $setting = json_encode(setting());
 		body = document.body;
 		imUI = new webim.ui(null,{menu: menu});
 		im = imUI.im;
-		var adminids = "<?php $_IMC['admini_ds'] ?>";
+		var adminids = "<?php echo $_IMC['admin_ids'] ?>";
 		im.admins = adminids?adminids.split(","):"";
 		layout = imUI.layout;
                 imUI.addApp("room");

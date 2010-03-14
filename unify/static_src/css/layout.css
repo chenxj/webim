@@ -149,7 +149,7 @@
         bottom: 2.20em;
         z-index: 5;
         right: 0;
-        width: 20em;
+        width: 18em;
 }
 
 .webim-layout .webim-window-content {
@@ -186,7 +186,7 @@
 .webim-layout .webim-shortcut .webim-window-window{
         right:auto;
         left: 0;
-        width: 12em;
+        width: 10em;
 }
 .webim-layout .webim-window-normal .webim-window-tab, .webim-layout .webim-window-maximize .webim-window-tab{
         margin-top: -1px;
@@ -198,7 +198,7 @@
         border-top:1px solid #eee;
 }
 .webim-layout .webim-apps .webim-window-window {
-        width: 22.4em;
+        width: 20em;
 }
 
 

@@ -22,7 +22,7 @@ widget("broadcast",{
 	template:'<div class="webim-chat"> \
                       <div id=":header" class="webim-broadcast-header ui-widget-subheader">  \
                             <div id=":user" class="webim-user"> \
-                                  <a id=":userPic" class="webim-user-pic" href="#id"><img width="50" height="50" src="about:blank" defaultsrc="" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;"></a> \
+                                  <a id=":userPic" class="webim-user-pic" href="space.php?uid=0"><img width="50" height="50" src="images/icons/broadcast.png" defaultsrc="" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;"></a> \
 				  	<span id=":userStatus" title="" class="webim-user-status"></span>\
                              </div> \
                        </div> \
@@ -30,7 +30,7 @@ widget("broadcast",{
                        </div> \
                        <div id=":actions" class="webim-chat-actions"> \
                            <div id=":toolContent" class="webim-chat-tool-content"></div>\
-                              <div id=":tools" class="webim-chat-tools ui-helper-clearfix ui-state-default"></div>\
+			   			%dynContentTools% \
                                <table class="webim-chat-t" cellSpacing="0"> \
                                    <tr> \
                                        <td style="vertical-align:top;"> \
@@ -50,10 +50,12 @@ widget("broadcast",{
 	var self = this,options = self.options,info = options.info,isadmin = info.isadmin;
         if (isadmin){
 		options.template = options.template.replace("%dynContentIcon%",'<em class="webim-icon webim-icon-chat"></em>');
+		options.template = options.template.replace("%dynContentTools%",'<div id=":tools" class="webim-chat-tools ui-helper-clearfix ui-state-default"></div>');
 		options.template = options.template.replace("%dynContentInput%",'<textarea id=":input" class="webim-chat-input webim-gray"></textarea>');
 	}else{
 		options.template = options.template.replace("%dynContentInput%",'');
 		options.template = options.template.replace("%dynContentIcon%",'');
+		options.template = options.template.replace("%dynContentTools%",'');
 	}	
     },
     _init:function(){
@@ -150,9 +152,9 @@ widget("broadcast",{
     },
    _updateInfo:function(info){
 		var self = this, $ = self.$;
-		$.userPic.setAttribute("href", info.url);
-		$.userPic.firstChild.setAttribute("defaultsrc", info.default_pic_url ? info.default_pic_url : "");
-		$.userPic.firstChild.setAttribute("src", info.pic_url);
+		//$.userPic.setAttribute("href", info.url);
+		//$.userPic.firstChild.setAttribute("defaultsrc", info.default_pic_url ? info.default_pic_url : "");
+		//$.userPic.firstChild.setAttribute("src", info.pic_url);
 		//$.userStatus.innerHTML = info.status;
 		self.window.title(info.name);
 	},

@@ -39,5 +39,6 @@ webim.ui.i18n.store('en',{
 	"leave-channel":" Leave group...",
 	"join-channel":" Join group...",
 	"people online":"Online",
+	"broadcast":"BroadCast",
 	"group-notavail":"Failed to join group，please reopen this window."
 });

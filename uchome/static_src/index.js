@@ -25,7 +25,7 @@ function imlog(ui){
 		refresh:path + "webim/refresh.php?platform=uchome",
 		status:path + "webim/status.php?platform=uchome"
 	};
-	webim.setting.defaults.url = path + "webim/setting.php";
+	webim.setting.defaults.url = path + "webim/setting.php?platform=uchome";
 	webim.history.defaults.urls = {
 		load: path + "webim/histories.php?platform=uchome",
 		clear: path + "webim/clear_history.php?platform=uchome"
@@ -49,16 +49,16 @@ function imlog(ui){
 		body = document.body;
 		imUI = new webim.ui(null,{menu: menu});
 		im = imUI.im;
-		im.admin = "2283";
+		im.admins = ["25","26"];
 		layout = imUI.layout;
 		//imUI.addApp("hotpost");
-		imUI.addApp("chatlink");
 		imUI.addApp("room");
+		imUI.addApp("chatlink");
 		body.appendChild(layout.element);
 		//need timeout
 		setTimeout(function(){imUI.initSound(soundUrls)},1000);
 		//log
-		imlog(imUI);
+	//	imlog(imUI);
 	}
 	function init(){
 		layout.buildUI();

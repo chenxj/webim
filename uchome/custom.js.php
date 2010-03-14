@@ -112,7 +112,11 @@ $setting = json_encode(setting());
 		chatlink.disable();
 		chatlink.offline(chatlink.idsArray());
 	}
-	setTimeout(function(){(document.body ? create() : webim.ui.ready(create))},1000);
-	setTimeout(function(){webim.ui.ready(init)},1000);
-
+	if (window.ActiveXObject){
+		setTimeout(function(){document.body?create():webim.ui.ready(create);},1000);
+		setTimeout(function(){webim.ui.ready(init);},1000)
+	}else{
+		document.body?create():webim.ui.ready(create);
+		webim.ui.ready(init);
+	}
 })(webim);

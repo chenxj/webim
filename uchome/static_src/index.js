@@ -1,11 +1,11 @@
 function imlog(ui){
-	var im = ui.im, log = window.webim.log;
+	var im = ui.im ;//log = window.webim.log;
 	im.connection.bind("data",function(data){
-		log(data, "data");
+	//	log(data, "data");
 	}).bind("error",function(data){
-		log(data, "connect error");
+		//log(data, "connect error");
 	}).bind("close",function(data){
-		log(data, "disconnect");
+		//log(data, "disconnect");
 	});
 }
 (function(webim){
@@ -18,26 +18,26 @@ function imlog(ui){
 	var menu = [{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"album","icon": path + "image\/app\/album.gif","link":"space.php?do=album"},{"title":"blog","icon": path + "image\/app\/blog.gif","link":"space.php?do=blog"},{"title":"thread","icon": path + "image\/app\/mtag.gif","link":"space.php?do=thread"},{"title":"share","icon": path + "image\/app\/share.gif","link":"space.php?do=share"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"}];
 	var log = webim.log;
 	webim.defaults.urls = {
-		online:path + "webim/online.php",
-		online_list:path + "webim/online_list.php",
-		offline:path + "webim/offline.php",
-		message:path + "webim/message.php",
-		refresh:path + "webim/refresh.php",
-		status:path + "webim/status.php"
+		online:path + "webim/online.php?platform=uchome",
+		online_list:path + "webim/online_list.php?platform=uchome",
+		offline:path + "webim/offline.php?platform=uchome",
+		message:path + "webim/message.php?platform=uchome",
+		refresh:path + "webim/refresh.php?platform=uchome",
+		status:path + "webim/status.php?platform=uchome"
 	};
 	webim.setting.defaults.url = path + "webim/setting.php";
 	webim.history.defaults.urls = {
-		load: path + "webim/histories.php",
-		clear: path + "webim/clear_history.php"
+		load: path + "webim/histories.php?platform=uchome",
+		clear: path + "webim/clear_history.php?platform=uchome"
 	};
 	webim.room.defaults.urls = {
-		member: path + "webim/members.php",
-		join: path + "webim/join.php",
-		leave: path + "webim/leave.php"
+		member: path + "webim/members.php?platform=uchome",
+		join: path + "webim/join.php?platform=uchome",
+		leave: path + "webim/leave.php?platform=uchome"
 	};
-	webim.buddy.defaults.url = path + "webim/buddies.php";
-	webim.notification.defaults.url = path + "webim/notifications.php";
-	webim.hotpost.defaults.url = path + "webim/hotpost.php";
+	webim.buddy.defaults.url = path + "webim/buddies.php?platform=uchome";
+	webim.notification.defaults.url = path + "webim/notifications.php?platform=uchome";
+	webim.hotpost.defaults.url = path + "webim/hotpost.php?platform=uchome";
 	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});
 	var soundUrls = {
 		lib: path + "webim/static/assets/sound.swf",
@@ -49,6 +49,7 @@ function imlog(ui){
 		body = document.body;
 		imUI = new webim.ui(null,{menu: menu});
 		im = imUI.im;
+		im.admin = "2283";
 		layout = imUI.layout;
 		//imUI.addApp("hotpost");
 		imUI.addApp("chatlink");

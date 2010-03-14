@@ -18,7 +18,7 @@
 app("hotpost",{
 	init: function(){
 		//hotpost start
-	/*	var model = new webim.hotpost();
+		var model = new webim.hotpost();
 		var widget = new webimUI.hotpost();
 		this.layout.addApp(widget, {
 			title: i18n("hotpost"),
@@ -33,7 +33,7 @@ app("hotpost",{
 		});
 		setTimeout(function(){
 			model.load();
-		}, 2000);*/
+		}, 2000);
 		//hotpost end
 	}
 });

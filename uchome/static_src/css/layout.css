@@ -43,6 +43,7 @@
         left: 1.5em;
 }
 .webim-layout-minimize{
+	width:auto;
         left: auto;
 }
 .webim-layout .webim-bgiframe{

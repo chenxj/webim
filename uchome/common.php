@@ -74,7 +74,7 @@ function to_unicode($s) {
 	return preg_replace("/^\"(.*)\"$/","$1",json_encode($s));
 }
 function ids_array($ids){
-        return empty($ids) ? array() : (is_array($ids) ? array_unique($ids) : array_unique(split(",", $ids)));
+        return ($ids===NULL || $ids==="") ? array() : (is_array($ids) ? array_unique($ids) : array_unique(split(",", $ids)));
 }
 function ids_except($id, $ids){
         if(in_array($id, $ids)){
@@ -167,13 +167,16 @@ function find_history($ids){
         $uid = $space['uid'];
         $histories = array();
         $ids = ids_array($ids);
-        if(empty($ids))return array();
+        if($ids===NULL)return array();
         for($i=0;$i<count($ids);$i++){
                 $id = $ids[$i];
                 $list = array();
-		if(((int)$id) = 0){
+		if(((int)$id) == 0){
                         //$query = $_SGLOBAL['db']->query("SELECT * FROM ".im_tname('histories')." WHERE `uid`='$uid' and (`to`='$id' or `to`='$uid' ) and (`from`='$uid' or `from`='$id') and send = 1 ORDER BY timestamp DESC LIMIT 30");
                           $query = $_SGLOBAL['db']->query("SELECT * FROM ".im_tname('histories')." WHERE (`type`='broadcast') and send = 1 ORDER BY timestamp DESC LIMIT 30");
+                        while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+                                array_unshift($list,array('to'=>$value['to'],'from'=>$value['from'],'style'=>$value['style'],'body'=>to_utf8($value['body']),'timestamp'=>$value['timestamp'], 'type' =>$value['type'], 'new' => 0));
+                        }
 		}
 		else if(((int)$id) < $_IMC['room_id_pre']){
                         //$query = $_SGLOBAL['db']->query("SELECT * FROM ".im_tname('histories')." WHERE `uid`='$uid' and (`to`='$id' or `to`='$uid' ) and (`from`='$uid' or `from`='$id') and send = 1 ORDER BY timestamp DESC LIMIT 30");
@@ -197,6 +200,8 @@ function find_history($ids){
                 }
                 $histories[$id] = $list;
         }
+	//var_dump($histories);
+//exit();
         return $histories;
 }
 

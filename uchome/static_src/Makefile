@@ -28,6 +28,9 @@ CSS_BASE_FILES = ${CSS_SRC_DIR}/core.css\
 
 
 IM = ${SRC_DIR}/im/dist/webim.js
+DZ_IM = ${SRC_DIR}/im/dist/webim_dz.js
+UC_IM = ${SRC_DIR}/im/dist/webim_uc.js
+
 
 JS_BASE_FILES = ${JS_SRC_DIR}/core.js\
 	${JS_SRC_DIR}/date.js\
@@ -48,12 +51,40 @@ JS_BASE_FILES = ${JS_SRC_DIR}/core.js\
 
 UI_CSS_FILES = ${CSS_BASE_FILES}
 
+UC_UI_CSS_FILES = ${UI_CSS_FILES}
+DZ_UI_CSS_FILES = ${UI_CSS_FILES}\
+		  ${CSS_SRC_DIR}/hotpost.css
+
 UI_JS_FILES = ${JS_SRC_DIR}/intro.js\
 	${JS_BASE_FILES}\
 	${JS_SRC_DIR}/outro.js
 
 UI_ALL_JS_FILES = ${IM}\
 	${UI_JS_FILES}\
+
+DZ_UI_ALL_JS_FILES = ${DZ_IM}\
+		${JS_SRC_DIR}/intro.js\
+		     ${JS_SRC_DIR}/core.js\
+		${JS_SRC_DIR}/date.js\
+		${JS_SRC_DIR}/notice.js\
+		${JS_SRC_DIR}/i18n.js\
+		${JS_SRC_DIR}/ui.js\
+		${JS_SRC_DIR}/ui.window.js\
+		${JS_SRC_DIR}/ui.layout.js\
+		${JS_SRC_DIR}/ui.emot.js\
+		${JS_SRC_DIR}/ui.chatlink.js\
+		${JS_SRC_DIR}/ui.setting.js\
+		${JS_SRC_DIR}/ui.buddy.js\
+		${JS_SRC_DIR}/ui.notification.js\
+		${JS_SRC_DIR}/ui.history.js\
+		${JS_SRC_DIR}/ui.menu.js\
+		${JS_SRC_DIR}/ui.chat.js\
+		${JS_SRC_DIR}/ui.room.js\
+		${JS_SRC_DIR}/ui.hotpost.js\
+		${JS_SRC_DIR}/outro.js
+
+UC_UI_ALL_JS_FILES = ${UC_IM}\
+		     ${UI_JS_FILES}
 
 UI_VER = `cat ${SRC_DIR}/version.txt`
 #DATE=`svn info . | grep Date: | sed 's/.*: //g'`
@@ -71,15 +102,29 @@ MINJAR = java -jar ${BUILD_DIR}/yuicompressor-2.4.2.jar
 UNICODE = native2ascii -encoding utf-8 
 
 UI_CSS = ${DIST_DIR}/webim.css
+UC_UI_CSS = ${DIST_DIR}/webim_uc.css
+DZ_UI_CSS = ${DIST_DIR}/webim_dz.css
+
 UI_JS = ${DIST_DIR}/webim.ui.js
+
 UI_ALL_JS = ${DIST_DIR}/webim.all.js
+UC_UI_ALL_JS = ${DIST_DIR}/webim_uc.all.js
+DZ_UI_ALL_JS = ${DIST_DIR}/webim_dz.all.js
+
 
 UI_MIN_CSS = ${DIST_DIR}/webim.min.css
+UC_UI_MIN_CSS = ${DIST_DIR}/webim_uc.min.css
+DZ_UI_MIN_CSS = ${DIST_DIR}/webim_dz.min.css
+
 UI_MIN_JS = ${DIST_DIR}/webim.ui.min.js
+
 UI_MIN_ALL_JS = ${DIST_DIR}/webim.all.min.js
+DZ_UI_MIN_ALL_JS = ${DIST_DIR}/webim_dz.all.min.js
+UC_UI_MIN_ALL_JS = ${DIST_DIR}/webim_uc.all.min.js
 
 
-all: submake dist copy min i18n 
+
+all: submake dist copy dzim ucim i18n min 
 	@@echo "webim build complete."
 submake:
 	cd im && $(MAKE)
@@ -95,6 +140,23 @@ dist:
 	       ${REPLACE} > ${UI_ALL_JS};
 
 	@@echo "Built"
+dzim:
+	@@cat ${DZ_UI_CSS_FILES} | \
+		sed 's/\.\.\/images/images/' | \
+	       ${REPLACE} > ${DZ_UI_CSS};
+
+	@@cat ${DZ_UI_ALL_JS_FILES} | \
+	       ${REPLACE} > ${DZ_UI_ALL_JS};
+ucim:
+	@@cat ${UC_UI_CSS_FILES} | \
+		sed 's/\.\.\/images/images/' | \
+	       ${REPLACE} > ${UC_UI_CSS};
+
+	@@cat ${UC_UI_ALL_JS_FILES} | \
+	       ${REPLACE} > ${UC_UI_ALL_JS};
+
+
+
 
 copy:
 	@@cp -r ${IMAGE_SRC_DIR} ${DIST_DIR}/images 
@@ -108,9 +170,13 @@ min:
 	@@echo " - Compressing using Minifier"
 
 	@@${MINJAR} --type css ${UI_CSS} > ${UI_MIN_CSS}
+	@@${MINJAR} --type css ${UC_UI_CSS} > ${UC_UI_MIN_CSS}
+	@@${MINJAR} --type css ${DZ_UI_CSS} > ${DZ_UI_MIN_CSS}
 	@@echo ${UI_MIN_CSS} "Built"
 
 	@@${MINJAR} --type js ${UI_ALL_JS} > ${UI_MIN_ALL_JS}
+	@@${MINJAR} --type js ${UC_UI_ALL_JS} > ${UC_UI_MIN_ALL_JS}
+	@@${MINJAR} --type js ${DZ_UI_ALL_JS} > ${DZ_UI_MIN_ALL_JS}
 	@@echo ${UI_MIN_ALL_JS} "Built"
 	@@echo
 

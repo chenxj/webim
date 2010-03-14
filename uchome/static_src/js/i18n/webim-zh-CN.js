@@ -71,7 +71,8 @@ webim.ui.i18n.store('zh-CN',{
         "empty room":"尚无群组",
         "friend":"好友",
         "stranger":"陌生人",
-        "room":"群组"
+        "room":"群组",
+	"broadcast":"站长广播"
 });
 webim.ui.i18n.store('zh-CN',{
         "doing": "记录",

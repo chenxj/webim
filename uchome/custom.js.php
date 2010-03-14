@@ -1,6 +1,19 @@
 <?php
 header("Content-type: application/javascript");
+include_once 'config.php';
 include_once('common.php');
+$platform = $_GET['platform'];
+switch($platform){
+	case 'discuz':
+		include_once('common_discuz.php');
+		//$url_path = $_IMC['discuz_url'];
+		break;
+	case 'uchome':
+		include_once('common_uchome.php');
+		//$url_path = $_IMC['uchome_url'];
+		break;
+}
+
 $menu = array(
 	array("title" => 'doing',"icon" =>"image/app/doing.gif","link" => "space.php?do=doing"),
 	array("title" => 'album',"icon" =>"image/app/album.gif","link" => "space.php?do=album"),
@@ -17,35 +30,35 @@ if($_SCONFIG['my_status']) {
 }
 $setting = json_encode(setting());
 ?>
-
+ 
 //custom
 (function(webim){
-	var path = "";
-	path = document.location.href.split("/webim");
-	path = path.length > 1 ? (path[0] + "/") : "";
-        var menu = webim.JSON.decode('<?php echo json_encode($menu) ?>');
+    var path = "<?php echo $_IMC['install_url'] ?>";
+    var platform = "<?php echo $platform ?>";
+
+    var menu = webim.JSON.decode('<?php echo json_encode($menu) ?>');
 	webim.extend(webim.setting.defaults.data, webim.JSON.decode('<?php echo $setting ?>'));
-	var webim = window.webim, log = webim.log;
+	var webim = window.webim;
 	webim.defaults.urls = {
-		online:path + "webim/online.php",
-		online_list:path + "webim/online_list.php",
-		offline:path + "webim/offline.php",
-		message:path + "webim/message.php",
-		refresh:path + "webim/refresh.php",
-		status:path + "webim/status.php"
+		online:path + "webim/online.php?platform=" + platform,
+		online_list:path + "webim/online_list.php?platform=" + platform,
+		offline:path + "webim/offline.php?platform=" + platform,
+		message:path + "webim/message.php?platform=" + platform,
+		refresh:path + "webim/refresh.php?platform=" + platform,
+		status:path + "webim/status.php?platform=" + platform
 	};
 	webim.setting.defaults.url = path + "webim/setting.php";
 	webim.history.defaults.urls = {
-		load: path + "webim/histories.php",
-		clear: path + "webim/clear_history.php"
+		load: path + "webim/histories.php?platform=" + platform,
+		clear: path + "webim/clear_history.php?platform=" + platform
 	};
-    webim.room.defaults.urls = {
-                    member: path + "webim/members.php",
-                    join: path + "webim/join.php",
-                    leave: path + "webim/leave.php"
-    };
-	webim.buddy.defaults.url = path + "webim/buddies.php";
-	webim.notification.defaults.url = path + "webim/notifications.php";
+    	webim.room.defaults.urls = {
+                    member: path + "webim/members.php?platform=" + platform,
+                    join: path + "webim/join.php?platform=" + platform,
+                    leave: path + "webim/leave.php?platform=" + platform
+    	};
+	webim.buddy.defaults.url = path + "webim/buddies.php?platform=" + platform;
+	//webim.notification.defaults.url = path + "webim/notifications.php?platform=" + platform;
 	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});
 	var soundUrls = {
 		lib: path + "webim/static/assets/sound.swf",
@@ -60,8 +73,13 @@ $setting = json_encode(setting());
 		body = document.body;
 		imUI = new webim.ui(null,{menu: menu});
 		im = imUI.im;
+		var adminids = "<?php echo $_IMC['admin_ids'] ?>";
+		im.admins = adminids?adminids.split(","):"";
 		layout = imUI.layout;
                 imUI.addApp("room");
+		if ( platform === "discuz" ){
+			imUI.addApp("hotpost");
+		}
                 //imUI.addApp("chatlink");
 		body.appendChild(layout.element);
                 setTimeout(function(){imUI.initSound(soundUrls)},1000);
@@ -94,7 +112,7 @@ $setting = json_encode(setting());
 		chatlink.disable();
 		chatlink.offline(chatlink.idsArray());
 	}
-	(document.body ? create() : webim.ui.ready(create));
-	webim.ui.ready(init);
+	setTimeout(function(){(document.body ? create() : webim.ui.ready(create))},1000);
+	setTimeout(function(){webim.ui.ready(init)},1000);
 
 })(webim);

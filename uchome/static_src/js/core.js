@@ -1,4 +1,4 @@
-var log = webim.log,
+var //log = webim.log,
 idsArray = webim.idsArray,
 now = webim.now,
 isFunction = webim.isFunction,

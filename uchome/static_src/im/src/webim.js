@@ -237,7 +237,7 @@ window.webim = webim;
 extend(webim,{
 	version:"@VERSION",
 	defaults:{},
-	log:log,
+	//log:log,
 	idsArray: idsArray,
 	now: now,
 	isFunction: isFunction,

@@ -1,8 +1,8 @@
 <?php 
 include_once('common.php');
 $ids = gp('ids');
-if(empty($ids)){
-        echo "{}";
+if($ids===NULL){
+        echo "{empty}";
         exit();
 }
 //echo json_encode($ids);

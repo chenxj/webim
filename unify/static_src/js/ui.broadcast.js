@@ -22,7 +22,7 @@ widget("broadcast",{
 	template:'<div class="webim-chat"> \
                       <div id=":header" class="webim-broadcast-header ui-widget-subheader">  \
                             <div id=":user" class="webim-user"> \
-                                  <a id=":userPic" class="webim-user-pic" href="space.php?uid=0"><img width="50" height="50" src="images/icons/broadcast.png" defaultsrc="" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;"></a> \
+                                  <a id=":userPic" class="webim-user-pic" href="space.php?uid=0"><img width="50" height="50" src="webim/static/images/icons/broadcast.png" defaultsrc="" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;"></a> \
 				  	<span id=":userStatus" title="" class="webim-user-status"></span>\
                              </div> \
                        </div> \

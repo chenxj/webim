@@ -48,7 +48,8 @@ function which_platform(){
     }
 }
 ///
-$display_name = '';//用于在安装界面显示用户需要输入路径的另一平台名称
+//$display_name = '';
+//用于在安装界面显示用户需要输入路径的另一平台名称
 ///
 $url_path = $file_path = array();
 list($url_path[],$else) = explode('webim', "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']);   //平台请求路径
@@ -194,7 +195,7 @@ if(empty($step)) {
 	<p>UCIM让您的UCHome网站拥有校内网、同学网、Facebook一样出色的WEBIM!</p>
 	<p>专为UCHome1.5定制开发的WEBIM插件，采用与Facebook一样的标准HTML界面设计(没有任何Flash)，可以与UCHOME1.5网站无缝整合，让UC好友间自由的在线聊天，增加网站的用户粘合度。</p>
 	<p>Facebook IM相似的技术架构，单服务器100,000并发用户支持，集群服务器1,000,000万并发用户支持，支持以SaaS服务模式提供，安装简单方便。 </p>
-	<a href="http://ucim.webim20.cn" target="_blank"><strong>您可以登录UCIM运营站了解详细</strong></a>
+	<a href="http://www.nextim.cn" target="_blank"><strong>您可以登录UCIM运营站了解详细</strong></a>
 	</td></tr>
 	</table>
 END;
@@ -209,7 +210,7 @@ END;
 		$ext_url_path = empty($_POST['ext_url_path']) ? '' : $_POST['ext_url_path'];
 		$ext_file_path = empty($_POST['ext_file_path']) ? '' : $_POST['ext_file_path'];
 		print <<<END
-		<form id="theform" method="post" action="$theurl?step=1">
+		<form id="theform" method="post" onsubmit="dosubmit()" action="$theurl?step=1">
 			<table class=button>
 				<tr>
 					<td><input type="submit" id="startsubmit" name="startsubmit" value="开始安装"></td>
@@ -244,7 +245,7 @@ END;
 			<tbody>
 				<tr>
 					<td>网站域名:</td>
-					<td><input type="text" id="domain" name="domain" size="60" value="$domain"><br>例如：uchome.webim20.cn</td>
+					<td><input type="text" id="domain" name="domain" size="60" value="$domain"><br>例如：www.nextim.cn</td>
 				</tr>
 				<tr>
 					<td>API KEY:</td>
@@ -289,11 +290,16 @@ END;
                     <option value="en_utf8">英文（UTF-8）</option></select></td>
 				</tr>
 				<tr>
-					<td>DISCUZ本地文件路径(临时):</td>
+					<td col='2'><input style="padding:0" type="button"  value="$display_name IM配置" onclick="plat_toggle()"></td>
+				</tr>
+			</tbody>
+			<tbody id="ext_plat" style="display:none;padding:0">
+				<tr>
+					<td>$display_name 本地文件路径:</td>
 					<td><input type="text" id="ext_file_path" name="ext_file_path" size="60" value=""></td>
 				</tr>
 				<tr>
-					<td>DISCUZ URL路径(临时):</td>
+					<td>$display_name URL路径:</td>
 					<td><input type="text" id="ext_url_path" name="ext_url_path" size="60" value="http://"></td>
 				</tr>
 			</tbody>
@@ -301,7 +307,7 @@ END;
 		<br>
 	</div>
 	<table class=button>
-	<tr><td><input type="submit" id="imsubmit" name="imsubmit" value="提交"></td></tr>
+	<tr><td><input type="submit" id="imsubmit" onclick="dosubmit()" name="imsubmit" value="提交"></td></tr>
 	</table>
 	<input type="hidden" name="formhash" value="$formhash">
 	</form>
@@ -522,6 +528,11 @@ function show_header() {
 	function $(id) {
 		return document.getElementById(id);
 	}
+	function dosubmit(){
+		$('ext_file_path').name = "ext_file_path['<?php echo $display_name ?>']";
+		$('ext_url_path').name = "ext_url_path['<?php echo $display_name ?>']";
+	}
+
 	//添加Select选项
 	function addoption(obj) {
 		if (obj.value=='addoption') {
@@ -541,6 +552,11 @@ function show_header() {
 				obj.value=obj.options[0].value;
 			}
 		}
+	}
+	function plat_toggle(){
+		var tmp = $('ext_plat');
+		var showflag = tmp.style.display;
+		tmp.style.display = (showflag == "none")?"":"none";
 	}
 	</script>
 	</head>
@@ -564,7 +580,7 @@ function show_footer() {
 	print<<<END
 	</div>
 	<iframe id="phpframe" name="phpframe" width="0" height="0" marginwidth="0" frameborder="0" src="about:blank"></iframe>
-	<div id="footer">&copy; <a href="www.nextim.cn">WEBIM20.CN</a> Inc.2007-2009 <a href="ucim.webim20.cn">ucim.webim20.cn</a></div>
+	<div id="footer">&copy; <a href="http://www.nextim.cn">WEBIM20.CN</a> Inc.2007-2009 <a href="http://www.nextim.cn">www.nextim.cn</a></div>
 	</div>
 	<br>
 	</body>

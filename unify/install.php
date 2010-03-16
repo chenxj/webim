@@ -27,11 +27,11 @@ case 'discuz':
 $_SGLOBAL['timestamp'] = time();
 
 if(file_exists(S_ROOT.'./data/webiminstall.lock')) {
-	show_msg('您已经安装过IM,如果需要重新安装，请先删除文件 ./data/webiminstall.lock', 999);
+	show_msg('您已经安装过IM,如果需要重新安装，请先删除文件 uchome根目录/data/webiminstall.lock', 999);
 }
 
 if(file_exists(S_ROOT.'./forumdata/webiminstall.lock')) {
-	show_msg('您已经安装过IM,如果需要重新安装，请先删除文件 ./forumdata/webiminstall.lock', 999);
+	show_msg('您已经安装过IM,如果需要重新安装，请先删除文件 discuz根目录/forumdata/webiminstall.lock', 999);
 }
 
 function which_platform(){
@@ -464,7 +464,7 @@ END;
 	1. 复制 <font color="red">webim/webim_$platform .htm</font> 到 <font color="red"> $platform 平台根目录下的template/default/</font>
            修改<font color="red">template/default/footer.htm</font>
                 <p>在“&lt;/body&gt;”前添加如下代码：<span  style="color:blue"><pre>
-                &lt;!--{template webim_$platform }--&gt;
+                &lt;!--{template webim_$platform}--&gt;
                 </pre></span></p>
 </li>
 <li>

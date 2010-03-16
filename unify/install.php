@@ -27,11 +27,11 @@ case 'discuz':
 $_SGLOBAL['timestamp'] = time();
 
 if(file_exists(S_ROOT.'./data/webiminstall.lock')) {
-	show_msg('您已经安装过IM,如果需要重新安装，请先删除文件 webiminstall.lock', 999);
+	show_msg('您已经安装过IM,如果需要重新安装，请先删除文件 ./data/webiminstall.lock', 999);
 }
 
 if(file_exists(S_ROOT.'./forumdata/webiminstall.lock')) {
-	show_msg('您已经安装过IM,如果需要重新安装，请先删除文件 webiminstall.lock', 999);
+	show_msg('您已经安装过IM,如果需要重新安装，请先删除文件 ./forumdata/webiminstall.lock', 999);
 }
 
 function which_platform(){
@@ -709,7 +709,6 @@ function write_webim_config($file,$domain,$apikey,$theme,$charset) {
 	$configfile = insertconfig($configfile, '/\$_IMC\["groupchat"\] =\s*.*?;/i', '$_IMC["groupchat"] = true;');
 	$configfile = insertconfig($configfile, '/\$_IMC\["emot"\] =\s*".*?";/i', '$_IMC["emot"] = "default";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["opacity"\] =\s*.*?;/i', '$_IMC["opacity"] = 80;');
-	$configfile = insertconfig($configfile, '/\$_IMC\["admin_ids"\] =\s*.*?;/i', '$_IMC["admin_ids"] = "BROADCAST";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["uchome_path"\] =\s*.*?;/i', '$_IMC["uchome_path"] = "'.$uchome_path.'";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["uchome_url"\] =\s*.*?;/i', '$_IMC["uchome_url"] = "'.$uchome_url.'";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["discuz_path"\] =\s*.*?;/i', '$_IMC["discuz_path"] = "'.$discuz_path.'";');
@@ -720,13 +719,13 @@ function write_webim_config($file,$domain,$apikey,$theme,$charset) {
 	$configfile = insertconfig($configfile, '/\$_IMC\["update"\] =\s*.*?;/i', '$_IMC["update"] = 0;');
 	$configfile = insertconfig($configfile, '/\$_IMC_LOG_TYPE\["update_file"\] =\s*.*?;/i', '$_IMC_LOG_TYPE["update_file"] = "UPDATE";');
 	$configfile = insertconfig($configfile, '/\$_IMC_LOG_TYPE\["backup_project"\] =\s*.*?;/i', '$_IMC_LOG_TYPE["backup_project"] = "BACKUP";');
-	$configfile = insertconfig($configfile, '/\_IMC_LOG_FILE\["name"\] =\s*.*?;/i', '$_IMC_LOG_FILE["name"] = "./update.log";');
+	$configfile = insertconfig($configfile, '/\$_IMC_LOG_FILE\["name"\] =\s*.*?;/i', '$_IMC_LOG_FILE["name"] = "./update.log";');
 	$configfile = insertconfig($configfile, '/\$_IMC_BACKUP\["director"\] =\s*.*?;/i', '$_IMC_BACKUP["director"] = "../WEBIM_BAK";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["update_url"\] =\s*.*?;/i', '$_IMC["update_url"] = "http://update.nextim.cn/";');
-
+	$configfile = insertconfig($configfile, '/\$_IMC\["admin_ids"\] =\s*.*?;/i', '$_IMC["admin_ids"] = "BROADCAST";');
 	$fp = fopen($file, 'w');
 	if(!($fp = @fopen($file, 'w'))) {
-		show_msg('请确认文件 webim/config.php 可写');
+		show_msg('请确认文件夹webim可');
 	}
 	@fwrite($fp, trim($configfile));
 	@fclose($fp);
@@ -758,10 +757,10 @@ function write_ext_config($file) {
 	$configfile = substr($configfile, -2) == '?>' ? substr($configfile, 0, -2) : $configfile;
 	fclose($fp);
 
-	$configfile = insertconfig($configfile, '.*', "include_once '".$file_path['$platform']."webim".DIRECTORY_SEPARATOR."config.php';");
+	//$configfile = insertconfig($configfile, '.*', "include_once '".$file_path['$platform']."webim".DIRECTORY_SEPARATOR."config.php';");
 	$fp = fopen($file, 'w');
 	if(!($fp = @fopen($file, 'w'))) {
-		show_msg('请确认文件 config.php 可写');
+		show_msg('请确认 文件夹webim 可写');
 	}
 	@fwrite($fp, trim($configfile));
 	@fclose($fp);

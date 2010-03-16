@@ -1,9 +1,0 @@
-<?PHP exit;?>	2010-02-24 16:49:42		122.234.252.222	3	/do.php?ac=sendmail&rand=1267001380	jie.xu@webim20.cn sendmail failed.
-<?PHP exit;?>	2010-02-24 17:10:37		218.25.163.140	33	/do.php?ac=sendmail&rand=1267002637	dalong323@126.com sendmail failed.
-<?PHP exit;?>	2010-02-24 20:28:22		59.55.191.74	9	/do.php?ac=sendmail&rand=1267014501	demo@gmail.com sendmail failed.
-<?PHP exit;?>	2010-02-25 11:02:16		10.193.9.12	1964	/do.php?ac=sendmail&rand=1267066936	lin.su@ubisoft.com sendmail failed.
-<?PHP exit;?>	2010-02-26 18:47:05		221.6.39.106	8	/do.php?ac=sendmail&rand=1267181223	brave@hw0755.com sendmail failed.
-<?PHP exit;?>	2010-02-27 14:49:32		163.25.133.164	0	/do.php?ac=sendmail&rand=1267253369	startpojq@126.com sendmail failed.
-<?PHP exit;?>	2010-02-27 14:50:22		163.25.133.164	254	/do.php?ac=sendmail&rand=1267253419	fhgz@hotmail.com sendmail failed.
-<?PHP exit;?>	2010-02-27 15:22:08		61.87.253.217	1997	/do.php?ac=sendmail&rand=1267255322	pandazdj@gmail.com sendmail failed.
-<?PHP exit;?>	2010-02-28 16:38:22		221.6.37.131	2020	/do.php?ac=sendmail&rand=1267346301	maguoquan_007@sina.com sendmail failed.

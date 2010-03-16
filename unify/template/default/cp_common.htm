@@ -1,0 +1,79 @@
+<!--{template header}-->
+
+<!--{if $_GET['op'] == 'report'}-->
+
+	<h1>举报违规</h1>
+	<a href="javascript:hideMenu();" class="float_del" title="关闭">关闭</a>
+	<div class="popupmenu_inner" id="__reportform_{$_GET[id]}">
+	<form method="post" id="reportform_{$_GET[id]}" name="reportform_{$_GET[id]}" action="cp.php?ac=common&op=report&idtype=$_GET[idtype]&id=$_GET[id]">
+	<table>
+	<tr>
+		<td>感谢您能协助我们一起管理站点，我们会对您的举报尽快处理。
+			<br>请填写举报理由(最多150个字符):
+			<img src="image/zoomin.gif" onmouseover="this.style.cursor='pointer'" onclick="zoomTextarea('reason', 1)">
+			<img src="image/zoomout.gif" onmouseover="this.style.cursor='pointer'" onclick="zoomTextarea('reason', 0)"><br />
+			<textarea id="reason" name="reason" cols="72" rows="3" onkeydown="ctrlEnter(event, 'reportsubmit_btn')"></textarea>
+			<!--{if $reason}-->
+			<br />
+			<select name="reportinfo" onchange="$('reason').value=this.value">
+				<option value="" selected>举报理由</option>
+				<!--{loop $reason $key $val}-->
+				<option value="$val">$val</option>
+				<!--{/loop}-->
+			</select>
+			<!--{/if}-->
+		</td>
+	</tr>
+	<tr>
+		<td>
+		<input type="hidden" name="reportsubmit" value="true">
+		<!--{if $_SGLOBAL[inajax]}-->
+		<input type="hidden" name="refer" value="$_SGLOBAL[refer]">
+		<button name="reportsubmit_btn" id="reportsubmit_btn" type="button" class="submit" value="true" onclick="ajaxpost('reportform_{$_GET[id]}','',2000);">确定</button>
+		<!--{else}-->
+		<input type="hidden" name="refer" value="$_SGLOBAL[refer]">
+		<button name="reportsubmit_btn" id="reportsubmit_btn" type="submit" class="submit" value="true">确定</button>
+		<!--{/if}-->
+		</td>
+	</tr>
+	</table>
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+	</form>
+	</div>
+	
+<!--{elseif $_GET['op'] == 'ignore'}-->
+
+	<h1>屏蔽通知</h1>
+	<a href="javascript:hideMenu();" class="float_del" title="关闭">关闭</a>
+	<div class="popupmenu_inner" id="__ignoreform_{$formid}">
+		<form method="post" id="ignoreform_{$formid}" name="ignoreform_{$formid}" action="cp.php?ac=common&op=ignore&type=$type">
+			<p>在下次浏览时不再显示此类通知</p>
+			<p class="btn_line">
+				<input type="radio" name="authorid" id="authorid1" value="$_GET[authorid]" checked> <label for="uid1">仅屏蔽该好友的</label>
+				<br>
+				<input type="radio" name="authorid" id="authorid0" value="0"> <label for="uid0">屏蔽所有好友的</label>
+				<br><br>
+				<input type="hidden" name="refer" value="$_SGLOBAL[refer]">
+				<!--{if $_SGLOBAL[inajax]}-->
+				<input type="hidden" name="ignoresubmit" value="true" />
+				<button name="noteignoresubmit_btn" type="submit" class="submit" value="true" onclick="ajaxpost('ignoreform_{$formid}','',2000)">确定</button>
+				<!--{else}-->
+				<button name="feedignoresubmit" type="submit" class="submit" value="true">确定</button>
+				<!--{/if}-->
+			</p>
+			
+			<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+		</form>
+	</div>
+	
+<!--{elseif $_GET['op'] == 'getuserapp'}-->
+
+	<!--{loop $my_userapp $value}-->
+	<!--{if $value['allowsidenav']}-->
+	<li><img src="http://appicon.manyou.com/icons/$value[appid]"><a href="userapp.php?id=$value[appid]">$value[appname]</a></li>
+	<!--{/if}-->
+	<!--{/loop}-->
+	
+<!--{/if}-->
+
+<!--{template footer}-->

@@ -1,0 +1,26 @@
+/*
+[name]小屋[/name]
+Powered by Ucenter Home
+*/
+body { padding: 0 0 50px; background: url(images/body_bg.gif) fixed repeat left top; color: #666; }
+#wrap { padding: 60px 10px 15px; border: 3px solid #333; background: #FFF url(images/sub_bg.gif) repeat-x; }
+#header { margin: 0 0 20px; background: url(images/top_bg.jpg); color: #CCC; }
+.headerwarp { background: none; }
+#header a { color: #2C629E; }
+#header .logo a { width: 82px; height: 40px; background: url(images/logo.gif) no-repeat left center; overflow: hidden; display: block; }
+#header .logo a img { margin: -200px; }
+.login_thumb { background-image: url(images/login_bg.gif); }
+#ubar h2,
+#space_page .feed_header,
+#space_page .sidebox h2.title { padding: 0 10px 0 30px; height: 30px; border-bottom: 3px solid #DEDEDE; background: #F2F2F2 url(images/h2_news.gif) no-repeat 10px 50%; line-height: 29px; }
+.ulist,
+#space_page .feed li,
+#space_page .comments_list li,
+#footer { border-color: #ECF1F3; }
+.tabs_header{ position: absolute; margin: -57px 0 0 -210px; width: 950px; border: none;}
+.tabs_header ul.tabs{ margin: 7px 0 0; }
+.tabs_header ul.tabs li{ margin: 0 20px 0 0; }
+.tabs_header ul.tabs li.active a,
+.tabs_header ul.tabs li.active a span,
+.tabs_header ul.tabs li a,
+.tabs_header ul.tabs li a span { margin: 0; padding: 0; height: auto; background: none; font-size: 12px; color: #fff; display: inline; }

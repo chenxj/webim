@@ -1,0 +1,821 @@
+<!--{template header}-->
+
+<!--{if $op == 'syn' || $op == 'find' || $op == 'search' || $op == 'group' || $op == 'request'}-->
+<div class="searchbar floatright">
+<form method="get" action="cp.php">
+	<input name="searchkey" value="" size="15" class="t_input" type="text">
+	<input name="searchsubmit" value="找人" class="submit" type="submit">
+	<input type="hidden" name="searchmode" value="1" />
+	<input type="hidden" name="ac" value="friend" />
+	<input type="hidden" name="op" value="search" />
+</form>
+</div>
+<h2 class="title"><img src="image/icon/friend.gif">好友</h2>
+<div class="tabs_header">
+	<ul class="tabs">
+		<li><a href="space.php?uid=$space[uid]&do=friend"><span>好友列表</span></a></li>
+		<li$actives[search]><a href="cp.php?ac=friend&op=search"><span>查找好友</span></a></li>
+		<li$actives[find]><a href="cp.php?ac=friend&op=find"><span>可能认识的人</span></a></li>
+		<!--{if empty($_SCONFIG['closeinvite'])}-->
+		<li><a href="cp.php?ac=invite"><span>邀请好友</span></a></li>
+		<!--{/if}-->
+		<li$actives[request]><a href="cp.php?ac=friend&op=request"><span>好友请求</span></a></li>
+		<li><a href="space.php?do=top"><span>排行榜</span></a></li>
+		<!--{if $op=='group'}-->
+		<li$actives[group]><a href="cp.php?ac=friend&op=group"><span>好友分组</span></a></li>
+		<!--{/if}-->
+	</ul>
+</div>
+<!--{/if}-->
+
+<!--{if $op =='ignore'}-->
+
+<h1>忽略好友</h1>
+<a href="javascript:hideMenu();" class="float_del" title="关闭">关闭</a>
+<div class="popupmenu_inner" id="__friendform_{$uid}">
+<form method="post" id="friendform_{$uid}" name="friendform_{$uid}" action="cp.php?ac=friend&op=ignore&uid=$uid&confirm=1">
+	<p>确定忽略好友关系吗？</p>
+	<p class="btn_line">
+		<input type="hidden" name="refer" value="$_SGLOBAL[refer]">
+		<!--{if $_SGLOBAL[inajax]}-->
+		<input type="hidden" name="friendsubmit" value="true" />
+		<button name="friendsubmit_btn" type="button" class="submit" value="true" onclick="ajaxpost('friendform_{$uid}', 'friend_delete', 2000)">确定</button>
+		<!--{else}-->
+		<button name="friendsubmit" type="submit" class="submit" value="true">确定</button>
+		<!--{/if}-->
+	</p>
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+</form>
+</div>
+
+<!--{elseif $op == 'find'}-->
+
+<!--{if $nearlist}-->
+<div class="c_form">
+	<h2 class="l_status title">惊喜，他们就在您的附近</h2>
+	<ul class="avatar_list">
+		<!--{loop $nearlist $key $value}-->
+		<li>
+			<div class="avatar48"><a href="space.php?uid=$value[uid]" title="{$_SN[$value[uid]]}" target="_blank"><!--{avatar($value[uid],small)}--></a></div>
+			<p><a href="space.php?uid=$value[uid]" title="{$_SN[$value[uid]]}">{$_SN[$value[uid]]}</a></p>
+			<p class="gray"><a href="cp.php?ac=friend&op=add&uid=$value[uid]" id="a_near_friend_$key" onclick="ajaxmenu(event, this.id, 1)" class="addfriend">加为好友</a></p>
+		</li>
+		<!--{/loop}-->
+	</ul>
+</div>
+<!--{/if}-->
+
+<!--{if $friendlist}-->
+<div class="c_form">
+	<h2 class="l_status title">他们是您的好友的好友，您也可能认识</h2>
+	<ul class="avatar_list">
+		<!--{loop $friendlist $key $value}-->
+		<li>
+			<div class="avatar48"><a href="space.php?uid=$value[uid]" title="{$_SN[$value[uid]]}" target="_blank"><!--{avatar($value[uid],small)}--></a></div>
+			<p><a href="space.php?uid=$value[uid]" title="{$_SN[$value[uid]]}">{$_SN[$value[uid]]}</a></p>
+			<p class="gray"><a href="cp.php?ac=friend&op=add&uid=$value[uid]" id="a_friend_friend_$key" onclick="ajaxmenu(event, this.id, 1)" class="addfriend">加为好友</a></p>
+		</li>
+		<!--{/loop}-->
+	</ul>
+</div>
+<!--{/if}-->
+
+<!--{if $onlinelist}-->
+<div class="c_form">
+	<h2 class="l_status title">他们当前正在线，加为好友就可以互动啦</h2>
+	<ul class="avatar_list">
+		<!--{loop $onlinelist $key $value}-->
+		<li>
+			<div class="avatar48"><a href="space.php?uid=$value[uid]" title="{$_SN[$value[uid]]}" target="_blank"><!--{avatar($value[uid],small)}--></a></div>
+			<p><a href="space.php?uid=$value[uid]" title="{$_SN[$value[uid]]}">{$_SN[$value[uid]]}</a></p>
+			<p class="gray"><a href="cp.php?ac=friend&op=add&uid=$value[uid]" id="a_online_friend_$key" onclick="ajaxmenu(event, this.id, 1)" class="addfriend">加为好友</a></p>
+		</li>
+		<!--{/loop}-->
+	</ul>
+</div>
+<!--{/if}-->
+
+<!--{elseif $op == 'search'}-->
+
+<div class="c_form">
+
+	<!--{if !empty($_GET['searchsubmit'])}-->
+	
+	<!--{if empty($list)}-->
+		<div class="c_form">没有找到相关用户。<a href="cp.php?ac=friend&op=search">换个搜索条件试试</a></div>
+	<!--{else}-->
+		<div style="padding:0 0 20px 0;">以下是查找到的用户列表(最多显示500个)，您还可以<a href="cp.php?ac=friend&op=search">换个搜索条件试试</a>。</div>
+		<!--{template space_list}-->
+	<!--{/if}-->
+	
+	<!--{else}-->
+	<table cellspacing="2" cellpadding="2" class="search_table">
+
+<!--{if $_GET['all']}-->
+	<tr>
+		<td>
+		<form action="cp.php" method="get">
+		<table>
+		<tr><td align="right">姓名：</td><td><input type="text" name="name" value="" class="t_input"></td></tr>
+		<tr><td align="right">用户名：</td><td><input type="text" name="username" value="" class="t_input"></td></tr>
+		<tr><td align="right">用户UID：</td><td><input type="text" name="uid" value="" class="t_input"></td></tr>
+		<tr>
+			<td align="right" width="100">性别：</td>
+			<td>
+				<select id="sex" name="sex">
+					<option value="0">任意</option>
+					<option value="1">男</option>
+					<option value="2">女</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td align="right">婚恋：</td>
+			<td>
+				<select id="marry" name="marry">
+					<option value="0">任意</option>
+					<option value="1">单身</option>
+					<option value="2">非单身</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td align="right">年龄段：</td>
+			<td>
+				<input type="text" name="startage" value="" size="10" class="t_input" /> ~ <input type="text" name="endage" value="" size="10" class="t_input" />
+			</td>
+		</tr>
+		<!--{if $_SCONFIG['videophoto']}-->
+		<tr>
+			<td align="right">视频认证：</td>
+			<td>
+				<input type="checkbox" name="videostatus" value="1">通过视频认证
+			</td>
+		</tr>
+		<!--{/if}-->
+		<tr>
+			<td align="right">上传头像：</td>
+			<td>
+				<input type="checkbox" name="avatar" value="1">已经上传头像
+			</td>
+		</tr>
+		
+		<tr>
+			<td align="right">居住地：</td>
+			<td id="residecitybox"></td>
+		</tr>
+		
+		<tr>
+			<td align="right">出生地：</td>
+			<td id="birthcitybox"></td>
+		</tr>
+		
+		<script type="text/javascript" src="source/script_city.js"></script>
+		<script type="text/javascript">
+		<!--
+		showprovince('resideprovince', 'residecity', '', 'residecitybox');
+		showcity('residecity', '', 'resideprovince', 'residecitybox');
+		showprovince('birthprovince', 'birthcity', '', 'birthcitybox');
+		showcity('birthcity', '', 'birthprovince', 'birthcitybox');
+		//-->
+		</script>	
+		
+		<tr>
+			<td align="right">生日：</td>
+			<td>
+			<select id="birthyear" name="birthyear" onchange="showbirthday();">
+				<option value="0">&nbsp;</option>
+				$birthyeayhtml
+			</select> 年 
+			<select id="birthmonth" name="birthmonth" onchange="showbirthday();">
+				<option value="0">&nbsp;</option>
+				$birthmonthhtml
+			</select> 月 
+			<select id="birthday" name="birthday">
+				<option value="0">&nbsp;</option>
+				$birthdayhtml
+			</select> 日
+			</td>
+		</tr>
+		
+		<tr><td align="right">学校：</td><td><input type="text" name="title" value="" class="t_input"> <select name="startyear">
+			<option value="">入学年份</option>
+			$yearhtml
+			</select></td></tr>
+		<tr><td align="right">班级或院系：</td><td><input type="text" name="subtitle" value="" class="t_input"></td></tr>
+	
+		<tr><td align="right">公司或机构：</td><td><input type="text" name="title" value="" class="t_input"></td></tr>
+		<tr><td align="right">部门：</td><td><input type="text" name="subtitle" value="" class="t_input"></td></tr>
+			
+		
+		<tr>
+			<td align="right">血型：</td>
+			<td>
+				<select id="blood" name="blood">
+					<option value="">任意</option>
+					$bloodhtml
+				</select>
+			</td>
+		</tr>
+	
+		
+		<tr>
+			<td align="right">QQ：</td>
+			<td>
+				<input type="text" name="qq" value="" class="t_input" />
+			</td>
+		</tr>
+		<tr>
+			<td align="right">MSN：</td>
+			<td>
+				<input type="text" name="msn" value="" class="t_input" />
+			</td>
+		</tr>
+	
+		<!--{loop $fields $fkey $fvalue}-->
+		<!--{if $fvalue[allowsearch]}-->
+		<tr>
+			<td align="right">{$fvalue[title]}：</td>
+			<td>
+				$fvalue[html]
+			</td>
+		</tr>
+		<!--{/if}-->
+		<!--{/loop}-->
+		
+		<tr><td></td><td><input type="submit" name="searchsubmit" value="查找" class="submit"></td></tr>
+		</table>
+		<input type="hidden" name="ac" value="friend">
+		<input type="hidden" name="op" value="search">
+		<input type="hidden" name="type" value="all">
+		</form>	
+	</td></tr>
+<!--{else}-->
+	<tr>
+		<th style="border-top: none;"><img src="image/search.gif" align="absmiddle">
+			<a href="javascript:;" onclick="showtbody('sex');">查找男女朋友</a></th>
+	</tr>
+	<tbody id="s_sex" style="display:none;">
+	<tr>
+		<td>
+		<form action="cp.php" method="get">
+		<table>
+		<tr>
+			<td align="right" width="100">性别：</td>
+			<td>
+				<select id="sex" name="sex">
+					<option value="0">任意</option>
+					<option value="1"$sexarr[1]>男</option>
+					<option value="2"$sexarr[2]>女</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td align="right">婚恋：</td>
+			<td>
+				<select id="marry" name="marry">
+					<option value="0">任意</option>
+					<option value="1"$marryarr[1]>单身</option>
+					<option value="2"$marryarr[2]>非单身</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td align="right">年龄段：</td>
+			<td>
+				<input type="text" name="startage" value="" size="10" class="t_input" /> ~ <input type="text" name="endage" value="" size="10" class="t_input" />
+			</td>
+		</tr>
+		<!--{if $_SCONFIG['videophoto']}-->
+		<tr>
+			<td align="right" width="100">视频认证：</td>
+			<td>
+				<input type="checkbox" name="videostatus" value="1">通过视频认证
+			</td>
+		</tr>
+		<!--{/if}-->
+		<tr>
+			<td align="right" width="100">上传头像：</td>
+			<td>
+				<input type="checkbox" name="avatar" value="1">已经上传头像
+			</td>
+		</tr>
+		<tr><td align="right">姓名：</td><td><input type="text" name="name" value="" class="t_input"></td></tr>
+		<tr><td align="right">用户名：</td><td><input type="text" name="username" value="" class="t_input"></td></tr>
+		<tr><td></td><td><input type="submit" name="searchsubmit" value="查找" class="submit"></td></tr>
+		</table>
+		<input type="hidden" name="ac" value="friend">
+		<input type="hidden" name="op" value="search">
+		<input type="hidden" name="type" value="base">
+		</form>
+		</td>
+	</tr>
+	</tbody>
+
+	
+	<tr>
+		<th><img src="image/search.gif" align="absmiddle">
+			<a href="javascript:;" onclick="showtbody('reside');">查找同城的人</a></th>
+	</tr>
+	<tbody id="s_reside" style="display:none;">
+	<tr>
+		<td>
+		<form action="cp.php" method="get">
+		<table>
+		<tr>
+			<td align="right" width="150">居住地：</td>
+			<td id="residecitybox"></td>
+		</tr>
+		<tr><td align="right">姓名：</td><td><input type="text" name="name" value="" class="t_input"></td></tr>
+		<tr><td align="right">用户名：</td><td><input type="text" name="username" value="" class="t_input"></td></tr>
+		<tr><td></td><td><input type="submit" name="searchsubmit" value="查找" class="submit"></td></tr>
+		</table>
+		<script type="text/javascript" src="source/script_city.js"></script>
+		<script type="text/javascript">
+		<!--
+		showprovince('resideprovince', 'residecity', '$space[resideprovince]', 'residecitybox');
+		showcity('residecity', '$space[residecity]', 'resideprovince', 'residecitybox');
+		//-->
+		</script>
+		<input type="hidden" name="ac" value="friend">
+		<input type="hidden" name="op" value="search">
+		<input type="hidden" name="type" value="base">
+		</form>
+		</td>
+	</tr>
+	</tbody>
+	
+
+	<tr>
+		<th><img src="image/search.gif" align="absmiddle">
+			<a href="javascript:;" onclick="showtbody('birth');">查找老乡</a></th>
+	</tr>
+	<tbody id="s_birth" style="display:none;">
+	<tr>
+		<td>
+		<form action="cp.php" method="get">
+		<table>
+		<tr>
+			<td align="right" width="150">出生地：</td>
+			<td id="birthcitybox"></td>
+		</tr>
+		<tr><td align="right">姓名：</td><td><input type="text" name="name" value="" class="t_input"></td></tr>
+		<tr><td align="right">用户名：</td><td><input type="text" name="username" value="" class="t_input"></td></tr>
+		<tr><td></td><td><input type="submit" name="searchsubmit" value="查找" class="submit"></td></tr>
+		</table>
+		<script type="text/javascript" src="source/script_city.js"></script>
+		<script type="text/javascript">
+		<!--
+		showprovince('birthprovince', 'birthcity', '$space[birthprovince]', 'birthcitybox');
+		showcity('birthcity', '$space[birthcity]', 'birthprovince', 'birthcitybox');
+		//-->
+		</script>
+		<input type="hidden" name="ac" value="friend">
+		<input type="hidden" name="op" value="search">
+		<input type="hidden" name="type" value="base">
+		</form>
+		</td>
+	</tr>
+	</tbody>
+
+	
+	<tr>
+		<th><img src="image/search.gif" align="absmiddle">
+			<a href="javascript:;" onclick="showtbody('birthyear');">查找同年同月同日生的人</a></th>
+	</tr>
+	<tbody id="s_birthyear" style="display:none;">
+	<tr>
+		<td>
+		<form action="cp.php" method="get">
+		<table>
+		<tr>
+			<td align="right" width="150">生日：</td>
+			<td>
+			<select id="birthyear" name="birthyear" onchange="showbirthday();">
+				<option value="0">&nbsp;</option>
+				$birthyeayhtml
+			</select> 年 
+			<select id="birthmonth" name="birthmonth" onchange="showbirthday();">
+				<option value="0">&nbsp;</option>
+				$birthmonthhtml
+			</select> 月 
+			<select id="birthday" name="birthday">
+				<option value="0">&nbsp;</option>
+				$birthdayhtml
+			</select> 日
+			</td>
+		</tr>
+		<tr><td align="right">姓名：</td><td><input type="text" name="name" value="" class="t_input"></td></tr>
+		<tr><td align="right">用户名：</td><td><input type="text" name="username" value="" class="t_input"></td></tr>
+		<tr><td></td><td><input type="submit" name="searchsubmit" value="查找" class="submit"></td></tr>
+		</table>
+		<input type="hidden" name="ac" value="friend">
+		<input type="hidden" name="op" value="search">
+		<input type="hidden" name="type" value="base">
+		</form>
+		</td>
+	</tr>
+	</tbody>
+	
+	<tr>
+		<th>
+			<img src="image/search.gif" align="absmiddle">
+			<a href="javascript:;" onclick="showtbody('edu');">查找你的同学</a>
+		</th>
+	</tr>
+	<tbody id="s_edu" style="display:none;">
+	<tr>
+		<td>
+		<form action="cp.php" method="get">
+		<table>
+			<tr><td align="right" width="150">学校：</td><td><input type="text" name="title" value="" class="t_input"> <select name="startyear">
+				<option value="">入学年份</option>
+				$yearhtml
+				</select></td></tr>
+			<tr><td align="right">班级或院系：</td><td><input type="text" name="subtitle" value="" class="t_input"></td></tr>
+			<tr><td align="right">姓名：</td><td><input type="text" name="name" value="" class="t_input"></td></tr>
+			<tr><td align="right">用户名：</td><td><input type="text" name="username" value="" class="t_input"></td></tr>
+			<tr><td></td><td><input type="submit" name="searchsubmit" value="查找" class="submit"></td></tr>
+		</table>
+		<input type="hidden" name="ac" value="friend">
+		<input type="hidden" name="op" value="search">
+		<input type="hidden" name="type" value="edu">
+		</form>
+		</td>
+	</tr>
+	</tbody>
+	
+	<tr>
+		<th><img src="image/search.gif" align="absmiddle">
+			<a href="javascript:;" onclick="showtbody('work');">查找你的同事</a></th>
+	</tr>
+	<tbody id="s_work" style="display:none;">
+	<tr>
+		<td>
+		<form action="cp.php" method="get">
+		<table>
+			<tr><td align="right" width="150">公司或机构：</td><td><input type="text" name="title" value="" class="t_input"></td></tr>
+			<tr><td align="right">部门：</td><td><input type="text" name="subtitle" value="" class="t_input"></td></tr>
+			<tr><td align="right">姓名：</td><td><input type="text" name="name" value="" class="t_input"></td></tr>
+			<tr><td align="right">用户名：</td><td><input type="text" name="username" value="" class="t_input"></td></tr>
+			<tr><td></td><td><input type="submit" name="searchsubmit" value="查找" class="submit"></td></tr>
+		</table>
+		<input type="hidden" name="ac" value="friend">
+		<input type="hidden" name="op" value="search">
+		<input type="hidden" name="type" value="work">
+		</form>
+		</td>
+	</tr>
+	</tbody>
+	
+	
+	<tr>
+		<th><img src="image/search.gif" align="absmiddle">
+			<a href="javascript:;" onclick="showtbody('name');">精确查找</a></th>
+	</tr>
+	<tbody id="s_name" style="display:none;">
+	<tr>
+		<td>
+		<form action="cp.php" method="get">
+		<table>
+		<tr><td align="right" width="150">姓名：</td><td><input type="text" name="name" value="" class="t_input"></td></tr>
+		<tr><td align="right">用户名：</td><td><input type="text" name="username" value="" class="t_input"></td></tr>
+		<tr><td align="right">用户UID：</td><td><input type="text" name="uid" value="" class="t_input"></td></tr>
+		<tr><td></td><td><input type="submit" name="searchsubmit" value="查找" class="submit"></td></tr>
+		</table>
+		<input type="hidden" name="ac" value="friend">
+		<input type="hidden" name="op" value="search">
+		<input type="hidden" name="type" value="base">
+		</form>
+		</td>
+	</tr>
+	</tbody>
+	
+	<tr>
+		<th><img src="image/search.gif" align="absmiddle">
+			<a href="cp.php?ac=friend&op=search&all=yes">高级方式查找</a></th>
+	</tr>
+<!--{/if}-->
+
+	</table>
+	<!--{/if}-->
+</div>
+
+<script>
+function showtbody(id) {
+	var obj = $('s_'+id);
+	if(obj.style.display == 'none') {
+		obj.style.display = '';
+	} else {
+		obj.style.display = 'none';
+	}
+}
+<!--{if $_GET['view']}-->showtbody('$_GET[view]');<!--{/if}-->
+</script>
+
+<!--{elseif $op=='changenum'}-->
+
+<h1>好友热度</h1>
+<a href="javascript:hideMenu();" class="float_del" title="关闭">关闭</a>
+<div class="popupmenu_inner" id="__changenumform_{$uid}">
+<form method="post" id="changenumform_{$uid}" name="changenumform_{$uid}" action="cp.php?ac=friend&op=changenum&uid=$uid">
+	<p>调整好友的热度</p>
+	<p>
+		新的热度：<input type="text" name="num" value="$friend[num]" size="5"> (0~9999之间的一个数字）
+	</p>
+	<p class="btn_line">
+		<input type="hidden" name="refer" value="$_SGLOBAL[refer]">
+		<button name="changenumsubmit" type="submit" class="submit" value="true">确定</button>
+	</p>
+	
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+</form>
+</div>
+
+<!--{elseif $op=='changegroup'}-->
+
+<h1>好友分组</h1>
+<a href="javascript:hideMenu();" class="float_del" title="关闭">关闭</a>
+<div class="popupmenu_inner" id="__changegroupform_{$uid}">
+<form method="post" id="changegroupform_{$uid}" name="changegroupform_{$uid}" action="cp.php?ac=friend&op=changegroup&uid=$uid">
+	<p>设置好友分组</p>
+	<table cellspacing="2" cellpadding="2"><tr>
+	<!--{eval $i=0;}-->
+	<!--{loop $groups $key $value}-->
+	<td><input type="radio" name="group" value="$key"$groupselect[$key]> $value</td>
+	<!--{if $i%2==1}--></tr><tr><!--{/if}-->
+	<!--{eval $i++;}-->
+	<!--{/loop}-->
+	</tr></table>
+
+	<p class="btn_line">
+		<input type="hidden" name="refer" value="$_SGLOBAL[refer]">
+		<!--{if $_SGLOBAL[inajax]}-->
+		<input type="hidden" name="changegroupsubmit" value="true" />
+		<button name="changegroupsubmit_btn" type="button" class="submit" value="true" onclick="ajaxpost('changegroupform_{$uid}', 'friend_changegroup', 2000)">确定</button>
+		<!--{else}-->
+		<button name="changegroupsubmit" type="submit" class="submit" value="true">确定</button>
+		<!--{/if}-->
+	</p>
+	
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+</form>
+</div>
+
+<!--{elseif $op=='group'}-->
+
+<div class="h_status">
+对选定的好友进行分组，热度表示的是你跟好友互动的次数。
+</div>
+
+<div id="content" style="width: 640px;">
+	<form method="post" action="cp.php?ac=friend&op=group&ref">
+<!--{if $list}-->
+	<div class="thumb_list" id="friend_ul">
+		<ul>
+		<!--{loop $list $key $value}-->
+			<li>
+				<div class="avatar48"><a href="space.php?uid=$value[uid]"><!--{avatar($value[uid],small)}--></a></div>
+				<div class="thumbTitle"><input type="checkbox" name="fuids[]" value="$value[uid]" /><a href="space.php?uid=$value[uid]">{$_SN[$value[uid]]}</a></div>
+				<div class="gray">热度：$value[num]</div>
+				<div class="gray">$value[group]</div>
+			</li>
+		<!--{/loop}-->
+		</ul>
+	</div>
+	<div class="page">$multi</div>
+	<div style="padding:20px 0 0 0;">
+		<input type="checkbox" id="chkall" name="chkall" onclick="checkAll(this.form, 'fuids')" /><label for="chkall">全选</label></td>
+		设置用户组：<select name="group">
+			<!--{loop $groups $key $value}-->
+				<option value="$key">$value</option>
+			<!--{/loop}-->
+			</select>
+			<input type="submit" name="btnsubmit" value="确定" class="submit" />
+	</div>
+<!--{else}-->
+	<div class="c_form">
+		没有相关用户列表。
+	</div>
+<!--{/if}-->
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+	<input type="hidden" name="groupsubmin" value="true" />
+	</form>
+</div>
+
+<div id="sidebar" style="width: 150px;">
+	<div class="cat">
+	<h3>好友分组</h3>
+	<ul class="post_list line_list">
+		<li<!--{if !isset($_GET[group])}--> class="current"<!--{/if}-->><a href="cp.php?ac=friend&op=group">全部好友</a></li>
+		<!--{loop $groups $key $value}-->
+		<li<!--{if isset($_GET[group]) && $_GET[group]==$key}--> class="current"<!--{/if}-->><a href="cp.php?ac=friend&op=group&group=$key">$value</a></li>
+		<!--{/loop}-->
+	</ul>
+	</div>
+</div>
+
+<!--{elseif $op=='groupname'}-->
+
+<h1>好友组</h1>
+<a href="javascript:hideMenu();" class="float_del" title="关闭">关闭</a>
+<div class="popupmenu_inner" id="__groupnameform_{$group}">
+<form method="post" id="groupnameform_{$group}" name="groupnameform_{$group}" action="cp.php?ac=friend&op=groupname&group=$group">
+	<p>设置新好友分组名</p>
+	<div class="c_form">
+		新名称：<input type="text" name="groupname" value="$groups[$group]" size="15" class="t_input">
+		<input type="hidden" name="refer" value="$_SGLOBAL[refer]">
+		<!--{if $_SGLOBAL[inajax]}-->
+		<input type="hidden" name="groupnamesubmit" value="true" />
+		<input type="button" name="groupnamesubmit_btn" value="确定" class="submit" onclick="ajaxpost('groupnameform_{$group}', 'friend_changegroupname', 2000)" />
+		<!--{else}-->
+		<input type="submit" name="groupnamesubmit" value="确定" class="submit" />
+		<!--{/if}-->
+	</div>
+	
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+</form>
+</div>
+
+
+<!--{elseif $op=='groupignore'}-->
+
+<h1>调整用户组动态</h1>
+<a href="javascript:hideMenu();" class="float_del" title="关闭">关闭</a>
+<div class="popupmenu_inner" id="$group">
+<form method="post" id="groupignoreform" name="groupignoreform" action="cp.php?ac=friend&op=groupignore&group=$group">
+	<!--{if !isset($space['privacy']['filter_gid'][$group])}-->
+	<p>在首页不显示该用户组的好友动态</p>
+	<!--{else}-->
+	<p>在首页显示该用户组的好友动态</p>
+	<!--{/if}-->
+	<p class="btn_line">
+		<input type="hidden" name="refer" value="$_SGLOBAL[refer]">
+		<!--{if $_SGLOBAL[inajax]}-->
+		<input type="hidden" name="groupignoresubmit" value="true" />
+		<button name="groupignoresubmit_btn" type="submit" class="submit" value="true">确定</button>
+		<!--{else}-->
+		<button name="groupignoresubmit" type="submit" class="submit" value="true">确定</button>
+		<!--{/if}-->
+	</p>
+<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+</form>
+</div>
+
+<!--{elseif $op=='request'}-->
+
+<div class="l_status">
+	<div class="r_option">
+		<a href="cp.php?ac=friend&op=ignore&confirm=1&key=$space[key]" onclick="return confirm('您确定要忽略所有的好友申请吗？');">忽略所有好友申请(慎用)</a>
+		 | <a href="cp.php?ac=friend&op=addconfirm&key=$space[key]">批准全部申请</a>
+	</div>
+	<span id="add_friend_div">请选定好友的申请进行批准或忽略</span>
+	<!--{if $maxfriendnum}-->
+	(最多可以添加 $maxfriendnum 个好友)
+	<p>
+		<!--{if $_SGLOBAL[magic][friendnum]}-->
+		<img src="image/magic/friendnum.small.gif" class="magicicon" />
+		<a id="a_magic_friendnum" href="magic.php?mid=friendnum" onclick="ajaxmenu(event, this.id, 1)">我要扩容好友数</a>
+		(您可以购买道具“{$_SGLOBAL[magic][friendnum]}”来扩容，让自己可以添加更多的好友。)
+		<!--{/if}-->
+	</p>
+	<!--{/if}-->
+</div>
+<!--{if $list}-->
+<div class="thumb_list" id="friend_ul">
+<table cellspacing="6" cellpadding="0">
+<!--{loop $list $key $value}-->
+<tbody id="friend_tbody_$value[uid]">
+<tr>
+	<td class="thumb <!--{if $ols[$value[uid]]}-->online<!--{/if}-->">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td class="image">
+				<div class="ar_r_t"><div class="ar_l_t"><div class="ar_r_b"><div class="ar_l_b">
+				<a href="space.php?uid=$value[uid]" class="avatarlink"><!--{avatar($value[uid],middle)}--></a>
+				</div></div></div></div>
+				</td>
+				<td>
+					<h6 class="l_status">
+						<a href="space.php?uid=$value[uid]">{$_SN[$value[uid]]}</a>
+						<!--{if $value['videostatus']}-->
+						<img src="image/videophoto.gif" align="absmiddle"> <span class="gray">已通过视频认证</span>
+						<!--{/if}-->
+					</h6>
+					<div id="friend_$value[uid]">
+					<!--{if $value[note]}--><div class="quote"><span id="quote" class="q">$value[note]</span></div><!--{/if}-->
+					<p><!--{date('m-d H:i',$value[dateline],1)}--></p>
+					<!--{if $value['cfcount']}--><p><a href="cp.php?ac=friend&op=getcfriend&fuid=$value[cfriend]" id="a_cfriend_$key" onclick="ajaxmenu(event, this.id, 1)">你们有 $value[cfcount] 个共同好友</a></p><!--{/if}-->
+					<p style="margin-top:1em;">
+						<a href="cp.php?ac=friend&op=add&uid=$value[uid]" id="afr_$value[uid]" onclick="ajaxmenu(event, this.id, 1)" class="submit a">批准申请</a>
+						<a href="cp.php?ac=friend&op=ignore&uid=$value[uid]&confirm=1" id="afi_$value[uid]" onclick="ajaxmenu(event, this.id, 1)" class="button a">忽略</a>
+					</p>
+					</div>
+				</td>
+			</tr>
+			<tbody id="cf_$value[uid]"></tbody>
+		</table>
+	</td>
+</tr>
+</tbody>
+<!--{/loop}-->
+</table>
+</div>
+<div class="page">$multi</div>
+<!--{else}-->
+<div class="c_form">
+	没有新的好友请求。
+</div>
+<!--{/if}-->
+
+<!--{elseif $op=='getcfriend'}-->
+
+
+<h1>共同好友</h1>
+<a href="javascript:hideMenu();" class="float_del" title="关闭">关闭</a>
+<div class="popupmenu_inner" id="cfriend">
+	<div class="h_status">最多显示15位共同的好友</div>
+	<ul class="avatar_list">
+		<!--{loop $list $key $value}-->
+		<li>
+			<div class="avatar48"><a href="space.php?uid=$value[uid]"><!--{avatar($value[uid],small)}--></a></div>
+			<p><a href="space.php?uid=$value[uid]" title="{$_SN[$value[uid]]}">{$_SN[$value[uid]]}</a></p>
+		</li>
+		<!--{/loop}-->
+	</ul>
+</div>
+
+<!--{elseif $op=='add'}-->
+
+<h1>加好友</h1>
+<a href="javascript:hideMenu();" title="关闭" class="float_del">关闭</a>
+<div class="popupmenu_inner" id="__addform_{$tospace[uid]}">
+<form method="post" id="addform_{$tospace[uid]}" name="addform_{$tospace[uid]}" action="cp.php?ac=friend&op=add&uid=$tospace[uid]">
+	<table cellspacing="0" cellpadding="3">
+		<tr>
+			<th width="52"><a href="space.php?uid=$tospace[uid]"><!--{avatar($tospace[uid],small)}--></th>
+			<td>加 <strong>{$_SN[$tospace[uid]]}</strong> 为好友，附言：<br />
+				<input type="text" name="note" value="" size="20" class="t_input" style="width: 300px;"  onkeydown="ctrlEnter(event, 'addsubmit_btn', 1);" />
+				<p class="gray">(附言为可选，{$_SN[$tospace[uid]]} 会看到这条附言，最多50个字符)</p>
+			</td>
+		</tr>
+		<tr>
+			<th>&nbsp;</th>
+			<td>
+				分组: <select name="gid">
+				<!--{loop $groups $key $value}-->
+				<option value="$key">$value</option>
+				<!--{/loop}-->
+				</select>
+				<input type="hidden" name="refer" value="$_SGLOBAL[refer]" />
+				<input type="hidden" name="addsubmit" value="true" />
+				<!--{if $_SGLOBAL[inajax]}-->
+				<input type="button" name="addsubmit_btn" id="addsubmit_btn" value="确定" class="submit" onclick="ajaxpost('addform_{$tospace[uid]}','',2000)" />
+				<!--{else}-->
+				<input type="submit" name="addsubmit_btn" id="addsubmit_btn" value="确定" class="submit" />
+				<!--{/if}-->
+			</td>
+	</table>
+	
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+</form>
+</div>
+
+
+<!--{elseif $op=='add2'}-->
+
+<h1>批准请求</h1>
+<a href="javascript:hideMenu();" title="关闭" class="float_del">关闭</a>
+<div class="popupmenu_inner" id="__addratifyform_{$tospace[uid]}">
+<form method="post" id="addratifyform_{$tospace[uid]}" name="addratifyform_{$tospace[uid]}" action="cp.php?ac=friend&op=add&uid=$tospace[uid]">
+	<table cellspacing="0" cellpadding="3">
+		<tr>
+			<th width="52"><a href="space.php?uid=$tospace[uid]"><!--{avatar($tospace[uid],small)}--></th>
+			<td>
+			<div class="l_status">批准 <strong>{$_SN[$tospace[uid]]}</strong> 的好友请求，并分组：</div>
+				<table cellspacing="2" cellpadding="2"><tr>
+				<!--{eval $i=0;}-->
+				<!--{loop $groups $key $value}-->
+				<td><input type="radio" name="gid" id="group_$key" value="$key"$groupselect[$key]> <label for="group_$key">$value</label></td>
+				<!--{if $i%2==1}--></tr><tr><!--{/if}-->
+				<!--{eval $i++;}-->
+				<!--{/loop}-->
+				</tr></table>
+				
+				<p>
+				<input type="hidden" name="refer" value="$_SGLOBAL[refer]" />
+				<!--{if $_SGLOBAL[inajax]}-->
+				<input type="hidden" name="add2submit" value="true" />
+				<input type="button" name="add2submit_btn" value="批准" class="submit" onclick="ajaxpost('addratifyform_{$tospace[uid]}', 'myfriend_post', 2000)" />
+				<!--{else}-->
+				<input type="submit" name="add2submit" value="批准" class="submit" />
+				<!--{/if}-->
+				</p>
+			</td>
+	</table>
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+</form>
+</div>
+
+<!--{/if}-->
+<!--{template footer}-->

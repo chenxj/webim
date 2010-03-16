@@ -1,0 +1,98 @@
+<!--{template admin/tpl/header}-->
+
+<div class="mainarea">
+<div class="maininner">
+	<form method="post" action="admincp.php?ac=app">
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+	<div class="bdrcontent">
+	<p>以下列出的是UCenter中已经安装的所有产品应用。</p>
+	<p>当您安装了新的基于UCenter的应用后，需要在本页面进行配置修改，并提交更新后，新安装的应用才能在UCenter Home中显示。</p>
+	<p>如果您发现某个应用的信息有误，请到UCenter的管理平台进行应用参数的修正。</p>
+	</div>
+	<br>
+	
+	<!--{loop $applist $data}-->
+	<!--{eval $template = stripslashes(htmlspecialchars($relatedtag['data'][$data[appid]]['template'] != '' ? $relatedtag['data'][$data[appid]]['template'] : $data['tagtemplates']['template']));}-->
+	<!--{eval $name = stripslashes(htmlspecialchars($relatedtag['data'][$data[appid]]['name'] != '' ? $relatedtag['data'][$data[appid]]['name'] : $data['name']));}-->
+	<!--{eval $openarr = !isset($relatedtag['data'][$data[appid]][open]) || intval($relatedtag['data'][$data[appid]][open]) > 0 ? array('', 'checked') : array('checked', '');}-->
+	<div class="bdrcontent">
+	<div class="title">
+		<h3>$data[name]</h3>
+	</div>
+	<table cellspacing="0" cellpadding="0" class="formtable">
+	<tr>
+		<th style="width: 200px;">显示名称:</th>
+		<td><input type="text" name="relatedtag[data][{$data[appid]}][name]" value="$name"></td>
+	</tr>
+	<tr>
+		<th>访问地址:</th>
+		<td>
+		<a href="$data[url]" target="_blank">$data[url]</a>
+		<input type="hidden" name="relatedtag[data][{$data[appid]}][url]" value="$data[url]" size="50"></td>
+	</tr>
+	<tr>
+		<th>导航中是否显示:</th>
+		<td>
+		<!--{if $data['appid'] == UC_APPID}-->
+		<input type="hidden" name="relatedtag[data][{$data[appid]}][open]" value="0">当前产品，不需要选择
+		<!--{else}-->
+		<input type="radio" name="relatedtag[data][{$data[appid]}][open]" value="1" $openarr[1]>是
+		<input type="radio" name="relatedtag[data][{$data[appid]}][open]" value="0" $openarr[0]>否
+		<!--{/if}-->
+		</td>
+	</tr>
+	<tr>
+		<th>标签相关显示条数:</th>
+		<td><input type="text" size="4" name="relatedtag[limit][{$data[appid]}]" value="<!--{eval echo intval($relatedtag['limit'][$data[appid]]);}-->" />
+			设置为 0，则不显示本产品的标签相关。</td>
+	</tr>
+	<tr>
+		<th>标签相关单条模板:<br>
+		<!--{if is_array($data[tagtemplates][fields])}-->
+		<!--{loop $data[tagtemplates][fields] $field $memo}-->
+			<a onclick="insertunit('{{$field}}', 'jstemplate_$data[appid]')" href="javascript:;">{{$field}}</a> 代表 $memo<br />
+		<!--{/loop}-->
+		<!--{/if}-->
+		</th>
+		<td><img src="image/zoomin.gif" onmouseover="this.style.cursor='pointer'" onclick="zoomTextarea('jstemplate_$data[appid]', 1)">
+			<img src="image/zoomout.gif" onmouseover="this.style.cursor='pointer'" onclick="zoomTextarea('jstemplate_$data[appid]', 0)"><br />
+			<textarea cols="100" rows="5" id="jstemplate_$data[appid]" name="relatedtag[data][{$data[appid]}][template]" style="width: 95%;">$template</textarea>
+			<input type="hidden" name="relatedtag[data][{$data[appid]}][type]" value="$data[type]">
+		</td>
+	</tr>
+	</table>
+	</div>
+	<div class="footactions">
+	<input type="submit" name="appsubmit" value="提交更新" class="submit">
+	</div>
+
+	<br>
+	<!--{/loop}-->
+
+	</form>
+</div>
+</div>
+
+<div class="side">
+	<!--{template admin/tpl/side}-->
+</div>
+
+<script type="text/javascript">
+function insertunit(text, obj) {
+	if(!obj) {
+		obj = 'jstemplate';
+	}
+	$(obj).focus();
+	if(!isUndefined($(obj).selectionStart)) {
+		var opn = $(obj).selectionStart + 0;
+		$(obj).value = $(obj).value.substr(0, $(obj).selectionStart) + text + $(obj).value.substr($(obj).selectionEnd);
+	} else if(document.selection && document.selection.createRange) {
+		var sel = document.selection.createRange();
+		sel.text = text.replace(/\r?\n/g, '\r\n');
+		sel.moveStart('character', -strlen(text));
+	} else {
+		$(obj).value += text;
+	}
+}
+</script>
+<!--{template admin/tpl/footer}-->

@@ -1,0 +1,400 @@
+<!--{template admin/tpl/header}-->
+
+<div class="mainarea">
+<div class="maininner">
+
+	<div class="tabs_header">
+		<ul class="tabs">
+			<li$actives[enabled]><a href="admincp.php?ac=magic&view=enabled"><span>已启用道具</span></a></li>
+			<li$actives[disabled]><a href="admincp.php?ac=magic&view=disabled"><span>已禁用道具</span></a></li>
+		</ul>
+	</div>
+
+<!--{if "edit" == $_GET['op']}-->
+	
+	<form method="post" action="admincp.php?ac=magic&op=$_GET[op]&mid=$_GET[mid]&view=$_GET[view]">
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+
+	<div class="bdrcontent">
+	
+		<table cellspacing="0" cellpadding="0" class="formtable">
+			<tr>
+				<th style="width:15em;">名称</th>
+				<td>$thevalue[name]</td>
+			</tr>
+			<tr>
+				<th style="width:15em;">道具说明</th>
+				<td>
+					<textarea name="description" cols="80" rows="2">$thevalue[description]</textarea>					
+				</td>
+			</tr>
+			<tr>
+				<th style="width:15em;">道具单价</th>
+				<td>
+					<input type="text" name="charge" value="$thevalue[charge]" />
+					购买时单个需要花费的积分值，需小于65535
+				</td>
+			</tr>
+			<tr>
+				<th style="width:15em;">经验成长</th>
+				<td>
+					<input type="text" name="experience" value="$thevalue[experience]" />
+					购买单个可以增长的经验值，需小于65535
+				</td>
+			</tr>
+			<tr>
+				<th style="width:15em;">补给周期</th>
+				<td>
+					<select name="provideperoid">
+						<option value="0"<!--{if $thevalue[provideperoid]==0}--> selected<!--{/if}-->>总是可以</option>
+						<option value="3600"<!--{if $thevalue[provideperoid]==3600}--> selected<!--{/if}-->>间隔1小时</option>
+						<option value="86400"<!--{if $thevalue[provideperoid]==86400}--> selected<!--{/if}-->>间隔24小时</option>
+						<option value="604800"<!--{if $thevalue[provideperoid]==604800}--> selected<!--{/if}-->>间隔7天</option>
+					</select>
+					若道具商店中此道具已售光，在补给周期内自动补给一次
+				</td>
+			</tr>
+			<tr>
+				<th style="width:15em;">补给数目</th>
+				<td>
+					<input type="text" name="providecount" value="$thevalue[providecount]" maxlength="6" />
+					若道具商店中此道具已售光，自动补给一次的数目，需小于65535
+				</td>
+			</tr>
+			<tr>
+				<th style="width:15em;">使用周期</th>
+				<td>
+					<select name="useperoid">
+						<option value="0"<!--{if $thevalue[useperoid]==0}--> selected<!--{/if}-->>总是可以</option>
+						<option value="3600"<!--{if $thevalue[useperoid]==3600}--> selected<!--{/if}-->>间隔1小时</option>
+						<option value="86400"<!--{if $thevalue[useperoid]==86400}--> selected<!--{/if}-->>间隔24小时</option>
+						<option value="604800"<!--{if $thevalue[useperoid]==604800}--> selected<!--{/if}-->>间隔7天</option>
+					</select>
+					设定用户使用此道具的使用周期
+				</td>
+			</tr>
+			<tr>
+				<th style="width:15em;">使用数目</th>
+				<td>
+					<input type="text" name="usecount" value="$thevalue[usecount]" maxlength="6" />
+					设定用户在使用周期内最多能使用此道具的个数，需小于65535
+				</td>
+			</tr>
+			<tr>
+				<th style="width:15em;">禁购用户组</th>
+				<td>
+					选中的用户组不能在道具商店购买此道具（但可以接受赠与）<br />
+					<!--{loop $usergroups $groups}-->
+					<!--{loop $groups $gid $value}-->
+					<input id="ckgid_$gid" type="checkbox" name="forbiddengid[]" value="$gid"<!--{if in_array($gid, $thevalue[forbiddengid])}-->checked<!--{/if}--> />
+					<label for="ckgid_$gid">$value[grouptitle]</label>
+					<!--{/loop}-->
+					<br />
+					<!--{/loop}-->
+				</td>
+			</tr>
+			<tr>
+				<th style="width:15em;">库存数目</th>
+				<td>
+					<input type="text" name="storage" value="$thevalue[storage]" size="5" maxlength="5" />
+				</td>
+			</tr>
+			<tr>
+				<th style="width:15em;">显示顺序</th>
+				<td>
+					<input type="text" name="displayorder" value="$thevalue[displayorder]" size="5" maxlength="5" />
+				</td>
+			</tr>
+			<tr>
+				<th style="width:15em;">是否禁用</th>
+				<td>
+					<input type="checkbox" id="magicclose" name="close" value="1"<!--{if $thevalue[close]}--> checked<!--{/if}--> />
+					<label for="magicclose">禁用后页面上将不显示此道具</label>
+				</td>
+			</tr>
+			<!--{if $_GET[mid] == 'invisible'}-->
+			<tr>
+				<th style="width:15em;">自定义效果</th>
+				<td>
+					请修改道具描述和道具效果一致<br />
+					<table>
+						<tr>
+							<th width="100">隐身时间</th>
+							<td>
+								<select name="custom[effectivetime]">
+									<option value="">默认</option>
+									<option value="86400"<!--{if $thevalue[custom][effectivetime]==86400}--> selected<!--{/if}-->>24小时</option>
+									<option value="259200"<!--{if $thevalue[custom][effectivetime]==259200}--> selected<!--{/if}-->>3天</option>
+									<option value="432000"<!--{if $thevalue[custom][effectivetime]==432000}--> selected<!--{/if}-->>5天</option>
+									<option value="604800"<!--{if $thevalue[custom][effectivetime]==604800}--> selected<!--{/if}-->>7天</option>
+								</select>
+								默认为 24 小时
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<!--{elseif $_GET[mid] == 'superstar'}-->
+			<tr>
+				<th style="width:15em;">自定义效果</th>
+				<td>
+					请修改道具描述和道具效果一致<br />
+					<table>
+						<tr>
+							<th width="100">持续时间</th>
+							<td>
+								<select name="custom[effectivetime]">
+									<option value="">默认</option>
+									<option value="86400"<!--{if $thevalue[custom][effectivetime]==86400}--> selected<!--{/if}-->>24小时</option>
+									<option value="259200"<!--{if $thevalue[custom][effectivetime]==259200}--> selected<!--{/if}-->>3天</option>
+									<option value="432000"<!--{if $thevalue[custom][effectivetime]==432000}--> selected<!--{/if}-->>5天</option>
+									<option value="604800"<!--{if $thevalue[custom][effectivetime]==604800}--> selected<!--{/if}-->>7天</option>
+								</select>							
+							</td>
+							默认为 7天
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<!--{elseif $_GET[mid] == 'friendnum'}-->
+			<tr>
+				<th style="width:15em;">自定义效果</th>
+				<td>
+					请修改道具描述和道具效果一致<br />
+					<table>
+						<tr>
+							<th width="100">增加好友数</th>
+							<td>
+								<select name="custom[addnum]">
+									<option value="">默认</option>
+									<option value="5"<!--{if $thevalue[custom][addnum]==5}--> selected<!--{/if}-->>5</option>
+									<option value="10"<!--{if $thevalue[custom][addnum]==10}--> selected<!--{/if}-->>10</option>
+									<option value="20"<!--{if $thevalue[custom][addnum]==20}--> selected<!--{/if}-->>20</option>
+									<option value="50"<!--{if $thevalue[custom][addnum]==50}--> selected<!--{/if}-->>50</option>
+									<option value="100"<!--{if $thevalue[custom][addnum]==100}--> selected<!--{/if}-->>100</option>
+								</select>
+								默认为 10
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<!--{elseif $_GET[mid] == 'attachsize'}-->
+			<tr>
+				<th style="width:15em;">自定义效果</th>
+				<td>
+					请修改道具描述和道具效果一致<br />
+					<table>
+						<tr>
+							<th width="100">增加容量</th>
+							<td>
+								<select name="custom[addsize]">
+									<option value="">默认</option>
+									<option value="5"<!--{if $thevalue[custom][addsize]==5}--> selected<!--{/if}-->>5M</option>
+									<option value="10"<!--{if $thevalue[custom][addsize]==10}--> selected<!--{/if}-->>10M</option>
+									<option value="20"<!--{if $thevalue[custom][addsize]==20}--> selected<!--{/if}-->>20M</option>
+									<option value="50"<!--{if $thevalue[custom][addsize]==50}--> selected<!--{/if}-->>50M</option>
+									<option value="100"<!--{if $thevalue[custom][addsize]==100}--> selected<!--{/if}-->>100M</option>
+								</select>
+								默认为 10M
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<!--{elseif $_GET[mid] == 'visit'}-->
+			<tr>
+				<th style="width:15em;">自定义效果</th>
+				<td>
+					请修改道具描述和道具效果一致<br />
+					<table>
+						<tr>
+							<th width="100">访问好友数</th>
+							<td>
+								<select name="custom[maxvisit]">
+									<option value="">默认</option>
+									<option value="5"<!--{if $thevalue[custom][maxvisit]==5}--> selected<!--{/if}-->>5</option>
+									<option value="10"<!--{if $thevalue[custom][maxvisit]==10}--> selected<!--{/if}-->>10</option>
+									<option value="20"<!--{if $thevalue[custom][maxvisit]==20}--> selected<!--{/if}-->>20</option>
+									<option value="50"<!--{if $thevalue[custom][maxvisit]==50}--> selected<!--{/if}-->>50</option>
+								</select>
+								默认为 10
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<!--{elseif $_GET[mid] == 'gift'}-->
+			<tr>
+				<th style="width:15em;">自定义效果</th>
+				<td>
+					请修改道具描述和道具效果一致<br />
+					<table>
+						<tr>
+							<th width="100">每份积分最大值</th>
+							<td>
+								<select name="custom[maxchunk]">
+									<option value="">默认</option>
+									<option value="5"<!--{if $thevalue[custom][maxchunk]==5}--> selected<!--{/if}-->>5</option>
+									<option value="10"<!--{if $thevalue[custom][maxchunk]==10}--> selected<!--{/if}-->>10</option>
+									<option value="20"<!--{if $thevalue[custom][maxchunk]==20}--> selected<!--{/if}-->>20</option>
+									<option value="50"<!--{if $thevalue[custom][maxchunk]==50}--> selected<!--{/if}-->>50</option>
+									<option value="100"<!--{if $thevalue[custom][maxchunk]==100}--> selected<!--{/if}-->>100</option>
+									<option value="999"<!--{if $thevalue[custom][maxchunk]=='999'}--> selected<!--{/if}-->>不限</option>
+								</select>
+								默认为 20
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<!--{elseif $_GET[mid] == 'viewmagic'}-->
+			<tr>
+				<th style="width:15em;">自定义效果</th>
+				<td>
+					请修改道具描述和道具效果一致<br />
+					<table>
+						<tr>
+							<th width="100">最多查看数</th>
+							<td>
+								<select name="custom[maxview]">
+									<option value="">默认</option>
+									<option value="5"<!--{if $thevalue[custom][maxview]==5}--> selected<!--{/if}-->>5</option>
+									<option value="10"<!--{if $thevalue[custom][maxview]==10}--> selected<!--{/if}-->>10</option>
+									<option value="20"<!--{if $thevalue[custom][maxview]==20}--> selected<!--{/if}-->>20</option>
+									<option value="50"<!--{if $thevalue[custom][maxview]==50}--> selected<!--{/if}-->>50</option>
+									<option value="999"<!--{if $thevalue[custom][maxview]=='999'}--> selected<!--{/if}-->>不限</option>
+								</select>
+								默认为 10
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<!--{elseif $_GET[mid] == 'viewvisitor'}-->
+			<tr>
+				<th style="width:15em;">自定义效果</th>
+				<td>
+					请修改道具描述和道具效果一致<br />
+					<table>
+						<tr>
+							<th width="100">最多查看数</th>
+							<td>
+								<select name="custom[maxview]">
+									<option value="">默认</option>
+									<option value="5"<!--{if $thevalue[custom][maxview]==5}--> selected<!--{/if}-->>5</option>
+									<option value="10"<!--{if $thevalue[custom][maxview]==10}--> selected<!--{/if}-->>10</option>
+									<option value="20"<!--{if $thevalue[custom][maxview]==20}--> selected<!--{/if}-->>20</option>
+									<option value="50"<!--{if $thevalue[custom][maxview]==50}--> selected<!--{/if}-->>50</option>
+								</select>
+								默认为 10
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<!--{elseif $_GET[mid] == 'detector'}-->
+			<tr>
+				<th style="width:15em;">自定义效果</th>
+				<td>
+					请修改道具描述和道具效果一致<br />
+					<table>
+						<tr>
+							<th width="100">最多探测数</th>
+							<td>
+								<select name="custom[maxdetect]">
+									<option value="">默认</option>
+									<option value="5"<!--{if $thevalue[custom][maxdetect]==5}--> selected<!--{/if}-->>5</option>
+									<option value="10"<!--{if $thevalue[custom][maxdetect]==10}--> selected<!--{/if}-->>10</option>
+									<option value="20"<!--{if $thevalue[custom][maxdetect]==20}--> selected<!--{/if}-->>20</option>
+									<option value="50"<!--{if $thevalue[custom][maxdetect]==50}--> selected<!--{/if}-->>50</option>
+								</select>
+								默认为 10
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<!--{elseif $_GET[mid] == 'call'}-->
+			<tr>
+				<th style="width:15em;">自定义效果</th>
+				<td>
+					请修改道具描述和道具效果一致<br />
+					<table>
+						<tr>
+							<th width="100">最多点名数</th>
+							<td>
+								<select name="custom[maxcall]">
+									<option value="">默认</option>
+									<option value="5"<!--{if $thevalue[custom][maxcall]==5}--> selected<!--{/if}-->>5</option>
+									<option value="10"<!--{if $thevalue[custom][maxcall]==10}--> selected<!--{/if}-->>10</option>
+									<option value="20"<!--{if $thevalue[custom][maxcall]==20}--> selected<!--{/if}-->>20</option>
+									<option value="50"<!--{if $thevalue[custom][maxcall]==50}--> selected<!--{/if}-->>50</option>
+								</select>
+								默认为 10
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<!--{/if}-->
+		</table>
+	</div>
+
+	<div class="footactions">
+		<input type="hidden" name="mid" value="$thevalue[mid]" />
+		<input type="submit" name="editsubmit" value="提交" class="submit">
+	</div>
+
+	</form>
+	
+<!--{else}-->
+	<form method="post" action="admincp.php?ac=magic&view=$_GET[view]">
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+
+	<div class="bdrcontent">
+		<table cellspacing="0" cellpadding="0" class="formtable">
+			<tr>
+				<th width="100">图标</th>
+				<th>道具</th>
+				<!--{if $_GET[view] != 'disabled'}-->
+				<th width="80">道具单价</th>
+				<th width="80">显示顺序</th>
+				<!--{/if}-->
+				<th width="80">操作</th>
+			</tr>
+			<!--{loop $list $key $value}-->
+			<tr>
+				<th><img src="image/magic/{$value[mid]}.gif" alt="$value[name]" /></th>
+				<td>
+					<b>$value[name]</b>
+					<p>$value[description]</p>				
+				</td>
+				<!--{if $_GET[view] != 'disabled'}-->
+				<td><input type="text" name="charge[$key]" value="$value[charge]" size="5" maxlength="5" /></td>
+				<td><input type="text" name="displayorder[$key]" value="$value[displayorder]" size="5" maxlength="5" /></td>
+				<!--{/if}-->
+				<td><a href="admincp.php?ac=magic&op=edit&mid=$key&view=$_GET[view]">编辑</a></td>
+			</tr>
+			<!--{/loop}-->
+		</table>
+	</div>
+
+	<!--{if $_GET[view] != 'disabled'}-->
+	<div class="footactions">
+		<input type="submit" name="ordersubmit" value="更新数据" class="submit">
+	</div>
+	<!--{/if}-->
+
+	</form>
+
+<!--{/if}-->
+
+</div>
+</div>
+
+<div class="side">
+	<!--{template admin/tpl/side}-->
+</div>
+
+<!--{template admin/tpl/footer}-->

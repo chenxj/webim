@@ -1,0 +1,54 @@
+<!--{eval $_TPL['titles'] = array('热闹');}-->
+<!--{template header}-->
+
+<h2 class="title"><img src="image/app/topic.gif" />热闹</h2>
+<div class="tabs_header">
+	<ul class="tabs">
+		<li$actives[new]><a href="space.php?do=topic&view=new"><span>最新参与</span></a></li>
+		<li$actives[hot]><a href="space.php?do=topic&view=hot"><span>最热参与</span></a></li>
+		<li$actives[me]><a href="space.php?do=topic&view=me"><span>我参与的热闹</span></a></li>
+		<!--{if checkperm('allowtopic')}-->
+		<li class="null"><a href="cp.php?ac=topic">添加新热闹</a></li>
+		<!--{/if}-->
+	</ul>
+	<!--{if $_SGLOBAL[refer]}-->
+	<div class="r_option">
+		<a  href="$_SGLOBAL[refer]">&laquo; 返回上一页</a>
+	</div>
+	<!--{/if}-->
+</div>
+
+<!--{if $list}-->
+<div class="event_list">
+<ol>
+<!--{loop $list $key $value}-->
+<li>
+	<div class="event_icon">
+		<a href="space.php?do=topic&topicid=$value[topicid]"><img src="$value[pic]"></a>
+	</div>
+	
+	<div class="hotspot">
+		<a href="space.php?do=topic&topicid=$value[topicid]">$value[joinnum]</a>
+	</div>
+	
+	<div class="event_content">
+		<h4 class="event_title">
+			<a href="space.php?do=topic&topicid=$value[topicid]">$value[subject]</a>
+		</h4>
+		<ul>
+			<li>$value[message] ...</li>
+			<li class="gray">发起作者: <a href="space.php?uid=$value[uid]">{$_SN[$value[uid]]}</a></li>
+			<li class="gray">发起时间: $value[dateline]</li>
+			<!--{if $value[endtime]}--><li class="gray">参与截止: $value[endtime]</li><!--{/if}-->
+			<li class="gray">最后参与: $value[lastpost]</li>
+		</ul>
+	</div>
+</li>
+<!--{/loop}-->
+</ol>
+</div>
+<!--{else}-->
+	<div class="c_form">目前还没有相关列表。</div>
+<!--{/if}-->
+
+<!--{template footer}-->

@@ -1,0 +1,57 @@
+<!--{eval $_TPL['titles'] = array($fieldtitle, '群组');}-->
+<!--{template header}-->
+
+<div class="searchbar floatright">
+<form method="get" action="space.php">
+	<input name="searchkey" value="" size="15" class="t_input" type="text">
+	<input name="searchsubmit" value="搜索群组" class="submit" type="submit">
+	<input type="hidden" name="searchmode" value="1" />
+	<input type="hidden" name="do" value="mtag" />
+	<input type="hidden" name="view" value="hot" />
+</form>
+</div>
+<h2 class="title"><img src="image/app/mtag.gif">群组</h2>
+
+<!--{if $space[self]}-->
+<div class="tabs_header">
+	<ul class="tabs">
+		<li><a href="space.php?uid=$space[uid]&do=thread"><span>群组话题</span></a></li>
+		<li><a href="space.php?do=mtag&view=me"><span>我参与的群组</span></a></li>
+		<li><a href="space.php?do=mtag&view=manage"><span>我管理的群组</span></a></li>
+		<li class="active"><a href="space.php?do=mtag&view=hot"><span>热门群组</span></a></li>
+		<li><a href="space.php?do=mtag&view=recommend"><span>推荐群组</span></a></li>
+		<li class="null"><a href="cp.php?ac=thread">发起新话题</a></li>
+		<li class="null"><a href="cp.php?ac=mtag">创建群组</a></li>
+	</ul>
+</div>
+<!--{/if}-->
+
+<div class="h_status">
+群组分类：
+<a href="space.php?do=mtag&view=hot"{$sub_actives[0]}>全部</a>
+<!--{loop $_SGLOBAL['profield'] $value}-->
+<span class="pipe">|</span><a href="space.php?do=mtag&id=$value[fieldid]"{$sub_actives[$value[fieldid]]}>$value[title]</a>
+<!--{/loop}-->
+</div>
+
+<div class="box">
+	<!--{if $list}-->
+	<ul class="thread_list">
+	<!--{loop $list $value}-->
+		<li>
+			<div class="threadimg60"><a href="space.php?do=mtag&tagid=$value[tagid]"><img src="$value[pic]" style="width:60px;"></a></div>
+			<a href="space.php?do=mtag&tagid=$value[tagid]">$value[tagname]</a><br />
+			已有 <span class="num">$value[membernum]</span> 人加入
+			<div class="gray">
+				话题: $value[threadnum], 回帖: $value[postnum]
+			</div>
+		</li>
+	<!--{/loop}-->
+	</ul>
+	<div class="page">$multi</div>
+	<!--{else}-->
+	<p>还没有群组。</p>
+	<!--{/if}-->
+</div>
+
+<!--{template footer}-->

@@ -1,0 +1,102 @@
+<!--{template admin/tpl/header}-->
+
+<div class="mainarea">
+<div class="maininner">
+
+	<form method="get" action="admincp.php">
+	<div class="block style4">
+		
+		<table cellspacing="3" cellpadding="3">
+		<tr><th>标签名*</th><td><input type="text" name="tagname" value="$_GET[tagname]"></td>
+			<th>是否锁定</th><td>
+			<select name="close">
+			<option value="">不限制</option>
+			<option value="1"<!--{if $_GET[close]==1}--> selected<!--{/if}-->>锁定</option>
+			</select>
+			</td>
+		</tr>
+		<tr><th>创建时间</th><td colspan="3">
+			<input type="text" name="dateline1" value="$_GET[dateline1]" size="10"> ~
+			<input type="text" name="dateline2" value="$_GET[dateline2]" size="10"> (YYYY-MM-DD)
+		</td></tr>
+		<tr><th>日志数</th><td colspan="3">
+			<input type="text" name="blognum1" value="$_GET[blognum1]" size="10"> ~
+			<input type="text" name="blognum2" value="$_GET[blognum2]" size="10">
+			</td>
+		</tr>
+	
+		<tr><th>结果排序</th>
+		<td colspan="3">
+		<select name="orderby">
+		<option value="">默认排序</option>
+		<option value="dateline"$orderby[dateline]>创建时间</option>
+		<option value="blognum"$orderby[blognum]>日志数</option>
+		</select>
+		<select name="ordersc">
+		<option value="desc"$ordersc[desc]>递减</option>
+		<option value="asc"$ordersc[asc]>递增</option>
+		</select>
+		<select name="perpage">
+		<option value="20"$perpages[20]>每页显示20个</option>
+		<option value="50"$perpages[50]>每页显示50个</option>
+		<option value="100"$perpages[100]>每页显示100个</option>
+		</select>
+		<input type="hidden" name="ac" value="tag">
+		<input type="submit" name="searchsubmit" value="搜索" class="submit">
+		</td>
+		</tr>
+		</table>
+	</div>
+	</form>
+
+<!--{if $list}-->
+
+	<form method="post" action="admincp.php?ac=tag">
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+	<div class="bdrcontent">
+	
+	<table cellspacing="0" cellpadding="0" class="formtable">
+	<tr>
+		<th>标签名</th>
+		<th width="80">日志数</th>
+		<th width="100">时间</th>
+	</tr>
+	<!--{loop $list $value}-->
+	<tr>
+		<td><input type="<!--{if $allowbatch}-->checkbox<!--{else}-->radio<!--{/if}-->" name="ids[]" value="$value[tagid]">
+		<a href="space.php?uid=$space[uid]&do=tag&id=$value[tagid]" target="_blank">$value[tagname]</a><!--{if $value[close]}-->(<a href="admincp.php?ac=tag&close=$value[close]">锁定</a>)<!--{/if}--></td>
+		<td>$value[blognum]</td>
+		<td><!--{date('Y-m-d', $value[dateline])}--></td>
+	</tr>
+	<!--{/loop}-->
+	</table>
+	</div>
+	
+	<div class="footactions">
+		<input type="hidden" name="mpurl" value="$mpurl">
+		<!--{if $allowbatch}-->
+		<input type="checkbox" id="chkall" name="chkall" onclick="checkAll(this.form, 'ids')">全选
+		<!--{/if}-->
+		<input type="radio" name="optype" value="delete"> 删除
+		<input type="radio" name="optype" value="merge"> 合并到新标签:<input type="text" name="newtagname" value="" size="5">
+		<input type="radio" name="optype" value="close"> 锁定
+		<input type="radio" name="optype" value="open"> 开放
+		<input type="submit" name="opsubmit" value="执行操作" onclick="return confirm('本操作不可恢复，确认继续？');" class="submit">
+		
+		<div class="pages">$multi</div>
+	</div>
+	
+	</form>
+<!--{else}-->
+	<div class="bdrcontent">
+		<p>指定条件下还没有数据</p>
+	</div>
+<!--{/if}-->
+</div>
+</div>
+
+<div class="side">
+	<!--{template admin/tpl/side}-->
+</div>
+
+<!--{template admin/tpl/footer}-->

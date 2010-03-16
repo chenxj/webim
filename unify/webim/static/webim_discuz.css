@@ -1,0 +1,994 @@
+/*!
+ * Webim UI v2.1.0pre
+ * http://www.nextim.cn/
+ *
+ * Copyright (c) 2009 Hidden
+ *
+ * Date:   Mon Mar 15 21:25:05 2010 +0800
+ * Revision: 
+ */
+
+body {
+        margin: 0;
+}
+
+/* some sites removes and neutralizes the inconsistent default styling of HTML elements. */
+.webim, .webim *{ 
+        margin:0;
+        padding:0;
+}
+.webim img{
+        border:0;
+}
+.webim{
+        font-size: 10px;
+        line-height: 1.5;
+        font-family: "lucida grande", tahoma, helvetica, arial, "bitstream vera sans", sans-serif;
+        text-align: left;
+}
+
+.webim a{
+        text-decoration: none;
+}
+.webim a:hover{
+        text-decoration: underline;
+}
+.webim h4{
+        font-size: 1em;
+}
+.webim h5{
+        font-size: .83em;
+}
+.webim-gray{
+        /*
+	opacity:.5;
+	filter:alpha(opacity=50);
+	zoom:1;
+        */
+        color: gray;
+}
+
+.webim-icon{ 
+        display: block; 
+        overflow: hidden; 
+        text-indent: -99999px; 
+        background-repeat: no-repeat; 
+        height:16px;
+        width:16px;
+}
+a .webim-icon, a .ui-icon{
+		cursor: pointer;
+}
+
+/*
+* jQuery UI CSS Framework
+* Copyright (c) 2009 AUTHORS.txt (http://jqueryui.com/about)
+* Dual licensed under the MIT (MIT-LICENSE.txt) and GPL (GPL-LICENSE.txt) licenses.
+*/
+
+/* Layout helpers
+----------------------------------*/
+.ui-helper-hidden { display: none; }
+.ui-helper-hidden-accessible { position: absolute; left: -99999999px; }
+.ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }
+.ui-helper-clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.ui-helper-clearfix { display: inline-block; }
+/* required comment for clearfix to work in Opera \*/
+* html .ui-helper-clearfix { height:1%; }
+.ui-helper-clearfix { display:block; }
+/* end clearfix */
+.ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }
+
+
+/* Interaction Cues
+----------------------------------*/
+.ui-state-disabled { cursor: default !important; }
+
+
+/* Icons
+----------------------------------*/
+
+/* states and images */
+.ui-icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; }
+
+
+/* Misc visuals
+----------------------------------*/
+
+/* Overlays */
+.ui-widget-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }.webim-icon{
+	background-image:url(images/icons/icon16.gif);
+}
+.webim-icon-home{
+	background-position:0 0;
+
+ }
+ .webim-icon-buddy{
+	 background-position:-16px 0;
+ }
+ .webim-icon-notification{
+	 background-position:-32px 0;
+
+ }
+ .webim-icon-setting{
+	 background-position:-48px 0;
+ }
+ .webim-icon-chat{
+	 background-position:0 -16px;
+
+ }
+ .webim-icon-clear{
+	 background-position:-16px -16px;
+
+ }
+ .webim-icon-emot{
+	 background-position:-32px -16px;
+
+ }
+ .webim-icon-unblock{
+	 background-position:0 -32px;
+
+ }
+ .webim-icon-block{
+	 background-position:-16px -32px;
+
+ }
+ .webim-icon-hotpost{
+	 background-image:url(images/icons/hotpost.jpg);
+ }
+/*theme extend*/
+
+.ui-widget{
+        font-size: 1.2em !important;
+}
+.ui-toolbar{ 
+	opacity:0.75;
+	filter:alpha(opacity=75);
+	/*
+        border: 1px solid #b5b5b5;
+        background:#eee url(images/bar_bg.gif) repeat-x scroll left top; color: #333; 
+	*/
+}
+
+.webim-layout .webim-window-tab-wrap .ui-state-default{
+	background: none;
+}
+.ui-widget-subheader { 
+        border: 1px solid #ccc; 
+        background:#eee; color: gray; 
+}
+/*
+ * layout
+ */
+
+/*
+ * ie z-index bgiframe http://hi.baidu.com/pcbbt/blog/item/47405e2259148df9d7cae25c.html
+ */
+.webim-bgiframe{
+	position:absolute;
+	width: 100%;
+	height: 100%;
+	z-index:-1;
+	opacity:0;
+	filter:alpha(opacity=0);
+}
+
+.webim-layout{
+        position: fixed;
+        bottom: 0;
+        right: 1.5em;
+        z-index: 50000;
+        left: 1.5em;
+}
+.webim-layout-minimize{
+	width:auto;
+        left: auto;
+}
+.webim-layout .webim-bgiframe{
+	height: 2.7em;
+	top: -1px;
+	left: -1px;
+	width: 100%;
+}
+.webim-layout-minimize .webim-layout-r{
+	float:left;
+}
+.webim-layout-minimize .webim-shortcut{
+	float:left;
+}
+
+/*ie6*/
+* html .webim-layout .webim-bgiframe{
+	width: expression(this.parentNode.offsetWidth+'px');
+}
+.webim-layout-bg{
+	position:absolute;
+	top: -1px;
+	left: -1px;
+	width: 100%;
+	height: 2.7em;
+	z-index:-1;
+        border-bottom-width:0;
+}
+* html .webim-layout-bg{
+	width: expression(this.parentNode.offsetWidth+'px');
+}
+
+/*
+ * 
+ */
+.webim-shortcut{
+        float:left;
+        position:relative;
+}
+.webim-layout-r{
+		float: right;
+}
+.webim-apps{
+        float:left;
+        position:relative;
+}
+
+.webim-panels{
+        float:left;
+}
+
+/*
+ * window
+ */
+.webim-layout .webim-window{
+        float:left;
+}
+.webim-layout .webim-window .webim-bgiframe{
+	top: 0px;
+	left: 0px;
+	width:100%;
+	height: 100%;
+}
+/*ie6*/
+* html .webim-layout .webim-window .webim-bgiframe{
+	height: expression(this.parentNode.offsetHeight+'px');
+}
+
+.webim-layout .webim-window-tab {
+        z-index: 6;
+        float:left;
+        cursor: pointer;
+        height: 2.2em;
+        display: block;
+        position: relative;
+        border-width: 0;
+        padding-left:1px;
+        text-decoration:none;
+        border-left-width: 1px;
+} 
+.webim-layout .webim-window-tab-wrap{
+        float: left;
+}
+.webim-layout .webim-window-tab .webim-icon{
+        float: left;
+        display:inline;
+        margin: .4em .5em .2em;
+        *margin: .3em .5em .3em;
+}
+.webim-layout .webim-window-tab h4{
+        float: left;
+        font-weight: normal;
+        margin: .3em 2em .3em .3em;
+        display:inline;
+}
+.webim-layout .webim-window-tab .webim-window-close{
+		right:.3em;
+		top: .4em;
+		position:absolute;
+}
+.webim-layout .webim-window-window {
+        position: absolute;
+        bottom: 2.20em;
+        z-index: 5;
+        right: 0;
+        width: 18em;
+}
+
+.webim-layout .webim-window-content {
+        border-top-width: 0;
+}
+
+.webim-layout .webim-window-header {
+        cursor: pointer;
+        text-align: center;
+        padding: .2em .5em;
+}
+
+.webim-layout .webim-window-actions{
+        float: right;
+}
+.webim-layout .webim-window-actions a{
+        float:left;
+        margin: 0 .1em;
+}
+.webim-layout .webim-window-header h4{
+        margin: 0;
+        font-weight:normal;
+        background:url(about:blank);/*events http://ued.koubei.com/?p=394*/
+}
+/*window state */
+.webim-layout .webim-window-minimize .webim-window-window{
+        /*visibility: hidden;*/
+        display: none;
+}
+.webim-layout .webim-shortcut .webim-window-tab{
+        border-left-width:0;
+        border-right-width:1px;
+}
+.webim-layout .webim-shortcut .webim-window-window{
+        right:auto;
+        left: 0;
+        width: 10em;
+}
+.webim-layout .webim-window-normal .webim-window-tab, .webim-layout .webim-window-maximize .webim-window-tab{
+        margin-top: -1px;
+        padding-left:0;
+        border-width: 1px;
+        border-top-width:0;
+}
+.webim-layout .webim-window-normal .webim-window-tab-inner, .webim-layout .webim-window-maximize .webim-window-tab-inner{
+        border-top:1px solid #eee;
+}
+.webim-layout .webim-apps .webim-window-window {
+        width: 20em;
+}
+
+
+.webim-layout .webim-buddy-window .webim-window-tab{
+        width: 10em;
+}
+.webim-layout .webim-buddy-window .webim-window-tab h4{
+		margin-right: 0;
+}
+
+.webim-layout  .webim-window-tab-count {
+        font-size: 10px;
+        font-weight: bold;
+        height: 17px;
+        width: 22px;
+        padding-top: 2px;
+        position: absolute;
+        right: 0px;
+        top: -16px;
+        text-align: center;
+        overflow: hidden;
+        line-height: 1.2;
+        display:none;
+        color:#fff;
+        background: url(images/count_bg.gif) no-repeat;
+}
+
+.webim-layout  .webim-window-tab-tip {
+        background: transparent url(images/dark_pointer.gif) no-repeat scroll right bottom;
+        bottom: 2.1em;/*< 2.2 in fiefox 2*/
+        display: none;
+        padding-bottom: .34em;
+        position: absolute;
+        right: 1.2em;
+        z-index: 3;
+}
+
+.webim-layout .webim-window-tab-tip strong {
+        background: #282828;
+        color: #FFFFFF;
+        display: block;
+        font-weight: normal;
+        margin: 0 -.5em 0 0;
+        padding: .3em .8em;
+        text-align: center;
+        white-space: nowrap;
+        float: left;
+        position: relative;
+}
+.webim-layout .webim-window-tab-wrap .ui-state-hover .webim-window-tab-tip {
+		display: block;
+}
+.webim-layout .webim-window-tab-wrap .ui-state-active .webim-window-tab-tip {
+		display: none;
+}
+.webim-layout .webim-shortcut .webim-window-tab-tip{
+		background-position: left bottom;
+		right: auto;
+		left: .8em;
+}
+.webim-layout .webim-shortcut .webim-window-tab-tip strong{
+		margin: 0 0 0 -.5em;
+}
+/*window end*/
+/**/
+.webim-layout .webim-shortcut-item .ui-state-hover{
+		border-width: 0;
+}
+/*panels*/
+
+.webim-layout .webim-panels .webim-window{
+        position: relative;
+}
+
+/*ie6: need clear css expression when remove the window.*/
+* html .webim-layout .webim-panels .webim-window .webim-bgiframe{
+	height: 27em;
+}
+.webim-layout .webim-panels-tab-wrap{
+        float:left;
+}
+.webim-layout .webim-panels-tab{
+        float:left;
+}
+.webim-layout .webim-panels-prev, .webim-layout .webim-panels-next{
+        display: none;
+}
+.webim-layout .webim-panels-prev .ui-icon, .webim-layout .webim-panels-next .ui-icon{
+        float:left;
+        margin: .4em 0 .2em;
+}
+.webim-layout .webim-panels-next span{
+        float:left;
+        font-weight: normal;
+        margin: .4em .3em .2em 0;
+}
+.webim-layout .webim-panels-prev span{
+        float:left;
+        font-weight: normal;
+        margin: .4em -.3em .2em .2em;
+}
+.webim-layout .webim-panels-next .ui-icon{
+        width: 13px;
+}
+
+/* collapse expand */
+
+.webim-layout .webim-collapse .ui-icon, .webim-layout .webim-expand .ui-icon{
+        margin-top: .4em;
+}
+.webim-layout .webim-expand-wrap{
+        display: none;
+}
+.webim-layout-minimize .webim-expand-wrap{
+        display: block;
+}
+.webim-layout-minimize .webim-collapse-wrap{
+        display: none;
+}
+/*****ie 6 *********/
+*  html{
+	background:url(blank) fixed; /*To prevent the jitter.*/
+}
+* html  .webim-layout{
+	position: absolute; 
+	bottom: auto;
+	right: 1.5em;
+    left: 1.5em;/*ie6 1px bug. http://www.pmob.co.uk/temp/onepxgap.htm */
+	top:expression(eval(document.compatMode &&document.compatMode=='CSS1Compat') ? documentElement.scrollTop+(documentElement.clientHeight-this.clientHeight) : document.body.scrollTop + (document.body.clientHeight-this.clientHeight));
+}
+* html  .webim-layout .webim-apps .webim-window-window {
+}
+* html  .webim-layout-minimize{
+        left: auto;
+}
+* html  .webim-layout-minimize .webim-ui{
+	display:inline;
+}
+* html  .webim-layout-minimize .webim-layout-r{
+	float: left;
+}
+* html .webim-layout-minimize .webim-shortcut{
+	float:auto;
+	width:auto;
+	left:auto;
+}
+/* end */
+.webim-state-stop{
+        left:auto;
+        right:0;
+}
+.webim-state-stop .webim-apps{
+        right:0;
+}
+.webim-state-stop .webim-pannels{
+}
+
+/*
+ * widget setting
+ */
+#webim-setting{
+        padding: 1em 0;
+        width:20em;
+
+}
+#webim-setting ul{
+	list-style: none;
+}
+#webim-setting ul li{
+        margin: .5em 1em;
+}
+#webim-setting ul li input{
+        vertical-align: middle;
+}
+
+#webim-setting ul li label{
+        padding-left: .2em;
+}
+.webim-setting-offline{
+  float:right;
+  position:absolute;
+  bottom:.5em;
+  left:16em;
+}
+.webim-setting-online{
+  auto:left;
+  float:right;
+  position:absolute;
+  bottom:.5em;
+  left:16em;
+}
+#webim-buddy{
+        padding: .3em 0;
+
+}
+#webim-buddy .webim-buddy-search{
+        padding: 0em 1.6em 0em 0em;
+        margin: .3em .5em .5em;
+        display: none;
+        
+}
+#webim-buddy .webim-buddy-search input{
+        border: none;
+        background: none;
+	display: block;
+	width:95%;
+        padding: .2em;
+	/*
+	*/
+}
+#webim-buddy .webim-buddy-search em{
+        float: right;
+	display: inline;
+        margin: .1em -1.5em 0 0;
+}
+#webim-buddy .webim-buddy-online{
+        padding: 1em;
+        text-align: center;
+        display: none;
+}
+
+#webim-buddy .webim-buddy-online a{
+        padding: 1em 2em;
+}
+#webim-buddy .webim-buddy-content{
+        padding: .2em .5em 0;
+        position:relative;
+}
+/*fuck ie6  why ?*/
+* html  #webim-buddy .webim-buddy-content{
+        position: fixed;
+}
+
+#webim-buddy.webim-buddy-scroll .webim-buddy-content{
+        height: 25em;
+        overflow-y: auto;
+}
+#webim-buddy.webim-buddy-scroll .webim-buddy-search{
+        display: block;
+}
+
+#webim-buddy .webim-buddy-offline{
+        display: none;
+	float: right;
+	/*
+        position: absolute;
+        top: .3em;
+        right: .5em;
+	*/
+}
+#webim-buddy .webim-buddy-empty{
+        display: none;
+        padding: 0 0 1em;
+}
+
+#webim-buddy .webim-buddy-offline a{
+}
+#webim-buddy ul{
+	list-style: none;
+}
+#webim-buddy ul h4{
+        background:none;
+        font-weight: normal;
+        border-width: 0;
+        border-bottom-width: 1px;
+        padding: .2em .5em 0;
+}
+#webim-buddy ul li{
+}
+#webim-buddy ul li a{
+        display:block;
+        margin-left:3em;
+        padding: .3em 0;
+}
+#webim-buddy ul li a img{
+        display:block;
+        float:left;
+        margin-left: -2.5em;
+}
+/*fuck ie6  why ?*/
+* html  #webim-buddy ul li a img{
+        position: fixed;
+}
+#webim-buddy ul li a strong{
+        display: block;
+        font-weight: normal;
+}
+#webim-buddy ul li a span{
+        display: block;
+}
+.webim-state-stop .webim-buddy-window{
+        width:0;
+        display:none;
+        position:absolute;
+}
+.webim-broadcast a{
+	text-align:left;
+	display:block;
+
+	margin-left:10px;
+	margin-top:5px;
+}
+.webim-broadcast  strong {
+	top:auto;
+	bottom:auto;
+	left:auto;
+	right:auto;
+	margin-top:-20px;
+	margin-left:30px;
+	position:absolute;
+	font-style:normal;
+	font-size:12px;
+	font-weight:400;
+}
+.webim-broadcast img{
+	display:block;
+
+}
+#webim-room{
+        padding: .3em 0;
+
+}
+#webim-room .webim-room-search{
+        padding: 0em 1.6em 0em 0em;
+        margin: .3em .5em .5em;
+        display: none;
+}
+#webim-room .webim-room-search input{
+        border: none;
+        background: none;
+	display: block;
+	width:95%;
+        padding: .2em;
+	/*
+	*/
+}
+#webim-room .webim-room-search em{
+        float: right;
+	display: inline;
+        margin: .1em -1.5em 0 0;
+}
+#webim-room .webim-room-online{
+        padding: 1em;
+        text-align: center;
+        display: none;
+}
+
+#webim-room .webim-room-online a{
+        padding: 1em 2em;
+}
+#webim-room .webim-room-content{
+        padding: .2em .5em 0;
+        position:relative;
+}
+/*fuck ie6  why ?*/
+* html  #webim-room .webim-room-content{
+        position: fixed;
+}
+
+#webim-room.webim-room-scroll .webim-room-content{
+        height: 25em;
+        overflow-y: auto;
+}
+#webim-room.webim-room-scroll .webim-room-search{
+        display: block;
+}
+
+#webim-room .webim-room-offline{
+        display: none;
+	float: right;
+	/*
+        position: absolute;
+        top: .3em;
+        right: .5em;
+	*/
+}
+#webim-room .webim-room-empty{
+        display: none;
+        padding: 0 0 1em;
+}
+
+#webim-room .webim-room-offline a{
+}
+#webim-room ul{
+	list-style: none;
+}
+#webim-room ul h4{
+        background:none;
+        font-weight: normal;
+        border-width: 0;
+        border-bottom-width: 1px;
+        padding: .2em .5em 0;
+}
+#webim-room ul li{
+}
+#webim-room ul li a{
+        display:block;
+        margin-left:3em;
+        padding: .3em 0;
+}
+#webim-room ul li a img{
+        display:block;
+        float:left;
+        margin-left: -2.5em;
+}
+/*fuck ie6  why ?*/
+* html  #webim-room ul li a img{
+        position: fixed;
+}
+#webim-room ul li a strong{
+        display: block;
+        font-weight: normal;
+}
+#webim-room ul li a span{
+        display: block;
+}
+.webim-state-stop .webim-icon-room{
+        display:none;
+        position:absolute;
+}
+.webim-icon-room{
+	width:1.8em;
+	background-image:url(images/icons/room.gif);
+}
+.webim-emot{
+        display: none;
+}
+.webim-emot-show{
+        display: block;
+}
+.webim-emot ul{
+        padding: .2em;
+        list-style:none;
+}
+.webim-emot ul li{
+        float: left;
+        cursor: pointer;
+}
+.webim-chat .webim-emot{
+        position: absolute;
+        bottom: 0;
+        border-left-width: 0;
+        border-right-width: 0;
+        width: 100%;
+}
+
+/*webim user*/
+.webim .webim-user{
+        margin-left: 6em;
+}
+.webim .webim-user-pic{
+        float: left;
+        margin-left: -5.5em;
+        margin-top: -1.8em;
+}
+.webim .webim-user-pic img{
+}
+.webim .webim-user-status{
+        height: 3em;
+        display: block;
+}
+* html  .webim-user-status{
+	height:1em;
+	display:none;
+}
+/**/
+.webim .webim-chat .webim-chat-header{
+	border-left-width:0;
+	border-right-width:0;
+}
+*html .webim-chat-header{
+	height:3em;
+}
+.webim .webim-chat-content{
+        height: 16em;
+        overflow-y:auto;
+        overflow-x:visible;
+        *background:url(about:blank);
+}
+.webim .webim-chat-status{
+        font-style: italic;
+        margin-left: .8em;
+
+}
+.webim .webim-chat .webim-chat-actions{
+        border-width:0;
+        border-top-width:1px;
+}
+.webim .webim-chat-t{
+        width:100%;
+        border-spacing:0;
+        border:0;
+}
+.webim .webim-chat-t em{
+        margin: .1em .2em;
+}
+.webim .webim-chat-input-wrap{
+}
+.webim .webim-chat-input{
+        border:none;
+        background: transparent;
+        overflow: auto;
+        width: 100%;
+        height: 3em;
+        padding: .3em 0 .2em;
+}
+.webim .webim-chat .webim-chat-notice{
+        border-right-width:0;
+        border-left-width:0;
+        display: none;
+        padding: 0 .5em;
+        position: relative;
+}
+.webim .webim-chat .webim-chat-notice-wrap{
+}
+.webim .webim-chat .webim-chat-tools{
+        padding: 0 .3em;
+        border-left-width: 0;
+        border-right-width: 0;
+}
+.webim .webim-chat-tools a, .webim .webim-chat-tools a em{
+        float: left;
+}
+.webim .webim-chat-tools a{
+        padding: .2em;
+}
+.webim .webim-chat-tool-content{
+        position: relative;
+        height:0;
+}
+
+/*member*/
+.webim .webim-member{
+	margin-top:  -.1em;
+	height: 16em;
+	width: 7em;
+	left: -7.1em;
+	position: absolute;
+}
+.webim .webim-chat .webim-member .webim-bgiframe{
+	top: -.1em;
+	left: -.1em;
+	width: 7.2em;
+	height: 16.2em;
+}
+.webim .webim-member ul{
+	height: 16em;
+	width: 7em;
+	position: absolute;
+        overflow-y:auto;
+        overflow-x:hidden;
+	list-style: none;
+}
+.webim .webim-member li{
+	margin: 0.1em 0.1em 0.1em 0.5em;
+}
+.webim-menu {
+        padding:1em .5em;
+        overflow-x: hidden;
+        overflow-y: auto;
+	max-height: 300px;
+}
+* html .webim-menu{
+	height: expression(this.offsetHeight > 300 ? 300+'px' : 'auto');
+}
+.webim-menu .webim-menu-empty{
+
+}
+.webim-menu ul{
+        list-style: none;
+}
+.webim-menu ul li{
+        overflow: hidden;
+        padding: .4em 0;
+}
+.webim-menu ul li *{
+        cursor: pointer;
+        float: left;
+}
+.webim-menu ul li span{
+        padding: 0 .4em;
+}
+.webim-chatlink span{
+        cursor:pointer;
+        padding-left: 1.2em;
+        *display:inline-block;
+}
+.webim-chatlink .webim-chatlink-off-i{
+        background:url(images/chat_offline.gif) no-repeat 2px center;
+}
+.webim-chatlink .webim-chatlink-on-i{
+        background:url(images/chat_online.gif) no-repeat 2px center;
+}
+.webim-chatlink-on .webim-chatlink-off-i{
+        background:url(images/chat_online.gif) no-repeat 2px center;
+
+}
+.webim-chatlink-on .webim-chatlink-on-i{
+		display:inline;
+        *display:inline-block;
+}
+.webim-chatlink-no-offline .webim-chatlink-off-i{
+        background:url(images/chat_offline.gif) no-repeat 2px center;
+}
+.webim-chatlink-disable span{
+        display:none !important;
+}
+.webim .webim-history-actions{
+        margin:0;
+        padding: .3em .5em 0;
+}
+.webim .webim-history-content{
+        margin: .3em .5em;
+}
+.webim .webim-history h5{
+        margin-top: .5em;
+        padding: 0 .4em;
+}
+.webim .webim-history h4{
+        border-top: 1px solid #eee;
+        margin-top: .1em;
+        padding: .2em .3em .1em;
+        font-weight: normal;
+}
+.webim .webim-history h4 span{
+        float: right;
+        padding .1em 0;
+        font-size: .8em;
+}
+.webim .webim-history p{
+        margin: .2em .3em;
+}
+.webim .webim-history *{
+		*background:url(about:blank);
+}
+
+.webim-hotpost {
+        padding:1em .5em;
+        overflow-x: hidden;
+        overflow-y: auto;
+		max-height: 300px;
+}
+* html .webim-menu{
+	height: expression(this.offsetHeight > 300 ? 300+'px' : 'auto');
+}
+.webim-hotpost .webim-hotpost-empty{
+
+}
+.webim-hotpost ul{
+        list-style: none;
+}
+.webim-hotpost ul li{
+        overflow: hidden;
+        padding:.1em 0;
+}

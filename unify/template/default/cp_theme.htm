@@ -1,0 +1,155 @@
+<!--{template header}-->
+<!--{if $op=='diy'}-->
+<!--{template cp_header}-->
+<div class="h_status"><a href="cp.php?ac=theme">返回主页风格列表</a></div>
+
+<div class="d_content">
+	
+	<form method="post" action="cp.php?ac=theme" class="c_form">
+	
+	<!--{if !empty($_GET['view'])}-->
+	<div class="notice">最后保存时间：<!--{date('H:i:s',$_SGLOBAL[timestamp])}-->，<a href="space.php" target="_blank">新窗口预览个人主页</a></div>
+	<!--{/if}-->
+	
+	<table cellspacing="6" cellpadding="0" width="100%">
+	<!--{if $allowcss}-->
+	<tr>
+		<td>自己设计个人主页风格，这需要你了解一定的CSS知识<br>
+		CSS内容:<br>
+		<textarea name="css" style="width:98%;" rows="20">$space[css]</textarea></td>
+	</tr>
+	<!--{else}-->
+	<tr>
+		<td>您当前不能自定义CSS风格，您可以设置屏蔽他人风格，或者<a href="cp.php?ac=theme">返回主页风格列表</a>选择系统的风格。</td>
+	</tr>
+	<!--{/if}-->
+	<tr>
+		<td>
+		<input type="checkbox" name="nocss" value="1"<!--{if $space[nocss]}--> checked<!--{/if}-->> <strong>屏蔽其他人风格</strong>
+		<br>
+		别人美化不当可能会造成查看其个人主页时出现问题。你可以勾选此选项，则查看所有人的个人主页将显示默认效果。
+		</td>
+	</tr>
+	<tr>
+		<td><input type="submit" name="csssubmit" id="csssubmit" value="保存修改" class="submit" /> 
+		</td>
+	</tr>
+	</table>
+	
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+	</form>
+</div>
+
+<!--{else}-->
+<!--{template cp_header}-->
+<div class="c_form">
+	<table cellspacing="0" cellpadding="0" class="formtable">
+	<caption>
+		<h2>主页风格</h2>
+		<p>
+			选择自己喜欢的个人主页风格。
+			<!--{if checkperm('admin')}--><a href="http://u.discuz.net/theme">作为站长，您可以来这里下载更多的风格提供给站内用户选择使用。</a><!--{/if}-->
+		</p>
+	</caption>
+	<tr>
+	<!--{eval $i=0;}-->
+	<!--{loop $themes $key $value}-->
+		<td align="center">
+			<div style="border: 1px solid #CCC; padding: 2px; width: 110px; ">
+			<!--{if $value['dir']!='uchomediy'}-->
+			<a href="space.php?theme=$value[dir]" target="_blank"><!--{if $value[pic]}--><img src="$value[pic]" alt="$value[name]" style="width: 110px; height: 120px" /><!--{else}--><img src="theme/$value[dir]/preview.jpg" alt="$value[name]" style="width: 110px; height: 120px" /><!--{/if}--></a>
+			<!--{else}-->
+			<a href="cp.php?ac=theme&op=diy"><img src="$value[pic]" alt="$value[name]" /></a>
+			<!--{/if}-->
+			</div>
+			
+			<div style="padding: 10px;">
+				<!--{if $value['dir']=='uchomediy'}-->
+				<a href="cp.php?ac=theme&op=diy"><strong>$value[name]</strong></a>
+				<!--{else}-->
+				<a href="space.php?theme=$value[dir]" target="_blank"><strong>$value[name]</strong></a>
+				<!--{/if}-->
+				<br>
+				<!--{if $value['dir']=='uchomediy'}-->
+				<a href="cp.php?ac=theme&op=diy">进入设置界面</a>
+				<!--{else}-->
+				<a href="space.php?theme=$value[dir]" target="_blank">预览</a> | <a href="cp.php?ac=theme&op=use&dir=$value[dir]">启用</a>
+				<!--{/if}-->
+			</div>
+
+		</td>
+		<!--{if $i%4==3}--></tr><tr><!--{/if}-->
+		<!--{eval $i++;}-->
+	<!--{/loop}-->
+	</tr>
+	</table>
+	
+	<form method="post" action="cp.php?ac=theme">
+	<table cellspacing="0" cellpadding="0" class="formtable">
+	<caption>
+		<h2>我的时区</h2>
+		<p>如果发现当前显示的时间与你本地时间相差几个小时，那么你需要更改自己的时区设置。</p>
+	</caption>
+	<tr>
+	<tr>
+		<th width="120">
+		当前时间
+		</th>
+		<td>
+		<!--{date('Y-m-d H:i',$_SGLOBAL[timestamp])}-->
+		</td>
+	</tr>
+	<tr>
+		<th>
+			我的时区
+		</th>
+		<td>
+			<select name="timeoffset">
+			<option value="">使用系统默认</option>
+			<option value="-12" $toselect[-12]>(GMT -12:00) Eniwetok, Kwajalein</option>
+			<option value="-11" $toselect[-11]>(GMT -11:00) Midway Island, Samoa</option>
+			<option value="-10" $toselect[-10]>(GMT -10:00) Hawaii</option>
+			<option value="-9" $toselect[-9]>(GMT -09:00) Alaska</option>
+			<option value="-8" $toselect[-8]>(GMT -08:00) Pacific Time (US &amp; Canada), Tijuana</option>
+			<option value="-7" $toselect[-7]>(GMT -07:00) Mountain Time (US &amp; Canada), Arizona</option>
+			<option value="-6" $toselect[-6]>(GMT -06:00) Central Time (US &amp; Canada), Mexico City</option>
+			<option value="-5" $toselect[-5]>(GMT -05:00) Eastern Time (US &amp; Canada), Bogota, Lima, Quito</option>
+			<option value="-4" $toselect[-4]>(GMT -04:00) Atlantic Time (Canada), Caracas, La Paz</option>
+			<option value="-3.5" $toselect[-3.5]>(GMT -03:30) Newfoundland</option>
+			<option value="-3" $toselect[-3]>(GMT -03:00) Brassila, Buenos Aires, Georgetown, Falkland Is</option>
+			<option value="-2" $toselect[-2]>(GMT -02:00) Mid-Atlantic, Ascension Is., St. Helena</option>
+			<option value="-1" $toselect[-1]>(GMT -01:00) Azores, Cape Verde Islands</option>
+			<option value="0"  $toselect[0]>(GMT) Casablanca, Dublin, Edinburgh, London, Lisbon, Monrovia</option>
+			<option value="1" $toselect[1]>(GMT +01:00) Amsterdam, Berlin, Brussels, Madrid, Paris, Rome</option>
+			<option value="2" $toselect[2]>(GMT +02:00) Cairo, Helsinki, Kaliningrad, South Africa</option>
+			<option value="3" $toselect[3]>(GMT +03:00) Baghdad, Riyadh, Moscow, Nairobi</option>
+			<option value="3.5" $toselect[3.5]>(GMT +03:30) Tehran</option>
+			<option value="4" $toselect[4]>(GMT +04:00) Abu Dhabi, Baku, Muscat, Tbilisi</option>
+			<option value="4.5" $toselect[4.5]>(GMT +04:30) Kabul</option>
+			<option value="5" $toselect[5]>(GMT +05:00) Ekaterinburg, Islamabad, Karachi, Tashkent</option>
+			<option value="5.5" $toselect[5.5]>(GMT +05:30) Bombay, Calcutta, Madras, New Delhi</option>
+			<option value="5.75" $toselect[5.75]>(GMT +05:45) Katmandu</option>
+			<option value="6" $toselect[6]>(GMT +06:00) Almaty, Colombo, Dhaka, Novosibirsk</option>
+			<option value="6.5" $toselect[6.5]>(GMT +06:30) Rangoon</option>
+			<option value="7" $toselect[7]>(GMT +07:00) Bangkok, Hanoi, Jakarta</option>
+			<option value="8" $toselect[8]>(GMT +08:00) Beijing, Hong Kong, Perth, Singapore, Taipei</option>
+			<option value="9" $toselect[9]>(GMT +09:00) Osaka, Sapporo, Seoul, Tokyo, Yakutsk</option>
+			<option value="9.5" $toselect[9.5]>(GMT +09:30) Adelaide, Darwin</option>
+			<option value="10" $toselect[10]>(GMT +10:00) Canberra, Guam, Melbourne, Sydney, Vladivostok</option>
+			<option value="11" $toselect[11]>(GMT +11:00) Magadan, New Caledonia, Solomon Islands</option>
+			<option value="12" $toselect[12]>(GMT +12:00) Auckland, Wellington, Fiji, Marshall Island</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th>&nbsp;</th>
+		<td><input type="submit" name="timeoffsetsubmit" value="提交" class="submit" /></td>
+	</tr>
+	</table>
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+	</form>
+</div>
+
+<!--{/if}-->
+
+<!--{template footer}-->

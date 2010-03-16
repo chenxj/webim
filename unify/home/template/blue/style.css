@@ -1,0 +1,225 @@
+a { color: #3B5998; }
+
+/*avatar bg*/
+.ar_r_t { background: #FFF url(image/avatar_bg.gif) no-repeat right top; }
+  .ar_l_t { background: url(image/avatar_bg.gif) no-repeat left top; }
+    .ar_r_b { background: url(image/avatar_bg.gif) no-repeat right bottom; }
+      .ar_l_b { background: url(image/avatar_bg.gif) no-repeat left bottom; }
+/*yellow radius*/
+.ye_r_t { background: url(image/yel_bg.gif) no-repeat right top; }
+  .ye_l_t { background: url(image/yel_bg.gif) no-repeat left top; }
+    .ye_r_b { background: url(image/yel_bg.gif) no-repeat right bottom; }
+      .ye_l_b { background: url(image/yel_bg.gif) no-repeat left bottom; }
+
+.ybg { background: #F7F7F7; }
+
+#ad_header { background: #F7F7F7; border: 1px solid #CCCCCC; }
+    #ad_header a{ color: #000; }
+#ad_contenttop { border-bottom: 1px solid #CCC; }
+#ad_contentbottom { border-top: 1px solid #CCC; }
+
+
+/*************************************************HEADER***/
+  .headerwarp { background: #3B5998 url(image/header_bg.gif); color: #3B5998; }
+
+.menu { font-size: 12px; }
+
+.nav_account { color: #FFF; }
+  .login_thumb { background: url(image/thumb20bg.gif) no-repeat; }
+ 
+  .dropmenu_drop { border: 1px solid #CCC; }
+
+
+#main { background: url(image/appSidebar_bg.gif) repeat-y 0 0; }
+
+/*************************************************APP SIDEBAR***/
+#app_sidebar { background: url(image/appSidebar_top_bg.gif) no-repeat 0 0; }
+    .app_more a { background: url(image/tri.gif) no-repeat; }
+
+  .chostlp img{ float: right; padding: 5px; border: 1px solid #FFF; border-top: none; vertical-align: middle; }
+     .chostlp img.hover{ background: #FFF; border-color: #CCC;  }
+        .chostlp_drop { background: #FFF; }
+            .chostlp_drop { border: 1px solid #CCC; border-bottom: none; }
+                .chostlp_drop li{ padding: 5px; width: 16px; height: 16px; }
+
+
+#content { float: left; margin: 0 20px 0 0; width: 540px; overflow: hidden; }
+
+/*************************************************COMPOSER***/
+    .mgs_list div { border: 1px solid #CCC; }
+
+/*************************************************FEED***/
+.feed_header {background: url(image/c_title.gif) no-repeat; }
+  .feed li { border-bottom: 1px solid #CCC; }
+
+      .hotspot a{ background: url('image/hotspot.gif'); color: #3B5998;}
+
+.c_mgs{background:#F7F7F7;margin:0 0 20px;}
+
+/*************************************************TABS HEADER***/
+.tabs_header { border-bottom: 1px solid #CCC; }
+    .tabs_header a.thread_button { background: url(image/buttons.gif) no-repeat 0 0; }
+                .tabs_header ul.tabs li a { background: url(image/tab_bg.gif) no-repeat left top; }
+                    .tabs_header ul.tabs li a span { background: url(image/tab_bg.gif) no-repeat right top; }
+            .tabs_header ul.tabs li.active a { background: url(image/active_tab_bg.gif) no-repeat left top; color: #000; }
+                .tabs_header ul.tabs li.active a span { background: url(image/active_tab_bg.gif) no-repeat right top; }
+            .tabs_header ul.tabs li.null { background: url(image/add_button.gif) no-repeat 0 0; }
+                .tabs_header ul.tabs li.null a { background: url(image/add_button.gif) no-repeat right top; color: #FFF; }
+
+
+/*************************************************DOING***/
+    .post_doing button.post_button { background: url(image/post_button.jpg); }
+        
+/*************************************************ENTRY***/
+    .entry_list .title { border: 1px solid #CCC; border-right: none; border-left: none; background: #F7F7F7; }
+        .entry .title { border: 1px solid #CCC; border-right: none; border-left: none; background: #F7F7F7;}
+
+            .entry .article a img { border: 1px solid #CCC; }
+            .entry .article a:hover img { border: 1px solid #C60; }
+        .entry .status { border-bottom: 1px solid #CCC; color: #999; }
+
+
+/*************************************************COMMENTS***/
+
+
+.comments h2 { border-bottom: 1px solid #CCC; }
+    .comments_list li { border-bottom: 1px solid #CCC; }
+        .comments_list li .time { color: #999; font-size: 12px; }
+        .comments_list .quote { border: 1px solid #CCC; background: #F7F7F7 none repeat scroll 0 0; }
+
+/*************************************************THREAD***/
+    .topic_list thead td { border-bottom: 1px solid #CCC; color: #333; }
+.topic_list tbody tr td { border-bottom: 1px solid #CCC; }
+    .topic_list tbody tr.alt td { background: #F7F7F7; }
+    .space_list td { padding: 5px; color: #999; }
+    .space_list thead td { background: #F7F7F7; color: #333; }
+    .space_list tbody tr.alt td { background: #F7F7F7; }
+.affiche { border: 1px solid #CCC; background: #F7F7F7; }
+
+        .affiche #space_avatar img { border: 1px solid #CCC; background: #FFF; }
+
+            .board .quote { border: 1px solid #CCC; background: #F7F7F7 none repeat scroll 0 0;}
+
+/*************************************************TASK***/
+.task_percent { border: 1px solid #CCC; }
+    .task_percent .percent { background: #CCC; }
+
+        .task_status_progress { border: 1px solid #E2EAED; background: #F7F7F7; }
+    .space_task { border: 1px solid #CCC; background: #F7F7F7; }
+
+/*************************************************ALBUM***/
+
+.photobox { padding: 10px; border-bottom: 1px solid #CCC;}
+    .photobox p { padding: 10px 0 0 0; text-align: left; }
+
+        .album_i_m_g a img { border: 1px solid #CCC; border-top: none; border-left: none; background: #F8F2CB; }
+
+#share_ul { border-bottom: 1px solid #CCC; }
+    #share_ul .title { border-bottom: 1px solid #CCC; background: #F7F7F7; }
+    .page * {border: 1px solid #CCC; background: #F7F7F7; color: #999; }
+    .page em { border-color: #CCC color: #333; font-style: normal; }
+    .page strong { background: #CCC; color: #333; }
+    .page a { color: #666; }
+    .page a:hover { background: #CCC; text-decoration: none; }
+.submit { padding: 0 5px; height: 24px; border: none; background: #3B5998; color: #FFF; line-height: 20px; letter-spacing: 1px; cursor: pointer; }
+
+/*************************************************CP SIDEBAR***/
+.task_notice { background: #F7F7F7; }
+  .sidebox h2.title { background: url(image/sidebar_title.gif) no-repeat; color: #333; }
+  .sidebox h3.title { border-bottom: 1px solid #CCC; background: #F7F7F7; }
+
+/*************************************************SPACE PAGE***/
+  .ulist { border: 1px solid #CCC; background: #F7F7F7; }
+    #ubar h2 { background: url(image/ubar_title.gif) no-repeat; color: #444; }
+
+    #space_page .feed_header { background: url(image/c_title2.gif) no-repeat; }
+
+#space_page .sidebox h2.title{ background-image: url(image/sidebar_title2.gif); }
+
+.facebox { background: #FFF; z-index: 100000; }
+
+
+
+#bottom { background: url(image/appSidebar_bottom_bg.gif) no-repeat; }
+#footer { border-top: 1px solid #CCC; }
+
+
+
+.notice { border-bottom: 1px solid #CCC; background: #F7F7F7; }
+
+
+
+.popupmenu_popup { border: 3px solid #CCCCCC; background: #F7F7F7; }
+
+.popupmenu_centerbox { border: 8px solid #CCC; background: #F7F7F7; }
+    .popupmenu_centerbox h1 { color: #3B5998; }
+
+            .popupmenu_centerbox .popupmenu_inner .t_input, .popupmenu_centerbox .popupmenu_inner textarea{ border-color: #CCC; }
+            .popupmenu_centerbox .float_del{ background-image: url(image/delete.gif); }
+
+
+/*************************************************INDEX PAGE***/
+
+
+
+.start { background: url(image/start.jpg) no-repeat; color: #333; }
+
+.reg_button { background: url(image/regButton.gif) no-repeat; }
+
+.login_box { background: url(image/login_bg.gif) repeat-y -250px 0; }
+    .login_box h3 { background: url(image/login_bg.gif) no-repeat 0 0; color: #3B5998; }
+    .login_form { background: url(image/login_bg.gif) no-repeat right bottom; }
+
+#index_page .title { background: url(image/index_title.gif) no-repeat 0 0; color: #444; }
+
+.albs { background: #F7F7F7; }
+    .albs li { background: url(image/albs.gif) no-repeat; }
+
+
+.searchfriend { background: #F7F7F7; }
+
+
+    .searchfriend .t_input { border-color: #CCC; }
+.showmessage { background: #F7F7F7; }
+
+
+.sub_menu{ background: #F7F7F7; border-bottom:1px solid #CCC; }
+
+    .sub_menu a.active{ background: #FFF; border:1px solid #CCC; border-bottom: none; }
+
+.rec_event_list{ background: #F7F7F7; border: 1px solid #CCC;}
+    .rec_event_list h2{ border-bottom: 1px solid #CCC; color: #444;}
+
+
+    .event_list ol li{ border-bottom:1px solid #CCC; }
+
+
+    .event_albs_p{ background: #f7f7f7; }
+
+    .poll_status{ float: left; padding: 10px 0 0; width: 60px; }
+        a.poll_joins{ background: url(image/joins_bg.gif) no-repeat 0 0; color: #3B5998; }
+
+
+        a.go2_poll{ background: url(image/poll_button.jpg) no-repeat 0 0; }
+
+.magic_img{ background: url(image/magic_image_bg.gif) 0 0; }
+.magic_info .m_button{ background: url(image/m_button.gif); }
+/*************************************************INDEX PAGE***/
+
+.firbox { background: #F7F7F7 none repeat scroll 0 0; }
+
+.task_notice2 { background: #F7F7F7; overflow: hidden; }
+
+.integral { border-top: 1px solid #CCC; color: #666;}
+.albs2 { background: #F7F7F7; }
+    .albs2 li { background: url(image/albs.gif) no-repeat; }
+
+  .borderbox { border: 1px solid #ECF1F3; }
+.showflash{ background: #F7F7F7; border: 1px solid #CCC; }
+
+.atitle{ background: #F7F7F7; }
+#header .logo a{ background:transparent url(image/logo.gif) no-repeat scroll left center; }
+
+
+.susb .fuser{ background: #F7F7F7; }
+.appmo{ background: #F7F7F7; }

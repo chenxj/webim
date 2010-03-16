@@ -1,0 +1,56 @@
+<!--{template header}-->
+
+<!--{if $op == "use"}-->
+
+	<!--{if !$frombuy}-->
+	<h1>使用道具</h1>
+	<a class="float_del" title="关闭" href="javascript:hideMenu();">关闭</a>
+	<!--{/if}-->
+	<div class="toolly" id="__magicuse_form_$mid">
+		<form method="post" id="magicuse_form_$mid" action="magic.php?mid=$mid&idtype=$idtype&id=$id">
+			<div class="magic_img">
+				<img src="image/magic/{$mid}.gif" alt="$magic[name]" />
+			</div>
+			<div class="magic_info">
+				<h3>$magic[name]</h3>
+				<p class="gray">$magic[description]</p>
+				<p>拥有个数: $usermagic[count]</p>
+				<div>
+					<h4>好友名单</h4>
+					<div>
+						<label for="friendinput">输入好友用户名点添加，最多点 $magic[custom][maxcall] 个好友</label><br />
+						<input class="t_input" type="text" id="friendinput" />
+						<input type="button" class="button" value="添加" onclick="addFriendCall();" />
+					</div>
+					<div id="friends"></div>
+					<br style="clear:both;"/>
+				</div>
+				<p class="btn_line">
+					<input type="hidden" name="formhash" value="<!--{eval echo formhash()}-->" />
+					<input type="hidden" name="refer" value="$_SGLOBAL[refer]"/>
+					<input type="hidden" name="usesubmit" value="1" />
+					<input type="button" value="使用" class="submit" onclick="ajaxpost('magicuse_form_$mid')" />
+				</p>
+			</div>
+		</form>
+	</div>
+
+<!--{elseif $op == 'show'}-->
+	<div style="width:420px;">
+		<p>
+			已通知以下好友
+		</p>
+		<!--{if $list}-->
+		<ul class="avatar_list">
+			<!--{loop $list $value}-->
+			<li>
+				<div class="avatar48"><a href="space.php?uid=$value[fuid]"><!--{avatar($value[fuid],small)}--></a></div>
+				<p><a href="space.php?uid=$value[fuid]" title="{$_SN[$value[fuid]]}">{$_SN[$value[fuid]]}</a></p>
+			</li>
+			<!--{/loop}-->
+		</ul>
+		<!--{/if}-->
+	</div>
+<!--{/if}-->
+
+<!--{template footer}-->

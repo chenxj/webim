@@ -1,0 +1,157 @@
+<!--{template admin/tpl/header}-->
+<!--{eval
+	$_TPL['rewardtype'] = array(
+		'0' => '扣分',
+		'1' => '加分'
+	);
+	$_TPL['cycletype'] = array(
+		'0' => '一次性',
+		'1' => '每天',
+		'2' => '整点',
+		'3' => '间隔分钟',
+		'4' => '不限周期'
+	);
+	$_TPL['norepeat'] = array(
+		'1' => '信息去重',
+		'2' => '人去重',
+		'3' => '应用去重'
+	);
+}-->
+<div class="mainarea">
+	<div class="maininner">
+		<div class="tabs_header">
+			<ul class="tabs">
+				<li$actives[1]><a href="admincp.php?ac=credit&rewardtype=1"><span>奖励规则</span></a></li>
+				<li$actives[0]><a href="admincp.php?ac=credit&rewardtype=0"><span>惩罚规则</span></a></li>
+			</ul>
+		</div>
+		<!--{if $_GET[op]=='edit'}-->
+		<div class="bdrcontent">
+			<form method="post" action="admincp.php?ac=credit">
+				<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+				<div class="title">
+					<h3>规则设置</h3>
+				</div>
+				<table cellspacing="0" cellpadding="0" class="formtable">
+					<tr>
+						<th style="width:10em;">规则名称</th>
+						<td>$rule[rulename]</td>
+					</tr>
+					<tr>
+						<td>奖励方式</td>
+						<td>
+							$_TPL[rewardtype][$rule[rewardtype]]
+						</td>
+					</tr>
+					<tbody id="otherrule" <!--{if $rule[rewardtype] == 0}--> style="display:none"<!--{/if}-->>
+						<tr>
+							<td style="width:10em;">奖励周期</td>
+							<td>
+								<!--{loop $_TPL[cycletype] $key $desc}-->
+								<input type="radio" name="cycletype" value="$key" onclick="showoption($key);" <!--{if $key == $rule[cycletype]}-->checked<!--{/if}-->>$desc 
+								<!--{/loop}-->
+							</td>
+						</tr>
+						<tr id="cycletimetr" <!--{if in_array($rule[cycletype], array(0, 1, 4))}--> style="display:none"<!--{/if}-->>
+							<td>间隔时间</td>
+							<td><input type="text" name="cycletime" value="$rule[cycletime]"></td>
+						</tr>
+						<tr id="rewardnumtr"<!--{if $rule[cycletype] == 0}--> style="display:none"<!--{/if}-->>
+							<td>奖励次数</td>
+							<td>
+								<input type="text" name="rewardnum" value="$rule[rewardnum]">0为不限次数
+							</td>
+						</tr>
+					</tbody>
+					<tr>
+						<td><!--{if $rule[rewardtype]}-->奖励<!--{else}-->扣除<!--{/if}-->积分值</td>
+						<td><input type="text" name="credit" value="$rule[credit]"></td>
+					</tr>
+					<tr>
+						<td><!--{if $rule[rewardtype]}-->奖励<!--{else}-->扣除<!--{/if}-->经验值</td>
+						<td><input type="text" name="experience" value="$rule[experience]"></td>
+					</tr>
+					<!--{if $rule[norepeat]}-->
+					<tr>
+						<td>去重奖励</td>
+						<td>
+							<!--{if $rule[norepeat]==1}-->
+							该条规则针对信息去重,防止所有奖励给一条信息的评论这类的
+							<!--{elseif $rule[norepeat]==2}-->
+							该条规则针对人去重，例如对同一个人在一个周期内只有一次奖励机会
+							<!--{else}-->
+							该条规则针对应用去重，例如同一个周期内第一次使用应用给奖励机会
+							<!--{/if}-->
+						</td>
+					</tr>
+					<!--{/if}-->
+				</table>
+				<br/>
+				<input type="submit" name="creditsubmit" value="提交" class="submit">
+				<input type="hidden" name="rid" value="$_GET[rid]" />
+				<script type="text/javascript">
+					function showoption(id) {
+						switch(id) {
+							case 0:
+								$('cycletimetr').style.display = "none";
+								$('rewardnumtr').style.display = "none";
+								break;
+							case 1:
+							case 4:
+								$('cycletimetr').style.display = "none";
+								$('rewardnumtr').style.display = "";
+								break;
+							case 2:
+							case 3:
+								$('cycletimetr').style.display = "";
+								$('rewardnumtr').style.display = "";
+								break;
+						}
+					}
+				</script>
+			</form>
+		</div>
+		<!--{else}-->
+		<div class="bdrcontent">
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tr>
+					<th>动作名称</th>
+					<!--{if $_GET[rewardtype]!='0'}-->
+					<th width="80">奖励周期</th>
+					<th width="80">奖励次数</th>
+					<th width="80">奖励方式</th>
+					<!--{/if}-->
+					<th width="80"><!--{if $_GET[rewardtype]=='0'}-->扣除积分<!--{else}-->获得积分<!--{/if}--></th>
+					<th width="80"><!--{if $_GET[rewardtype]=='0'}-->扣除经验值<!--{else}-->获得经验值<!--{/if}--></th>
+					<th width="50">操作</th>
+				</tr>
+				<!--{if $list}-->
+				<!--{loop $list $value}-->
+				<tr>
+					<td>$value[rulename]</td>
+					<!--{if $_GET[rewardtype]!='0'}-->
+					<td>$_TPL[cycletype][$value[cycletype]]</td>
+					<td><!--{if $value[rewardnum]=='0'}-->不限次数<!--{else}-->$value[rewardnum]<!--{/if}--></td>
+					<td>$_TPL[rewardtype][$value[rewardtype]]</td>
+					<!--{/if}-->
+					<td>$value[credit]</td>
+					<td>$value[experience]</td>
+					<td><a href="admincp.php?ac=credit&op=edit&rid=$value[rid]">编辑</a></td>
+				</tr>
+				<!--{/loop}-->
+				<!--{else}-->
+				<tr>
+					<td colspan="6">暂无相关积分规则</td>
+				</tr>
+				<!--{/if}-->
+			</table>
+		</div>
+		<!--{/if}-->
+	</div>
+</div>
+
+<div class="side">
+	<!--{template admin/tpl/side}-->
+</div>
+
+<!--{template admin/tpl/footer}-->

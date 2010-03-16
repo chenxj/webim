@@ -1,0 +1,28 @@
+/*
+[name]淡淡花香[/name]
+Powered by Ucenter Home
+*/
+body { padding: 0 0 50px; background: #EFD5B2 url(images/body_bg.gif) repeat; color: #666; }
+a { color: #F05961; }
+#wrap { padding: 15px; background: #FFF; }
+#header { margin: 0; color: #CCC; }
+.headerwarp { background: none; }
+#header a { color: #2C629E; }
+#header .logo a { width: 82px; height: 40px; background: url(images/logo.gif) no-repeat left center; overflow: hidden; display: block; }
+#header .logo a img { margin: -200px; }
+.login_thumb { background-image: url(images/login_bg.gif); }
+#ubar h2,
+#space_page .feed_header,
+#space_page .sidebox h2.title { padding: 0 10px; height: 30px; border-bottom: 1px solid #EFD5B2; background: #F9F0E3; color: #F05961; line-height: 30px; }
+.ulist,
+ .tabs_header,
+ #space_page .feed li,
+ #space_page .comments_list li,
+ #footer { border-color: #EFD5B2; }
+.tabs_header ul.tabs li.active a,
+.tabs_header ul.tabs li.active a span,
+.tabs_header ul.tabs li a,
+.tabs_header ul.tabs li a span { background: none; }
+.ulist { background: #F9F0E3; }
+.tabs_header ul.tabs li a { border: 1px solid #EFD5B2; border-bottom: none; background: #F9F0E3; }
+.tabs_header { height: 31px; }

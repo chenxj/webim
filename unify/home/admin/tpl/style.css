@@ -1,0 +1,83 @@
+/*
+Master Style Sheet for Ucenter Home
+CopyRight: 2001-2007 Comsenz Inc.
+URL: http://www.comsenz.com
+*/
+
+
+.mainarea { float: right; width: 100%; margin-left: -150px; }
+	.maininner { margin-left: 140px; }
+.side { float: left; width: 130px; }
+
+#cp_content { margin: 1em 0;}
+
+/*细线边框区域*/
+.bdrcontent { padding: 1em; border: 1px solid #FF8E00; zoom: 1; }
+	.bdrcontent th { font-weight:bold; }
+
+/*粗边框区域*/
+.block { margin-bottom: 10px; padding: 0.5em 1em; border: 1px solid #EFF5F8; }
+	.block h2 { margin: 0.5em 0; color: #363636; font-size: 1.17em; }
+	.block p { margin: 0.5em 0; }
+	.side .block li { margin: 0.2em 0; }
+				
+/*多列的列表*/
+.listcol { overflow: hidden; zoom: 1; }
+	.list2col li { float: left; width: 49.9%; }
+	.list3col li { float: left; width: 33.3%; }
+	.list4col li { float: left; width: 24.9%; }
+	.list5col li { float: left; width: 19.9%; }
+	.list6col li { float: left; width: 16.6%; }
+					
+
+		
+/*分页*/
+.pages { margin-top: 10px; }
+	.pages * { float: left; padding: 0 4px; border: 1px solid #CDCDCD; margin-right: 5px; background: #FFF; font-style: normal; }
+	
+.topactions { margin-bottom: 10px; padding-top: 0.4em; padding-bottom: 0.4em;  border-bottom: 1px solid #FF8E00; }
+	.topactions a { font-size: 14px; font-weight:bold; padding: 0.5em; border-top: 1px solid #FF8E00; border-right: 1px solid #FF8E00; border-left: 1px solid #FF8E00; background: #FCF9E6; }
+
+.footactions { margin: 0 0 1em; padding: 0.5em; border: 1px solid #FF8E00; border-top: 0px; text-align:center; }
+	/*\*/ * html .footactions { height: 1%; } /**/ * > .footactions { overflow: hidden; }
+	.footactions .pages { float: right; }
+
+	
+/*标题右浮动 Digg 按钮*/
+.titlel { float: left; margin-right: 0.83em; margin-top: 0.5em; }
+.titler { position: absolute; right: 1em; top: 0.5em; z-index: 1; }
+
+/*各种区域样式*/
+.style1 { border-color: #EBE6C9; background: #FCF9E6; }
+.style2 { border-color: #EAF6D2; }
+.style3 { border-color: #EDEDED; }
+.style3 { border-color: #CDE39C; }
+.style4 { border: none; background: #FCF9E6; zoom: 1; border: 1px solid #CDCDCD; }
+.style5 { padding: 10px; border: 1px solid #CDCDCD; background:#EAF6D2; }
+.style6 { border: none; background: #DDF3FD; }
+
+.gray { color: #999; font-weight: normal; }
+.sfont { font-size: 10px; }
+.underline { text-decoration: underline; }
+.noline { text-decoration: none !important; border: none; }
+	.noline a { text-decoration: none !important; border: none; }
+.footmargin { margin-bottom: 10px; }
+
+/*用于表单的表格*/
+.formtable { width: 100%; table-layout: fixed; }
+	.formtable th { text-align: left; font-weight: bold; color: #333333; }
+	.formtable th, .formtable td { padding: 0.5em 0; border-bottom: 1px solid #F2F2F2; vertical-align: top; line-height:1.5em; }
+		.formtable td th, .formtable td td { border: none; }
+
+.title { margin-bottom: 10px; padding-bottom: 0.5em; border-bottom: 1px solid #FF8E00;}
+	.title h1, .title h3 { padding: 0.6em 0 0.2em 0; font-size: 1.17em; }
+
+#footer { clear: both; padding: 1em 0; color: #939393; text-align: center; }
+	#footer p { font-size: 0.83em; }
+	#footer .menu a { padding: 0 1em; }
+
+/*目录列表*/
+.folder li { padding-left: 1em; }
+	.folder .active { font-weight:bold; padding-left: 1em; }
+	
+.message { width:100%; text-align:center;  font-size:14px; padding:1em; }

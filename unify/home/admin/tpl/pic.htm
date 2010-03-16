@@ -1,0 +1,125 @@
+<!--{template admin/tpl/header}-->
+
+<div class="mainarea">
+	<div class="maininner">
+
+		<form method="get" action="admincp.php">
+		<div class="block style4">
+
+			<table cellspacing="3" cellpadding="3">
+			<tr>
+				<th>所在相册ID</th><td><input type="text" name="albumid" value="$_GET[albumid]"></td>
+				<!--{if $allowmanage}-->
+				<th>作者名</th><td><input type="text" name="username" value="$_GET[username]" /></td>
+				<!--{else}-->
+				<td>&nbsp;</td><td>&nbsp;</td>
+				<!--{/if}-->
+			</tr>
+			<tr>
+				<th>指定图片ID</th><td><input type="text" name="picid" value="$_GET[picid]"></td>
+				<th>发布IP</th><td><input type="text" name="postip" value="$_GET[postip]"></td>
+			</tr>
+			<tr>
+				<th>文件名*</th><td><input type="text" name="filename" value="$_GET[filename]"></td>
+				<th>图片说明*</th><td><input type="text" name="title" value="$_GET[title]"></td>
+			</tr>
+			<tr><th>热度</th><td colspan="3">
+				<input type="text" name="hot1" value="$_GET[hot1]" size="10"> ~
+				<input type="text" name="hot2" value="$_GET[hot2]" size="10">
+			</td></tr>
+			<tr>
+				<th>上传时间</th><td colspan="3">
+				<input type="text" name="dateline1" value="$_GET[dateline1]" size="10"> ~
+				<input type="text" name="dateline2" value="$_GET[dateline2]" size="10"> (格式为: YYYY-MM-DD)
+				</td>
+			</tr>
+		
+			<tr>
+				<th>结果排序</th>
+				<td colspan="3">
+				<select name="orderby">
+				<option value="">默认排序</option>
+				<option value="dateline"$orderby[dateline]>上传时间</option>
+				<option value="size"$orderby[size]>图片大小</option>
+				<option value="hot"$orderby[hot]>热度</option>
+				</select>
+				<select name="ordersc">
+				<option value="desc"$ordersc[desc]>递减</option>
+				<option value="asc"$ordersc[asc]>递增</option>
+				</select>
+				<select name="perpage">
+				<option value="20"$perpages[20]>每页显示20个</option>
+				<option value="50"$perpages[50]>每页显示50个</option>
+				<option value="100"$perpages[100]>每页显示100个</option>
+				<option value="1000"$perpages[1000]>一次处理1000个</option>
+				</select>
+				<input type="hidden" name="ac" value="pic">
+				<input type="submit" name="searchsubmit" value="搜索" class="submit">
+				</td>
+			</tr>
+			</table>
+		</div>
+		</form>
+	
+<!--{if $list}-->
+	
+		<form method="post" action="admincp.php?ac=pic">
+		<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+		<div class="bdrcontent">
+
+<!--{if $perpage>100}-->
+			<p>总共有满足条件的数据 <strong>$count</strong> 个</p>
+			<!--{loop $list $value}-->
+			<input type="hidden" name="ids[]" value="$value[picid]">
+			<!--{/loop}-->
+	
+<!--{else}-->
+			
+			<table cellspacing="0" cellpadding="0" class="formtable">
+			<tr>
+			<!--{loop $list $key $value}-->
+				<td width="105">
+					<a href="$value[bigpic]" target="_blank"><img src="$value[pic]" width="90" alt="$value[filename]"></a>
+					<input type="<!--{if $allowbatch}-->checkbox<!--{else}-->radio<!--{/if}-->" name="ids[]" value="$value[picid]"> 选择
+				</td>
+				<td>
+					<!--{if $value[title]}-->$value[title]<br /><!--{/if}-->
+					大小: $value[size]
+					<br />相册: <a href="admincp.php?ac=pic&uid=$value[uid]&albumid=$value[albumid]"><!--{if $value[albumid]}-->{$albums[$value[albumid]][albumname]}<!--{else}-->默认相册<!--{/if}--></a>
+					<!--{if $allowmanage}--><br />作者: <a href="admincp.php?ac=pic&uid=$value[uid]">$users[$value[uid]]</a><!--{/if}-->
+					<br />时间: <!--{date('Y-m-d H:i',$value[dateline])}-->
+					<!--{if $value[hot]}--><br /><span style="color:red;">热度: $value[hot]</span><!--{/if}-->
+					<br><a href="admincp.php?ac=comment&id=$value[picid]&idtype=picid">评论管理</a>
+				</td>
+				<!--{if $key%2==1}--></tr><tr><!--{/if}-->
+			<!--{/loop}-->
+			</tr>
+			</table>
+		
+	<!--{/if}-->
+		</div>
+		
+		<div class="footactions">
+			<!--{if $allowbatch && $perpage<=100}--><input type="checkbox" id="chkall" name="chkall" onclick="checkAll(this.form, 'ids')">全选<!--{/if}-->
+			<input type="hidden" name="mpurl" value="$mpurl">
+			<input type="submit" name="batchsubmit" value="批量删除" onclick="return confirm('本操作不可恢复，确认删除？');" class="submit">
+		
+			<div class="pages">$multi</div>
+		</div>
+		
+		</form>
+	
+<!--{else}-->
+	<div class="bdrcontent">
+		<p>指定条件下还没有数据</p>
+	</div>
+<!--{/if}-->
+
+	</div>
+</div>
+
+<div class="side">
+	<!--{template admin/tpl/side}-->
+</div>
+
+<!--{template admin/tpl/footer}-->

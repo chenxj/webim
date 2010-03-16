@@ -1,0 +1,28 @@
+/*
+[name]科技[/name]
+Powered by Ucenter Home
+*/
+body { padding: 0 0 50px; background: #5778A1; color: #666; }
+#wrap { padding: 15px 10px; border: 3px solid #94B5DE; background: #FFF; }
+#header { margin: 0; background: url(images/top_bg.jpg) repeat-x; color: #CCC; }
+.headerwarp { height: 140px; background: url(images/header.gif) no-repeat 0 40px; }
+#header a { color: #2C629E; }
+#header .logo a { width: 82px; height: 40px; background: url(images/logo.gif) no-repeat left center; overflow: hidden; display: block; }
+#header .logo a img { margin: -200px; }
+.login_thumb { background-image: url(images/login_bg.gif); }
+#ubar h2,
+#space_page .feed_header,
+#space_page .sidebox h2.title { padding: 0 10px 0 30px; height: 30px; border-bottom: 3px solid #DEDEDE; background: #F2F2F2 url(images/h2_news.gif) no-repeat 10px 50%; line-height: 29px; }
+
+.ulist,
+#space_page .feed li,
+#space_page .comments_list li,
+#footer { border-color: #ECF1F3; }
+.tabs_header{ position: absolute; margin:-44px 0 0 170px; width: 600px; border: none;}
+
+.tabs_header ul.tabs li a, .tabs_header ul.tabs li a span{ background-image: url(images/tab_bg.gif); color: #FFF; }
+.tabs_header ul.tabs li.active a, .tabs_header ul.tabs li.active a span{ background-image: url(images/active_tab_bg.gif); color: #5778A1; }
+
+.tabs_header ul.tabs li{
+  margin: 0 5px 0 0;
+}

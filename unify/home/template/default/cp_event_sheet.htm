@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=$_SC[charset]" />
+<meta http-equiv="x-ua-compatible" content="ie=7" />
+	<title>$event[title] 签到表</title>
+	<style type="text/css">
+		body{font-size: 12px;}
+		h1{text-align:center; font-size: 18px;}
+		table{width: 98%; background:#DDD;text-align:left;}
+		table tr{}
+		table th{ background: #EEE; }
+		table td{ background: #FFF; }
+	</style>
+</head>
+<body>
+	<h1>$event[title] 签到表</h1>
+	<table border="0" cellpadding="5" cellspacing="1">
+		<tbody>
+			<tr>
+				<!--{if $_POST[avatarbig]}-->
+				<th>头像</th>
+				<!--{/if}-->
+				<!--{if $_POST[avatarsmall]}-->
+				<th>头像</th>
+				<!--{/if}-->
+				<!--{if $_POST[username]}-->
+				<th>姓名</th>
+				<!--{/if}-->
+				<!--{if $_POST[fellow]}-->
+				<th>携带人数</th>
+				<!--{/if}-->
+				<!--{if $_POST[template]}-->
+				<th>报名信息</th>
+				<!--{/if}-->
+				<th>签到</th>
+			</tr>
+			<!--{loop $members $value}-->
+			<tr>
+				<!--{if $_POST[avatarbig]}-->
+				<td><!--{avatar($value[uid], 'big')}--></td>
+				<!--{/if}-->
+				<!--{if $_POST[avatarsmall]}-->
+				<td><!--{avatar($value[uid])}--></td>
+				<!--{/if}-->
+				<!--{if $_POST[username]}-->
+				<td>$_SN[$value[uid]]<!--{if $value[status]>=3}-->（组织者）<!--{/if}--></td>
+				<!--{/if}-->
+				<!--{if $_POST[fellow]}-->
+				<td>$value[fellow]</td>
+				<!--{/if}-->
+				<!--{if $_POST[template]}-->
+				<td><!--{eval echo nl2br(htmlspecialchars($value[template]))}--></td>
+				<!--{/if}-->
+				<td>&nbsp;&nbsp;</td>
+			</tr>
+			<!--{/loop}-->
+		</tbody>
+	</table>
+</body>
+</html>

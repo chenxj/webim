@@ -1,0 +1,130 @@
+<!--{template admin/tpl/header}-->
+<style type="text/css">
+	.poster{
+	max-width: 240px; max-height: 180px;}
+</style>
+
+<div class="mainarea">
+<div class="maininner">
+
+	<div class="tabs_header">
+		<ul class="tabs">
+			<li$actives[view]><a href="admincp.php?ac=eventclass"><span>浏览全部分类</span></a></li>
+			<li class="null"><a href="admincp.php?ac=eventclass&op=add">添加新活动分类</a></li>
+		</ul>
+	</div>
+		
+	<form method="post" action="admincp.php?ac=eventclass" enctype="multipart/form-data">
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+
+	<div class="bdrcontent">
+
+<!--{if "add" == $_GET['op'] || "edit" == $_GET['op']}-->
+
+		<table cellspacing="0" cellpadding="0" class="formtable">
+			<tr>
+				<th style="width:15em;">分类名称</th>
+				<td><input type="text" name="classname" value="$thevalue[classname]"></td>
+			</tr>
+			<tr>
+				<th>默认海报</th>
+				<td>
+					活动发起者发起此类型的活动时如果没有上传海报则默认使用此海报 <br />
+					<img id="posterview" class="poster" src="$thevalue[poster]?v=$_SGLOBAL[timestamp]" alt="默认海报" onerror="this.src='image/event/default.jpg'" />
+					<a href="#" onclick="$('posterview').src='image/event/default.jpg'; $('delposter').value='1'; return false;">删除</a>
+					<br />
+					<input type="hidden" id="delposter" name="delposter" value="0" />
+					<input type="file" name="poster" value="">
+				</td>
+			</tr>
+			<tr>
+				<th>默认模板</th>
+				<td>
+					建议活动发起者发起此类型的活动时按此内容模板填写活动介绍 <br />
+					<textarea name="template" rows="8" cols="80">$thevalue[template]</textarea>
+				</td>
+			</tr>
+			<tr>
+				<th>显示顺序</th>
+				<td>
+					<input type="text" name="displayorder" value="$thevalue[displayorder]" />
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="footactions">
+		<input type="hidden" name="classid" value="$thevalue[classid]" />
+		<input type="submit" name="eventclasssubmit" value="提交" class="submit">
+	</div>
+
+	</form>
+
+<!--{elseif "delete" == $_GET['op']}-->
+
+		<div class="topactions">
+			该活动分类删除后，请选择该活动分类下面已有的活动会归类到那个新活动分类。
+		</div>
+		<table cellspacing="0" cellpadding="0" class="formtable">
+			<tr>
+				<th width="150">活动分类下的新归类</th>
+				<td>
+				<select name="newclassid">
+				<!--{loop $list $key $value}-->
+					<!--{if $value}-->
+					<option value="$value[classid]">$value[classname]</option>
+					<!--{/if}-->
+				<!--{/loop}-->
+				</select>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="footactions">
+		<input type="hidden" name="classid" value="$thevalue[classid]" />
+		<input type="submit" name="deletesubmit" value="确认" class="submit">
+	</div>
+
+	</form>
+
+<!--{else}-->
+
+		<table cellspacing="0" cellpadding="0" class="formtable">
+			<tr>
+				<th>名称</th>
+				<th>设置海报</th>
+				<th>设置模板</th>
+				<th>显示顺序</th>
+				<th width="80">操作</th>
+			</tr>
+			<!--{loop $list $key=>$value}-->
+			<tr>
+				<th>$value[classname]</th>
+				<td><!--{if $value[poster]=='image/event/default.jpg'}-->否<!--{else}-->是<!--{/if}--></td>
+				<td><!--{if empty($value[template])}-->否<!--{else}-->是<!--{/if}--></td>
+				<td><input type="text" name="displayorder[$key]" value="$value[displayorder]" size="5"></td>
+				<td width="80">
+				<a href="admincp.php?ac=eventclass&op=edit&classid=$key">编辑</a> |
+				<a onclick="return confirm('确认删除？');" href="admincp.php?ac=eventclass&op=delete&classid=$key">删除</a></td>
+			</tr>
+			<!--{/loop}-->
+		</table>
+	</div>
+
+	<div class="footactions">
+		<input type="submit" name="ordersubmit" value="更新排序" class="submit">
+	</div>
+
+	</form>
+
+<!--{/if}-->
+
+</div>
+</div>
+
+<div class="side">
+	<!--{template admin/tpl/side}-->
+</div>
+
+<!--{template admin/tpl/footer}-->

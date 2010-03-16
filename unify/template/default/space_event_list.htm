@@ -1,0 +1,383 @@
+<!--{eval $_TPL['titles'] = array('活动');}-->
+<!--{template header}-->
+
+
+<!--{if !empty($_SGLOBAL[inajax])}-->
+	<div id="space_event">
+		<h3 class="feed_header">
+			<a href="cp.php?ac=event" class="r_option" target="_blank">组织活动</a>
+			活动(共 $count 个)</h3>
+		<!--{if $eventlist}-->
+		<ul class="line_list">
+		<!--{loop $eventlist $event}-->
+			<li>
+				<p class="r_option">
+					<!--{if $event[grade] == 0}-->
+					<span class="event_state">待审核</span>
+					<!--{/if}-->
+					<!--{if $event[endtime]<$_SGLOBAL[timestamp]}-->
+					<span class="event_state">已结束</span>
+					<!--{elseif $event[deadline]<$_SGLOBAL[timestamp]}-->
+					<span class="event_state">报名截止</span>
+					<!--{/if}-->
+				</p>
+				<h4><a href="space.php?do=event&id=$event[eventid]" target="_blank">$event[title]</a><span class="gray">[<!--{$_SGLOBAL[eventclass][$event[classid]][classname]}-->]</span></h4>
+	
+				<p><span class="gray">活动时间:</span> 	<!--{eval echo sgmdate("m月d日 H:i", $event[starttime])}--> - <!--{eval echo sgmdate("m月d日 H:i", $event[endtime])}--></p>
+				<p><span class="gray">活动地点:</span> 	$event[province] $event[city] $event[location]</p>
+			</li>
+		<!--{/loop}-->
+		</ul>
+		<div class="page">$multi</div>
+		
+		<!--{else}-->
+		<div class="c_form">还没有相关的活动。</div>
+		<!--{/if}-->
+	</div><br>
+<!--{else}-->
+
+<!--{if $space[self]}-->
+<div class="searchbar floatright">
+<form method="get" action="space.php">
+	<input name="searchkey" value="" size="15" class="t_input" type="text">
+	<input name="searchsubmit" value="搜索活动" class="submit" type="submit">
+	<input type="hidden" name="searchmode" value="1" />
+	<input type="hidden" name="do" value="event" />
+	<input type="hidden" name="view" value="all" />
+</form>
+</div>
+<h2 class="title"><img src="image/app/event.gif" />活动</h2>
+<div class="tabs_header">
+    <ul class="tabs">
+        <li $menu[all]><a href="space.php?do=event&view=all"><span>全部活动</span></a></li>
+        <li $menu[recommend]><a href="space.php?do=event&view=recommend"><span>推荐活动</span></a></li>
+        <li $menu[city]><a href="space.php?do=event&view=city"><span>同城活动</span></a></li>
+        <!--{if $space[friendnum]}-->
+        <li $menu[friend]><a href="space.php?do=event&view=friend"><span>好友的活动</span></a></li>
+        <!--{/if}-->
+		<li $menu[me]><a href="space.php?uid=$space[uid]&do=event&view=me"><span>我的活动</span></a></li>
+		<li class="null"><a href="cp.php?ac=event" class="t_button">发起新活动</a></li>
+    </ul>
+</div>
+<!--{else}-->
+<!--{eval 
+	$_TPL['spacetitle'] = "活动";
+	$_TPL['spacemenus'][] = "<a href=\"space.php?uid=$space[uid]&do=event&view=me\">TA的所有活动</a>";
+}-->
+<!--{template space_menu}-->
+<!--{/if}-->
+<div class="h_status">
+	<!--{if $menu[all]}-->
+	<a $submenus[going] href="space.php?do=event&view=all&type=going">尚未结束的活动</a>
+	<span class="pipe">|</span><a $submenus[over] href="space.php?do=event&view=all&type=over">已结束的活动</a>
+	<!--{elseif $menu[recommend]}-->
+	<a $submenus[hot] href="space.php?do=event&view=recommend&type=hot">热门活动</a>
+	<span class="pipe">|</span><a $submenus[admin] href="space.php?do=event&view=recommend&type=admin">站长推荐</a>
+	<!--{elseif $menu[city]}-->	
+	<a $submenus[going] href="space.php?do=event&view=city&type=going">尚未结束的活动</a>
+	<span class="pipe">|</span><a $submenus[over] href="space.php?do=event&view=city&type=over">已结束的活动</a>
+	<!--{elseif $menu[friend]}-->
+	<a $submenus[all] href="space.php?do=event&view=friend&type=all">全部</a>
+	<span class="pipe">|</span><a $submenus[join] href="space.php?do=event&view=friend&type=join">参加的活动</a>
+	<span class="pipe">|</span><a $submenus[follow] href="space.php?do=event&view=friend&type=follow">关注的活动</a>
+	<span class="pipe">|</span><a $submenus[org] href="space.php?do=event&view=friend&type=org">组织的活动</a>
+	<!--{elseif $menu[me]}-->
+	<a $submenus[all] href="space.php?uid=$space[uid]&do=event&view=me&type=all">全部</a>
+	<span class="pipe">|</span><a $submenus[join] href="space.php?uid=$space[uid]&do=event&view=me&type=join">参加的活动</a>
+	<span class="pipe">|</span><a $submenus[follow] href="space.php?uid=$space[uid]&do=event&view=me&type=follow">关注的活动</a>
+	<span class="pipe">|</span><a $submenus[org] href="space.php?uid=$space[uid]&do=event&view=me&type=org">组织的活动</a>
+	<!--{/if}-->
+</div>
+
+<!--{if $searchkey}-->
+<div class="h_status">以下是搜索活动 <span style="color:red;font-weight:bold;">$searchkey</span> 结果列表</div>
+<!--{/if}-->
+
+<div id="content">
+	<!--{if $view == "all" && !empty($recommendevents)}-->
+	<div class="rec_event_list">
+		<h2>
+			<div class="r_option"><a href="space.php?do=event&view=recommend&type=admin">更多</a></div>
+			站长推荐
+		</h2>
+		<ol>
+			<!--{loop $recommendevents $key $value}-->
+			<li>
+				<div class="event_icon">
+					<a href="space.php?do=event&id=$value[eventid]"><img class="poster_pre" src="$value[pic]" alt="$value[title]" onerror="this.src='$_SGLOBAL[eventclass][$value[classid]][poster]'"></a>
+				</div>
+				<div class="event_content">
+					<h4><a href="space.php?do=event&id=$value[eventid]">$value[title]</a> <span class="gray">[<!--{$_SGLOBAL[eventclass][$value[classid]][classname]}-->]</span></h4>
+					<p>活动时间: <!--{eval echo sgmdate("m月d日 H:i", $value[starttime])}--> - <!--{eval echo sgmdate("m月d日 H:i", $value[endtime])}--></p>
+				</div>
+			</li>
+			<!--{/loop}-->
+		</ol>
+	</div>
+	<!--{/if}-->
+	
+	<!--{if $view == "city"}-->
+	<div>
+		<!--{if $_GET[city]}-->
+			您现在浏览的是 <b>$_GET[province] - $_GET[city]</b> 的活动。
+			<a href="#" onclick="$('viewcityevents').style.display=''; this.blur(); return false;">浏览其他城市</a>
+		<!--{elseif $_GET[province]}-->
+			您现在浏览的是 $_GET[province] 的活动。
+			<!--{if $space[province] == $_GET[province] && $space[city]}-->
+			您还可以只浏览 <a href="space.php?do=event&view=city&province=$space[province]&city=$space[city]">$space[city]</a> 的活动。
+			<!--{/if}-->
+			<a href="#" onclick="$('viewcityevents').style.display=''; this.blur(); return false;">浏览其他城市</a>
+		<!--{/if}-->
+		<script type="text/javascript" src="source/script_city.js"></script>
+		<form id="viewcityevents" action="space.php" method="GET" style="display:none;">
+			<input type="hidden" name="do" value="event" />
+			<input type="hidden" name="view" value="city" />
+			<span id="eventcitybox"></span>
+			 <script type="text/javascript">
+				showprovince('province', 'city', '$_GET[province]', 'eventcitybox');
+                showcity('city', '$_GET[city]', 'province', 'eventcitybox');
+            </script>
+			<input class="submit" type="submit" value="浏览" />
+		</form>
+		<!--{if !$space[resideprovince]}-->
+		<div class="c_form">
+			您还没有设置居住城市。<a href="cp.php?ac=profile" target="_blank">现在就去设置</a>
+		</div>
+		<!--{/if}-->
+	</div>
+	<!--{/if}-->
+
+	<!--{if !empty($eventlist)}-->
+	<div class="event_list">
+		<ol>
+			<!--{eval $hiddecount = 0}-->
+			<!--{loop $eventlist $key $event}-->
+			<!--{if $event[uid] != $_SGLOBAL[supe_uid] && ($event[grade]==0 || ($event[public]==0 && ($_GET[view]!='me' || $_GET[uid] != $_SGLOBAL[supe_uid])))}-->
+			<!--{eval $hiddencount = $hiddencount + 1}-->
+			<!--{else}-->
+			<li>
+				<div class="event_icon">
+					<a href="space.php?do=event&id=$event[eventid]"><img class="poster_pre" src="$event[pic]" alt="$event[title]" onerror="this.src='$_SGLOBAL[eventclass][$event[classid]][poster]'"></a>
+				</div>
+				<div class="event_content">
+					<h4 class="event_title"><a href="space.php?do=event&id=$event[eventid]">$event[title]</a><span class="gray">[<!--{$_SGLOBAL[eventclass][$event[classid]][classname]}-->]</span></h4>
+					<ul>
+						<li>
+							<span class="gray">活动时间:</span> 	<!--{eval echo sgmdate("m月d日 H:i", $event[starttime])}--> - <!--{eval echo sgmdate("m月d日 H:i", $event[endtime])}-->
+							<!--{if $event[grade] == 0}-->
+							<span class="event_state"> 待审核</span>
+							<!--{/if}-->
+							<!--{if $event[endtime]<$_SGLOBAL[timestamp]}-->
+							<span class="event_state"> 已结束</span>
+							<!--{elseif $event[deadline]<$_SGLOBAL[timestamp]}-->
+							<span class="event_state"> 报名截止</span>
+							<!--{/if}-->						
+						</li>
+						<li><span class="gray">活动地点:</span>
+							<a href="space.php?uid=$_GET[uid]&do=event&view=$view&type=$type&classid=$_GET[classid]&province=$event[province]&date=$_GET[date]">$event[province]</a>
+							<a href="space.php?uid=$_GET[uid]&do=event&view=$view&type=$type&classid=$_GET[classid]&province=$event[province]&city=$event[city]&date=$_GET[date]">$event[city]</a>
+							$event[location]
+						</li>
+						<li><span class="gray">发起人:</span> <a href="space.php?uid=$event[uid]">$_SN[$event[uid]]</a></li>
+						<!--{if $fevents[$event[eventid]]}-->
+						<li><span class="gray">好友:</span> 
+							<!--{loop $fevents[$event[eventid]] $value}-->
+							<a href="space.php?uid=$value[fuid]">$_SN[$value[fuid]]</a>
+							<!--{if $value[status] == 2}--><span class="gray">参加</span>
+							<!--{elseif $value[status] == 3}--><span class="gray">组织者</span>
+							<!--{elseif $value[status] == 4}--><span class="gray">发起者</span>
+							<!--{else}--><span class="gray">关注</span>
+							<!--{/if}-->
+							&nbsp;
+							<!--{/loop}-->
+						</li>
+						<!--{/if}-->
+						<li style="margin: 5px 0 0;">$event[viewnum] 次查看&nbsp; $event[membernum] 人参加&nbsp; $event[follownum] 人关注</li>
+					</ul>
+				</div>
+			</li>
+			<!--{/if}-->
+			<!--{/loop}-->
+		</ol>
+		<!--{if $hiddencount}-->
+		<div>本页有 $hiddencount 个活动因隐私设置而隐藏</div>
+		<!--{/if}-->
+		<div class="page">$multi</div>		
+	</div>
+	<!--{else}-->
+	<div class="c_form">
+		<!--{if $view == "me"}-->
+		现在还没有相关的活动
+		<!--{else}-->
+		<br/>
+		还没有相关的活动。您可以 <a href="cp.php?ac=event">发起一个新活动</a>		
+		<!--{/if}-->
+	</div>
+	<!--{/if}-->
+</div><!--//左侧内容结束//-->
+
+<div id="sidebar">
+
+	<!--{if $view == "all"}-->
+	<div class="sidebox">			
+		<h2 class="title">
+			<p class="r_option">
+				<a href="space.php?uid=$_GET[uid]&do=event&view=$view&type=$type&classid=$_GET[classid]&province=$_GET[province]&city=$_GET[city]">全部</a>
+			</p>
+			日历
+		</h2>
+		<div class="calendarbox" id="eventcalendar"></div>
+	</div>
+	<script type="text/javascript" charset="$_SC[charset]">
+		function showcalendar(month){
+			var month = month ? "&month="+month : "";
+			ajaxget('cp.php?ac=event&op=calendar' + month + '&date=$_GET[date]&url=<!--{eval echo urlencode($theurl)}-->', 'eventcalendar');
+		}
+		showcalendar();
+	</script>
+	<!--{/if}-->
+	
+	<!--{if $view != 'friend'}-->
+	<div class="sidebox">
+		<h2 class="title">
+			<p class="r_option">
+				<a href="space.php?uid=$_GET[uid]&do=event&view=$view&type=$type&date=$_GET[date]&uid=$_GET[uid]">全部</a>
+			</p>
+			分类
+		</h2>
+		<ul class="event_cat">
+		<!--{loop $_SGLOBAL[eventclass] $value}-->			
+			<li<!--{if $_GET[classid] == $value[classid]}--> class="on"<!--{/if}-->>
+			<a href="space.php?uid=$_GET[uid]&do=event&view=$view&type=$type&classid=$value[classid]&province=$_GET[province]&city=$_GET[city]&date=$_GET[date]">$value[classname]</a></li>
+		<!--{/loop}-->
+		</ul>
+	</div>
+	<!--{/if}-->
+
+	<!--{if $followevents}-->
+	<div class="sidebox">
+		<h2 class="title">
+			<div class="r_option"><a href="space.php?do=event&view=me&type=follow">更多</a></div>
+			我关注的活动
+		</h2>
+		<ul class="attention">
+			<!--{loop $followevents $value}-->
+			<li style="height: auto;">
+				<p>
+					<a href="space.php?do=event&id=$value[eventid]">$value[title]</a>					
+				</p>
+				<p class="gray" style="text-align:left">
+					<!--{if $_SGLOBAL[timestamp] > $value[endtime]}-->
+						已结束
+					<!--{else}-->
+						<!--{eval echo sgmdate("n月j日",$value[starttime])}-->
+					<!--{/if}-->&nbsp;		
+					$value[membernum] 人参加 /				
+					$value[follownum] 人关注
+				</p>
+				<p>
+					<!--{if $value[threadnum]}-->
+					<a href="space.php?do=event&id=$value[eventid]&view=thread">
+						$value[threadnum] 个话题
+					</a> &nbsp;
+					<!--{/if}-->
+					<!--{if $value[picnum]}-->
+					<a href="space.php?do=event&id=$value[eventid]&view=pic">
+						$value[picnum] 张照片
+					</a>
+					<!--{/if}-->
+				</p>
+			</li>
+			<!--{/loop}-->
+		</ul>
+	</div>
+	<!--{/if}-->
+
+	<!--{if $friendevents}-->
+	<div class="sidebox">
+		<h2 class="title">
+			<div class="r_option"><a href="space.php?do=event&view=friend">更多</a></div>
+			好友最近参加的活动
+		</h2>
+		<ul class="attention">			
+			<!--{loop $friendevents $value}-->
+			<li style="height: auto;">
+				<p>
+					<a href="space.php?do=event&id=$value[eventid]">$value[title]</a>					
+				</p>
+				<p class="gray" style="text-align:left">
+					好友：
+					<!--{loop $value[friends] $fuid}-->
+					<a href="space.php?uid=$fuid" target="_blank">$_SN[$fuid]</a>&nbsp;
+					<!--{/loop}-->
+				</p>
+				<p class="gray" style="text-align:left">
+					<!--{if $_SGLOBAL[timestamp] > $value[endtime]}-->
+						已结束
+					<!--{else}-->
+						<!--{eval echo sgmdate("n月j日",$value[starttime])}-->
+					<!--{/if}-->&nbsp;		
+					$value[membernum] 人参加 /				
+					$value[follownum] 人关注
+				</p>
+				<p>
+					<!--{if $value[threadnum]}-->
+					<a href="space.php?do=event&id=$value[eventid]&view=thread">
+						$value[threadnum] 个话题
+					</a> &nbsp;
+					<!--{/if}-->
+					<!--{if $value[picnum]}-->
+					<a href="space.php?do=event&id=$value[eventid]&view=pic">
+						$value[picnum] 张照片
+					</a>
+					<!--{/if}-->
+				</p>
+			</li>
+			<!--{/loop}-->
+		</ul>
+	</div>
+	<!--{/if}-->
+	
+	<!--{if $hotevents}-->
+	<div class="sidebox">
+		<h2 class="title">
+			<div class="r_option"><a href="space.php?do=event&view=recommend&type=hot">更多</a></div>
+			热门活动
+		</h2>
+		<ul class="attention">
+			<!--{loop $hotevents $value}-->
+			<li style="height: auto;">
+				<p>
+					<a href="space.php?do=event&id=$value[eventid]">$value[title]</a>					
+				</p>
+				<p class="gray" style="text-align:left">
+					<!--{if $_SGLOBAL[timestamp] > $value[endtime]}-->
+						已结束
+					<!--{else}-->
+						<!--{eval echo sgmdate("n月j日",$value[starttime])}-->
+					<!--{/if}-->&nbsp;		
+					$value[membernum] 人参加 /				
+					$value[follownum] 人关注
+				</p>
+				<p>
+					<!--{if $value[threadnum]}-->
+					<a href="space.php?do=event&id=$value[eventid]&view=thread">
+						$value[threadnum] 个话题
+					</a> &nbsp;
+					<!--{/if}-->
+					<!--{if $value[picnum]}-->
+					<a href="space.php?do=event&id=$value[eventid]&view=pic">
+						$value[picnum] 张照片
+					</a>
+					<!--{/if}-->
+				</p>
+			</li>
+			<!--{/loop}-->
+		</ul>
+	</div>
+	<!--{/if}-->
+	
+</div>
+<!--{/if}-->
+
+<!--{template footer}-->

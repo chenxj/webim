@@ -1,0 +1,31 @@
+<!--{template header}-->
+
+<!--{template cp_header}-->
+
+<div class="c_form">
+	<form method="post" action="cp.php?ac=domain&op=">
+	<table cellspacing="0" cellpadding="0" class="formtable">
+		<caption>
+			<h2>空间域名</h2>
+			<p>域名可使用最少 $domainlength 个 ，最多 30 个的字母或数字组合，且必须字母开头。</p>
+		</caption>
+		<!--{if $space[domain] && $dcredit}-->
+		<tr>
+			<th width="100">积分</th>
+			<td><img src="image/credit.gif" align="absmiddle"> 修改域名将需要支付积分 $dcredit 个，您现在有积分 $space[credit] 个</td>
+		</tr>
+		<!--{/if}-->
+		<tr>
+			<th width="100">空间域名</th>
+			<td>http://<input type="text" name="domain" value="$space[domain]" size="10" class="t_input" />.{$_SCONFIG[domainroot]}</td>
+		</tr>
+		<tr>
+			<th>&nbsp;</th>
+			<td><input type="submit" name="domainsubmit" value="修改域名" class="submit" /></td>
+		</tr>
+	</table>
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+	</form>
+</div>
+
+<!--{template footer}-->

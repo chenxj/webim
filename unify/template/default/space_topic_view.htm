@@ -1,0 +1,306 @@
+<!--{eval $_TPL['titles'] = array($topic[subject],'热闹');}-->
+<!--{template header}-->
+
+<h2 class="title">
+	<img src="image/app/topic.gif" />热闹 - <a href="space.php?do=topic&topicid=$topicid">$topic[subject]</a>
+</h2>
+<div class="tabs_header">
+	<ul class="tabs">
+		<li class="active"><a href="space.php?do=topic&topicid=$topicid"><span>查看热闹</span></a></li>
+		<li><a href="space.php?do=topic"><span>热闹列表</span></a></li>
+	</ul>
+	<!--{if checkperm('managetopic') || $topic['uid']==$_SGLOBAL[supe_uid]}-->
+	<div class="r_option">
+		<a href="cp.php?ac=topic&op=edit&topicid=$topic[topicid]">编辑</a> | 
+		<a href="cp.php?ac=topic&op=delete&topicid=$topic[topicid]" id="a_delete_$topic[topicid]" onclick="ajaxmenu(event,this.id);" id="a_ignore_tid_$value[tid]" onclick="ajaxmenu(event, this.id)">删除</a>
+		</p>
+	</div>
+	<!--{/if}-->
+</div>
+
+<div id="content">
+	<!--{template space_topic_inc}-->
+	
+	<!--{if in_array($_GET[view], array('pic','index')) && in_array('pic', $topic['jointype'])}-->
+	<div class="feed">
+		<h3 class="feed_header">
+			<div class="r_option">
+				<!--{if $topic[allowjoin]}-->
+				<a href="cp.php?ac=upload&topicid=$topicid" style="font-weight:bold;">我来添加图片</a><span class="pipe">|</span>
+				<!--{/if}-->
+				<a href="space.php?do=topic&topicid=$topicid&view=pic">全部</a>
+			</div>
+			图片
+		</h3>
+		<!--{if $piclist}-->
+		<table cellspacing="6" cellpadding="0" width="100%" class="photo_list">
+			<tr>
+				<!--{loop $piclist $key $value}-->
+					<td align="center">
+						<a href="space.php?uid=$value[uid]&do=album&picid=$value[picid]"><img src="$value[pic]" alt="" width="100" /></a>
+						<p><a href="space.php?uid=$value[uid]">{$_SN[$value[uid]]}</a></p>
+						<p class="gray"><!--{date('m-d H:i',$value[dateline],1)}--></p>
+						<!--{if $managetopic}--><p class="gray"><a href="cp.php?ac=topic&op=ignore&topicid=$value[topicid]&id=$value[picid]&idtype=picid" id="a_ignore_picid_$value[picid]" onclick="ajaxmenu(event, this.id)">剔除</a></p><!--{/if}-->
+					</td>
+					<!--{if $key%3==2}--></tr><tr><!--{/if}-->
+				<!--{/loop}-->
+			</tr>
+		</table>
+		<!--{else}-->
+		<div class="c_form gray">
+			现在还没有相关图片，您可以 <a href="cp.php?ac=upload&topicid=$topicid">上传图片</a> 来凑个热闹。
+		</div>
+		<!--{/if}-->
+	</div>
+	<!--{/if}-->
+
+	<!--{if in_array($_GET[view], array('blog','index')) && in_array('blog', $topic['jointype'])}-->
+	<div class="feed">
+		<h3 class="feed_header">
+			<div class="r_option">
+				<!--{if $topic[allowjoin]}-->
+				<a href="cp.php?ac=blog&topicid=$topicid" style="font-weight:bold;">我来发表日志</a><span class="pipe">|</span>
+				<!--{/if}-->
+				<a href="space.php?do=topic&topicid=$topicid&view=blog">全部</a>
+			</div>
+			日志
+		</h3>
+		<!--{if $bloglist}-->
+		<ul class="line_list">
+		<!--{loop $bloglist $value}-->
+			<li>
+			<table width="100%"><tr>
+				<td>
+					<a href="space.php?uid=$value[uid]&do=blog&id=$value[blogid]">$value[subject]</a>
+				</td>
+				<td width="120" align="center"><a href="space.php?uid=$value[uid]">{$_SN[$value[uid]]}</a></td>
+				<td width="80" align="right">
+					<!--{date('m-d H:i',$value[dateline],1)}-->
+					<!--{if $managetopic}--><p class="gray"><a href="cp.php?ac=topic&op=ignore&topicid=$value[topicid]&id=$value[blogid]&idtype=blogid" id="a_ignore_blogid_$value[blogid]" onclick="ajaxmenu(event, this.id)">剔除</a></p><!--{/if}-->
+				</td>
+			</tr></table>
+			</li>
+		<!--{/loop}-->
+		</ul>
+		<!--{else}-->
+		<div class="c_form gray">
+			现在还没有相关日志，您可以 <a href="cp.php?ac=blog&topicid=$topicid">发表日志</a> 来凑个热闹。
+		</div>
+		<!--{/if}-->
+	</div>
+	<!--{/if}-->
+
+
+	<!--{if in_array($_GET[view], array('thread','index')) && in_array('thread', $topic['jointype'])}-->
+	<div class="feed">
+		<h3 class="feed_header">
+			<div class="r_option">
+				<!--{if $topic[allowjoin]}-->
+				<a href="cp.php?ac=thread&topicid=$topicid" style="font-weight:bold;">我来发起话题</a><span class="pipe">|</span>
+				<!--{/if}-->
+				<a href="space.php?do=topic&topicid=$topicid&view=thread">全部</a>
+			</div>
+			话题
+		</h3>
+		<!--{if $threadlist}-->
+		<ul class="line_list">
+		<!--{loop $threadlist $value}-->
+			<li>
+			<table width="100%"><tr>
+				<td>
+					<a href="space.php?uid=$value[uid]&do=thread&id=$value[tid]">$value[subject]</a>
+					<p class="gray"><a href="space.php?do=mtag&tagid=$value[tagid]">$value[tagname]</a></p>
+				</td>
+				<td width="120" align="center"><a href="space.php?uid=$value[uid]">{$_SN[$value[uid]]}</a></td>
+				<td width="80" align="right">
+					<!--{date('m-d H:i',$value[dateline],1)}-->
+					<!--{if $managetopic}--><p class="gray"><a href="cp.php?ac=topic&op=ignore&topicid=$value[topicid]&id=$value[tid]&idtype=tid" id="a_ignore_tid_$value[tid]" onclick="ajaxmenu(event, this.id)" id="a_ignore_tid_$value[tid]" onclick="ajaxmenu(event, this.id)">剔除</a></p><!--{/if}-->
+				</td>
+			</tr></table>
+			</li>
+		<!--{/loop}-->
+		</ul>
+		<!--{else}-->
+		<div class="c_form gray">
+			现在还没有相关话题，您可以 <a href="cp.php?ac=thread&topicid=$topicid">发起话题</a> 来凑个热闹。
+		</div>
+		<!--{/if}-->
+	</div>
+	<!--{/if}-->
+
+	<!--{if in_array($_GET[view], array('poll','index')) && in_array('poll', $topic['jointype'])}-->
+	<div class="feed">
+		<h3 class="feed_header">
+			<div class="r_option">
+				<!--{if $topic[allowjoin]}-->
+				<a href="cp.php?ac=poll&topicid=$topicid" style="font-weight:bold;">我来发起投票</a><span class="pipe">|</span>
+				<!--{/if}-->
+				<a href="space.php?do=topic&topicid=$topicid&view=poll">全部</a>
+			</div>
+			投票
+		</h3>
+		<!--{if $polllist}-->
+		<ul class="line_list">
+		<!--{loop $polllist $value}-->
+			<li>
+			<table width="100%"><tr>
+				<td>
+					<a href="space.php?uid=$value[uid]&do=poll&pid=$value[pid]">$value[subject]</a>
+					<p class="gray">
+					<!--{if $value[multiple]}-->多选<!--{else}-->单选<!--{/if}-->
+					</p>
+				</td>
+				<td width="120" align="center"><a href="space.php?uid=$value[uid]">{$_SN[$value[uid]]}</a></td>
+				<td width="80" align="right">
+					<!--{date('m-d H:i',$value[dateline],1)}-->
+					<!--{if $managetopic}--><p class="gray"><a href="cp.php?ac=topic&op=ignore&topicid=$value[topicid]&id=$value[pid]&idtype=pid" id="a_ignore_pid_$value[pid]" onclick="ajaxmenu(event, this.id)">剔除</a></p><!--{/if}-->
+				</td>
+			</tr></table>
+			</li>
+		<!--{/loop}-->
+		</ul>
+		<!--{else}-->
+		<div class="c_form gray">
+			现在还没有相关投票，您可以 <a href="cp.php?ac=poll&topicid=$topicid">发起投票</a> 来凑个热闹。
+		</div>
+		<!--{/if}-->
+	</div>
+	<!--{/if}-->
+	
+	<!--{if in_array($_GET[view], array('event','index')) && in_array('event', $topic['jointype'])}-->
+	<div class="feed">
+		<h3 class="feed_header">
+			<div class="r_option">
+				<!--{if $topic[allowjoin]}-->
+				<a href="cp.php?ac=event&topicid=$topicid" style="font-weight:bold;">我来发起活动</a><span class="pipe">|</span>
+				<!--{/if}-->
+				<a href="space.php?do=topic&topicid=$topicid&view=event">全部</a>
+			</div>
+			活动
+		</h3>
+		<!--{if $eventlist}-->
+		<ul class="line_list">
+		<!--{loop $eventlist $value}-->
+			<li>
+			<table width="100%"><tr>
+				<td>
+					<a href="space.php?uid=$value[uid]&do=event&id=$value[eventid]">$value[title]</a>
+					<p class="gray">
+						活动开始：<!--{date('m-d H:i',$value[starttime])}-->
+					</p>
+				</td>
+				<td width="120" align="center"><a href="space.php?uid=$value[uid]">{$_SN[$value[uid]]}</a></td>
+				<td width="80" align="right">
+					<!--{date('m-d H:i',$value[dateline],1)}-->
+					<!--{if $managetopic}--><p class="gray"><a href="cp.php?ac=topic&op=ignore&topicid=$value[topicid]&id=$value[eventid]&idtype=eventid" id="a_ignore_eventid_$value[eventid]" onclick="ajaxmenu(event, this.id)">剔除</a></p><!--{/if}-->
+				</td>
+			</tr></table>
+			</li>
+		<!--{/loop}-->
+		</ul>
+		<!--{else}-->
+		<div class="c_form gray">
+			现在还没有相关活动，您可以 <a href="cp.php?ac=event&topicid=$topicid">发起活动</a> 来凑个热闹。
+		</div>
+		<!--{/if}-->
+	</div>
+	<!--{/if}-->
+	
+
+	<!--{if in_array($_GET[view], array('share','index')) && in_array('share', $topic['jointype'])}-->
+	<div class="feed">
+		<h3 class="feed_header">
+			<div class="r_option">
+				<!--{if $topic[allowjoin]}-->
+				<a href="cp.php?ac=share&topicid=$topicid" style="font-weight:bold;">我来添加分享</a><span class="pipe">|</span>
+				<!--{/if}-->
+				<a href="space.php?do=topic&topicid=$topicid&view=share">全部</a>
+			</div>
+			分享
+		</h3>
+		<!--{if $sharelist}-->
+		<ul class="line_list">
+			<!--{loop $sharelist $value}-->
+				<!--{template space_share_li}-->
+			<!--{/loop}-->
+		</ul>
+		<!--{else}-->
+		<div class="c_form gray">
+			现在还没有相关分享，您可以 <a href="cp.php?ac=share&topicid=$topicid">添加分享</a> 来凑个热闹。
+		</div>
+		<!--{/if}-->
+	</div>
+	<!--{/if}-->
+	
+	<!--{if $_GET['view'] == 'space'}-->
+		<!--{if $spacelist}-->
+		<div class="feed">
+			<h3 class="feed_header">
+				<a href="space.php?do=topic&topicid=$topicid&view=space" class="r_option">全部</a>
+				用户
+			</h3>
+	
+			<!--{eval $list = $spacelist;}-->
+			<!--{template space_list}-->
+		</div>
+		<!--{else}-->
+		<div class="c_form">还没有相关列表。</div>
+		<!--{/if}-->
+		
+	<!--{else}-->
+		<div class="page">$multi</div>
+	<!--{/if}-->
+
+</div>
+
+<div id="sidebar">
+
+	<div class="sidebox">
+	<h2 class="title">分类查看</h2>
+	<ul class="post_list line_list">
+		<li$sub_actives[index]><a href="space.php?do=topic&topicid=$topicid&view=index"><span>全部</span></a></li>
+		<!--{if in_array('blog', $topic['jointype'])}-->
+		<li$sub_actives[blog]><a href="space.php?do=topic&topicid=$topicid&view=blog"><span>日志</span></a></li>
+		<!--{/if}-->
+		<!--{if in_array('pic', $topic['jointype'])}-->
+		<li$sub_actives[pic]><a href="space.php?do=topic&topicid=$topicid&view=pic"><span>图片</span></a></li>
+		<!--{/if}-->
+		<!--{if in_array('thread', $topic['jointype'])}-->
+		<li$sub_actives[thread]><a href="space.php?do=topic&topicid=$topicid&view=thread"><span>话题</span></a></li>
+		<!--{/if}-->
+		<!--{if in_array('poll', $topic['jointype'])}-->
+		<li$sub_actives[poll]><a href="space.php?do=topic&topicid=$topicid&view=poll"><span>投票</span></a></li>
+		<!--{/if}-->
+		<!--{if in_array('event', $topic['jointype'])}-->
+		<li$sub_actives[event]><a href="space.php?do=topic&topicid=$topicid&view=event"><span>活动</span></a></li>
+		<!--{/if}-->
+		<!--{if in_array('share', $topic['jointype'])}-->
+		<li$sub_actives[share]><a href="space.php?do=topic&topicid=$topicid&view=share"><span>分享</span></a></li>
+		<!--{/if}-->
+		<li$sub_actives[space]><a href="space.php?do=topic&topicid=$topicid&view=space"><span>用户</span></a></li>
+	</ul>
+	</div>
+	
+	<!--{if $_GET['view'] != 'space' && $spacelist}-->
+	<div class="sidebox">
+		<h2 class="title">
+			<p class="r_option">
+				<a href="space.php?do=topic&topicid=$topicid&view=space">全部</a>
+			</p>
+			参与成员
+		</h2>
+		<ul class="avatar_list">
+			<!--{loop $spacelist $key $value}-->
+			<li>
+				<div class="avatar48"><a href="space.php?uid=$value[uid]"><!--{avatar($value[uid],small)}--></a></div>
+				<p><a href="space.php?uid=$value[uid]" title="{$_SN[$value[uid]]}">{$_SN[$value[uid]]}</a></p>
+				<p class="gray"><!--{date('H:i',$value[dateline],1)}--></p>
+			</li>
+			<!--{/loop}-->
+		</ul>
+	</div>
+	<!--{/if}-->
+	
+</div>
+	
+<!--{template footer}-->

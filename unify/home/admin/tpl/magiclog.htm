@@ -1,0 +1,312 @@
+<!--{template admin/tpl/header}-->
+
+<div class="mainarea">
+<div class="maininner">
+
+	<div class="tabs_header">
+		<ul class="tabs">
+			<li$actives[holdlog]><a href="admincp.php?ac=magiclog&view=holdlog"><span>道具持有记录</span></a></li>
+			<li$actives[inlog]><a href="admincp.php?ac=magiclog&view=inlog"><span>道具获取记录</span></a></li>
+			<li$actives[uselog]><a href="admincp.php?ac=magiclog&view=uselog"><span>道具使用记录</span></a></li>
+			<!--{if $allowmanage}-->
+			<li$actives[storelog]><a href="admincp.php?ac=magiclog&view=storelog"><span>道具出售统计</span></a></li>
+			<!--{/if}-->
+		</ul>
+	</div>
+
+<!--{if $_GET[view] == 'inlog'}-->
+	<form method="get" action="admincp.php">
+	<div class="block style4">
+	<table cellspacing="3" cellpadding="3">
+		<tr>
+			<!--{if $allowmanage}-->
+			<th>用户名</th><td><input type="text" name="username" value="$_GET[username]"></td>
+			<!--{else}-->
+			<th>用户名</th><td><input type="text" name="username" value="$_SGLOBAL[supe_username]" disabled></td>
+			<!--{/if}-->
+			<th>道具</th>
+			<td>
+				<select name="mid">
+				<option value="">不限</option>
+				<!--{loop $_SGLOBAL[magic] $key $value}-->
+				<option value="$key"<!--{if $_GET[mid]==$key}--> selected<!--{/if}-->>$value</option>
+				<!--{/loop}-->
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th>交易量</th>
+			<td>
+				<select name="count">
+					<option value="">不限</option>
+					<option value="1-4"<!--{if $_GET['count']=='1-4'}--> selected<!--{/if}-->>1 - 4</option>
+					<option value="5-9"<!--{if $_GET['count']=='5-9'}--> selected<!--{/if}-->>5 - 9</option>
+					<option value="10-49"<!--{if $_GET['count']=='10-49'}--> selected<!--{/if}-->>10 - 49</option>
+					<option value="50-99"<!--{if $_GET['count']=='50-99'}--> selected<!--{/if}-->>50 - 99</option>
+					<option value="100-99999"<!--{if $_GET['count']=='100-99999'}--> selected<!--{/if}-->>100以上</option>
+				</select>
+			</td>
+			<th>获得途径</th>
+			<td>
+				<select name="type">
+					<option value="">不限</option>
+					<option value="1"<!--{if $_GET[type]==1}--> selected<!--{/if}-->>购买</option>
+					<option value="2"<!--{if $_GET[type]==2}--> selected<!--{/if}-->>赠送</option>
+					<option value="3"<!--{if $_GET[type]==3}--> selected<!--{/if}-->>升级</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th>记录时间</th>
+			<td colspan="3">
+				<script type="text/javascript" src="source/script_calendar.js" charset="$_SC[charset]"></script>
+				<input type="text" name="starttime" value="$_GET[starttime]" onclick="showcalendar(event,this,1)"/> ~
+				<input type="text" name="endtime" value="$_GET[endtime]"  onclick="showcalendar(event,this,1)" />
+				<input type="hidden" name="view" value="$_GET[view]">
+				<input type="hidden" name="ac" value="magiclog">
+				<input type="submit" name="searchsubmit" value="搜索" class="submit">
+			</td>
+		</tr>
+		</table>
+	</div>
+	</form>
+	
+	<!--{if $list}-->
+	<div class="bdrcontent">
+	<table width="100%">
+		<tr>
+			<th>用户</th>
+			<th>方式</th>
+			<th>道具</th>
+			<th>数量</th>
+			<th>时间</th>
+		</tr>
+		<!--{loop $list $value}-->
+		<tr>
+			<td>
+			<a href="admincp.php?ac=magiclog&view=inlog&username=$value[username]">$value[username]</a>
+			</td>
+			<td>
+			<!--{if $value[type]==2}-->
+			获赠
+			<!--{elseif $value[type] == 3}-->
+			升级用户组
+			<!--{else}-->
+			购买
+			<!--{/if}-->
+			</td>
+			<td>
+			<a href="admincp.php?ac=magiclog&view=inlog&mid=$value[mid]">$_SGLOBAL[magic][$value[mid]]</a>
+			</td>
+			<td>
+			$value[count]
+			</td>
+			<td>
+			<!--{eval echo sgmdate('Y-m-d H:i', $value[dateline])}-->
+			</td>
+		</tr>
+		<!--{/loop}-->	
+	</table>
+	</div>
+	<div class="footactions">
+		<div class="pages">$multi</div>
+	</div>
+	<!--{else}-->
+	<div class="bdrcontent">
+	没有指定数据
+	</div>	
+	<!--{/if}-->
+	
+<!--{elseif $_GET[view] == 'uselog'}-->
+	<form method="get" action="admincp.php">
+	<div class="block style4">
+	<table cellspacing="3" cellpadding="3">
+		<tr>
+			<!--{if $allowmanage}-->
+			<th>用户名</th><td><input type="text" name="username" value="$_GET[username]"></td>
+			<!--{else}-->
+			<th>用户名</th><td><input type="text" name="username" value="$_SGLOBAL[supe_username]" disabled></td>
+			<!--{/if}-->
+			<th>道具</th>
+			<td>
+				<select name="mid">
+				<option value="">不限</option>
+				<!--{loop $_SGLOBAL[magic] $key $value}-->
+				<option value="$key"<!--{if $_GET[mid]==$key}--> selected<!--{/if}-->>$value</option>
+				<!--{/loop}-->
+				</select>
+				</select>			
+			</td>
+		</tr>
+		<tr>
+			<th>作用对象类型</th>
+			<td>
+				<select name="idtype">
+					<option value="">不限</option>
+					<option value="blogid"<!--{if $_GET['idtype']=='blogid'}--> selected<!--{/if}-->>日志</option>
+					<option value="tid"<!--{if $_GET['idtype']=='tid'}--> selected<!--{/if}-->>话题</option>
+					<option value="cid"<!--{if $_GET['idtype']=='cid'}--> selected<!--{/if}-->>评论/留言</option>
+					<option value="uid"<!--{if $_GET['idtype']=='uid'}--> selected<!--{/if}-->>空间</option>
+					<option value="picid"<!--{if $_GET['idtype']=='picid'}--> selected<!--{/if}-->>图片</option>
+					<option value="pollid"<!--{if $_GET['idtype']=='pollid'}--> selected<!--{/if}-->>投票</option>
+					<option value="eventid"<!--{if $_GET['idtype']=='eventid'}--> selected<!--{/if}-->>活动</option>
+				</select>
+			</td>
+			<th>作用对象ID</th>
+			<td>
+				<input type="text" name="id" value="$_GET[id]" />
+			</td>
+		</tr>
+		<tr>
+			<th>记录时间</th>
+			<td colspan="3">
+				<script type="text/javascript" src="source/script_calendar.js"></script>
+				<input type="text" name="starttime" value="$_GET[starttime]" onclick="showcalendar(event,this,1)"/> ~
+				<input type="text" name="endtime" value="$_GET[endtime]"  onclick="showcalendar(event,this,1)" />
+				<input type="hidden" name="view" value="$_GET[view]">
+				<input type="hidden" name="ac" value="magiclog">
+				<input type="submit" name="searchsubmit" value="搜索" class="submit">
+			</td>
+		</tr>
+		</table>
+	</div>
+	</form>
+	
+	<!--{if $list}-->	
+	<div class="bdrcontent">	
+	<table width="100%">
+		<tr>
+			<th>用户</th>
+			<th>道具</th>
+			<th>时间</th>
+		</tr>
+		<!--{loop $list $value}-->
+		<tr>
+			<td>
+			<a href="admincp.php?ac=magiclog&view=uselog&username=$value[username]">$value[username]</a>
+			</td>
+			<td>
+			<a href="admincp.php?ac=magiclog&view=uselog&mid=$value[mid]">$_SGLOBAL[magic][$value[mid]]</a>
+			</td>
+			<td>
+			<!--{eval echo sgmdate('Y-m-d H:i', $value[dateline])}-->
+			</td>
+		</tr>
+		<!--{/loop}-->	
+	</table>
+	</div>
+	<div class="footactions">
+		<div class="pages">$multi</div>
+	</div>
+	<!--{else}-->
+	<div class="bdrcontent">
+	没有指定数据
+	</div>	
+	<!--{/if}-->
+<!--{elseif $_GET['view'] == 'storelog'}-->
+	<!--{if $list}-->	
+	<div class="bdrcontent">
+	<h3>
+		共售出道具 $totalcount 件，回收 $totalcredit 积分
+	</h3>
+	<br />
+	<table width="100%">
+		<tr>
+			<th>道具</th>
+			<th>售出数</th>
+			<th>回收积分</th>
+		</tr>
+		<!--{loop $list $value}-->
+		<tr>
+			<td><a href="admincp.php?ac=magiclog&view=holdlog&mid=$value[mid]">$_SGLOBAL[magic][$value[mid]]</a></td>
+			<td>$value[sellcount]</td>
+			<td>$value[sellcredit]</td>
+			</td>
+		</tr>
+		<!--{/loop}-->	
+	</table>
+	</div>
+	<div class="footactions">
+		<div class="pages">$multi</div>
+	</div>
+	<!--{else}-->
+	<div class="bdrcontent">
+	没有指定数据
+	</div>	
+	<!--{/if}-->
+<!--{else}-->
+	<form method="get" action="admincp.php">
+	<div class="block style4">
+	<table cellspacing="3" cellpadding="3">
+		<tr>
+			<!--{if $allowmanage}-->
+			<th>用户UID</th><td><input type="text" name="uid" value="$_GET[uid]"></td>
+			<th>用户名</th><td><input type="text" name="username" value="$_GET[username]"></td>
+			<!--{else}-->
+			<th>用户UID</th><td><input type="text" name="uid" value="$_SGLOBAL[supe_uid]" disabled></td>
+			<th>用户名</th><td><input type="text" name="username" value="$_GET[username]" disabled></td>
+			<!--{/if}-->
+		</tr>
+		<tr>
+			<th>道具</th>
+			<td colspan="3">
+				<select name="mid">
+				<option value="">不限</option>
+				<!--{loop $_SGLOBAL[magic] $key $value}-->
+				<option value="$key"<!--{if $_GET[mid]==$key}--> selected<!--{/if}-->>$value</option>
+				<!--{/loop}-->
+				</select>
+				</select>	
+				<input type="hidden" name="view" value="$_GET[view]">
+				<input type="hidden" name="ac" value="magiclog">
+				<input type="submit" name="searchsubmit" value="搜索" class="submit">		
+			</td>
+		</tr>
+		</table>
+	</div>
+	</form>
+	
+	<!--{if $list}-->	
+	<div class="bdrcontent">	
+	<table width="100%">
+		<tr>
+			<th>用户</th>
+			<th>道具</th>
+			<th>数量</th>
+		</tr>
+		<!--{loop $list $value}-->
+		<tr>
+			<td>
+			<a href="admincp.php?ac=magiclog&view=holdlog&uid=$value[uid]">
+			$value[username]
+			</a>
+			</td>
+			<td>
+			<a href="admincp.php?ac=magiclog&view=holdlog&mid=$value[mid]">$_SGLOBAL[magic][$value[mid]]</a>
+			</td>
+			<td>
+			$value[count]
+			</td>
+		</tr>
+		<!--{/loop}-->	
+	</table>
+	</div>
+	<div class="footactions">
+		<div class="pages">$multi</div>
+	</div>
+	<!--{else}-->
+	<div class="bdrcontent">
+	没有指定数据
+	</div>	
+	<!--{/if}-->
+
+<!--{/if}-->
+
+</div>
+</div>
+
+<div class="side">
+	<!--{template admin/tpl/side}-->
+</div>
+
+<!--{template admin/tpl/footer}-->

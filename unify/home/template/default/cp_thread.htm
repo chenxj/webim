@@ -1,0 +1,328 @@
+<!--{template header}-->
+
+<!--{if $_GET['op'] == 'edit'}-->
+
+
+
+<h1>编辑</h1>
+<a href="javascript:hideMenu();" class="float_del" title="关闭">关闭</a>
+<div class="popupmenu_inner">
+
+	<form id="editpostform_{$pid}" name="editpostform_{$pid}" method="post" action="cp.php?ac=thread&op=edit&pid=$pid&tagid=$tagid&eventid=$eventid">
+		<table>
+			<tr>
+				<th style="vertical-align: top;"><label for="message">内容：</label></th>
+				<td>
+					<a href="###" id="face_{$pid}" onclick="showFace(this.id, 'message_{$pid}');return false;"><img src="image/facelist.gif" align="absmiddle" /></a>
+					<img src="image/zoomin.gif" onmouseover="this.style.cursor='pointer'" onclick="zoomTextarea('message_{$pid}', 1)">
+					<img src="image/zoomout.gif" onmouseover="this.style.cursor='pointer'" onclick="zoomTextarea('message_{$pid}', 0)"><br/>
+					<textarea id="message_{$pid}" name="message" onkeydown="ctrlEnter(event, 'posteditsubmit_btn');" <!--{if $post['isthread']}-->rows="18" style="width:98%;"<!--{else}-->rows="8" cols="50"<!--{/if}-->>$post[message]</textarea>
+				</td>
+			</tr>
+			<tbody id="editwebimg">
+				<tr>
+					<th>图片：</th>
+					<td>
+						<input class="t_input" type="text" onfocus="if(this.value == 'http://')this.value='';" onblur="if(this.value=='')this.value='http://'" name="pics[]" value="http://" size="40" />&nbsp;
+						<a href="javascript:;" onclick="insertWebImg(this.previousSibling.previousSibling)">插入</a> &nbsp;
+						<a href="javascript:;" onclick="delRow(this, 'editwebimg')">删除</a>
+					</td>
+				</tr>
+			</tbody>
+			<tr>
+				<th>&nbsp;</th>
+				<td>
+					<a href="javascript:;" onclick="copyRow('editwebimg')">+增加图片</a> <span class="gray">只支持 .jpg、.gif、.png为结尾的URL地址</span>
+				</td>
+			</tr>
+			<tr>
+				<th>&nbsp;</th>
+				<td>
+				<input type="hidden" name="pid" value="$pid">
+				<input type="hidden" name="refer" value="$_SGLOBAL[refer]" />
+				<input type="hidden" name="posteditsubmit" value="true" />
+				<!--{if $_SGLOBAL[inajax]}-->
+				<input type="button" name="posteditsubmit_btn" id="posteditsubmit_btn" value="提交" class="submit" onclick="ajaxpost('editpostform_{$pid}', 'post_edit', 1)" />
+				<!--{else}-->
+				<input type="submit" name="posteditsubmit_btn" id="posteditsubmit_btn" value="提交" class="submit" />
+				<!--{/if}-->
+				
+				<div id="__editpostform_{$pid}"></div>
+				</td>
+			</tr>
+		</table>
+		<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+	</form>
+</div>
+
+<!--{elseif $_GET['op'] == 'delete'}-->
+
+<h1>删除回帖</h1>
+<a href="javascript:hideMenu();" class="float_del" title="关闭">关闭</a>
+<div class="popupmenu_inner" id="__deletepostform_{$pid}">
+<form id="deletepostform_{$pid}" name="deletepostform_{$pid}" method="post" action="cp.php?ac=thread&op=delete&pid=$pid&tagid=$tagid&eventid=$eventid">
+	<p>确定删除指定的帖子吗？</p>
+	<p class="btn_line">
+		<input type="hidden" name="refer" value="$_SGLOBAL[refer]" />
+		<!--{if $_SGLOBAL[inajax]}-->
+		<input type="hidden" name="postdeletesubmit" value="true" />
+		<input type="button" name="postdeletesubmit_btn" value="提交" class="submit" onclick="ajaxpost('deletepostform_{$pid}', 'post_delete', 2000)" />&nbsp;
+		<!--{else}-->
+		<input type="submit" name="postdeletesubmit" value="提交" class="submit" />&nbsp;
+		<!--{/if}-->
+	</p>
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+</form>
+</div>
+
+<!--{elseif $_GET['op'] == 'edithot'}-->
+
+<h1>调整热度</h1>
+<a href="javascript:hideMenu();" class="float_del" title="关闭">关闭</a>
+<div class="popupmenu_inner">
+<form method="post" action="cp.php?ac=thread&op=edithot&tid=$tid">
+	<p class="btn_line">
+		新的热度：<input type="text" name="hot" value="$thread[hot]" size="5">
+		<input type="hidden" name="refer" value="$_SGLOBAL[refer]" />
+		<input type="hidden" name="hotsubmit" value="true" />
+		<input type="submit" name="btnsubmit" value="确定" class="submit" />
+	</p>
+<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+</form>
+</div>
+
+<!--{elseif $_GET['op'] == 'reply'}-->
+
+<h1>回复</h1>
+<a href="javascript:hideMenu();" class="float_del" title="关闭">关闭</a>
+<div class="popupmenu_inner">
+<form id="reply_postform_{$post[pid]}" name="reply_postform_{$post[pid]}" method="post" action="cp.php?ac=thread&eventid=$eventid">
+	<table>
+		<tr>
+			<th><label for="message">内容：</label></th>
+			<td>
+				<a href="###" id="face_{$post[pid]}" onclick="showFace(this.id, 'message_{$post[pid]}');return false;"><img src="image/facelist.gif" align="absmiddle" /></a>
+				<img src="image/zoomin.gif" onmouseover="this.style.cursor='pointer'" onclick="zoomTextarea('message_{$post[pid]}', 1)">
+				<img src="image/zoomout.gif" onmouseover="this.style.cursor='pointer'" onclick="zoomTextarea('message_{$post[pid]}', 0)"><br/>
+				<textarea id="message_{$post[pid]}" name="message" onkeydown="ctrlEnter(event, 'postsubmit');" rows="8" cols="70"></textarea>
+			</td>
+		</tr>
+		<tbody id="replybimg">
+			<tr>
+				<td>图片：</td>
+				<td>
+					<input class="t_input" type="text" name="pics[]" onfocus="if(this.value == 'http://')this.value='';" onblur="if(this.value=='')this.value='http://'" value="http://" size="30" />&nbsp;
+					<a href="javascript:;" onclick="insertWebImg(this.previousSibling.previousSibling)">插入</a> &nbsp;
+					<a href="javascript:;" onclick="delRow(this, 'replybimg')">删除</a>
+				</td>
+			</tr>
+		</tbody>
+		<tr>
+			<th>&nbsp;</th>
+			<td>
+				<a href="javascript:;" onclick="copyRow('replybimg')">+增加图片</a> <span class="gray">只支持 .jpg、.gif、.png为结尾的URL地址</span>
+			</td>
+		</tr>
+
+		<tr>
+			<td>&nbsp;</td>
+			<td>
+				<input type="hidden" name="refer" value="$_SGLOBAL[refer]" />
+				<input type="hidden" name="tid" value="$post[tid]" />
+				<input type="hidden" name="pid" value="$post[pid]" />
+				<!--{if $_SGLOBAL[inajax]}-->
+				<input type="hidden" name="postsubmit" value="true" />
+				<input type="submit" name="postsubmit_btn" id="postsubmit" value="回复" class="submit" onclick="ajaxpost('reply_postform_{$post[pid]}', 'post_add', 1)" />
+				<!--{else}-->
+				<input type="submit" name="postsubmit" id="postsubmit" value="回复" class="submit" />
+				<!--{/if}-->
+				<div id="__reply_postform_{$post[pid]}"></div>
+			</td>
+		</tr>
+	</table>
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+</form>
+</div>
+
+<!--{else}-->
+
+<script language="javascript" src="image/editor/editor_function.js"></script>
+<script language="javascript" src="source/script_blog.js"></script>
+
+<!--{if $topic}-->
+	<!--{template cp_topic_menu}-->
+<!--{else}-->
+	<h2 class="title">
+		<!--{if $eventid}-->
+		<img src="image/app/event.gif">活动 - <a href="space.php?do=event&id=$eventid">$event[title]</a>
+		<!--{else}-->
+		<img src="image/app/mtag.gif" />群组
+		<!--{/if}-->
+	</h2>
+	<div class="tabs_header">
+		<ul class="tabs">
+		<!--{if $eventid}-->
+			<li class="active"><a href="cp.php?ac=thread&eventid=$eventid"><span>发表活动话题</span></a></li>
+			<li><a href="space.php?do=event&id=$eventid"><span>返回活动</span></a></li>
+		<!--{elseif $thread}-->
+			<li class="active"><a href="cp.php?ac=thread&op=edit&pid=$post[pid]"><span>编辑话题</span></a></li>
+			<li><a href="space.php?do=mtag&tagid=$thread[tagid]&view=list"><span>返回讨论区</span></a></li>
+		<!--{else}-->
+			<li class="active"><a href="cp.php?ac=thread"><span>发表新话题</span></a></li>
+			<li><a href="space.php?do=thread&view=me"><span>返回我的话题</span></a></li>
+		<!--{/if}-->
+		</ul>
+	</div>
+<!--{/if}-->
+
+<div class="c_form">
+
+<style>
+	.userData {behavior:url(#default#userdata);}
+</style>
+
+	<form method="post" action="cp.php?ac=thread&eventid=$eventid" enctype="multipart/form-data">
+		<table cellspacing="4" cellpadding="4" width="100%" class="infotable">
+		<!--{if $eventid}-->
+			<tr>
+				<td>
+					<input type="hidden" name="tagid" maxlength="100" value="$tagid" />
+				</td>
+			</tr>
+		<!--{elseif !$tagid}-->
+			<tr>
+				<td>
+				<select name="tagid" id="tagid">
+				<!--{loop $mtaglist $fieldid $values}-->
+				<!--{loop $values $value}-->
+					<option value="$value[tagid]">[{$_SGLOBAL[profield][$value[fieldid]][title]}] $value[tagname]</option>>
+				<!--{/loop}-->
+				<!--{/loop}-->
+				</select>
+				<a href="cp.php?ac=mtag">创建新群组</a>
+				</td>
+			</tr>
+		<!--{else}-->
+			<tr>
+				<td>$mtag[tagname]<!--{if !$thread}--> [<a href="cp.php?ac=thread">切换</a>]<!--{/if}-->
+					<input type="hidden" name="tagid" value="$tagid" />
+				</td>
+			</tr>
+		<!--{/if}-->
+			<tr>
+				<td><input type="text" class="t_input" id="subject" name="subject" value="$thread[subject]" size="60" /></td>
+			</tr>
+			<tr>
+				<td>
+				<a id="doodleBox" href="magic.php?mid=doodle&showid=blog_doodle&target=uchome-ttHtmlEditor&from=editor" style="display:none"></a>
+				<textarea class="userData" name="message" id="uchome-ttHtmlEditor" style="height:100%;width:100%;display:none;border:0px">$post[message]</textarea>
+				<iframe src="editor.php?charset=$_SC[charset]&allowhtml=<!--{eval echo checkperm('allowhtml')}-->&doodle=<!--{if isset($_SGLOBAL[magic][doodle])}-->1<!--{/if}-->" name="uchome-ifrHtmlEditor" id="uchome-ifrHtmlEditor" scrolling="no" border="0" frameborder="0" style="width:100%;border: 1px solid #C5C5C5;" height="400"></iframe>
+				</td>
+			</tr>
+
+			<!--{if checkperm('seccode')}-->
+			<!--{if $_SCONFIG['questionmode']}-->
+			<tr>
+				<td>
+					<p>请回答验证问题</p>
+					<p><!--{eval question();}--></p>
+					<input type="text" id="seccode" name="seccode" value="" size="15" class="t_input" />
+				</td>
+			</tr>
+			<!--{else}-->
+			<tr>
+				<td>
+					<p>请填写验证码</p>
+					<script>seccode();</script>
+					<p>请输入上面的4位字母或数字，看不清可<a href="javascript:updateseccode()">更换一张</a></p>
+					<input type="text" id="seccode" name="seccode" value="" size="15" class="t_input" />
+				</td>
+			</tr>
+			<!--{/if}-->
+			<!--{/if}-->
+
+			<tr>
+				<td>
+					<input type="checkbox" name="makefeed" id="makefeed" value="1"<!--{if empty($mtag['viewperm']) && ckprivacy('thread', 1)}--> checked<!--{/if}-->> 产生动态 (<a href="cp.php?ac=privacy#feed" target="_blank">更改默认设置</a>)
+				</td>
+			</tr>
+
+		</table>
+		<input type="hidden" name="tid" value="$thread[tid]" />
+		<input type="hidden" name="threadsubmit" value="true" />
+		<input type="button" id="threadbutton" name="threadbutton" value="提交发布" onclick="validate(this);" style="display: none;" />
+		<input type="hidden" name="topicid" value="$_GET[topicid]" />
+		<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+	</form>
+	<!--{if !$thread['uid'] || $thread['uid']==$_SGLOBAL['supe_uid']}-->
+	<table cellspacing="4" cellpadding="4" width="100%" class="infotable">
+		<tr><td>
+		<input type="button" name="clickbutton[]" value="上传图片" class="button" onclick="edit_album_show('pic')">
+		<input type="button" name="clickbutton[]" value="插入图片" class="button" onclick="edit_album_show('album')">
+		</td></tr>
+	</table>
+	<!--{/if}-->
+	<table cellspacing="4" cellpadding="4" width="100%" id="uchome-edit-pic" class="infotable" style="display:none;">
+		<tr>
+			<td>
+				<strong>选择图片</strong>:
+				<table summary="Upload" cellspacing="2" cellpadding="0">
+					<tbody id="attachbodyhidden" style="display:none">
+						<tr>
+							<td>
+								<form method="post" id="upload" action="cp.php?ac=upload" enctype="multipart/form-data" target="uploadframe" style="background: transparent;">
+									<input type="file" name="attach" style="border: 1px solid #CCC;" />
+									<span id="localfile"></span>
+									<input type="hidden" name="uploadsubmit" id="uploadsubmit" value="true" />
+									<input type="hidden" name="albumid" id="albumid" value="0" />
+									<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+								</form>
+							</td>
+						</tr>
+					</tbody>
+					<tbody id="attachbody"></tbody>
+				</table>
+				<strong>存储相册</strong>:
+				<table cellspacing="2" cellpadding="0">
+					<tr>
+						<td>
+							<select name="albumid" id="uploadalbum" onchange="addSort(this)">
+								<option value="-1">请选择相册</option>
+								<option value="-1">默认相册</option>
+								<!--{loop $albums $value}-->
+								<option value="$value[albumid]">$value[albumname]</option>
+								<!--{/loop}-->
+								<option value="addoption" style="color:red;">+新建相册</option>
+							</select>
+							<script src="source/script_upload.js" type="text/javascript"></script>
+							<iframe id="uploadframe" name="uploadframe" width="0" height="0" marginwidth="0" frameborder="0" src="about:blank"></iframe>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	<table cellspacing="4" cellpadding="4" width="100%" class="infotable" id="uchome-edit-album" style="display:none;">
+		<tr>
+			<td>
+				选择相册: <select name="view_albumid" onchange="picView(this.value)">
+					<option value="none">选择一个相册</option>
+					<option value="0">默认相册</option>
+					<!--{loop $albums $value}-->
+					<option value="$value[albumid]">$value[albumname]</option>
+					<!--{/loop}-->
+				</select> (点击图片可以插入到内容中)
+				<div id="albumpic_body"></div>
+			</td>
+		</tr>
+	</table>
+	<table cellspacing="4" cellpadding="4" width="100%" class="infotable">
+		<tr>
+			<td><input type="button" id="issuance" onclick="document.getElementById('threadbutton').click();" value="保存发布" class="submit" /></td>
+		</tr>
+	</table>
+</div>
+
+<!--{/if}-->
+
+<!--{template footer}-->

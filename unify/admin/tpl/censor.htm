@@ -1,0 +1,43 @@
+<!--{template admin/tpl/header}-->
+
+<div class="mainarea">
+<div class="maininner">
+
+	<form method="post" action="admincp.php?ac=censor">
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+	
+	<div class="bdrcontent">
+
+	<table cellspacing="0" cellpadding="0" class="formtable">
+	<tr><td>
+	<textarea name="censor" style="width:98%;" rows="12">$censor</textarea>
+	</td></tr>
+	<tr><td>
+	添加格式：<br />
+	每行一组过滤词语<br />
+	不良词语和替换词语之间使用“=”进行分割<br />
+	如需禁止发布包含某个词语的文字，而不是替换过滤，请将其对应的替换内容设置为 $banflag 即可<br />
+	替换前的内容可以使用限定符 {x} 以限定相邻两字符间可忽略的文字，x 是忽略字符的个数<br />
+	如 "a{1}s{2}s"(不含引号) 可以过滤 "ass" 也可过滤 "axsxs" 和 "axsxxs" 等等<br />
+	例如：<br />
+	toobad=** (作用:将toobad文字替换为**)<br />
+	badword=good (作用:将badword文字替换为good)<br />
+	sexword=$banflag (作用:禁止发布包含sexword词语的文字)<br />
+	</td></tr>
+	</table>
+	</div>
+	
+	<div class="footactions">
+		<input type="submit" name="censorsubmit" value="提交" class="submit">
+	</div>
+		
+	</form>
+
+</div>
+</div>
+
+<div class="side">
+	<!--{template admin/tpl/side}-->
+</div>
+
+<!--{template admin/tpl/footer}-->

@@ -1,0 +1,118 @@
+<!--{template admin/tpl/header}-->
+
+<div class="mainarea">
+<div class="maininner">
+	<div class="bdrcontent">
+	
+	<!--{if $_SCONFIG['my_status']}-->
+	<p></p>
+	
+	<table width="100%">
+		<tr>
+			<td>
+				<strong>本站MYOP应用管理</strong><br>
+				如果用户应用功能无法与ManYou通讯，请重新同步站点信息；如果想要关闭用户应用功能，点击“关闭用户应用功能”；注意：关闭用户应用功能后当前所有的应用都将处于禁用状态。
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table><tr><td>
+				<form method="post" action="admincp.php?ac=userapp">
+					<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+					<input type="hidden" name="my_hidden" value="1">
+					<input type="submit" name="mysubmit" value="同步信息" class="submit">
+				</form>
+				</td><td>
+				<form method="post" action="admincp.php?ac=userapp">
+					<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+					<input type="hidden" name="my_hidden" value="1">
+					<input type="submit" name="closemysubmit" value="关闭用户应用功能" class="submit">
+				</form>
+				</td></tr></table>
+			</td>
+		</tr>
+	</table>
+	<!--{else}-->
+	<form method="post" action="admincp.php?ac=userapp">
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+	<table width="100%">
+		<tr><td>
+			<strong>MYOP用户多应用功能简介</strong><br>
+			开启用户应用功能后，用户可以自由选择各种不同的或好玩有趣、或实用的等应用（诸如停车位、好友买卖、电影、送礼物......）在站内进行使用。<br>
+			面对如此众多的好玩好用的应用，作为站长，您可以:<br><br>
+			1. 可选择全部开启模式，用户可以自由选择MYOP上面的全部应用；<br>
+			2. 可选择自定义开启模式，由你按照自己的站点情况，选择自己想要的特定应用来提供给站点用户；<br>
+			<br>
+			<strong>本多应用功能由 <a target="_blank" href="http://www.manyou.com">MYOP开放平台</a> 提供</strong>。<br>
+			Manyou Open Platform(Manyou开放平台/MYOP)服务是由Comsenz公司为应用开发者提供的开放平台。<br>
+			作为UCenter Home使用网站的开放平台应用开发标准（API），Manyou将为您站点UCenter Home的用户提供各种个性化的互联网应用。<br><br>
+			启用服务前，<a href="http://wiki.developer.manyou.com/wiki/index.php?title=MYOP%E7%BD%91%E7%AB%99%E6%9C%8D%E5%8A%A1%E5%8D%8F%E8%AE%AE&printable=yes" target="_blank">请先阅读MYOP网站服务协议</a><br><br>
+		</td></tr>
+		<tr><td>
+		<input type="hidden" name="my_hidden" value="1">
+		<input type="submit" name="mysubmit" value="启用服务" class="submit">
+		</td></tr>
+	</table>
+	</form>
+	<!--{/if}-->
+	</div>
+	<br>
+	
+	<!--{if $_SCONFIG['my_status']}-->
+<script type="text/javascript" src="http://static.manyou.com/scripts/my_iframe.js"></script>
+<script language="javascript">
+var prefixURL = "$my_prefix";
+var suffixURL = "$my_suffix";
+var queryString = '';
+var url = "{$url}";
+var oldHash = null;
+var timer = null;
+var server = new MyXD.Server("ifm0");
+server.registHandler('iframeHasLoaded');
+server.registHandler('setTitle');
+server.start();
+
+function iframeHasLoaded(ifm_id) {
+        MyXD.Util.showIframe(ifm_id);
+        document.getElementById('loading').style.display = 'none';
+}
+function  htmlspecialchars_decode(string) {
+	string = string.toString();
+	string = string.replace(/&amp;/g, '&');
+	string = string.replace(/&lt;/g, '<');
+	string = string.replace(/&gt;/g, '>');
+	string = string.replace(/&quot;/g, '"');
+	string = string.replace(/&#039;/g, "'");
+	return string;
+
+}
+function setTitle(x) {
+	<!--{eval $my_site_name=htmlspecialchars($_SCONFIG['sitename'], ENT_QUOTES);}-->
+	var my_site_name = htmlspecialchars_decode('{$my_site_name}');
+
+	x = htmlspecialchars_decode(x);
+	document.title = x + ' - <!--{if $space}--><!--{eval echo saddslashes($_SN[$space[uid]])}--> - <!--{/if}-->' + my_site_name + ' - Powered by UCenter Home';
+}
+
+</script>
+
+
+	<div class="bdrcontent">
+    <div id="loading" style="display:block; padding:100px 0 100px 0;text-align:center;color:#999999;font-size:12px;">
+    <img src="image/my/loading.gif" alt="loading..." style="position:relative;top:11px;"/>  页面加载中...
+	</div>
+	<center>
+    <iframe id="ifm0" frameborder="0" width="810px" scrolling="no" height="810px" style="position:absolute; top:-5000px; left:-5000px;" src="{$url}"></iframe>
+	</center>
+
+	</div>
+	<!--{/if}-->
+	
+</div>
+</div>
+
+<div class="side">
+	<!--{template admin/tpl/side}-->
+</div>
+
+<!--{template admin/tpl/footer}-->

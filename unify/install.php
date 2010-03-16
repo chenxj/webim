@@ -15,7 +15,7 @@ case 'discuz':
 	define('IN_DISCUZ', TRUE);
 	$basic_configfile = S_ROOT.'./config.inc.php';
 	include_once(S_ROOT.'./include/common.inc.php');
-	include_once('./discuz.php');
+	include_once('./discuz_function.php');
 	$_SC['gzipcompress'] = true;
 	$_SC['tablepre']=$tablepre;
 	$_SC['dbcharset']=$dbcharset;
@@ -53,11 +53,8 @@ function which_platform(){
 ///
 $url_path = $file_path = array();
 list($url_path[$platform],$else) = explode('/webim/', "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']);   //平台请求路径
-//echo $_SERVER['HTTP_HOST'];
-//echo "</br>";
-//echo  "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
-//echo "</br>";
-//var_dump($url_path);
+//$url_path[$platform] = $url_path[$platform] . "/";
+$url_path[$platform] .= "/";
 $file_path[$platform] = S_ROOT;//$_ROOT 平台文件夹路径
 //$config_file_path = $file_path[0].'./webim/config.php';//IM 配置文件绝对路径 已被 webim_configfile 替代
 
@@ -113,9 +110,15 @@ if (submitcheck('imsubmit')) {
 	$theme = trim($_POST['theme']);
 	$charset = trim($_POST['charset']);
 	foreach($_POST['ext_url_path'] as $key=>$value){
+		if(!endsWith($value, '/')){
+			$value = trim($value).'/';
+		}
 		$url_path[trim($key)] = trim($value);
 	}
 	foreach($_POST['ext_file_path'] as $key=>$value){
+		if(!endsWith($value, '/')){
+			$value = trim($value).'/';
+		}
 		$file_path[trim($key)] = trim($value);
 	}
 
@@ -446,7 +449,7 @@ END;
 		'if($_IMC[\'enable\'] && $_SCOOKIE[\'auth\']) {<br>'.
 		'include_once(S_ROOT.\'./webim/webim_template.php\');<br>'.
 		'$template = webim_template($template);<br>}';
-		//@touch(S_ROOT.'./data/webiminstall.lock');
+		@touch(S_ROOT.'./data/webiminstall.lock');
 		@include($basic_configfile);
 	}else if($platform == 'discuz'){
         $cache_path = "forumdata/cache";

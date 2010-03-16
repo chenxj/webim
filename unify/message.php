@@ -32,7 +32,7 @@ $pageContents = $client->getContent();
 $body = from_utf8($body);
 $columns = "`uid`,`send`,`to`,`from`,`style`,`body`,`timestamp`,`type`";
 if($type=="multicast"){//add by free.wang
-    $to = $to + $_IMC['channel_pre'];//add by free.wang
+    $to = $to + $_IMC['room_id_pre'];//add by free.wang
 }//add by free.wang
 
 //add by Harvey.

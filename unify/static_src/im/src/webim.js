@@ -48,7 +48,7 @@ extend(webim.prototype, objectExtend,{
 		self.buddy = new webim.buddy();
 		self.room = new webim.room();
 		self.history = new webim.history();
-		//self.notification = new webim.notification();
+		self.notification = new webim.notification();
                 //self.hotpost= new webim.hotpost();
 		self.connection = new comet(null,{jsonp:true});
 		self._initEvents();

@@ -2,16 +2,22 @@
 header("Content-type: application/javascript");
 include_once 'config.php';
 $platform = $_GET['platform'];
+
+global $_SGLOBAL;
+if (isset($_SGLOBAL['db'])) { 
+	$query = $_SGLOBAL['db']->query("set names utf8");
+	while($ad = $_SGLOBAL['db']->fetch_array($query));
+}
+
 switch($platform){
 	case 'discuz':
-		include_once('common_discuz.php');
-		//$url_path = $_IMC['discuz_url'];
+		include_once('discuz.php');
 		break;
 	case 'uchome':
-		include_once('common_uchome.php');
-		//$url_path = $_IMC['uchome_url'];
+		include_once('uchome.php');
 		break;
 }
+
 
 $menu = array(
 	array("title" => 'doing',"icon" =>"image/app/doing.gif","link" => "space.php?do=doing"),
@@ -27,10 +33,11 @@ if($_SCONFIG['my_status']) {
 		}
 	}
 }
+
 $setting = json_encode(setting());
 
 ?>
- 
+
 //custom
 (function(webim){
     var path = "<?php echo $_IMC['install_url'] ?>";
@@ -59,6 +66,9 @@ $setting = json_encode(setting());
     	};
 	webim.buddy.defaults.url = path + "webim/buddies.php?platform=" + platform;
 	//webim.notification.defaults.url = path + "webim/notifications.php?platform=" + platform;
+	if ( platform === "discuz" ){
+		webim.hotpost.defaults.url = path + "webim/hotpost.php";
+	}
 	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});
 	var soundUrls = {
 		lib: path + "webim/static/assets/sound.swf",
@@ -112,7 +122,11 @@ $setting = json_encode(setting());
 		chatlink.disable();
 		chatlink.offline(chatlink.idsArray());
 	}
-	setTimeout(function(){(document.body ? create() : webim.ui.ready(create))},1000);
-	setTimeout(function(){webim.ui.ready(init)},1000);
-
+	if (window.ActiveXObject){
+		setTimeout(function(){document.body?create():webim.ui.ready(create);},1000);
+		setTimeout(function(){webim.ui.ready(init);},1000)
+	}else{
+		document.body?create():webim.ui.ready(create);
+		webim.ui.ready(init);
+	}
 })(webim);

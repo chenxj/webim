@@ -66,7 +66,6 @@ webim.ui.i18n.store('zh-CN',{
 		"friend":"好友",
 		"stranger":"陌生人",
 		"room":"群組",
-		"broadcast":"站長廣播",
 		"empty room":"尚無群組"
 });
 webim.ui.i18n.store('zh-CN',{

@@ -29,7 +29,7 @@ extend(webimUI.prototype, objectExtend, {
 			chatAutoPop: im.setting.get("msg_auto_pop")
 		}),
 		options = self.options;
-		//self.notification = new webimUI.notification();
+		self.notification = new webimUI.notification();
 		var d = im.setting.data;
 		self.setting = new webimUI.setting(null,{
 			data: {
@@ -54,7 +54,6 @@ extend(webimUI.prototype, objectExtend, {
 			isMinimize: true
 		}, null,"shortcut");
 		layout.addShortcut(menuData);
-
 		layout.addApp(self.buddy, {
 			title: i18n("chat"),
 			icon: "buddy",
@@ -64,23 +63,22 @@ extend(webimUI.prototype, objectExtend, {
 			isMinimize: !im.status.get("b"),
 			titleVisibleLength: 19
 		});
-		layout.addApp(self.setting, {
-			title: i18n("setting"),
-			icon: "setting",
-			sticky: false,
-			onlyIcon: true,
-			isMinimize: true
-		});
 
-	/*	layout.addApp(self.notification, {
+		layout.addApp(self.notification, {
 			title: i18n("notification"),
 			icon: "notification",
 			sticky: false,
 			onlyIcon: true,
 			isMinimize: true
 		});
-		*/
- 			im.setting.get("play_sound") ? sound.enable() : sound.disable() ;
+ 		layout.addApp(self.setting, {
+			title: i18n("setting"),
+			icon: "setting",
+			sticky: false,
+			onlyIcon: true,
+			isMinimize: true
+		});
+		im.setting.get("play_sound") ? sound.enable() : sound.disable() ;
 		im.setting.get("minimize_layout") ? layout.collapse() : layout.expand(); 
 		self.buddy.offline();
 		//document.body.appendChild(layout.element);
@@ -107,7 +105,7 @@ extend(webimUI.prototype, objectExtend, {
 		sound.init(urls || this.options.soundUrls);
 	},
 	_initEvents: function(){
-		var self = this, im = self.im, buddy = im.buddy, history = im.history, status = im.status, setting = im.setting, buddyUI = self.buddy,chatlink = im.chatlink, layout = self.layout, /*notificationUI = self.notification,*/ settingUI = self.setting, room = im.room;
+		var self = this, im = self.im, buddy = im.buddy, history = im.history, status = im.status, setting = im.setting, buddyUI = self.buddy,chatlink = im.chatlink, layout = self.layout, notificationUI = self.notification, settingUI = self.setting, room = im.room;
 		//im events
 		im.bind("ready",function(){
 			layout.changeState("ready");
@@ -295,7 +293,6 @@ extend(webimUI.prototype, objectExtend, {
 		});
 
 		///notification
-		/*
 		im.notification.bind("data",function( data){
 			notificationUI.window.notifyUser("information", "+" + data.length);
 			notificationUI.add(data);
@@ -303,7 +300,6 @@ extend(webimUI.prototype, objectExtend, {
     setTimeout(function(){
 			im.notification.load();
 		}, 2000);  
-		*/
 
 	},
 	__status: false,
@@ -337,27 +333,18 @@ extend(webimUI.prototype, objectExtend, {
 		// status end
 	},
 	addBroadcast: function(){
-
-		var self = this,layout = self.layout,im = self.im,history = self.im.history,u = im.data.user,isadmin =self._isAdmin(u.id);
-		var _info = {id:0,name:tpl("<%=broadcast%>"),isadmin:isadmin};
+		var self = this,layout = self.layout,im = self.im,history = self.im.history,u = im.data.user,isadmin = (im.admin == u.id);
+		var _info = {id:0,name:"站长广播",isadmin:isadmin};
 		if (layout.chat(0))return;
 		var h = history.get(0);
 		if(!h)history.load('0');
-		layout.addBroadcast(_info,extend({user:u,history:h,block:true,emot:isadmin,clearHistory:true,member:false,msgType:"broadcast"},{name:tpl("<%=broadcast%>")}), null);
+		layout.addBroadcast(_info,extend({user:u,history:h,block:true,emot:isadmin,clearHistory:true,member:false,msgType:"broadcast"},{name:"站长广播"}), null);
 		var broadcast = layout.chat(0);
 		broadcast.bind("sendMsg",function(msg){
 			im.sendMsg(msg);		
 			history.handle(msg);
 		});
-	},
-	_isAdmin:function(id){
-		var self = this,im = self.im,ids = im.admins;
-       		for (var i = 0; i < ids.length; i++){
-			if(id == trim(ids[i])){
-				return true;
-			}
-		}		
-		return false; 
+
 	},
 	addChat: function(id, options, winOptions, name){
 		var self = this, layout = self.layout, im = self.im, history = self.im.history, buddy = im.buddy, room = im.room;

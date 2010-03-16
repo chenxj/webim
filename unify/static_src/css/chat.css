@@ -14,17 +14,10 @@
         height: 3em;
         display: block;
 }
-* html  .webim-user-status{
-	height:1em;
-	display:none;
-}
 /**/
 .webim .webim-chat .webim-chat-header{
 	border-left-width:0;
 	border-right-width:0;
-}
-*html .webim-chat-header{
-	height:3em;
 }
 .webim .webim-chat-content{
         height: 16em;

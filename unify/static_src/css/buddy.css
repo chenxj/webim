@@ -102,26 +102,3 @@
         display:none;
         position:absolute;
 }
-.webim-broadcast a{
-	text-align:left;
-	display:block;
-
-	margin-left:10px;
-	margin-top:5px;
-}
-.webim-broadcast  strong {
-	top:auto;
-	bottom:auto;
-	left:auto;
-	right:auto;
-	margin-top:-20px;
-	margin-left:30px;
-	position:absolute;
-	font-style:normal;
-	font-size:12px;
-	font-weight:400;
-}
-.webim-broadcast img{
-	display:block;
-
-}

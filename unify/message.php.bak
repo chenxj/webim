@@ -1,13 +1,5 @@
 <?php 
-$platform = $_GET['platform'];
-switch($platform){
-	case 'discuz':
-		include_once('discuz.php');
-		break;
-	case 'uchome':
-		include_once('uchome.php');
-		break;
-}
+include_once('common.php');
 require 'http_client.php';
 
 $ticket = gp('ticket');
@@ -18,9 +10,8 @@ $send = gp('offline') == "1" ? false : true;
 $type = gp('type');
 $from = $space['uid'];
 $time = microtime(true)*1000;
-//change by chenxj
-if($type != "broadcast" && (empty($to)||empty($from))){
-	echo "{success:false}"."{".$to.":".$from."}";exit();
+if(empty($to)||empty($from)){
+	echo '{success:false}';exit();
 }
 $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
 $nick = to_unicode(to_utf8(nick($space)));
@@ -34,20 +25,9 @@ $columns = "`uid`,`send`,`to`,`from`,`style`,`body`,`timestamp`,`type`";
 if($type=="multicast"){//add by free.wang
     $to = $to + $_IMC['channel_pre'];//add by free.wang
 }//add by free.wang
-
-//add by Harvey.
-if ($type == "broadcast"){
-	if(strpos($_IMC["admin_ids"], $from) !== false){
-		$values_from = "'$from','1','$to','$from','$style','$body','$time','$type'";
-        	$values_to = "'$to','$send','$to','$from','$style','$body','$time','$type'";
-        	$_SGLOBAL['db']->query("INSERT INTO ".im_tname('histories')." ($columns) VALUES ($values_from)");
-	}
-}
-else{
-	$values_from = "'$from','1','$to','$from','$style','$body','$time','$type'";
-	$values_to = "'$to','$send','$to','$from','$style','$body','$time','$type'";
-	$_SGLOBAL['db']->query("INSERT INTO ".im_tname('histories')." ($columns) VALUES ($values_from)");
-}
+$values_from = "'$from','1','$to','$from','$style','$body','$time','$type'";
+$values_to = "'$to','$send','$to','$from','$style','$body','$time','$type'";
+$_SGLOBAL['db']->query("INSERT INTO ".im_tname('histories')." ($columns) VALUES ($values_from)");
 
 $output = array();
 $output["success"] = $send;

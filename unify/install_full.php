@@ -52,12 +52,7 @@ function which_platform(){
 //用于在安装界面显示用户需要输入路径的另一平台名称
 ///
 $url_path = $file_path = array();
-list($url_path[$platform],$else) = explode('/webim/', "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']);   //平台请求路径
-//echo $_SERVER['HTTP_HOST'];
-//echo "</br>";
-//echo  "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
-//echo "</br>";
-//var_dump($url_path);
+list($url_path[$platform],$else) = explode('webim', "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']);   //平台请求路径
 $file_path[$platform] = S_ROOT;//$_ROOT 平台文件夹路径
 //$config_file_path = $file_path[0].'./webim/config.php';//IM 配置文件绝对路径 已被 webim_configfile 替代
 
@@ -441,7 +436,6 @@ END;
 	}
 } elseif ($step == 3) {
 	if($platform == 'uchome'){
-        $cache_path = "data/tpl_cache";
 		$tplcode = 'global $_SCOOKIE,$_IMC;<br>'.
 		'if($_IMC[\'enable\'] && $_SCOOKIE[\'auth\']) {<br>'.
 		'include_once(S_ROOT.\'./webim/webim_template.php\');<br>'.
@@ -449,7 +443,6 @@ END;
 		//@touch(S_ROOT.'./data/webiminstall.lock');
 		@include($basic_configfile);
 	}else if($platform == 'discuz'){
-        $cache_path = "forumdata/cache";
 		@touch(S_ROOT.'./forumdata/webiminstall.lock');
 		@include($basic_configfile);
 	}
@@ -459,20 +452,24 @@ END;
 <ul>
 <li>
 	1. 复制 <font color="red">webim/webim_$platform .htm</font> 到 <font color="red"> $platform 平台根目录下的template/default/</font>
+	<br/>
            修改<font color="red">template/default/footer.htm</font>
                 <p>在“&lt;/body&gt;”前添加如下代码：<span  style="color:blue"><pre>
                 &lt;!--{template webim_$platform }--&gt;
                 </pre></span></p>
 </li>
 <li>
-    2. 开通站长广播功能, 修改<font color="red">webim/config.php</font>,替换<span  style="color:blue">BROADCAST</span>
-    为允许使用站长广播的用户ID,用“逗号”隔开.
-    <p> 如 <span  style="color:blue">\$_['admin_ids'] = "1,8,888";</span>  则代表id为1 或 8 或 888的用户拥有使用站长广播的权限.</pre>
-
+    2. 如果需要安装 $display_name 平台下的NextIM
+           复制 <font color="red">webim/webim_$display_name.htm</font> 到 <font color="blue">$display_name 平台根目录下的template/default/</font>
+           并修改<font color="blue">template/default/footer.htm</font>
+                <p>在“&lt;/body&gt;”前添加如下代码：<span  style="color:blue"><pre>
+                &lt;!--{template webim_$display_name}--&gt;
+                </pre></span></p>
+	        在 $display_name 平台的配置文件中加入 include_once("$pathcur/config.php");
 </li>
 <li>
-    <p></p>
-	3. 删除 $platform 根目录下 $cache_path 中的模板缓存(或者通过UCenter的"更新缓存")
+	<h3>3. 清除UCHome模板缓存</h3>
+	<p>删除UCHome根目录下./data/tpl_cache/中的模板缓存(或者通过UCenter的"更新缓存")</p>
 </li>
 </ul>
 	<p style="text-align:center">
@@ -696,7 +693,7 @@ function write_webim_config($file,$domain,$apikey,$theme,$charset) {
 	$configfile = insertconfig($configfile, '/\$_IMC\["domain"\] =\s*".*?";/i', '$_IMC["domain"] = "'.$domain.'";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["apikey"\] =\s*".*?";/i', '$_IMC["apikey"] = "'.$apikey.'";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["imsvr"\] =\s*".*?";/i', '$_IMC["imsvr"] = "im.nextim.cn";');
-	$configfile = insertconfig($configfile, '/\$_IMC\["impost"\] =\s*.*?;/i', '$_IMC["impost"] = 9000;');
+	$configfile = insertconfig($configfile, '/\$_IMC\["impost"\] =\s*.*?;/i', '$_IMC["impost"] = 80;');
 	$configfile = insertconfig($configfile, '/\$_IMC\["impoll"\] =\s*.*?;/i', '$_IMC["impoll"] = 8000;');
 	$configfile = insertconfig($configfile, '/\$_IMC\["theme"\] =\s*".*?";/i', '$_IMC["theme"] = "'.$theme.'";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["local"\] =\s*".*?";/i', '$_IMC["local"] = "'.substr($charset,0,5).'";');
@@ -706,7 +703,6 @@ function write_webim_config($file,$domain,$apikey,$theme,$charset) {
 	$configfile = insertconfig($configfile, '/\$_IMC\["groupchat"\] =\s*.*?;/i', '$_IMC["groupchat"] = true;');
 	$configfile = insertconfig($configfile, '/\$_IMC\["emot"\] =\s*".*?";/i', '$_IMC["emot"] = "default";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["opacity"\] =\s*.*?;/i', '$_IMC["opacity"] = 80;');
-	$configfile = insertconfig($configfile, '/\$_IMC\["admin_ids"\] =\s*.*?;/i', '$_IMC["admin_ids"] = "BROADCAST";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["uchome_path"\] =\s*.*?;/i', '$_IMC["uchome_path"] = "'.$uchome_path.'";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["uchome_url"\] =\s*.*?;/i', '$_IMC["uchome_url"] = "'.$uchome_url.'";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["discuz_path"\] =\s*.*?;/i', '$_IMC["discuz_path"] = "'.$discuz_path.'";');

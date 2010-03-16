@@ -52,13 +52,6 @@
 	left: -1px;
 	width: 100%;
 }
-.webim-layout-minimize .webim-layout-r{
-	float:left;
-}
-.webim-layout-minimize .webim-shortcut{
-	float:left;
-}
-
 /*ie6*/
 * html .webim-layout .webim-bgiframe{
 	width: expression(this.parentNode.offsetWidth+'px');
@@ -149,7 +142,7 @@
         bottom: 2.20em;
         z-index: 5;
         right: 0;
-        width: 18em;
+        width: 20em;
 }
 
 .webim-layout .webim-window-content {
@@ -186,7 +179,7 @@
 .webim-layout .webim-shortcut .webim-window-window{
         right:auto;
         left: 0;
-        width: 10em;
+        width: 12em;
 }
 .webim-layout .webim-window-normal .webim-window-tab, .webim-layout .webim-window-maximize .webim-window-tab{
         margin-top: -1px;
@@ -198,7 +191,7 @@
         border-top:1px solid #eee;
 }
 .webim-layout .webim-apps .webim-window-window {
-        width: 20em;
+        width: 22.4em;
 }
 
 

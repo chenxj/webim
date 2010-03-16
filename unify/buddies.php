@@ -2,10 +2,10 @@
 $platform = $_GET['platform'];
 switch($platform){
 	case 'discuz':
-		include_once('common_discuz.php');
+		include_once('discuz.php');
 		break;
 	case 'uchome':
-		include_once('common_uchome.php');
+		include_once('uchome.php');
 		break;
 }
 $ids = gp('ids');

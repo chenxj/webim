@@ -7,24 +7,33 @@ STATIC_SRC_FILES = ${STATIC_SRC_DIR}/images \
 		   ${STATIC_SRC_DIR}/themes \
 		   ${STATIC_SRC_DIR}/i18n 
 
-all: submake static
+all: submake static debug
 	@@echo "complete."
 
 submake:
 	cd static_src && $(MAKE)
 static: 
 	@@mkdir -p ${STATIC_DIR}
-	@@cp ${STATIC_SRC_FILES} ${STATIC_DIR} -r
-	@@cp ${STATIC_SRC_DIR}/webim.css ${STATIC_DIR}/webim.css
-	@@cp ${STATIC_SRC_DIR}/webim.min.css ${STATIC_DIR}/webim.min.css
-	@@cp ${STATIC_SRC_DIR}/webim.all.js ${STATIC_DIR}/webim.all.js
-	@@cp ${STATIC_SRC_DIR}/webim.all.min.js ${STATIC_DIR}/webim.all.min.js
+	@@cp -r ${STATIC_SRC_FILES} ${STATIC_DIR} 
 
-debug:  submake
+	@@cp ${STATIC_SRC_DIR}/webim.min.css ${STATIC_DIR}/webim.min.css
+	@@cp ${STATIC_SRC_DIR}/webim_uc.min.css ${STATIC_DIR}/webim_uchome.min.css
+	@@cp ${STATIC_SRC_DIR}/webim_dz.min.css ${STATIC_DIR}/webim_discuz.min.css
+
+	@@cp ${STATIC_SRC_DIR}/webim.all.min.js ${STATIC_DIR}/webim.all.min.js
+	@@cp ${STATIC_SRC_DIR}/webim_dz.all.min.js ${STATIC_DIR}/webim_discuz.all.min.js
+	@@cp ${STATIC_SRC_DIR}/webim_uc.all.min.js ${STATIC_DIR}/webim_uchome.all.min.js
+
+debug:  
 	@@mkdir -p ${STATIC_DIR}
-	@@cp ${STATIC_SRC_FILES} ${STATIC_DIR} -r
+	@@cp -r ${STATIC_SRC_FILES} ${STATIC_DIR} 
 	@@cp ${STATIC_SRC_DIR}/webim.css ${STATIC_DIR}/webim.css
+	@@cp ${STATIC_SRC_DIR}/webim_uc.css ${STATIC_DIR}/webim_uchome.css
+	@@cp ${STATIC_SRC_DIR}/webim_dz.css ${STATIC_DIR}/webim_discuz.css
+
 	@@cp ${STATIC_SRC_DIR}/webim.all.js ${STATIC_DIR}/webim.all.js
+	@@cp ${STATIC_SRC_DIR}/webim_uc.all.js ${STATIC_DIR}/webim_uchome.all.js
+	@@cp ${STATIC_SRC_DIR}/webim_dz.all.js ${STATIC_DIR}/webim_discuz.all.js
 	@@echo "debug complete."
 
 clean:

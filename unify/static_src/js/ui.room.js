@@ -32,7 +32,7 @@ app("room",{
 			icon: "room",
 			sticky: false,
 			isMinimize: true
-		}, "notification");
+		}, "setting");
 		ui.window && ui.window.title(i18n("room"));
 
 		room.bind("join",function(info){

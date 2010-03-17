@@ -26,4 +26,4 @@ rm -rf static_*
 rm -rf .git
 
 cd $HOME
-#zip -r $NAME.zip $NAME
+zip -r $NAME.zip $NAME

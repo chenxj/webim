@@ -1,13 +1,8 @@
 <?php
 header("Content-type: application/javascript");
 include_once 'config.php';
-$platform = $_GET['platform'];
 
-global $_SGLOBAL;
-if (isset($_SGLOBAL['db'])) { 
-	$query = $_SGLOBAL['db']->query("set names utf8");
-	while($ad = $_SGLOBAL['db']->fetch_array($query));
-}
+$platform = $_GET['platform'];
 
 switch($platform){
 	case 'discuz':
@@ -29,11 +24,10 @@ $menu = array(
 if($_SCONFIG['my_status']) {
 	if(is_array($_SGLOBAL['userapp'])) { 
 		foreach($_SGLOBAL['userapp'] as $value) { 
-			$menu[] = array("title" => $value['appname'],"icon" =>"http://appicon.manyou.com/icons/".$value['appid'],"link" => "userapp.php?id=".$value['appid']);
+			$menu[] = array("title" => iconv(UC_DBCHARSET,'utf-8',$value['appname']),"icon" =>"http://appicon.manyou.com/icons/".$value['appid'],"link" => "userapp.php?id=".$value['appid']);
 		}
 	}
 }
-
 $setting = json_encode(setting());
 
 ?>

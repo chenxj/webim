@@ -54,7 +54,7 @@ $setting = json_encode(setting());
 		refresh:path + "webim/refresh.php?platform=" + platform,
 		status:path + "webim/status.php?platform=" + platform
 	};
-	webim.setting.defaults.url = path + "webim/setting.php";
+	webim.setting.defaults.url = path + "webim/setting.php?platform="+platform;
 	webim.history.defaults.urls = {
 		load: path + "webim/histories.php?platform=" + platform,
 		clear: path + "webim/clear_history.php?platform=" + platform
@@ -67,7 +67,7 @@ $setting = json_encode(setting());
 	webim.buddy.defaults.url = path + "webim/buddies.php?platform=" + platform;
 	//webim.notification.defaults.url = path + "webim/notifications.php?platform=" + platform;
 	if ( platform === "discuz" ){
-		webim.hotpost.defaults.url = path + "webim/hotpost.php";
+		webim.hotpost.defaults.url = path + "webim/hotpost.php?platfrom=" + platform;
 	}
 	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});
 	var soundUrls = {

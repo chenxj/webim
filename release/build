@@ -1,0 +1,29 @@
+#!/bin/sh
+
+HOME=$PWD
+VERSION=2.1
+NAME=nextim_$VERSION
+
+rm -rf $NAME*
+
+mkdir $NAME
+mkdir $NAME/webim
+
+
+cd $NAME/webim
+cp -R $HOME/../* ./
+
+make clean
+make
+
+cp -R static static_tmp 
+cd static && rm -rf *js *css && cd ..
+cd static_tmp && ls *js *css  | grep "min" | xargs cp  --target-directory=../static
+
+cd $HOME/$NAME/webim
+rm -rf release
+rm -rf static_*
+rm -rf .git
+
+cd $HOME
+#zip -r $NAME.zip $NAME

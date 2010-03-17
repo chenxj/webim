@@ -7,7 +7,7 @@ STATIC_SRC_FILES = ${STATIC_SRC_DIR}/images \
 		   ${STATIC_SRC_DIR}/themes \
 		   ${STATIC_SRC_DIR}/i18n 
 
-all: submake static debug
+all: submake static 
 	@@echo "complete."
 
 submake:

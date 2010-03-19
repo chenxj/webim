@@ -34,7 +34,7 @@ $setting = json_encode(setting());
 
 //custom
 (function(webim){
-    var path = "<?php echo $_IMC['install_url'] ?>";
+    var path = "";
     var platform = "<?php echo $platform ?>";
 
     var menu = webim.JSON.decode('<?php echo json_encode($menu) ?>');

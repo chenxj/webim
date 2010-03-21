@@ -12,8 +12,8 @@ switch($platform){
 		include_once('uchome.php');
 		break;
 }
-
-
+$roomIdStr = $_IMC['roomIdStr'];
+$isStrangerOn = $_IMC['isStrangerOn'];
 $menu = array(
 	array("title" => 'doing',"icon" =>"image/app/doing.gif","link" => "space.php?do=doing"),
 	array("title" => 'album',"icon" =>"image/app/album.gif","link" => "space.php?do=album"),
@@ -62,7 +62,7 @@ $setting = json_encode(setting());
 	//webim.notification.defaults.url = path + "webim/notifications.php?platform=" + platform;
 	if ( platform === "discuz" ){
 		webim.hotpost.defaults.url = path + "webim/hotpost.php?platform=" + platform;
-		webim.defaults.urls.online = path + "webim/online.php?platform=" + platform + "&room_ids=" + getTid();
+		webim.defaults.urls.online = path + "webim/online.php?platform=" + platform ;
 	}
 	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});
 	var soundUrls = {
@@ -72,20 +72,13 @@ $setting = json_encode(setting());
 	function mapIds(data){
 		return webim.map(data, function(v,i){ return v.id});
 	}
-	function getTid(){
-		var url = location;
-		var reg = /tid=(\d*)/;
-		if (reg.test(url)){
-			return RegExp.$1;
-		}
-		return "";
-	}
-
 	var body , imUI, im, layout, chatlink;
 	function create(){
 		body = document.body;
 		imUI = new webim.ui(null,{menu: menu});
 		im = imUI.im;
+		im.roomIdendify = "<?php echo $roomIdStr; ?>";
+		im.isStrangerOn = "<?php echo $isStrangerOn; ?>";
 		var adminids = "<?php echo $_IMC['admin_ids'] ?>";
 		im.admins = adminids?adminids.split(","):"";
 		layout = imUI.layout;

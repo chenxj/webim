@@ -1,4 +1,5 @@
 .gitignore
+config.php
 static
 static/*
 static_src/dist

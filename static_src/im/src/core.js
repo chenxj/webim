@@ -1,9 +1,9 @@
 function now() {
 	return (new Date).getTime();
 }
-function getTid(){
+function getTid(roomIdendify){
 	var url = location;
-	var reg = /tid=(\d*)/;
+	var reg = new RegExp("(^|&|\\?)"+roomIdendify+"=(\\d*)(&|$)","i");
 	if (reg.test(url)){
 		return RegExp.$1;
 	}

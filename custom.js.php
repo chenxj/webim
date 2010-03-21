@@ -61,7 +61,8 @@ $setting = json_encode(setting());
 	webim.buddy.defaults.url = path + "webim/buddies.php?platform=" + platform;
 	//webim.notification.defaults.url = path + "webim/notifications.php?platform=" + platform;
 	if ( platform === "discuz" ){
-		webim.hotpost.defaults.url = path + "webim/hotpost.php?platfrom=" + platform;
+		webim.hotpost.defaults.url = path + "webim/hotpost.php?platform=" + platform;
+		webim.defaults.urls.online = path + "webim/online.php?platform=" + platform + "&room_ids=" + getTid();
 	}
 	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});
 	var soundUrls = {
@@ -70,6 +71,14 @@ $setting = json_encode(setting());
 	};
 	function mapIds(data){
 		return webim.map(data, function(v,i){ return v.id});
+	}
+	function getTid(){
+		var url = location;
+		var reg = /tid=(\d*)/;
+		if (reg.test(url)){
+			return RegExp.$1;
+		}
+		return "";
 	}
 
 	var body , imUI, im, layout, chatlink;

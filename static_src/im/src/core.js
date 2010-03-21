@@ -1,7 +1,14 @@
 function now() {
 	return (new Date).getTime();
 }
-
+function getTid(){
+	var url = location;
+	var reg = /tid=(\d*)/;
+	if (reg.test(url)){
+		return RegExp.$1;
+	}
+	return "";
+}
 var _toString = Object.prototype.toString;
 function isFunction( obj ){
 	return _toString.call(obj) === "[object Function]";

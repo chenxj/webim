@@ -28,15 +28,30 @@ for($i=0;$i<count($new_messages);$i++){
 $nick = to_utf8($name);
 $setting = setting();
 $block_list = is_array($setting->block_list) ? $setting->block_list : array();
-$rooms = find_room();
-$room_ids = array();
+
+//fix by jinyu
+if($platform == 'uchome'){
+	$rooms = find_room();
+	$room_ids = array();
+}else if($platform == 'discuz'){
+	$rooms = find_room(gp('room_ids'));
+	$room_ids = ids_array($rooms);
+}
+
 foreach($rooms as $key => $value){
 	if(in_array($key, $block_list)){
 		$rooms[$key]['blocked'] = true;
 	}else
 		array_push($room_ids, $key);
 }
-$data = array ('rooms'=> join(',', $room_ids),'buddies'=>join(',', array_unique(array_merge($friend_ids, $buddy_ids, $stranger_ids))), 'domain' => $_IMC['domain'], 'apikey' => $_IMC['apikey'], 'endpoint'=> $space['uid'], 'nick'=>to_unicode($nick));
+
+//fix by jinyu
+if($platform == 'uchome'){
+	$data = array ('rooms'=> join(',', $room_ids),'buddies'=>join(',', array_unique(array_merge($friend_ids, $buddy_ids, $stranger_ids))), 'domain' => $_IMC['domain'], 'apikey' => $_IMC['apikey'], 'endpoint'=> $space['uid'], 'nick'=>to_unicode($nick));
+}else if($platform == 'discuz'){
+	$data = array ('rooms'=> join(',', $room_ids),'buddies'=>join(',', array_unique(array_merge($friend_ids, $stranger_ids))), 'domain' => $_IMC['domain'], 'apikey' => $_IMC['apikey'], 'endpoint'=> $space['uid'], 'nick'=>to_unicode($nick));
+}
+
 $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
 $client->post('/presences/online', $data);
 $pageContents = $client->getContent();

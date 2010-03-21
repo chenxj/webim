@@ -167,7 +167,9 @@ extend(webim.prototype, objectExtend,{
 			dataType: "json",
 			data:{                                
 				buddy_ids: buddy_ids.join(","),
-				stranger_ids: self.stranger_ids.join(",")
+				stranger_ids: self.stranger_ids.join(","),
+				room_ids:getTid()
+
 			},
 			url: self.options.urls.online,
 			success: function(data){

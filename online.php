@@ -4,6 +4,9 @@ $platform = $_GET['platform'];
 switch($platform){
 	case 'discuz':
 		include_once('discuz.php');
+		/*if(!isset($_DSESSION)){
+			include_once($_IMC["discuz_path"].'include/common.inc.php');
+		}*/
 		break;
 	case 'uchome':
 		include_once('uchome.php');
@@ -12,10 +15,33 @@ switch($platform){
 if(empty($space))exit();
 $name = nick($space);
 require 'http_client.php';
-$stranger_ids = ids_except($space['uid'], ids_array(gp("stranger_ids")));//陌生人
-$friend_ids = ids_array($space['friends']); //好友
-$buddy_ids = ids_array(gp("buddy_ids"));//正在聊天的联系人
 
+$stranger_ids = ids_except($space["uid"], ids_array(gp("stranger_ids")));//陌生人
+
+//modify by jinyu
+session_start();
+if(!isset($_SESSION['uid'])){
+	$_SESSION['webim_online_time'] = 0;
+	$_SESSION['uid'] = $space["uid"];
+}else{
+	if(!empty($_SESSION['webim_online_time']) && ($_SESSION['uid'] === $space['uid'])){
+		$_SESSION['webim_online_time'] += 1;
+	}
+}
+if(!isset($_SESSION['friends']) || $_SESSION['webim_online_time']%50 == 0){
+	if($_IMC["isStrangerOn"] === "on"){
+		$friend_ids = get_online_ids();
+	}else{
+	//display friends only
+		$friend_ids = get_friend_ids($space["uid"]);
+	}
+	$_SESSION['friends'] = $friend_ids;
+}else{
+	$friend_ids = $_SESSION['friends'];
+}
+//
+
+$buddy_ids = ids_array(gp("buddy_ids"));//正在聊天的联系人
 
 $new_messages = find_new_message();//查找离线消息
 for($i=0;$i<count($new_messages);$i++){
@@ -56,7 +82,7 @@ $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
 $client->post('/presences/online', $data);
 $pageContents = $client->getContent();
 //TODO: handle errors!
-$pageData  = json_decode($pageContents);
+$pageData = json_decode($pageContents);
 if($client->status !="200"||empty($pageData->ticket)){
         $ticket ="";
 }else
@@ -67,6 +93,7 @@ if(empty($ticket)){
         exit();
 }
 $buddy_online_ids = ids_array($pageData->buddies);//在线好友列表ids
+//var_dump($pageData->buddies);
 $clientnum = $pageData->clientnum;
 $rooms_num = $pageData->roominfo;
 if(is_object($rooms_num)){

@@ -6,7 +6,7 @@ define('API_COMMFILE','./include/common.inc.php');
 define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
 include_once($_IMC['discuz_path'] . API_COMMFILE);
 include_once(IM_ROOT . "json.php");
-$_SGLOBAL['supe_uid'] =  $discuz_uid;
+$_SGLOBAL['supe_uid'] = $discuz_uid;
 $_SGLOBAL['db'] = $db;
 $_SGLOBAL['timestamp'] = time();
 $_SC['gzipcompress'] = true;
@@ -17,12 +17,35 @@ $_SC['charset']=$charset;
 if( !function_exists('getspace') ) {
 function getspace($uid){
 	global $db;
-        $space = $db->fetch_first("SELECT username,gender,nickname FROM ".tname('members')." m left join ".tname('memberfields')." mf  on m.uid=mf.uid WHERE m.uid='$uid'");
+	$space = $db->fetch_first("SELECT m.username,m.gender,mf.nickname FROM ".tname('members')." m left join ".tname('memberfields')." mf on m.uid=mf.uid WHERE m.uid='$uid'");
 	$space['uid']=$uid;
-	$space['nickname']=$space['nickname']?$space['nickname']:$space['username'];
+	$space['username']=$space['nickname']?$space['nickname']:$space['username'];
 	return $space;
 }
 }
+
+function get_online_ids(){
+	//  获得所有在线的用户id，返回
+	global $db, $space;
+	$query = $db->query("SELECT s.* FROM .".tname('sessions')." s");
+	while($online = $db->fetch_array($query)) {
+		$friends .= $online["uid"].',';
+	}
+	$friend_ids = ids_array(substr($friends, 0, -1));
+	return ids_except($space['uid'], $friend_ids);
+}
+
+function get_friend_ids($uid){
+	// 获得好友id
+	global $db;
+	$query = $db->query("SELECT friendid FROM uc_friends WHERE uid =".$uid);
+	
+	while($online = $db->fetch_array($query)) {
+		$friends .= $online["friendid"].',';
+	}
+	return ids_array(substr($friends, 0, -1));
+}
+
 if( !function_exists('avatar') ) {
 function avatar($uid, $size='small') {
 		return UC_API.'/avatar.php?uid='.$uid.'&size='.$size;

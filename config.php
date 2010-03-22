@@ -30,4 +30,5 @@ $_IMC["update_url"] = "http://update.nextim.cn/";
 $_IMC["admin_ids"] = "BROADCAST";
 $_IMC["isStrangerOn"] = "on";
 $_IMC["roomIdStr"] = "fid";
+$_IMC[emot_url]="webim/static/images/emot/default";
 ?>

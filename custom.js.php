@@ -64,7 +64,7 @@ $setting = json_encode(setting());
 		webim.hotpost.defaults.url = path + "webim/hotpost.php?platform=" + platform;
 		webim.defaults.urls.online = path + "webim/online.php?platform=" + platform ;
 	}
-	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});
+	webim.ui.emot.init({"dir": path + "<?php echo $_IMC['emot_url']?>"});
 	var soundUrls = {
 		lib: path + "webim/static/assets/sound.swf",
 		msg: path + "webim/static/assets/sound/msg.mp3"

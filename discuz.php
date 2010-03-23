@@ -4,6 +4,14 @@ error_reporting(E_ALL & ~E_NOTICE);
 //API DEFINE
 define('API_COMMFILE','./include/common.inc.php');
 define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
+//fix by jinyu
+include_once($_IMC['discuz_path'] . 'config.inc.php');
+$pw = $dbpw;
+$name = $dbname;
+$user = $dbuser;
+$host = $dbhost;
+$table;
+//
 include_once($_IMC['discuz_path'] . API_COMMFILE);
 include_once(IM_ROOT . "json.php");
 $_SGLOBAL['supe_uid'] = $discuz_uid;
@@ -24,6 +32,17 @@ function getspace($uid){
 }
 }
 
+//new function
+function mysql_table_exists($table)
+{	
+	global $pw, $name, $user, $host;
+	mysql_connect($host, $user, $pw) or die("Cannot connect: " . mysql_error());
+	mysql_select_db($name);
+	$exists = mysql_query("SELECT 1 FROM `$table` LIMIT 0");
+	if ($exists) return true;
+	return false;
+}
+
 function get_online_ids(){
 	//  获得所有在线的用户id，返回
 	global $db, $space;
@@ -37,9 +56,15 @@ function get_online_ids(){
 
 function get_friend_ids($uid){
 	// 获得好友id
-	global $db;
-	$query = $db->query("SELECT friendid FROM uc_friends WHERE uid =".$uid);
-	
+	global $db, $table;
+	if(!isset($table)){
+		if(!mysql_table_exists("uc_friends")){
+			$table = "cdb_uc_friends";
+		}else{
+			$table = "uc_friends";
+		}
+	}
+	$query = $db->query("SELECT friendid FROM `$table` WHERE uid =".$uid);
 	while($online = $db->fetch_array($query)) {
 		$friends .= $online["friendid"].',';
 	}

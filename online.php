@@ -4,9 +4,6 @@ $platform = $_GET['platform'];
 switch($platform){
 	case 'discuz':
 		include_once('discuz.php');
-		/*if(!isset($_DSESSION)){
-			include_once($_IMC["discuz_path"].'include/common.inc.php');
-		}*/
 		break;
 	case 'uchome':
 		include_once('uchome.php');
@@ -29,12 +26,7 @@ if(!isset($_SESSION['uid'])){
 	}
 }
 if(!isset($_SESSION['friends']) || $_SESSION['webim_online_time']%50 == 0){
-	if($_IMC["isStrangerOn"] === "on"){
-		$friend_ids = get_online_ids();
-	}else{
-	//display friends only
-		$friend_ids = get_friend_ids($space["uid"]);
-	}
+	$friend_ids = ids_array($space['friends']);
 	$_SESSION['friends'] = $friend_ids;
 }else{
 	$friend_ids = $_SESSION['friends'];

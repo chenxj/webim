@@ -59,7 +59,7 @@ function get_friend_ids($uid){
 	global $db, $table;
 	if(!isset($table)){
 		if(!mysql_table_exists("uc_friends")){
-			$table = "cdb_uc_friends";
+			$table = tname("uc_friends");
 		}else{
 			$table = "uc_friends";
 		}

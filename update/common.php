@@ -5,7 +5,8 @@
  * Written by Jinyu
  */
 define('IM_ROOT', substr(dirname(__FILE__), 0, -6)); # webim 平台根目录
-define('STATE_FILE', dirname(__FILE__).DIRECTORY_SEPARATOR.'current_state');
+define('STATE_FILE', dirname(__FILE__).DIRECTORY_SEPARATOR.'current_state'); # ./webim/update/current_state [file]
+define('INDEX', dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.'download_index'); # ./webim/update/temp_download/download_index [file]
 include_once(IM_ROOT . "json.php"); # json 类
 include_once(IM_ROOT . "config.php"); # webim 配置文件
 
@@ -84,31 +85,123 @@ function getNewestVersionInfo(){ # 获取更新索引信息
 	/* $download_index 为 json 形式 */
 	global $_IMC;
 	if(!setState(setStatus("GetNewestVersion", "Waiting"))){
-		//echo json_encode(array("Error"=>"GetNewestVersion :: Set current_state failed"));
+		//echo json_encode(array("Error"=>"GetNewestVersion-Waiting :: Set current_state failed"));
 		exit();
 	}
 	$new_version = file_get_contents($_IMC['update_url']."public/NewestVersion");
 	if($new_version > $_IMC['version']){// if new version
-		$download_index = file_get_contents($_IMC['update_url'].$_IMC['version']."/index");
+		$download_index = file_get_contents($_IMC['update_url'].'Version_'.$_IMC['version']."/index");
 		if($download_index){
-			$fp = @fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.'download_index');
+			$fp = @fopen(INDEX, 'w');
 			if(!$fp){
 				exit();
 			}
 			fwrite($fp, $download_index);// write ./update/temp_download/download_index
 			fclose($fp);
 			if(!setState(setStatus("GetNewestVersion", "Successful", array('VersionInfo' => $download_index)))){
-				//echo json_encode(array("Error"=>"GetNewestVersion :: Set current_state failed"));
+				//echo json_encode(array("Error"=>"GetNewestVersion-Success :: Set current_state failed"));
 				exit();
 			}
 		}// if download success
 	}else if($new_version <= $_IMC['version']){// if none new version
 		if(!setState(setStatus("GetNewestVersion", "Invalid"))){
-			//echo json_encode(array("Error"=>"GetNewestVersion :: Set current_state failed"));
+			//echo json_encode(array("Error"=>"GetNewestVersion-Invalid :: Set current_state failed"));
 			exit();
 		}
 	}
 }// func getNewestVersion
+
+function update($version){ # 执行更新, 参数是将更新到的版本(新版)
+	global $_IMC;
+	if(!setState(setStatus("Download", "Waiting", array("Download"=>0)))){
+		//echo json_encode(array("Error"=>"Download :: Set current_state failed"));
+		exit();
+	}
+	
+	$fp = @fopen(INDEX, 'r');
+	if(!$fp){
+		exit();
+	}
+	$tmp = fread($fp, filesize(INDEX));
+	if(!$tmp){
+		if(!setState(setStatus("Download", "Invalid"))){
+			//echo json_encode(array("Error"=>"Download-Invalid :: Set current_state failed"));
+			exit();
+		}
+	}
+	fclose($fp);
+	
+	$tmp = json_decode($tmp);
+	$index = array();// 文件下载列表
+	foreach($tmp[$version] as $value){// 获取下载文件列表
+		$index[] = $value;
+	}
+	
+	$dp = @opendir(dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download');
+	if(!$dp){
+		exit();
+	}
+	while(($file = readdir($dp)) !== false ){// 删除临时目录下所有文件
+		unlink($file);
+	}
+	closedir($dp);
+	
+	$total = count($index);// 下载文件总数
+	$update_list = array();// 更新路径列表
+	$num = 0;
+	$remain = 5;// 下载失败尝试次数
+	$success = false;
+	foreach($index as $key=>$value){// 下载更新文件 $key--下载文件名, $value--文件更新路径
+		while($remain > 0 || !$success){
+			if(is_media($key)){// multimedia files
+				$fc = file_get_contents($_IMC['update_url'].'Version_'.$_IMC['version'].'/'.$key);
+				if(!$fc){// if download failed
+					$remain --;
+					continue;// break while-loop
+				}
+				$value = ($value[0] === '/')?substr($value, 1):$value;
+				$update_list[] = array(IM_ROOT.$value, dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.$key);
+				$fp = @fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.$key, 'wb');
+				if(!$fp){
+					exit();
+				}
+				fwrite($fp, $fc);
+				fclose($fp);
+				$success = true;
+			}else{// php, css, js files
+				$fc = file_get_contents($_IMC['update_url'].'Version_'.$_IMC['version'].'/'.$key);
+				if(!$fc){// if download failed
+					$remain --;
+					continue;// break while-loop
+				}
+				$fc = json_decode($fc);
+				if(md5($fc[0]) !== $fc[1]){// check md5
+					$remain --;
+					continue;// break while-loop
+				}
+				$value = ($value[0] === '/')?substr($value, 1):$value;
+				$update_list[] = array(IM_ROOT.$value, dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.$fc[1]);
+				$fp = @fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.$fc[1], 'w');
+				if(!$fp){
+					exit();
+				}
+				fwrite($fp, $fc[0]);
+				fclose($fp);
+				$success = true;
+			}
+		}// while-loop
+		$success = false;
+	}// foreach-loop
+}// func update
+
+function is_media($filename){ # 判断给定文件是否为媒体文件，是返回 true
+	// .swf .png .mp3 .jpg .gif
+	if(preg_match('/^[a-zA-z0-9_-]*[.](swf|png|mp3|jpg|gif)$/', $filename)){
+		return true;
+	}else{
+		return false;
+	}
+}// func is_media
 
 function insertconfig($s, $find, $replace) { # 添加配置文件
 	if(preg_match($find, $s)) {
@@ -117,7 +210,7 @@ function insertconfig($s, $find, $replace) { # 添加配置文件
 		$s .= "\r\n".$replace;
 	}
 	return $s;
-}
+}// func insertconfig
 
 function update_config($version){ # 修改配置文件版本号
 	$fp = fopen('./config.php', 'r');
@@ -128,7 +221,7 @@ function update_config($version){ # 修改配置文件版本号
 	$fp = fopen('./config.php', 'w');
 	@fwrite($fp, trim($configfile));
 	@fclose($fp);
-}
+}// func update_config
 
 /*
  * 记录日志
@@ -137,7 +230,6 @@ function update_config($version){ # 修改配置文件版本号
  * $content_string : 日志内容
  */
 function logto_file($file_name, $type_string, $content_string){
-	global $_IMC_BACKUP;
 	global $_IMC_LOG_FILE;
 	global $_IMC_LOG_TYPE;
 	if (!$handle = fopen($file_name, 'a')){
@@ -158,91 +250,172 @@ function logto_file($file_name, $type_string, $content_string){
 		return;
 	}
 	fclose($handle);
-}// func logt0_file
+}// func logto_file
 
 /*
  * 备份旧工程
- * @$project_path : 需要备份的工程路径。
- * $version_string : 版本名称。
+ * @$project_path : 需要备份的工程路径，如果为空，则默认使用$_IMC["install_path"] . DIRECTORY_SEPARATOR . 'webim'。
  * @return : 成功返回ture，否则返回false
+ * 注意：仅适用于Linux/Unix平台。
  */
-function backup_project($project_path, $version_string){
-
+$__errorString__ = "";
+function backup_project($project_path = null){
+	global $_IMC;/* Webim 的绝对路径 */
+	global $_IMC_LOG_FILE;/* 日志文件信息 */
+	global $_IMC_LOG_TYPE;/* 日志文件的类型索引 */
+	global $__errorString__;
+	
+	if ($project_path === null)
+	{
+		$project_path = $_IMC["install_path"] . DIRECTORY_SEPARATOR . 'webim';
+	}
+	
+	if ($project_path[strlen($project_path)-1] !== DIRECTORY_SEPARATOR)
+	{
+		$project_path .= DIRECTORY_SEPARATOR;
+	}
+	
+	//webim
+	//....update
+	//.........temp_download
+	//.........temp_backup
+	//.............webim
+	$backup_dir = $project_path . "update" . DIRECTORY_SEPARATOR . 'temp_backup' . DIRECTORY_SEPARATOR . 'webim';
+	
+	$res = copyDir($project_path,$backup_dir,'Backup');
+	
+	if ($res !== false)
+	{
+		$status = array('Backup' => array('Successful' => Array('Download' => 1)));
+		setState(json_encode($status)); 
+		logto_file($_IMC_LOG_FILE["name"], $_IMC_LOG_TYPE["backup_project"], "备份文件成功！文件夹：$res[0]，文件数：$res[1]");
+		return true;
+	}
+	else
+	{
+		$status = array('Backup' => array('Failed' => Array('Error' => $__errorString__)));
+		setState(json_encode($status)); 
+		logto_file($_IMC_LOG_FILE["name"], $_IMC_LOG_TYPE["backup_project"], "备份文件失败！");
+		return false;
+	}
 }// func backup_project
 
 /*
  * 更新文件
- * @$file_list : 需要更新的文件列表以及内容，格式：Array('file_name'=>'file_content', 'file_name_2'=>'file_content_2')
+ * @$file_list : 需要更新的文件列表以及内容，格式：Array('dst_path'=>'tmp_path', 'dst_path_2'=>'temp_path_2')
  * @return : 成功返回ture，否则返回false
  */
-function update_file($file_list){
-	global $_IMC_BACKUP;
+function update_file($file_list)
+{
 	global $_IMC_LOG_FILE;
 	global $_IMC_LOG_TYPE;
-	global $new_version;
-	$count = 0;
-	$files = "";
-	foreach($file_list as $filename => $content){
+	global $__errorString__;
+	
+	if( ($count = __update_file__($file_list)) === false )
+	{
+		logto_file($_IMC_LOG_FILE["name"], $_IMC_LOG_TYPE["update_file"], $__errorString__);
+		$status = array('Update' => array('Failed' => Array('Error' => $__errorString__)));
+		setState(json_encode($status));
+		return false;
+	}
+	else
+	{
+		logto_file($_IMC_LOG_FILE["name"], $_IMC_LOG_TYPE["update_file"], "更新文件成功，总计：$count");
+		$status = array('Update' => array('Successful' => Array('Update' => 1)));
+		setState(json_encode($status));
+		return true;
+	}
+}
+/*
+ * 更新文件
+ * @$file_list : 需要更新的文件列表，格式：Array('InstallPathName'=>'TempPathName')
+ * @return : 成功返回ture，否则返回false
+ */
+function __update_file__($file_list){
+	global $__errorString__;
+	
+	$status = array('Update' => array('Waiting' => Array('Update' => 0)));
+	setState(json_encode($status)); 
+	
+	$updateCountAll = count($file_list);
+	$updateCountCur = 0;
+	$rate = 0;
+	
+	foreach($file_list as $installPathName => $Tempfile){
 		
-		$pathpart = pathinfo($filename);
+		$pathpart = pathinfo($installPathName);
 		if (!is_dir($pathpart["dirname"]))
 		{
 			if(!mkdir($pathpart["dirname"]))
 			{
-				logto_file($_IMC_LOG_FILE["name"], $_IMC_LOG_TYPE["update_file"], "创建文件夹：$pathpart 失败！");
+				$path = $pathpart["dirname"];
+				$__errorString__ = "创建文件夹：$path 失败！";
 				return false;
 			}
 		}
-	
-		if(!$handle = fopen($filename, 'wb')){
-			logto_file($_IMC_LOG_FILE["name"], $_IMC_LOG_TYPE["update_file"], "不能打开文件 $filename");
+		if(!$handle = fopen($installPathName, 'w')){
+			$__errorString__ = "不能打开文件 $installPathName";
 			return false;
 		}
-		if($content != "M"){// Non-Multi-media file type
-			if(fwrite($handle, $content) === FALSE){
-				logto_file($_IMC_LOG_FILE["name"], $_IMC_LOG_TYPE["update_file"], "不能写入到文件 $filename");
-				return false;
-			}
-		}else{// Multi-media file type
-			if(fwrite($handle, file_get_contents($_IMC['update_url'].$new_version.substr($filename, 1))) === FALSE){
-				logto_file($_IMC_LOG_FILE["name"], $_IMC_LOG_TYPE["update_file"], "不能写入到文件 $filename");
-				return false;
-			}
+		if(!($content = file_get_contents($Tempfile))){
+			$__errorString__ = "不能打开文件 $Tempfile";
+			return false;
+		}
+		if(fwrite($handle, $content) === FALSE){
+			$__errorString__ = "不能写入到文件 $installPathName";
+			return false;
 		}
 		fclose($handle);
-		$count ++;
-		$files = $files . "\n" . $filename;
+		$updateCountCur ++;
+		$tempRate = ((int)$updateCountCur) / $updateCountAll;
+		
+		//增加统计间隔，减少file IO
+		if ($tempRate - $rate > 0.5)
+		{
+			$status = array('Update' => array('Waiting' => Array('Update' => $tempRate)));
+			setState(json_encode($status));
+			$rate = $tempRate;					
+		}			
 	}
-	logto_file($_IMC_LOG_FILE["name"], $_IMC_LOG_TYPE["update_file"], "更新文件成功：$files\n总计：$count");
-	return true;
+	return $updateCountAll;
 }// func update_file
 
 /*
  * 复制文件夹
- * $dirFrom : 源文件夹
- * $dirTo :目标文件夹（如果已经存在则删除）
+ * $dirFrom : 源文件夹（忽略temp_download 和 temp_backup），最后不带DIRECTORY_SEPARATOR
+ * $dirTo :目标文件夹（如果已经存在则删除），最后不带DIRECTORY_SEPARATOR
+ * $noticeString : 写入current_state的提示信息。
  * @return : array("文件夹数"，"文件数目")
  */
-function copyDir($dirFrom,$dirTo){
-	global $_IMC_BACKUP;
+ $__countFile__ = 0;
+ $__countDir__  = 0;
+ $__rate__ = 0;
+function copyDir($dirFrom,$dirTo,$noticeString = null){
 	global $_IMC_LOG_FILE;
 	global $_IMC_LOG_TYPE;
+	global $__countFile__;
+	global $__countDir__;
+	global $__errorString__;
+	global $__rate__;
 	$countFile = 0; //用于统计文件总数的变量
 	$countDir = 0; //用于统计目录总数的变量
 	
 	if(is_file($dirTo))
 	{ //判断目录是否与文件重名
 		logto_file($_IMC_LOG_FILE["name"], $_IMC_LOG_TYPE["copyDir"], "创建失败！指定的目录名： $dirTo 与文件名： $dirTo 不能相同。");
+		$__errorString__ = "创建失败！指定的目录名： $dirTo 与文件名： $dirTo 不能相同。";
 		return false;
 	}
 	
 	if(!is_dir($dirFrom))
 	{ //判断被拷贝的目录是否存在
 		logto_file($_IMC_LOG_FILE["name"], $_IMC_LOG_TYPE["copyDir"], "需要拷贝的目录： $dirFrom 不存在！");
+		$__errorString__ = "需要拷贝的目录： $dirFrom 不存在！";
 		return false;
 	}
 	
-	if(is_dir($dirTo))
+	//回滚时不删除目录
+	if(is_dir($dirTo) && $noticeString != 'Rollback')
 	{ //指定目录如果存在则删除了所有内容。
 		logto_file($_IMC_LOG_FILE["name"], $_IMC_LOG_TYPE["copyDir"], "指定目录： $dirTo 已经存在！");
 		if (removeDir($dirTo))
@@ -252,17 +425,22 @@ function copyDir($dirFrom,$dirTo){
 		else
 		{
 			logto_file($_IMC_LOG_FILE["name"], $_IMC_LOG_TYPE["copyDir"], "目录： $dirTo 删除失败！");
+			$__errorString__ = "目录： $dirTo 删除失败！";
 			return false;
 		}
 	}
 	
-	//新建目录
-	if(!mkdir($dirTo))
+	//目录不存在，建立
+	if(!is_dir($dirTo))
 	{
-		logto_file($_IMC_LOG_FILE["name"], $_IMC_LOG_TYPE["copyDir"], "发生未知错误，目录： $dirTo 建立失败！有可能是权限不足造成的！");
-		return false;
+		//新建目录
+		if(!mkdir($dirTo))
+		{
+			logto_file($_IMC_LOG_FILE["name"], $_IMC_LOG_TYPE["copyDir"], "发生未知错误，目录： $dirTo 建立失败！有可能是权限不足造成的！");
+			$__errorString__ = "发生未知错误，目录： $dirTo 建立失败！有可能是权限不足造成的！";
+			return false;
+		}
 	}
-	$countDir++;
 	
 	//打开目录
 	$handle = opendir($dirFrom);
@@ -273,31 +451,45 @@ function copyDir($dirFrom,$dirTo){
 		//复制到的文件路径
 		$file_path_to = $dirTo.DIRECTORY_SEPARATOR.$file_name;
 		
-
-		
-		if($file_name!="." && $file_name!="..")
-		{//当目录不是本目录. 和上级目录 .. 的时候才允许复制
+		if($file_name != "." && $file_name != ".." && $file_name != 'temp_download' && $file_name != 'temp_backup')
+		{//当目录不是本目录. 和上级目录 .. 以及更新文件夹、备份文件夹的时候才允许复制
 			if(is_dir($file_path_from))
 			{//如果当前路径是目录
-				if(($res = copyDir($file_path_from,$file_path_to)) !== false)
-				{//递归调用函数本身
-					$countDir += $res[0];
-					$countFile += $res[1];
-				}
+				copyDir($file_path_from,$file_path_to,$noticeString);
+				$__countDir__ ++;
 			}
 			else
 			{//如果不是目录则复制文件
 				if(!copy($file_path_from, $file_path_to))
 				{
 					logto_file($_IMC_LOG_FILE["name"], $_IMC_LOG_TYPE["copyDir"], "复制文件 $file_path_from 时发生未知错误，有可能是权限不足！");
+					$__errorString__ = "复制文件 $file_path_from 时发生未知错误，有可能是权限不足！";
 					return false;
 				}
-				$countFile++;//每复制一个文件countFile 加1
+				//每复制一个文件countFile 加1
+				$__countFile__ ++;
+				$rate = ((int)$__countFile__) / 8;
+				
+				//增加统计间隔，减少file IO
+				if ($rate - $__rate__ > 0.5)
+				{
+					if($noticeString === 'Backup')
+					{
+						$status = array('Backup' => array('Waiting' => Array('Backup' => $rate)));
+						setState(json_encode($status));					
+					}
+					else if ($noticeString === 'Rollback')
+					{
+						$status = array('Rollback' => array('Waiting' => Array('Rollback' => $rate)));
+						setState(json_encode($status));	
+					}
+					$__rate__ = $rate;
+				}
 			}
 		}
 	}
 	closedir($handle); //关闭目录
-	return array($countDir, $countFile);
+	return array($__countDir__, $__countFile__);
 }// func copyDir
 
 /*
@@ -315,6 +507,7 @@ function removeDir($dirName)
     $handle = opendir($dirName);
     while(($file = readdir($handle)) !== false)
     {
+		//不能删除update文件夹，否则程序无法执行
         if($file != '.' && $file != '..')
         {
             $dir = $dirName . DIRECTORY_SEPARATOR . $file;
@@ -325,5 +518,30 @@ function removeDir($dirName)
     $result = rmdir($dirName) ? true : false;
     return $result;
 }// func removeDir
+
+/*
+ * 回滚工程
+ * $project_path : 工程全路径（为空时，直接使用 $_IMC["install_path"] . DIRECTORY_SEPARATOR . 'webim'）
+ * @return : 成功返回ture，否则返回false
+ */
+function roll_back($project_path = null)
+{
+	global $_IMC;
+	if ($project_path === null)
+	{
+		$project_path = $_IMC["install_path"] . DIRECTORY_SEPARATOR . 'webim';
+	}
+	
+	if ($project_path[strlen($project_path)-1] === DIRECTORY_SEPARATOR)
+	{
+		$project_path = substr($project_path, 0, strlen($project_path)-1);
+	}
+	
+	$_backup_project_path = $project_path . DIRECTORY_SEPARATOR . 'update' . DIRECTORY_SEPARATOR . 'temp_backup' . DIRECTORY_SEPARATOR . 'webim';
+	
+	$status = array('Rollback' => array('Waiting' => Array('Rollback' => 0)));
+	setState(json_encode($status));
+	return copyDir($_backup_project_path, $project_path, 'Rollback');
+}// func roll_back
 
 ?>

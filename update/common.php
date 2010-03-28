@@ -167,6 +167,10 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 				}
 				fwrite($fp, $fc);
 				fclose($fp);
+				$num ++;
+				if(!setState(setStatus("Download", "Waiting", array("Download"=>$num*100/$total)))){
+					exit();
+				}
 				$success = true;
 			}else{// php, css, js files
 				$fc = file_get_contents($_IMC['update_url'].'Version_'.$_IMC['version'].'/'.$key);
@@ -187,11 +191,36 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 				}
 				fwrite($fp, $fc[0]);
 				fclose($fp);
+				$num ++;
+				if(!setState(setStatus("Download", "Waiting", array("Download"=>$num*100/$total)))){
+					exit();
+				}
 				$success = true;
 			}
 		}// while-loop
 		$success = false;
 	}// foreach-loop
+	if(!setState(setStatus("Download", "Successful"))){ # 下载并保存临时文件完毕
+		exit();
+	}
+	
+	if(!setState(setStatus("Backup", "Waiting", array("Backup"=>0)))){
+		exit();
+	}
+	if(backup_project()){ # 备份 webim
+		if(!setState(setStatus("Backup", "Successful"))){
+			exit();
+		}
+	}else{
+		exit();
+	}
+	
+	if(!setState(setStatus("Update", "Waiting", array("Update"=>0)))){
+		exit();
+	}
+	if(!update_file($update_list)){ # 更新 webim
+		exit();
+	}
 }// func update
 
 function is_media($filename){ # 判断给定文件是否为媒体文件，是返回 true
@@ -286,7 +315,7 @@ function backup_project($project_path = null){
 	
 	if ($res !== false)
 	{
-		$status = array('Backup' => array('Successful' => Array('Download' => 1)));
+		$status = array('Backup' => array('Successful' => Array('Download' => 100)));
 		setState(json_encode($status)); 
 		logto_file($_IMC_LOG_FILE["name"], $_IMC_LOG_TYPE["backup_project"], "备份文件成功！文件夹：$res[0]，文件数：$res[1]");
 		return true;

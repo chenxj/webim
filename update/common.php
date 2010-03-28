@@ -133,8 +133,8 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 	
 	$tmp = json_decode($tmp);
 	$index = array();// 文件下载列表
-	foreach($tmp[$version] as $value){// 获取下载文件列表
-		$index[] = $value;
+	foreach($tmp[$version] as $key=>$value){// 获取下载文件列表
+		$index[$key] = $value;
 	}
 	
 	$dp = @opendir(dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download');
@@ -151,17 +151,17 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 	$num = 0;
 	$remain = 5;// 下载失败尝试次数
 	$success = false;
-	foreach($index as $key=>$value){// 下载更新文件 $key--下载文件名, $value--文件更新路径
+	foreach($index as $key=>$value){// 下载更新文件 $key--下载文件地址, $value--文件更新路径
 		while($remain > 0 || !$success){
 			if(is_media($key)){// multimedia files
-				$fc = file_get_contents($_IMC['update_url'].'Version_'.$_IMC['version'].'/'.$key);
+				$fc = file_get_contents($key);
 				if(!$fc){// if download failed
 					$remain --;
 					continue;// break while-loop
 				}
 				$value = ($value[0] === '/')?substr($value, 1):$value;
-				$update_list[] = array(IM_ROOT.$value, dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.$key);
-				$fp = @fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.$key, 'wb');
+				$update_list[] = array(IM_ROOT.$value, dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1));
+				$fp = @fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1), 'wb');
 				if(!$fp){
 					exit();
 				}
@@ -173,23 +173,18 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 				}
 				$success = true;
 			}else{// php, css, js files
-				$fc = file_get_contents($_IMC['update_url'].'Version_'.$_IMC['version'].'/'.$key);
+				$fc = file_get_contents($key);
 				if(!$fc){// if download failed
 					$remain --;
 					continue;// break while-loop
 				}
-				$fc = json_decode($fc);
-				if(md5($fc[0]) !== $fc[1]){// check md5
-					$remain --;
-					continue;// break while-loop
-				}
 				$value = ($value[0] === '/')?substr($value, 1):$value;
-				$update_list[] = array(IM_ROOT.$value, dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.$fc[1]);
-				$fp = @fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.$fc[1], 'w');
+				$update_list[] = array(IM_ROOT.$value, dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1));
+				$fp = @fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1), 'w');
 				if(!$fp){
 					exit();
 				}
-				fwrite($fp, $fc[0]);
+				fwrite($fp, $fc);
 				fclose($fp);
 				$num ++;
 				if(!setState(setStatus("Download", "Waiting", array("Download"=>$num*100/$total)))){
@@ -225,7 +220,7 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 
 function is_media($filename){ # 判断给定文件是否为媒体文件，是返回 true
 	// .swf .png .mp3 .jpg .gif
-	if(preg_match('/^[a-zA-z0-9_-]*[.](swf|png|mp3|jpg|gif)$/', $filename)){
+	if(preg_match('/^(http:\/\/)?([A-Za-z]*[.]?(\/)?)+[A-Za-z0-9_\.]*[\/][a-zA-z0-9_-]*[.](swf|png|mp3|jpg|gif)?$/', $filename)){
 		return true;
 	}else{
 		return false;

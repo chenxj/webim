@@ -81,52 +81,61 @@ function setStatus($action, $mark, $ret_array = array()){ # 设置状态反馈�
 	return json_encode($status);
 }
 
-function getNewestVersionInfo(){ # 获取更新索引信息
+function getNewestVersionInfo(){ # 获取更新信息, 下载更新索引, 成功返回更新信息(json), 失败或无更新返回 false
 	/* $download_index 为 json 形式 */
-	global $_IMC;
+	global $_IMC, $_IMC_LOG_FILE;
 	if(!setState(setStatus("GetNewestVersion", "Waiting"))){
-		logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新列表:写入状态失败！");
-		exit();
+		logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新列表:写入状态失败！\n");
 	}
-	$new_version = file_get_contents($_IMC['update_url']."public/NewestVersion");
-	if($new_version > $_IMC['version']){// if new version
-		$download_index = file_get_contents($_IMC['update_url'].'Version_'.$_IMC['version']."/index");
+	$version_info = file_get_contents($_IMC['update_url']."publish/NewestVersionInfo");
+	if($version_info){
+		$new_version = array();
+		$temp_info = json_decode($version_info);
+		foreach($temp_info as $key=>$value){
+			$new_version[$key] = $value;
+		}
+	}
+	if($new_version['Version'] > $_IMC['version']){// if new version
+		$download_index = file_get_contents($_IMC['update_url'].'version_'.$_IMC['version']."/index");
 		if($download_index){
+			if(!file_exists('./temp_download')){
+				mkdir('./temp_download');
+			}
 			$fp = @fopen(INDEX, 'w');
 			if(!$fp){
-				logto_file($_IMC_LOG_FILE["name"], "Write download_index", "写入更新列表:写入失败！");
-				exit();
+				logto_file($_IMC_LOG_FILE["name"], "Write download_index", "写入更新列表:写入失败！\n");
 			}
 			fwrite($fp, $download_index);// write ./update/temp_download/download_index
 			fclose($fp);
-			if(!setState(setStatus("GetNewestVersion", "Successful", array('VersionInfo' => $download_index)))){
-				logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新列表成功:写入状态失败！");
-				exit();
+			if(!setState(setStatus("GetNewestVersion", "Successful", array('VersionInfo' => $new_version)))){
+				logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新列表成功:写入状态失败！\n");
 			}
+			return $version_info;
 		}// if download success
-	}else if($new_version <= $_IMC['version']){// if none new version
+	}else if($new_version['Version'] <= $_IMC['version']){// if none new version
 		if(!setState(setStatus("GetNewestVersion", "Invalid"))){
-			logto_file($_IMC_LOG_FILE["name"], "SetState", "无更新:写入状态失败！");
-			exit();
+			logto_file($_IMC_LOG_FILE["name"], "SetState", "无更新:写入状态失败！\n");
 		}
+		return false;
 	}
 }// func getNewestVersion
 
 function update($version){ # 执行更新, 参数是将更新到的版本(新版)
 	global $_IMC;
 	if(!setState(setStatus("Download", "Waiting", array("Download"=>0)))){
-		logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新文件:写入状态失败！");
+		logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新文件:写入状态失败！\n");
 		exit();
 	}
 	
 	$fp = @fopen(INDEX, 'r');
 	if(!$fp){
+		echo 'open INDEX failed';
 		exit();
 	}
 	$tmp = fread($fp, filesize(INDEX));
 	if(!$tmp){
 		if(!setState(setStatus("Download", "Invalid"))){
-			logto_file($_IMC_LOG_FILE["name"], "SetState", "载入更新列表失败:写入状态失败！");
+			logto_file($_IMC_LOG_FILE["name"], "SetState", "载入更新列表失败:写入状态失败！\n");
 			exit();
 		}
 	}
@@ -134,28 +143,21 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 	
 	$tmp = json_decode($tmp);
 	$index = array();// 文件下载列表
-	foreach($tmp[$version] as $key=>$value){// 获取下载文件列表
-		$index[$key] = $value;
+	foreach($tmp as $install=>$download){// 获取下载文件列表
+		$index[$download] = $install;
 	}
-	
-	$dp = @opendir(dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download');
-	if(!$dp){
-		exit();
-	}
-	while(($file = readdir($dp)) !== false ){// 删除临时目录下所有文件
-		unlink($file);
-	}
-	closedir($dp);
+
+	removeDir(dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download');// 删除临时目录下所有文件
 	
 	$total = count($index);// 下载文件总数
 	$update_list = array();// 更新路径列表
 	$num = 0;
 	$remain = 5;// 下载失败尝试次数
 	$success = false;
-	foreach($index as $key=>$value){// 下载更新文件 $key--下载文件地址, $value--文件更新路径
+	foreach($index as $key=>$value){// 下载更新文件 $key--download路径, $value--install路径
 		while($remain > 0 || !$success){
 			if(is_media($key)){// multimedia files
-				$fc = file_get_contents($key);
+				$fc = file_get_contents($_IMC['update_url'].$key);
 				if(!$fc){// if download failed
 					$remain --;
 					continue;// break while-loop
@@ -170,12 +172,12 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 				fclose($fp);
 				$num ++;
 				if(!setState(setStatus("Download", "Waiting", array("Download"=>$num*100/$total)))){
-					logto_file($_IMC_LOG_FILE["name"], "SetState", "下载文件过程:写入状态失败！");
+					logto_file($_IMC_LOG_FILE["name"], "SetState", "下载文件过程:写入状态失败！\n");
 					exit();
 				}
 				$success = true;
 			}else{// php, css, js files
-				$fc = file_get_contents($key);
+				$fc = file_get_contents($_IMC['update_url'].$key);
 				if(!$fc){// if download failed
 					$remain --;
 					continue;// break while-loop
@@ -190,7 +192,7 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 				fclose($fp);
 				$num ++;
 				if(!setState(setStatus("Download", "Waiting", array("Download"=>$num*100/$total)))){
-					logto_file($_IMC_LOG_FILE["name"], "SetState", "下载文件过程:写入状态失败！");
+					logto_file($_IMC_LOG_FILE["name"], "SetState", "下载文件过程:写入状态失败！\n");
 					exit();
 				}
 				$success = true;
@@ -199,35 +201,36 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 		$success = false;
 	}// foreach-loop
 	if(!setState(setStatus("Download", "Successful"))){ # 下载并保存临时文件完毕
-		logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新文件成功:写入状态失败！");
+		logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新文件成功:写入状态失败！\n");
 		exit();
 	}
 	
 	if(!setState(setStatus("Backup", "Waiting", array("Backup"=>0)))){
-		logto_file($_IMC_LOG_FILE["name"], "SetState", "备份工程开始:写入状态失败！");
+		logto_file($_IMC_LOG_FILE["name"], "SetState", "备份工程开始:写入状态失败！\n");
 		exit();
 	}
 	if(backup_project()){ # 备份 webim
 		if(!setState(setStatus("Backup", "Successful"))){
-			logto_file($_IMC_LOG_FILE["name"], "SetState", "备份成功:写入状态失败！");
+			logto_file($_IMC_LOG_FILE["name"], "SetState", "备份成功:写入状态失败！\n");
 			exit();
 		}
 	}else{
 		if(!setState(setStatus("Backup", "Failed"))){
-			logto_file($_IMC_LOG_FILE["name"], "SetState", "备份失败:写入状态失败！");
+			logto_file($_IMC_LOG_FILE["name"], "SetState", "备份失败:写入状态失败！\n");
 			exit();
 		}
 		exit();
 	}
 	
 	if(!setState(setStatus("Update", "Waiting", array("Update"=>0)))){
-		logto_file($_IMC_LOG_FILE["name"], "SetState", "更新文件开始:写入状态失败！");
+		logto_file($_IMC_LOG_FILE["name"], "SetState", "更新文件开始:写入状态失败！\n");
 		exit();
 	}
 	if(!update_file($update_list)){ # 更新 webim
-		logto_file($_IMC_LOG_FILE["name"], "SetState", "更新文件失败:写入状态失败！");
+		logto_file($_IMC_LOG_FILE["name"], "SetState", "更新文件失败:写入状态失败！\n");
 		exit();
 	}
+	update_config($version);
 }// func update
 
 function is_media($filename){ # 判断给定文件是否为媒体文件，是返回 true

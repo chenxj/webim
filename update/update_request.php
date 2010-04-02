@@ -1,4 +1,4 @@
-<?php
+ï»¿<?php
 	//global $ret;
 	if(gp['cmd'] === 'ClearState'){
 		if(!clearState()){
@@ -14,9 +14,9 @@
 		}
 	}else if(gp['cmd'] === 'Update'){
 		if(!update($version)){
-			# ¸üĞÂÊ§°Ü
+			# æ›´æ–°å¤±è´¥
 		}else{
-			# ¸üĞÂ³É¹¦
+			# æ›´æ–°æˆåŠŸ
 		}
 	}else if(gp['cmd'] === 'Rollback'){
 		# backup_project($project_path = null)
@@ -25,8 +25,8 @@
 	}
 ?>
 
-'ClearState' £º Çå³ıwebim·şÎñÆ÷ÉÏ#current_stateÎÄ¼şµÄÄÚÈİ¡£
-'GetNewestVersionInfo' £º ´Ó¸üĞÂ·şÎñÆ÷¶ÁÈ¡×îĞÂ°æ±¾ĞÅÏ¢£¬°üÀ¨×îĞÂ°æ±¾ºÅ¡¢°æ±¾¸üĞÂËµÃ÷¡¢ËùĞèÏÂÔØµÄÎÄ¼şÁĞ±í¡£
-'Update' £º Ö´ĞĞ¸üĞÂ¡£
-'Rollback' £º Ö´ĞĞ»Ø¹ö¡£
+'ClearState' ï¼š æ¸…é™¤webimæœåŠ¡å™¨ä¸Š#current_stateæ–‡ä»¶çš„å†…å®¹ã€‚
+'GetNewestVersionInfo' ï¼š ä»æ›´æ–°æœåŠ¡å™¨è¯»å–æœ€æ–°ç‰ˆæœ¬ä¿¡æ¯ï¼ŒåŒ…æ‹¬æœ€æ–°ç‰ˆæœ¬å·ã€ç‰ˆæœ¬æ›´æ–°è¯´æ˜ã€æ‰€éœ€ä¸‹è½½çš„æ–‡ä»¶åˆ—è¡¨ã€‚
+'Update' ï¼š æ‰§è¡Œæ›´æ–°ã€‚
+'Rollback' ï¼š æ‰§è¡Œå›æ»šã€‚
 json_encode(array('status'=>5, 'info'=>'ClearStateFailed', 'iserror'=>'true', 'isrollbackable'=>'false'));

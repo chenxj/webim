@@ -320,7 +320,7 @@ function backup_project($project_path = null){
 	
 	if ($project_path === null)
 	{
-		$project_path = $_IMC["install_path"] . 'webim';
+		$project_path = $_IMC["install_path"].'webim';
 	}
 	
 	if ($project_path[strlen($project_path)-1] !== DIRECTORY_SEPARATOR)
@@ -583,7 +583,7 @@ function roll_back($project_path = null)
 	global $_IMC;
 	if ($project_path === null)
 	{
-		$project_path = $_IMC["install_path"] . DIRECTORY_SEPARATOR . 'webim';
+		$project_path = $_IMC["install_path"].'webim';
 	}
 	
 	if ($project_path[strlen($project_path)-1] === DIRECTORY_SEPARATOR)

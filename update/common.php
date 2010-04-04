@@ -244,6 +244,12 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 		return false;
 	}
 	update_config($version); # 更新配置文件中版本号
+	$dp = opendir(IM_ROOT.'update'); # 删除更新锁
+	while($file = readdir($dp) !== false){
+		if($file != '.' && $file != '..' && substr($file, -4) != 'lock'){
+			unlink(IM_ROOT.'update'.DIRECTORY_SEPARATOR.$file);
+		}
+	}
 	return true;
 }// func update
 

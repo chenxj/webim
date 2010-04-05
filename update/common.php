@@ -73,7 +73,32 @@ function getCurrentState(){ # 获取 current_state 内容
 	}
 	$state = fread($fp, filesize(STATE_FILE));
 	fclose($fp);
-	return $state; //返回 json 形式
+	
+	$state_info = json_decode($state);
+	$ori_state = array();
+	foreach($state_info as $key=>$value){
+		$ori_state['state'] = $key;
+		foreach($value as $mark=>$info){
+			$ori_state['isok'] = $mark === "Successful"?true:false;
+			$ori_state['iswait'] = $mark === "Waiting"?true:false;
+			$ori_state['errmsg'] = $mark === "Invalid"?"Invalid":"";
+			foreach($info as $detail){
+				if(is_numeric($detail)){
+					$ori_state['percent'] = $detail;
+				}else{
+					$ori_state['errmsg'] = $detail;
+				}
+			}
+		}
+	}
+	if(!isset($ori_state['percent'])){
+		$ori_state['percent'] = "";
+	}
+	if(!isset($ori_state['errmsg'])){
+		$ori_state['errmsg'] = "";
+	}
+	$ret = json_encode($ori_state);
+	return $ret; //返回 json 形式
 }// func getCurrentState
 
 function setStatus($action, $mark, $ret_array = array()){ # 设置状态反馈变量
@@ -103,11 +128,12 @@ function getNewestVersionInfo(){ # 获取更新信息, 下载更新索引, 成�
 			}
 			$fp = @fopen(INDEX, 'w');
 			if(!$fp){
+				echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Write download_index file error! Check your permission", "percent"=>""));
 				logto_file($_IMC_LOG_FILE["name"], "Write download_index", "写入更新列表:写入失败！\n");
 			}
 			fwrite($fp, $download_index);// write ./update/temp_download/download_index
 			fclose($fp);
-			if(!setState(setStatus("GetNewestVersion", "Successful", array('VersionInfo' => $new_version)))){
+			if(!setState(setStatus("GetNewestVersion", "Successful"/*, array('VersionInfo' => $new_version)*/))){
 				logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新列表成功:写入状态失败！\n");
 			}
 			return $version_info;
@@ -129,7 +155,7 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 	
 	$fp = @fopen(INDEX, 'r');
 	if(!$fp){
-		echo 'open INDEX failed';
+		echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Read download_index file error! Check your permission", "percent"=>""));
 		return false;
 	}
 	$tmp = fread($fp, filesize(INDEX));
@@ -162,14 +188,17 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 				if(!$fc){// if download failed
 					if(-- $remain > 0){
 						continue;// break while-loop
-					}else
+					}else{
+						echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Download update file error!", "percent"=>""));
 						break;
+					}
 				}
 				$value = ($value[0] === '/')?substr($value, 1):$value;
 				//$update_list[] = array(IM_ROOT.$value, dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1));
 				$update_list[IM_ROOT.substr(strrchr($value, '/'), 1)] = dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1);
 				$fp = @fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1), 'wb');
 				if(!$fp){
+					echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Write media file error! Check your permission", "percent"=>""));
 					logto_file($_IMC_LOG_FILE["name"], "DownloadMediaFile", "写入媒体文件失败！\n");
 					return false;
 				}
@@ -186,14 +215,17 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 				if(!$fc){// if download failed
 					if(-- $remain > 0){
 						continue;// break while-loop
-					}else
+					}else{
+						echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Download update file error!", "percent"=>""));
 						break;
+					}
 				}
 				$value = ($value[0] === '/')?substr($value, 1):$value;
 				//$update_list[] = array(IM_ROOT.$value, dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1));
 				$update_list[IM_ROOT.substr(strrchr($value, '/'), 1)] = dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1);
 				$fp = @fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1), 'w');
 				if(!$fp){
+					echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Write script file error! Check your permission", "percent"=>""));
 					logto_file($_IMC_LOG_FILE["name"], "DownloadUpdateFile", "写入更新文件失败！\n");
 					return false;
 				}
@@ -380,7 +412,7 @@ function update_file($file_list)
 	else
 	{
 		logto_file($_IMC_LOG_FILE["name"], $_IMC_LOG_TYPE["update_file"], "更新文件成功，总计：$count");
-		$status = array('Update' => array('Successful' => Array('Update' => 1)));
+		$status = array('Update' => array('Successful' => Array('Update' => 100)));
 		setState(json_encode($status));
 		return true;
 	}
@@ -432,7 +464,7 @@ function __update_file__($file_list){
 		//增加统计间隔，减少file IO
 		if ($tempRate - $rate > 0.5)
 		{
-			$status = array('Update' => array('Waiting' => Array('Update' => $tempRate)));
+			$status = array('Update' => array('Waiting' => Array('Update' => $tempRate*100)));
 			setState(json_encode($status));
 			$rate = $tempRate;					
 		}			
@@ -535,12 +567,12 @@ function copyDir($dirFrom,$dirTo,$noticeString = null){
 				{
 					if($noticeString === 'Backup')
 					{
-						$status = array('Backup' => array('Waiting' => Array('Backup' => $rate)));
+						$status = array('Backup' => array('Waiting' => Array('Backup' => $rate*100)));
 						setState(json_encode($status));					
 					}
 					else if ($noticeString === 'Rollback')
 					{
-						$status = array('Rollback' => array('Waiting' => Array('Rollback' => $rate)));
+						$status = array('Rollback' => array('Waiting' => Array('Rollback' => $rate*100)));
 						setState(json_encode($status));	
 					}
 					$__rate__ = $rate;

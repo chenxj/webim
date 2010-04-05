@@ -24,7 +24,8 @@ if($new_version['Version'] > $_IMC['version']){
 	$time = microtime(true)*1000;
 	$body = from_utf8("WebIM有新的更新！请访问{$IMC['install_url']}update/index.php了解详情");
 	$columns = "`uid`,`send`,`to`,`from`,`style`,`body`,`timestamp`,`type`";
-	$values_from = "'1','1','1','1','','$body','$time','unicast'";
+	$values_from = "'1','0','1','1','','$body','$time','unicast'";
 	$_SGLOBAL['db']->query("INSERT INTO ".im_tname('histories')." ($columns) VALUES ($values_from)");
+	@touch($_IMC['version']);
 }
 ?>

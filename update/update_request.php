@@ -33,4 +33,8 @@
 'Update' ： 执行更新。
 'Rollback' ： 执行回滚。
 */
+<<<<<<< HEAD:update/update_request.php
 ?>
+=======
+?>
+>>>>>>> 3c07ffe5827d374f62be908a2247ed840ed504eb:update/update_request.php

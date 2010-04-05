@@ -38,18 +38,18 @@ $(document).ready(function() {
 		$("#version_txt").html("a");
 });*/
 		$.ajax({
-			url:"current_state",
-			dataType:'json',
+			url:"update_request.php",
 			data:{"cmd":"GetNewestVersionInfo"},
 			success:function(data){
-			//	alert(data);
-			//	var versioninfo = jQuery.parseJSON(data);.GetNewestVersion.Successful.VersionInfo;
+				var versioninfo = jQuery.parseJSON(data);
+				//.GetNewestVersion.Successful.VersionInfo;
 			//	$("#version_txt").html(versioninfo);
 				poll(data);
 			},
 			error:function(req,txt,err){
 			},
 			complete:function(){
+				alert('x');
 			}
 		}
 );

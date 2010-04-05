@@ -1,0 +1,13 @@
+<!--{if $_IMC['enable']}-->
+        <!--{if !empty($_SGLOBAL['supe_uid'])}-->
+        <link href="webim/static/webim.min.css" media="all" type="text/css" rel="stylesheet"/>
+        <link href="webim/static/themes/{$_IMC['theme']}/ui.theme.css" media="all" type="text/css" rel="stylesheet"/>
+        <script src="webim/static/webim_uchome.all.min.js" type="text/javascript"></script>
+        <script src="webim/static/i18n/webim-{$_IMC['local']}.js" type="text/javascript"></script>
+        <script src="webim/custom.js.php?platform=uchome" type="text/javascript"></script>
+        <!--{else}-->
+        <script type="text/javascript">
+                (function(c){c && c.apply(null, ["_webim","", null, "/", document.domain]);})((window.Cookie && window.Cookie.set) || window.setcookie);
+        </script>
+        <!--{/if}-->
+<!--{/if}-->

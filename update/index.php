@@ -5,25 +5,49 @@
 		<link rel="stylesheet" href="main.css" style="text/css">
 		<title>Nextim Update</title>
 		<script type="text/javascript" src="jslib/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="jslib/jquery.json-2.2.min.js"></script>
 		<script type="text/javascript" src="jslib/jquery.progressbar.min.js"></script>
 <script type="text/javascript">
-function poll(version){
+function versionUpdate(){
 	$.ajax({url:'update_request.php',
 		dataType:'json',
+		data:{cmd:'GetCurrentState'},
+		success:function(data){
+			if (data.state === "Update"){
+				
+			
+			}
+		}
+	});
+
+}
+function poll(preAction){
+	$.ajax({url:'update_request.php',
 		data:{cmd:"GetCurrentState"},
 		success:function(data){
-			switch (data.status){
+			var data = $.evalJSON(data);
+			alert(data.state);
+			var iscontinue = true;
+			switch (data.state){
 				//downloading...
 			case "":
 				break;
 				//updating
-			case "":
+			case "Update":
+				if (!data.isok){
+					iscontinue = false;
+					$("#btn1").css("background-image","");
+					alert(data.errmsg);
+					$("#progress_txt").html(data.errmsg);
+				}else{
+					$("#btn1").css("background-image","");
+					$('#spaceused1').progressBar(data.percent);
+				}
 				break;
 			}
 		//	$("#status").css("visibility","hidden");
 		//	$("#status").css("display","none");;
-
-		//	poll(version);
+			//iscontinue && poll(data.state);
 		}
 	});
 }
@@ -41,15 +65,15 @@ $(document).ready(function() {
 			url:"update_request.php",
 			data:{"cmd":"GetNewestVersionInfo"},
 			success:function(data){
-				var versioninfo = jQuery.parseJSON(data);
+				var versioninfo = $.evalJSON(data);
+				alert(versioninfo);
 				//.GetNewestVersion.Successful.VersionInfo;
-			//	$("#version_txt").html(versioninfo);
-				poll(data);
+				//$("#version_txt").html(versioninfo);
+				poll();
 			},
 			error:function(req,txt,err){
 			},
 			complete:function(){
-				alert('x');
 			}
 		}
 );
@@ -77,7 +101,7 @@ $(document).ready(function() {
 			</div>
 		</div>
 			<div id="control">
-			<a name="btn1" class="btn txt" onclick="$('#spaceused1').progressBar(20);">更新</a> <a class="btn" name="btn2" >取消</a>
+			<a name="btn1" id="btn1" class="btn txt" onclick="$('#spaceused1').progressBar(20);">更新</a> <a class="btn" name="btn2" >取消</a>
 		</div>
 		<div id="footer">
 联系(QQ) · 6168557 1034997251 30853554 100786001 <br/>

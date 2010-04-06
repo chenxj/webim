@@ -1,7 +1,40 @@
 <?php
+error_reporting(E_ALL);
 $_SGLOBAL = $_SCONFIG = $_SBLOCK = array();
 //安装平台根目录
-define('S_ROOT', substr(dirname(__FILE__), 0, -12-1));
+define('S_ROOT', substr(dirname(__FILE__), 0, -13));
+$platform = which_platform();
+switch($platform){
+    case 'uchome':
+        define('IN_UCHOME', TRUE);
+        $basic_configfile = S_ROOT.'./config.php';
+        include_once(S_ROOT.'./config.php');
+        include_once(S_ROOT.'./source/function_common.php');
+        $display_name = 'uchome';
+        break;
+    case 'discuz':
+        define('IN_DISCUZ', TRUE);
+        $basic_configfile = S_ROOT.'./config.inc.php';
+        include_once(S_ROOT.'./include/common.inc.php');
+        include_once('../lib/discuz_function.php');
+        $_SC['gzipcompress'] = true;
+        $_SC['tablepre']=$tablepre;
+        $_SC['dbcharset']=$dbcharset;
+        $_SC['charset']='utf-8';
+        $display_name = 'discuz';
+        break;
+}
+
+//timestamp
+$_SGLOBAL['timestamp'] = time();
+
+if(file_exists(S_ROOT.'/data/webiminstall.lock')) {
+	show_msg('您已经安装过IM,如果需要重新安装，请先删除文件 uchome根目录/data/webiminstall.lock', 999);
+}
+
+if(file_exists(S_ROOT.'/forumdata/webiminstall.lock')) {
+	show_msg('您已经安装过IM,如果需要重新安装，请先删除文件 discuz根目录/forumdata/webiminstall.lock', 999);
+}
 
 function which_platform(){
 	/*
@@ -9,52 +42,15 @@ function which_platform(){
 	*  Uchome ? Discuz ?  PhpWind?
 	*
 	*/
-	if(file_exists(S_ROOT.'data')){
+	if(file_exists(S_ROOT.'./data')){
 		return "uchome";
 	}
-	else if(file_exists(S_ROOT.'forumdata')){
+	if(file_exists(S_ROOT.'./forumdata')){
 		return "discuz";
-    }
+	}
 }
 
 
-
-
-
-$platform = which_platform();
-
-switch($platform){
-case 'uchome':
-	define('IN_UCHOME', TRUE);
-	$basic_configfile = S_ROOT.'./config.php';
-	include_once(S_ROOT.'./config.php');
-	include_once(S_ROOT.'./source/function_common.php');
-	$display_name = 'discuz';
-	break;
-case 'discuz':
-	define('IN_DISCUZ', TRUE);
-	$basic_configfile = S_ROOT.'./config.inc.php';
-	include_once(S_ROOT.'./include/common.inc.php');
-	include_once('../lib/discuz_function.php');
-	$_SC['gzipcompress'] = true;
-	$_SC['tablepre']=$tablepre;
-	$_SC['dbcharset']=$dbcharset;
-	$_SC['charset']='utf-8';
-	$display_name = 'uchome';
-	break;
-}
-//timestamp
-$_SGLOBAL['timestamp'] = time();
-
-/*
-if(file_exists(S_ROOT.'./data/webiminstall.lock')) {
-	show_msg('您已经安装过IM,如果需要重新安装，请先删除文件 uchome根目录/data/webiminstall.lock', 999);
-}
-
-if(file_exists(S_ROOT.'./forumdata/webiminstall.lock')) {
-	show_msg('您已经安装过IM,如果需要重新安装，请先删除文件 discuz根目录/forumdata/webiminstall.lock', 999);
-}
- */
 ///
 //$display_name = '';
 //用于在安装界面显示用户需要输入路径的另一平台名称
@@ -65,7 +61,6 @@ list($url_path[$platform],$else) = explode('/webim/', "http://".$_SERVER['HTTP_H
 $url_path[$platform] .= "/";
 $file_path[$platform] = S_ROOT;//$_ROOT 平台文件夹路径
 //$config_file_path = $file_path[0].'./webim/config.php';//IM 配置文件绝对路径 已被 webim_configfile 替代
-
 //GPC filter
 if(!(get_magic_quotes_gpc())) {
 	$_GET = saddslashes($_GET);
@@ -79,17 +74,16 @@ if ($_SC['gzipcompress'] && function_exists('ob_gzhandler')) {
 	ob_start();
 }
 
-
-
+header("content-type:text/html; charset=utf-8");
 $formhash = formhash();
 
 $theurl = 'index.php';
-$sqlfile = S_ROOT.'./webim/install/data/webim.sql';
+$sqlfile = S_ROOT.'/webim/install/data/webim.sql';
 if(!file_exists($sqlfile)) {
-	show_msg('./webim/install/data/webim.sql 数据库初始化文件不存在，请检查你的安装文件', 999);
+	show_msg('/webim/install/data/webim.sql 数据库初始化文件不存在，请检查你的安装文件', 999);
 }
 
-$webim_configfile = S_ROOT.'./webim/config.php';
+$webim_configfile = S_ROOT.'/webim/config.php';
 
 //variables
 $step = empty($_GET['step'])?0:intval($_GET['step']);
@@ -489,7 +483,7 @@ END;
 </ul>
 	<p style="text-align:center">
 	<table class=button>
-	<tr><td><a href="../"><input type="button" value="完成" style="cursor:pointer;" onclick="window.location.href='../../'" /></a></td></tr>
+	<tr><td><a href="../"><input type="button" value="完成" style="cursor:pointer;" onclick="window.location.href='../'" /></a></td></tr>
 	</table>
 	</p>
 EOF;
@@ -703,6 +697,7 @@ function write_webim_config($file,$domain,$apikey,$theme,$charset) {
 	$configfile = substr($configfile, -2) == '?>' ? substr($configfile, 0, -2) : $configfile;
 	fclose($fp);
 
+    $configfile = insertconfig($configfile, '/\<\?php/i', '<?php');
 	$configfile = insertconfig($configfile, '/\$_IMC = array\(\);/i', '$_IMC = array();');
 	$configfile = insertconfig($configfile, '/\$_IMC\["enable"\] =\s*.*?;/i', '$_IMC["enable"] = true;');
 	$configfile = insertconfig($configfile, '/\$_IMC\["domain"\] =\s*".*?";/i', '$_IMC["domain"] = "'.$domain.'";');

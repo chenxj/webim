@@ -1,5 +1,5 @@
 <?php
-include_once 'config.php';
+include_once '..' . DIRECTORY_SEPARATOR . 'config.php';
 error_reporting(E_ALL & ~E_NOTICE);
 define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
 include_once($_IMC['uchome_path'].'common.php');

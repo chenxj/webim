@@ -1,0 +1,62 @@
+/*!
+ * Webim UI v@VERSION
+ * http://www.nextim.cn/
+ *
+ * Copyright (c) 2009 Hidden
+ *
+ * Date: 
+ * Revision: 
+ */
+
+body {
+        margin: 0;
+}
+
+/* some sites removes and neutralizes the inconsistent default styling of HTML elements. */
+.webim, .webim *{ 
+        margin:0;
+        padding:0;
+}
+.webim img{
+        border:0;
+}
+.webim{
+        font-size: 10px;
+        line-height: 1.5;
+        font-family: "lucida grande", tahoma, helvetica, arial, "bitstream vera sans", sans-serif;
+        text-align: left;
+}
+
+.webim a{
+        text-decoration: none;
+}
+.webim a:hover{
+        text-decoration: underline;
+}
+.webim h4{
+        font-size: 1em;
+}
+.webim h5{
+        font-size: .83em;
+}
+.webim-gray{
+        /*
+	opacity:.5;
+	filter:alpha(opacity=50);
+	zoom:1;
+        */
+        color: gray;
+}
+
+.webim-icon{ 
+        display: block; 
+        overflow: hidden; 
+        text-indent: -99999px; 
+        background-repeat: no-repeat; 
+        height:16px;
+        width:16px;
+}
+a .webim-icon, a .ui-icon{
+		cursor: pointer;
+}
+

@@ -1,0 +1,29 @@
+.webim .webim-history-actions{
+        margin:0;
+        padding: .3em .5em 0;
+}
+.webim .webim-history-content{
+        margin: .3em .5em;
+}
+.webim .webim-history h5{
+        margin-top: .5em;
+        padding: 0 .4em;
+}
+.webim .webim-history h4{
+        border-top: 1px solid #eee;
+        margin-top: .1em;
+        padding: .2em .3em .1em;
+        font-weight: normal;
+}
+.webim .webim-history h4 span{
+        float: right;
+        padding .1em 0;
+        font-size: .8em;
+}
+.webim .webim-history p{
+        margin: .2em .3em;
+}
+.webim .webim-history *{
+		*background:url(about:blank);
+}
+

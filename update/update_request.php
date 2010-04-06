@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 	include_once('./common.php');
 	global $version_info;
 	if(gp('cmd') === 'ClearState'){

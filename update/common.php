@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 # ./webim/update/common.php
 /*
  * 提供更新所需的函数

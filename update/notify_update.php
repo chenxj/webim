@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $platform = $_GET['platform'];
 switch($platform){
 	case 'discuz':

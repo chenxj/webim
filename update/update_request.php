@@ -1,32 +1,36 @@
-<?php
-	//global $ret;
-	if(gp['cmd'] === 'ClearState'){
+ï»¿<?php
+	include_once('./common.php');
+	global $version_info;
+	if(gp('cmd') === 'ClearState'){
 		if(!clearState()){
 			echo "false";
 		}
 		echo "true";
-	}else if(gp['cmd'] === 'GetNewestVersionInfo'){
-		$ret = getNewestVersionInfo();
-		if(!$ret){
-			echo json_encode(array('status'=>0, 'info'=>'NoUpdatesAvaliable', 'iserror'=>'false', 'isrollbackable'=>'false'));
+	}else if(gp('cmd') === 'GetNewestVersionInfo'){
+		$version_info = getNewestVersionInfo();
+		if(!$version_info){
+			echo getCurrentState();
 		}else{
-			echo json_encode(array('status'=>1, 'info'=>$ret, 'iserror'=>'false', 'isrollbackable'=>'false'));
+			echo $version_info
 		}
-	}else if(gp['cmd'] === 'Update'){
+	}else if(gp('cmd') === 'Update'){
 		if(!update($version)){
-			# ¸üĞÂÊ§°Ü
+			echo getCurrentState();
 		}else{
-			# ¸üĞÂ³É¹¦
+			echo getCurrentState();
 		}
-	}else if(gp['cmd'] === 'Rollback'){
-		# backup_project($project_path = null)
-	}else if(gp['cmd'] === 'GetCurrentState'){
-		return getCurrentState();
+	}else if(gp('cmd') === 'Rollback'){
+		roll_back();
+	}else if(gp('cmd') === 'GetCurrentState'){
+		echo getCurrentState();
 	}
 ?>
 
-'ClearState' £º Çå³ıwebim·şÎñÆ÷ÉÏ#current_stateÎÄ¼şµÄÄÚÈİ¡£
-'GetNewestVersionInfo' £º ´Ó¸üĞÂ·şÎñÆ÷¶ÁÈ¡×îĞÂ°æ±¾ĞÅÏ¢£¬°üÀ¨×îĞÂ°æ±¾ºÅ¡¢°æ±¾¸üĞÂËµÃ÷¡¢ËùĞèÏÂÔØµÄÎÄ¼şÁĞ±í¡£
-'Update' £º Ö´ĞĞ¸üĞÂ¡£
-'Rollback' £º Ö´ĞĞ»Ø¹ö¡£
-json_encode(array('status'=>5, 'info'=>'ClearStateFailed', 'iserror'=>'true', 'isrollbackable'=>'false'));
+<?php
+/*
+'ClearState' ï¼š æ¸…é™¤webimæœåŠ¡å™¨ä¸Š#current_stateæ–‡ä»¶çš„å†…å®¹ã€‚
+'GetNewestVersionInfo' ï¼š ä»æ›´æ–°æœåŠ¡å™¨è¯»å–æœ€æ–°ç‰ˆæœ¬ä¿¡æ¯ï¼ŒåŒ…æ‹¬æœ€æ–°ç‰ˆæœ¬å·ã€ç‰ˆæœ¬æ›´æ–°è¯´æ˜ã€æ‰€éœ€ä¸‹è½½çš„æ–‡ä»¶åˆ—è¡¨ã€‚
+'Update' ï¼š æ‰§è¡Œæ›´æ–°ã€‚
+'Rollback' ï¼š æ‰§è¡Œå›æ»šã€‚
+*/
+?>

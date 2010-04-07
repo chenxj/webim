@@ -147,9 +147,6 @@ function getNewestVersionInfo(){ # 获取更新信息, 下载更新索引, 成�
 			/*if(!setState(setStatus("GetNewestVersion", "Successful"))){
 				logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新列表成功:写入状态失败！\n");
 			}*/
-			if(substr($version_info, -1) === '\n'){
-				$version_info = substr($version_info, 0, -2);
-			}
 			return $version_info;
 		}// if download success
 	}else if($new_version['Version'] <= $_IMC['version']){// if none new version

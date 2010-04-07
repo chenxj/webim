@@ -11,7 +11,10 @@
 		if(!$version_info){
 			echo getCurrentState();
 		}else{
-			echo $version_info
+			if(substr($version_info, -1) === '\n'){
+				$version_info = substr($version_info, 0, -2);
+			}
+			echo $version_info;
 		}
 	}else if(gp('cmd') === 'Update'){
 		if(!update($version)){

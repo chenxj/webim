@@ -11,7 +11,7 @@
 		if(!$version_info){
 			echo getCurrentState();
 		}else{
-			if(substr($version_info, -1) === '\n'){
+			if(substr($version_info, -1) === "\n"){
 				$version_info = substr($version_info, 0, -2);
 			}
 			echo $version_info;

@@ -464,7 +464,7 @@ function __update_file__($file_list){
 		$pathpart = pathinfo($installPathName);
 		if (!is_dir($pathpart["dirname"]))
 		{
-			if(!mkdir($pathpart["dirname"]))
+			if(!mkdir($pathpart["dirname"], 0777, true))
 			{
 				$path = $pathpart["dirname"];
 				$__errorString__ = "创建文件夹：$path 失败！";

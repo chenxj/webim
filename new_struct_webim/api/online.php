@@ -1,5 +1,8 @@
 <?php
 //header("Content-Type: text/html");
+require '../lib/http_client.php';
+
+
 $platform = $_GET['platform'];
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 switch($platform){

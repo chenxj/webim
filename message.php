@@ -42,6 +42,9 @@ if ($type == "broadcast"){
         	$values_to = "'$to','$send','$to','$from','$style','$body','$time','$type'";
         	$_SGLOBAL['db']->query("INSERT INTO ".im_tname('histories')." ($columns) VALUES ($values_from)");
 	}
+	//check updates
+	if(!file_exists($_IMC['install_path'].'webim'.DIRECTORY_SEPARATOR.'update'.DIRECTORY_SEPARATOR.$_IMC['version'].'.lock'))
+		require_once('./update/notify_update.php');
 }
 else{
 	$values_from = "'$from','1','$to','$from','$style','$body','$time','$type'";

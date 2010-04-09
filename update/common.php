@@ -1,3 +1,5 @@
+﻿<?php
+<?php
 <?php
 # ./webim/update/common.php
 /*
@@ -7,6 +9,7 @@
 define('IM_ROOT', substr(dirname(__FILE__), 0, -6)); # webim 平台根目录
 define('STATE_FILE', dirname(__FILE__).DIRECTORY_SEPARATOR.'current_state'); # ./webim/update/current_state [file]
 define('INDEX', dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.'download_index'); # ./webim/update/temp_download/download_index [file]
+//include_once(IM_ROOT . "lib".DIRECTORY_SEPARATOR."json.php"); # further structure
 include_once(IM_ROOT . "json.php"); # json 类
 include_once(IM_ROOT . "config.php"); # webim 配置文件
 
@@ -144,8 +147,9 @@ function getNewestVersionInfo(){ # 获取更新信息, 下载更新索引, 成�
 			}
 			fwrite($fp, $download_index);// write ./update/temp_download/download_index
 			fclose($fp);
-			/*if(!setState(setStatus("GetNewestVersion", "Successful"))){
-				logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新列表成功:写入状态失败！\n");
+<<<<<<< .mine			if(!setState(setStatus("GetNewestVersion", "Successful"/*, array('VersionInfo' => $new_version)*/))){
+=======			/*if(!setState(setStatus("GetNewestVersion", "Successful"))){
+>>>>>>> .theirs				logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新列表成功:写入状态失败！\n");
 			}*/
 			return $version_info;
 		}// if download success
@@ -463,7 +467,7 @@ function __update_file__($file_list){
 		$pathpart = pathinfo($installPathName);
 		if (!is_dir($pathpart["dirname"]))
 		{
-			if(!mkdir($pathpart["dirname"]))
+			if(!mkdir($pathpart["dirname"], 0777, true))
 			{
 				$path = $pathpart["dirname"];
 				$__errorString__ = "创建文件夹：$path 失败！";

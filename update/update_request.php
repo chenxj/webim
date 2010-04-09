@@ -1,8 +1,15 @@
-ï»¿<?php
+ <?php
+	//global $ret;
+	if(gp['cmd'] === 'ClearState'){
+<<<<<<< .mine<?php
 	include_once('./common.php');
 	global $version_info;
 	if(gp('cmd') === 'ClearState'){
-		if(!clearState()){
+=======<?php
+	include_once('./common.php');
+	global $version_info;
+	if(gp('cmd') === 'ClearState'){
+>>>>>>> .theirs		if(!clearState()){
 			echo "false";
 		}
 		echo "true";
@@ -11,8 +18,12 @@
 		if(!$version_info){
 			echo getCurrentState();
 		}else{
-			echo $version_info ;
-		}
+<<<<<<< .mine			echo $version_info ;
+=======			if(substr($version_info, -1) === "\n"){
+				$version_info = substr($version_info, 0, -2);
+			}
+			echo $version_info;
+>>>>>>> .theirs		}
 	}else if(gp('cmd') === 'Update'){
 		if(!update($version)){
 			echo getCurrentState();
@@ -24,13 +35,14 @@
 	}else if(gp('cmd') === 'GetCurrentState'){
 		echo getCurrentState();
 	}
-?>
+<<<<<<< .mine?>
 
 <?php
 /*
-'ClearState' ï¼š æ¸…é™¤webimæœåŠ¡å™¨ä¸Š#current_stateæ–‡ä»¶çš„å†…å®¹ã€‚
-'GetNewestVersionInfo' ï¼š ä»Žæ›´æ–°æœåŠ¡å™¨è¯»å–æœ€æ–°ç‰ˆæœ¬ä¿¡æ¯ï¼ŒåŒ…æ‹¬æœ€æ–°ç‰ˆæœ¬å·ã€ç‰ˆæœ¬æ›´æ–°è¯´æ˜Žã€æ‰€éœ€ä¸‹è½½çš„æ–‡ä»¶åˆ—è¡¨ã€‚
-'Update' ï¼š æ‰§è¡Œæ›´æ–°ã€‚
-'Rollback' ï¼š æ‰§è¡Œå›žæ»šã€‚
+'ClearState' £º Çå³ýwebim·þÎñÆ÷ÉÏ#current_stateÎÄ¼þµÄÄÚÈÝ¡£
+'GetNewestVersionInfo' £º ´Ó¸üÐÂ·þÎñÆ÷¶ÁÈ¡×îÐÂ°æ±¾ÐÅÏ¢£¬°üÀ¨×îÐÂ°æ±¾ºÅ¡¢°æ±¾¸üÐÂËµÃ÷¡¢ËùÐèÏÂÔØµÄÎÄ¼þÁÐ±í¡£
+'Update' £º Ö´ÐÐ¸üÐÂ¡£
+'Rollback' £º Ö´ÐÐ»Ø¹ö¡£
 */
 ?>
+=======?>>>>>>>> .theirs

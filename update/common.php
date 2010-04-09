@@ -1,4 +1,6 @@
 ﻿<?php
+<?php
+<?php
 # ./webim/update/common.php
 /*
  * 提供更新所需的函数
@@ -7,6 +9,7 @@
 define('IM_ROOT', substr(dirname(__FILE__), 0, -6)); # webim 平台根目录
 define('STATE_FILE', dirname(__FILE__).DIRECTORY_SEPARATOR.'current_state'); # ./webim/update/current_state [file]
 define('INDEX', dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.'download_index'); # ./webim/update/temp_download/download_index [file]
+//include_once(IM_ROOT . "lib".DIRECTORY_SEPARATOR."json.php"); # further structure
 include_once(IM_ROOT . "json.php"); # json 类
 include_once(IM_ROOT . "config.php"); # webim 配置文件
 
@@ -117,9 +120,9 @@ function setStatus($action, $mark, $ret_array = array()){ # 设置状态反馈�
 function getNewestVersionInfo(){ # 获取更新信息, 下载更新索引, 成功返回更新信息(json), 失败或无更新返回 false
 	/* $download_index 为 json 形式 */
 	global $_IMC, $_IMC_LOG_FILE;
-	if(!setState(setStatus("GetNewestVersion", "Waiting"))){
+	/*if(!setState(setStatus("GetNewestVersion", "Waiting"))){
 		logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新列表:写入状态失败！\n");
-	}
+	}*/
 	$version_info = file_get_contents($_IMC['update_url']."publish/NewestVersionInfo");
 	if($version_info){
 		$new_version = array();
@@ -144,15 +147,16 @@ function getNewestVersionInfo(){ # 获取更新信息, 下载更新索引, 成�
 			}
 			fwrite($fp, $download_index);// write ./update/temp_download/download_index
 			fclose($fp);
-			if(!setState(setStatus("GetNewestVersion", "Successful"/*, array('VersionInfo' => $new_version)*/))){
-				logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新列表成功:写入状态失败！\n");
-			}
+<<<<<<< .mine			if(!setState(setStatus("GetNewestVersion", "Successful"/*, array('VersionInfo' => $new_version)*/))){
+=======			/*if(!setState(setStatus("GetNewestVersion", "Successful"))){
+>>>>>>> .theirs				logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新列表成功:写入状态失败！\n");
+			}*/
 			return $version_info;
 		}// if download success
 	}else if($new_version['Version'] <= $_IMC['version']){// if none new version
-		if(!setState(setStatus("GetNewestVersion", "Invalid"))){
+		/*if(!setState(setStatus("GetNewestVersion", "Invalid"))){
 			logto_file($_IMC_LOG_FILE["name"], "SetState", "无更新:写入状态失败！\n");
-		}
+		}*/
 		return false;
 	}
 }// func getNewestVersion
@@ -463,7 +467,7 @@ function __update_file__($file_list){
 		$pathpart = pathinfo($installPathName);
 		if (!is_dir($pathpart["dirname"]))
 		{
-			if(!mkdir($pathpart["dirname"]))
+			if(!mkdir($pathpart["dirname"], 0777, true))
 			{
 				$path = $pathpart["dirname"];
 				$__errorString__ = "创建文件夹：$path 失败！";

@@ -1,11 +1,12 @@
 <?php
-include_once '../config.php';
 error_reporting(E_ALL & ~E_NOTICE);
+define('WEBIM_ROOT', substr(dirname(__FILE__), 0, -4));
 //API DEFINE
-define('API_COMMFILE','./include/common.inc.php');
+include_once(WEBIM_ROOT . '/config.php');
+define('API_COMMFILE','/include/common.inc.php');
 define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
 include_once($_IMC['discuz_path'] . API_COMMFILE);
-include_once(IM_ROOT . "json.php");
+include_once(WEBIM_ROOT . "/lib/json.php");
 $_SGLOBAL['supe_uid'] =  $discuz_uid;
 $_SGLOBAL['db'] = $db;
 $_SGLOBAL['timestamp'] = time();

@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
@@ -86,19 +86,14 @@ function poll(preAction){
 					case "GetNewestVersion":
 						iscontinue = false;
 						break;
-			}
-		//	$("#status").css("visibility","hidden");
-		//	$("#status").css("display","none");;
-			//iscontinue && poll(data.state);
-		},
-			error:function(req,txt,err){
-			},
-			complete:function(){
-			}
+					}
+				}
+			});
+			iscontinue &&  setTimeout(function(){poll();},2500);;
 		}
-	);
-//	iscontinue && setTimeout(function(){poll();},2500);
-}
+		
+ 
+ 
 function getVersion(){
 	$.ajax({url:'update_request.php',
 		async:false,
@@ -112,15 +107,36 @@ function getVersion(){
 			}
 		}
 	});
-
+ 
 }
 $(document).ready(function() {
 	//init progressbar 
-	$("#spaceused1").progressBar({height:12,width:120,
-		barImage:'images/progressbg_green.gif'});
-		// request to get newest version
+	$("#spaceused1").progressBar({height:12,width:120,	barImage:'images/progressbg_green.gif'});
+				// request to get newest version
 	//getVersion();
 	poll("");
+		//sync request to get newest version
+/*	$.getJSON('update_request.php?cmd=GetNewestVersionInfo',function(data){
+		var versioninfo = data.GetNewestVersion.Successful.VersionInfo;
+		alert(versioninfo);
+		$("#version_txt").html("a");
+});*/
+		$.ajax({
+			url:"update_request.php",
+			data:{"cmd":"GetNewestVersionInfo"},
+			success:function(data){
+				var versioninfo = $.evalJSON(data);
+				alert(versioninfo);
+				//.GetNewestVersion.Successful.VersionInfo;
+				//$("#version_txt").html(versioninfo);
+				poll();
+			},
+			error:function(req,txt,err){
+			},
+			complete:function(){
+			}
+		}
+);
 });
 </script>
 </head>
@@ -148,7 +164,6 @@ $(document).ready(function() {
 			<div id="control">
 			<input name="btn3" class="btn" style="width:63px" type="button" value="更新" onclick="versionUpdate();">
 			<input name="btn3" class="btn" style="width:63px" type="button" value="回滚" onclick="versionUpdate();">
-			<a name="btn1" id="btn1" class="btn txt" >更新</a> <a class="btn" name="btn2" >回滚</a>
 		</div>
 		<div id="footer">
 联系(QQ) · 6168557 1034997251 30853554 100786001 <br/>

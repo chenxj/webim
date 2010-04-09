@@ -4,18 +4,20 @@ require '../lib/http_client.php';
 
 
 $platform = $_GET['platform'];
+$configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 switch($platform){
 	case 'discuz':
-		include_once('../lib/discuz.php');
+		include_once($configRoot . 'discuz.php');
 		break;
 	case 'uchome':
-		include_once('../lib/uchome.php');
+		include_once($configRoot . 'uchome.php');
 		break;
 }
 
 
 if(empty($space))exit();
 $name = nick($space);
+require $configRoot . 'http_client.php';
 
 $stranger_ids = ids_except($space["uid"], ids_array(gp("stranger_ids")));//陌生人
 

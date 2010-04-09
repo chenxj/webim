@@ -10,7 +10,11 @@ pre { border: 1px dashed #ddd; color: #444; background-color: #eee; width: 100%;
 #update_info ul{margin-left:25px;}
 #spaceused1{margin-left:3px;}
 .logo_txt{margin-left:99px;margin-top:-22px;font-size:13px ; text-shadow:1px 1px 1px #ffb69a}
+<<<<<<< HEAD
 .btn{background:url("images/sprit.png") ;-moz-box-shadow:0 1px 3px rgba(0,0,0,0.618);-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.5);color:black;display:inline-block;width:49px;heigth:28px;padding:2px 6px; margin-left:0;cursor:pointer;margin-top:10px;margin-right:28px;-webkit-border-radius:3px;-moz-border-radius:3px;font-size:15px;font-variant:normal;text-decoration:none;text-align:center;}
+=======
+.btn{background:url("images/sprit.png") ;-moz-box-shadow:0 1px 3px rgba(0,0,0,0.5);-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.5);color:black;display:inline-block;width:49px;heigth:28px;padding:2px 6px; margin-left:0;cursor:pointer;margin-top:10px;margin-right:28px;-webkit-border-radius:3px;-moz-border-radius:3px;font-size:15px;font-variant:normal;text-decoration:none;text-align:center;}
+>>>>>>> 69616df03b1c6bafe22de571f7c44d7059c1e965
 .btn btn1{margin-left:12px;}
 #footer{ width: 100%;margin-top:163px;text-align: center;font-size:12px; border-top: #e5e5e5 1px solid; padding-top: 10px; padding-bottom: 20px; }
 .clearfix:after{visibility:hidden;display:block;font-size:0;content:"";clear:both;height:0;}
@@ -21,5 +25,8 @@ pre { border: 1px dashed #ddd; color: #444; background-color: #eee; width: 100%;
 #status ul li{margin-left:20px}
 #update_info ul span{font:13px ;color:blue;margin:-19px;}
 .txt{-webkit-text-shadow:0 -1px 10px rgba(0 0 0 0.25)}
+<<<<<<< HEAD
 #version_txt{margin-left:35px;}
 #status{visibility:hidden;}
+=======
+>>>>>>> 69616df03b1c6bafe22de571f7c44d7059c1e965

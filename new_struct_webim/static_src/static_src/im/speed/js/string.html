@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Benchmark: String.split()</title>
+		<script type="text/javascript" src="../benchmark/benchmark.js"></script>
+		<script type="text/javascript" src="../benchmark/benchmark_perlish.js"></script>
+		<link rel="stylesheet" href="../benchmark/benchmark.css" type="text/css" />
+
+	</head>
+	<body class="test">
+		<div id="body">
+			<h1>
+				<a href="../">Benchmark</a>: <var>String.split()</var>
+				<em>musing around <var>String</var>'s <var>split()</var> implementation</em>
+
+			</h1>
+			<div id="content">
+				<p>
+				<a href="#" onclick="runTests(); return false;">Run tests</a>
+				<input id="iterations" name="iterations" size="8" value="-1" /> times
+				using this string:
+				<input id="query" name="query" size="50" value="a=1&amp;b=2&amp;c=3&amp;d=4" />.
+				</p>
+				<p>
+				<a href="#" onclick="return clearTesters()">clear results</a>
+
+				</p>
+			</div>
+		</div>
+		<script type="text/javascript">
+			/* <![CDATA[ */
+		function clearTesters() {
+			var list = document.getElementsByTagName('pre');
+			for (var i=0, len=list.length; i<len; i++) {
+				var pre = list[i];
+				if (pre.parentNode && pre.className && pre.className.indexOf('tester') > -1) {
+					pre.parentNode.removeChild(pre);
+				}
+			}
+			return false;
+		};
+
+var query, qRE = /[;&]/;
+var methods = {
+string: function(){
+		var p = query.split('&');
+	},
+regexp: function(){
+		var p = query.split(/[;&]/);
+	},
+regexpCompiled: function(){
+			var p = query.split(qRE);
+		}
+};
+
+function runTests() {
+	query = document.getElementById('query').value;
+	new Benchmark(methods, { iterations: document.getElementById('iterations').value });
+}
+/* ]]> */
+</script>
+																																		    </body>
+																																	    </html>
+

@@ -13,21 +13,43 @@ function preProcess(data){
 	data = data.substr(1,data.length);
 	return data;
 }
+var iscontinue = true;
+var pollable = true;
 function versionUpdate(){
+	pollable = true;
+	$("#update_ctl").attr('disabled',true);
 	$.ajax({url:'update_request.php',
 		data:{cmd:'Update'},
 		success:function(data){
-			var info = jQuery.parseJSON(preProcess(data));
-			
+			try{
+				var info = jQuery.parseJSON(data);
+			}catch(e){
+					
+			}
+			poll("RollBack");
+		},
+		error:function(req,status,err){
+				$("#update_ctl").attr('disabled',false);
+				pollable = false;
 		}
 	});
 }
 function rollBack(){
+	pollable = true;
+	$("#rollback_ctl").attr('disabled',true);
 	$.ajax({url:'update_request.php',
 			data:{cmd:"Rollback"},
 			success:function(data){
-				var info = jQuery.parseJSON(preProcess(data));
-				
+				try{
+					var info = jQuery.parseJSON(data);
+				}catch(e){
+					
+				}
+				poll("RollBack");
+			},
+			error:function(req,status,err){
+				$("#rollback_ctl").attr('disabled',false);
+				pollable = false;
 			}
 	});
 
@@ -46,23 +68,32 @@ function showProgress(msg,percent){
 	$("#status").css("visibility","visible");
 	$("#progress_txt").html(msg);
 	$("#spaceuesd1").progressBar(percent);
+	$("#update_ctl").attr('disabled',true);
 }
 
 function poll(preAction){
-	var iscontinue = true;
+	
 	var Action = "";
 	$.ajax({
 			url:"update_request.php",
 			data:{"cmd":"GetCurrentState"},
 			success:function(data){
-				
-				var data = data.replace(/[\r\n]/g,"");
-				data = data.trim();
-				data = data.substr(1,data.length);
-
-				data = jQuery.parseJSON(data);
 				var iscontinue = true;
+				
+				try{
+					data = jQuery.parseJSON(data);
+				}catch(e){
+					//alert(e);	
+					iscontinue=false;
+				}
+				
 				Action = data.state;
+ 
+				if (data.isok){
+					//finished
+					$("#status").css("visibility","hidden");
+					return ;
+				}
 				switch (data.state){
 					case "Backup":
 						showProgress("备份现有版本...",data.percent);
@@ -74,62 +105,39 @@ function poll(preAction){
 						break;
 					//updating
 					case "Update":
-						if (!data.isok){
-							iscontinue = false;
-							$("#progress_txt").html(data.errmsg);
-							
-						}else{
-							showProgress("更新中...",data.percent);
-							//disable update button
-						}
-						break;
-					case "GetNewestVersion":
-						iscontinue = false;
+						showProgress("更新中...",data.percent);
 						break;
 					}
 				}
 			});
-			iscontinue &&  setTimeout(function(){poll();},2500);;
+			iscontinue && pollable && setTimeout(function(){poll(Action);},2500);;
 		}
 		
  
- 
-function getVersion(){
-	$.ajax({url:'update_request.php',
-		async:false,
-		data:{cmd:'GetNewestVersionInfo'},
-		success:function(data){
-			if (data){
-				data = data.replace(/[\r\n]/g,"");
-				data = data.substr(1,data.length);
-				$("#version_txt").html(data.Version+"版本新特性");
-
-			}
-		}
-	});
- 
-}
 $(document).ready(function() {
 	//init progressbar 
 	$("#spaceused1").progressBar({height:12,width:120,	barImage:'images/progressbg_green.gif'});
 				// request to get newest version
 	//getVersion();
-	poll("");
-		//sync request to get newest version
-/*	$.getJSON('update_request.php?cmd=GetNewestVersionInfo',function(data){
-		var versioninfo = data.GetNewestVersion.Successful.VersionInfo;
-		alert(versioninfo);
-		$("#version_txt").html("a");
-});*/
+	//poll("");
 		$.ajax({
 			url:"update_request.php",
 			data:{"cmd":"GetNewestVersionInfo"},
 			success:function(data){
-				var versioninfo = $.evalJSON(data);
-				alert(versioninfo);
-				//.GetNewestVersion.Successful.VersionInfo;
-				//$("#version_txt").html(versioninfo);
-				poll();
+				try{
+					data = jQuery.parseJSON(data);
+				}catch(e){
+					//err of return data;
+					//alert(e);	
+				}
+				//no update, 
+				if (!data.Version){
+					$("#version_txt").html("当前为最新版本");
+					$("#update_ctl").attr('disabled',true);
+					return ;
+				}
+				$("#version_txt").html("V"+data.Version+"版本新特性");
+				//poll("");
 			},
 			error:function(req,txt,err){
 			},
@@ -154,7 +162,9 @@ $(document).ready(function() {
 					<li>采用与Facebook一样的标准HTML界面设计</li>
 					<li>集群服务器1,000,000并发用户支持</li>
 				</ul>
-
+			<div id="errmsg">
+				<font color="red">出错啦</font>	
+			</div>
 			</div>
 			<div id="status">
 				<div id="progress"><span id="progress_txt"></span><span id="progress_simbol"></span></div>
@@ -162,9 +172,11 @@ $(document).ready(function() {
 			</div>
 		</div>
 			<div id="control">
-			<input name="btn3" class="btn" style="width:63px" type="button" value="更新" onclick="versionUpdate();">
-			<input name="btn3" class="btn" style="width:63px" type="button" value="回滚" onclick="versionUpdate();">
+			<input name="btn3" id="update_ctl" class="btn" style="width:63px" type="button" value="升级" onclick="versionUpdate();">
+			<input name="btn3" id="rollback_ctl" class="btn" style="width:63px" type="button" value="回滚" onclick="rollback();">
 		</div>
+		
+		
 		<div id="footer">
 联系(QQ) · 6168557 1034997251 30853554 100786001 <br/>
  Copyright  2007-2009 上海几维信息技术有限公司 - KIWI Inc.  苏ICP备10028328

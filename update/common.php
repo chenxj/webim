@@ -143,12 +143,6 @@ function getNewestVersionInfo(){ # 获取更新信息, 下载更新索引, 成�
 			}
 			fwrite($fp, $download_index);// write ./update/temp_download/download_index
 			fclose($fp);
-<<<<<<< HEAD
-			/*if(!setState(setStatus("GetNewestVersion", "Successful"))){
-				logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新列表成功:写入状态失败！\n");
-			}*/
-=======
->>>>>>> 30e80047ed88ee3a5045af08c78afe7bff2f9791
 			return $version_info;
 		}// if download success
 	}else if($new_version['Version'] <= $_IMC['version']){// if none new version

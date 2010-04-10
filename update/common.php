@@ -1,5 +1,3 @@
-﻿<?php
-<?php
 <?php
 # ./webim/update/common.php
 /*
@@ -147,9 +145,8 @@ function getNewestVersionInfo(){ # 获取更新信息, 下载更新索引, 成�
 			}
 			fwrite($fp, $download_index);// write ./update/temp_download/download_index
 			fclose($fp);
-<<<<<<< .mine			if(!setState(setStatus("GetNewestVersion", "Successful"/*, array('VersionInfo' => $new_version)*/))){
-=======			/*if(!setState(setStatus("GetNewestVersion", "Successful"))){
->>>>>>> .theirs				logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新列表成功:写入状态失败！\n");
+			/*if(!setState(setStatus("GetNewestVersion", "Successful"))){
+				logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新列表成功:写入状态失败！\n");
 			}*/
 			return $version_info;
 		}// if download success

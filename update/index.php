@@ -129,6 +129,7 @@ $(document).ready(function() {
 				}catch(e){
 					//err of return data;
 					//alert(e);	
+					
 				}
 				//no update, 
 				if (!data.Version){
@@ -173,7 +174,7 @@ $(document).ready(function() {
 		</div>
 			<div id="control">
 			<input name="btn3" id="update_ctl" class="btn" style="width:63px" type="button" value="升级" onclick="versionUpdate();">
-			<input name="btn3" id="rollback_ctl" class="btn" style="width:63px" type="button" value="回滚" onclick="rollback();">
+			<input name="btn3" id="rollback_ctl" class="btn" style="width:63px" type="button" value="回滚" onclick="rollBack();">
 		</div>
 		
 		

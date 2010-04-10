@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-﻿<?php
-=======
 <?php
->>>>>>> 69616df03b1c6bafe22de571f7c44d7059c1e965
 $platform = $_GET['platform'];
 switch($platform){
 	case 'discuz':

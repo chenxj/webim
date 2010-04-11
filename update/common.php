@@ -668,4 +668,9 @@ function roll_back($project_path = null)
 	return copyDir($_backup_project_path, $project_path, 'Rollback');
 }// func roll_back
 
+/*
+ *force_update_all
+ *下载除了媒体文件外的所有文件
+ */
+ 
 ?>

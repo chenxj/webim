@@ -45,6 +45,7 @@ function rollBack(){
 				}catch(e){
 					
 				}
+				
 				poll("RollBack");
 			},
 			error:function(req,status,err){
@@ -70,7 +71,27 @@ function showProgress(msg,percent){
 	$("#spaceuesd1").progressBar(percent);
 	$("#update_ctl").attr('disabled',true);
 }
-
+function checkbtnusable(){
+		$.ajax({
+			url:"update_request.php",
+			data:{"cmd":"GetCurrentState"},
+			success:function(data){
+				try{
+					data = jQuery.parseJSON(data);	
+				}catch(e){
+					$("#errmsg").css("display","");	
+					
+				}
+				if ((data.state == "Update" || data.state == "Download" || data.state == "Backup") && data.percent != "100"){
+						$("#update_ctl").attr('disabled',true);
+				}else if ((data.state == "Rollback") && data.percent != "100"){
+							$("#rollback_ctl").attr('disabled',true);
+				}
+			},
+			error:function(req,txt,err){
+				
+			}});
+}
 function poll(preAction){
 	
 	var Action = "";
@@ -95,8 +116,8 @@ function poll(preAction){
 					return ;
 				}
 				switch (data.state){
-					case "Backup":
-						showProgress("备份现有版本...",data.percent);
+					case "Rollback":
+						showProgress("回滚现有版本...",data.percent);
 						break;
 					//downloading...
 					case "Download":
@@ -106,6 +127,9 @@ function poll(preAction){
 					//updating
 					case "Update":
 						showProgress("更新中...",data.percent);
+						break;
+					case "Backup":
+						showProgress("备份现有版本...",data.percent);
 						break;
 					}
 				}
@@ -138,6 +162,8 @@ $(document).ready(function() {
 					return ;
 				}
 				$("#version_txt").html("V"+data.Version+"版本新特性");
+				$("#update_ctl").attr('disabled',false);
+				$("#rollback_ctl").attr('disabled',false);
 				//poll("");
 			},
 			error:function(req,txt,err){
@@ -164,7 +190,7 @@ $(document).ready(function() {
 					<li>集群服务器1,000,000并发用户支持</li>
 				</ul>
 			<div id="errmsg">
-				<font color="red">出错啦</font>	
+				<font color="red">出错啦,请尝试刷新页面，或者手动升级/回滚</font>	
 			</div>
 			</div>
 			<div id="status">

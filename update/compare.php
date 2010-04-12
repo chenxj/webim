@@ -64,15 +64,14 @@ function run()
 
     $s = get_download_list($latest_file_hash,$user_file_hash);
     var_dump($s);
+<<<<<<< HEAD
     return $s;
 
 
+=======
+>>>>>>> 608b3e09e2991b7598a34e92351fe066d22e9393
 }
 
-run();
-
-
-
-
+# run();
 
 ?>

@@ -7,6 +7,7 @@
 define('IM_ROOT', substr(dirname(__FILE__), 0, -6)); # webim 平台根目录
 define('STATE_FILE', dirname(__FILE__).DIRECTORY_SEPARATOR.'current_state'); # ./webim/update/current_state [file]
 define('INDEX', dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.'download_index'); # ./webim/update/temp_download/download_index [file]
+define('USER_FILE_HASH', dirname(__FILE__).DIRECTORY_SEPARATOR.'file_index');
 //include_once(IM_ROOT . "lib".DIRECTORY_SEPARATOR."json.php"); # further structure
 include_once(IM_ROOT . "json.php"); # json 类
 include_once(IM_ROOT . "config.php"); # webim 配置文件
@@ -128,7 +129,14 @@ function getNewestVersionInfo(){ # 获取更新信息, 下载更新索引, 成�
 		}
 	}
 	if($new_version['Version'] > $_IMC['version']){// if new version
-		$download_index = file_get_contents($_IMC['update_url'].'version_'.$_IMC['version']."/index");
+		//$download_index = file_get_contents($_IMC['update_url'].'version_'.$_IMC['version']."/index");
+		require_once('./compare.php');
+		$user_file_hash = get_user_file_hash(USER_FILE_HASH);
+		var_dump($user_file_hash);
+		$latest_file_hash = get_latest_file_hash();
+		var_dump($latest_file_hash);
+		$download_index = get_download_list($latest_file_hash,$user_file_hash);
+		var_dump($s);
 		if($download_index){
 			if(!file_exists('./temp_download')){
 				mkdir('./temp_download');
@@ -191,7 +199,7 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 	foreach($index as $key=>$value){// 下载更新文件 $key--download路径, $value--install路径
 		while($remain > 0 && !$success){
 			if(is_media($key)){// multimedia files
-				$fc = file_get_contents($_IMC['update_url'].$key.'_d');
+				$fc = file_get_contents($_IMC['update_url'].$key);
 				if(!$fc){// if download failed
 					if(-- $remain > 0){
 						continue;// break while-loop
@@ -224,7 +232,7 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 				}
 				$success = true;
 			}else{// php, css, js files
-				$fc = file_get_contents($_IMC['update_url'].$key.'_d');
+				$fc = file_get_contents($_IMC['update_url'].$key);
 				if(!$fc){// if download failed
 					if(-- $remain > 0){
 						continue;// break while-loop

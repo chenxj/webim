@@ -7,6 +7,7 @@
 define('IM_ROOT', substr(dirname(__FILE__), 0, -6)); # webim 平台根目录
 define('STATE_FILE', dirname(__FILE__).DIRECTORY_SEPARATOR.'current_state'); # ./webim/update/current_state [file]
 define('INDEX', dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.'download_index'); # ./webim/update/temp_download/download_index [file]
+//include_once(IM_ROOT . "lib".DIRECTORY_SEPARATOR."json.php"); # further structure
 include_once(IM_ROOT . "json.php"); # json 类
 include_once(IM_ROOT . "config.php"); # webim 配置文件
 
@@ -117,9 +118,7 @@ function setStatus($action, $mark, $ret_array = array()){ # 设置状态反馈�
 function getNewestVersionInfo(){ # 获取更新信息, 下载更新索引, 成功返回更新信息(json), 失败或无更新返回 false
 	/* $download_index 为 json 形式 */
 	global $_IMC, $_IMC_LOG_FILE;
-	if(!setState(setStatus("GetNewestVersion", "Waiting"))){
-		logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新列表:写入状态失败！\n");
-	}
+	
 	$version_info = file_get_contents($_IMC['update_url']."publish/NewestVersionInfo");
 	if($version_info){
 		$new_version = array();
@@ -144,21 +143,17 @@ function getNewestVersionInfo(){ # 获取更新信息, 下载更新索引, 成�
 			}
 			fwrite($fp, $download_index);// write ./update/temp_download/download_index
 			fclose($fp);
-			if(!setState(setStatus("GetNewestVersion", "Successful"/*, array('VersionInfo' => $new_version)*/))){
-				logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新列表成功:写入状态失败！\n");
-			}
 			return $version_info;
 		}// if download success
 	}else if($new_version['Version'] <= $_IMC['version']){// if none new version
-		if(!setState(setStatus("GetNewestVersion", "Invalid"))){
-			logto_file($_IMC_LOG_FILE["name"], "SetState", "无更新:写入状态失败！\n");
-		}
+		echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"No updates available", "percent"=>""));
 		return false;
 	}
 }// func getNewestVersion
 
 function update($version){ # 执行更新, 参数是将更新到的版本(新版)
 	global $_IMC, $_IMC_LOG_FILE;
+	set_time_limit(0);// 防止超时
 	if(!setState(setStatus("Download", "Waiting", array("Download"=>0)))){
 		logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新文件:写入状态失败！\n");
 		return false;
@@ -190,8 +185,9 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 	$total = count($index);// 下载文件总数
 	$update_list = array();// 更新路径列表
 	$num = 0;
-	$remain = 1;// 下载失败尝试次数
+	$remain = 3;// 下载失败尝试次数
 	$success = false;
+	$complete = true;
 	foreach($index as $key=>$value){// 下载更新文件 $key--download路径, $value--install路径
 		while($remain > 0 && !$success){
 			if(is_media($key)){// multimedia files
@@ -201,12 +197,15 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 						continue;// break while-loop
 					}else{
 						echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Download update file error!", "percent"=>""));
+						$complete = false;
 						break;
 					}
 				}
+				if($num % 2 == 0){
+					echo json_encode(array("state"=>"Update", "isok"=>true, "iswait"=>false, "errmsg"=>"Downloading update file", "percent"=>$num*100/$total));
+				}
 				$value = ($value[0] === '/')?substr($value, 1):$value;
-				//$update_list[] = array(IM_ROOT.$value, dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1));
-				$update_list[IM_ROOT.substr(strrchr($value, '/'), 1)] = dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1);
+				$update_list[IM_ROOT.substr($value, 6)] = dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1);
 				try{
 					$fp = @fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1), 'wb');
 				}catch(Exception $e){
@@ -231,12 +230,15 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 						continue;// break while-loop
 					}else{
 						echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Download update file error!", "percent"=>""));
+						$complete = false;
 						break;
 					}
 				}
+				if($num % 2 == 0){
+					echo json_encode(array("state"=>"Update", "isok"=>true, "iswait"=>false, "errmsg"=>"Downloading update file", "percent"=>$num*100/$total));
+				}
 				$value = ($value[0] === '/')?substr($value, 1):$value;
-				//$update_list[] = array(IM_ROOT.$value, dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1));
-				$update_list[IM_ROOT.substr(strrchr($value, '/'), 1)] = dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1);
+				$update_list[IM_ROOT.substr($value, 6)] = dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1);
 				try{
 					$fp = @fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1), 'w');
 				}catch(Exception $e){
@@ -258,6 +260,11 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 		}// while-loop
 		$success = false;
 	}// foreach-loop
+	if(!$complete){
+		echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Download isn't complete!", "percent"=>""));
+		exit();
+	}
+	
 	if(!setState(setStatus("Download", "Successful"))){ # 下载并保存临时文件完毕
 		logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新文件成功:写入状态失败！\n");
 		return false;
@@ -463,7 +470,7 @@ function __update_file__($file_list){
 		$pathpart = pathinfo($installPathName);
 		if (!is_dir($pathpart["dirname"]))
 		{
-			if(!mkdir($pathpart["dirname"]))
+			if(!mkdir($pathpart["dirname"], 0777, true))
 			{
 				$path = $pathpart["dirname"];
 				$__errorString__ = "创建文件夹：$path 失败！";
@@ -592,12 +599,12 @@ function copyDir($dirFrom,$dirTo,$noticeString = null){
 				{
 					if($noticeString === 'Backup')
 					{
-						$status = array('Backup' => array('Waiting' => Array('Backup' => $rate*100)));
+						$status = array('Backup' => array('Waiting' => Array('Backup' => $rate)));
 						setState(json_encode($status));					
 					}
 					else if ($noticeString === 'Rollback')
 					{
-						$status = array('Rollback' => array('Waiting' => Array('Rollback' => $rate*100)));
+						$status = array('Rollback' => array('Waiting' => Array('Rollback' => $rate)));
 						setState(json_encode($status));	
 					}
 					$__rate__ = $rate;
@@ -661,4 +668,9 @@ function roll_back($project_path = null)
 	return copyDir($_backup_project_path, $project_path, 'Rollback');
 }// func roll_back
 
+/*
+ *force_update_all
+ *下载除了媒体文件外的所有文件
+ */
+ 
 ?>

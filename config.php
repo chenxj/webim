@@ -20,7 +20,7 @@ $_IMC["discuz_path"] = "/var/www/discuz/";
 $_IMC["discuz_url"] = "http://61.149.60.82/discuz/";
 $_IMC["install_url"] = "http://61.149.60.82/discuz/";
 $_IMC["install_path"] = "/var/www/discuz/";
-$_IMC["version"] = "2.1.0";
+$_IMC["version"] = "2.2.1";
 $_IMC["update"] = 0;
 $_IMC_LOG_TYPE["update_file"] = "UPDATE";
 $_IMC_LOG_TYPE["backup_project"] = "BACKUP";
@@ -28,7 +28,7 @@ $_IMC_LOG_FILE["name"] = "./update.log";
 $_IMC_BACKUP["director"] = "../WEBIM_BAK";
 $_IMC["update_url"] = "http://update.nextim.cn/";
 $_IMC["admin_ids"] = "BROADCAST";
-$_IMC["isStrangerOn"] = "on";
+$_IMC["isStrangerOn"] = "off";
 $_IMC["roomIdStr"] = "fid";
 $_IMC["emot_url"]="webim/static/images/emot/default";
 ?>

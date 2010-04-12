@@ -5,71 +5,166 @@
 		<link rel="stylesheet" href="main.css" style="text/css">
 		<title>Nextim Update</title>
 		<script type="text/javascript" src="jslib/jquery-1.4.2.min.js"></script>
-		<script type="text/javascript" src="jslib/jquery.json-2.2.min.js"></script>
 		<script type="text/javascript" src="jslib/jquery.progressbar.min.js"></script>
 <script type="text/javascript">
+function preProcess(data){
+	var data = data.replace(/[\r\n]/g,"");
+	data = data.trim();
+	data = data.substr(1,data.length);
+	return data;
+}
+var iscontinue = true;
+var pollable = true;
 function versionUpdate(){
+	pollable = true;
+	$("#update_ctl").attr('disabled',true);
 	$.ajax({url:'update_request.php',
-		dataType:'json',
-		data:{cmd:'GetCurrentState'},
+		data:{cmd:'Update'},
 		success:function(data){
-			if (data.state === "Update"){
-				
-			
+			try{
+				var info = jQuery.parseJSON(data);
+			}catch(e){
+					
 			}
+			poll("RollBack");
+		},
+		error:function(req,status,err){
+				$("#update_ctl").attr('disabled',false);
+				pollable = false;
 		}
+	});
+}
+function rollBack(){
+	pollable = true;
+	$("#rollback_ctl").attr('disabled',true);
+	$.ajax({url:'update_request.php',
+			data:{cmd:"Rollback"},
+			success:function(data){
+				try{
+					var info = jQuery.parseJSON(data);
+				}catch(e){
+					
+				}
+				
+				poll("RollBack");
+			},
+			error:function(req,status,err){
+				$("#rollback_ctl").attr('disabled',false);
+				pollable = false;
+			}
 	});
 
 }
-function poll(preAction){
-	$.ajax({url:'update_request.php',
-		data:{cmd:"GetCurrentState"},
-		success:function(data){
-			var data = $.evalJSON(data);
-			alert(data.state);
-			var iscontinue = true;
-			switch (data.state){
-				//downloading...
-			case "":
-				break;
-				//updating
-			case "Update":
-				if (!data.isok){
-					iscontinue = false;
-					$("#btn1").css("background-image","");
-					alert(data.errmsg);
-					$("#progress_txt").html(data.errmsg);
-				}else{
-					$("#btn1").css("background-image","");
-					$('#spaceused1').progressBar(data.percent);
-				}
-				break;
-			}
-		//	$("#status").css("visibility","hidden");
-		//	$("#status").css("display","none");;
-			//iscontinue && poll(data.state);
+function progressing(){
+	var dom = $("#progress_simbol");
+	while(true){
+		if (dom.html().length > 3){
+			dom.html(".");
+		}else{
+			dom.html(dom.html() + ".");
 		}
-	});
+	}
 }
+function showProgress(msg,percent){
+	$("#status").css("visibility","visible");
+	$("#progress_txt").html(msg);
+	$("#spaceuesd1").progressBar(percent);
+	$("#update_ctl").attr('disabled',true);
+}
+function checkbtnusable(){
+		$.ajax({
+			url:"update_request.php",
+			data:{"cmd":"GetCurrentState"},
+			success:function(data){
+				try{
+					data = jQuery.parseJSON(data);	
+				}catch(e){
+					$("#errmsg").css("display","");	
+					
+				}
+				if ((data.state == "Update" || data.state == "Download" || data.state == "Backup") && data.percent != "100"){
+						$("#update_ctl").attr('disabled',true);
+				}else if ((data.state == "Rollback") && data.percent != "100"){
+							$("#rollback_ctl").attr('disabled',true);
+				}
+			},
+			error:function(req,txt,err){
+				
+			}});
+}
+function poll(preAction){
+	
+	var Action = "";
+	$.ajax({
+			url:"update_request.php",
+			data:{"cmd":"GetCurrentState"},
+			success:function(data){
+				var iscontinue = true;
+				
+				try{
+					data = jQuery.parseJSON(data);
+				}catch(e){
+					//alert(e);	
+					iscontinue=false;
+				}
+				
+				Action = data.state;
+ 
+				if (data.isok){
+					//finished
+					$("#status").css("visibility","hidden");
+					return ;
+				}
+				switch (data.state){
+					case "Rollback":
+						showProgress("回滚现有版本...",data.percent);
+						break;
+					//downloading...
+					case "Download":
+						showProgress("下载中...",data.percent);
+						//disable update button
+						break;
+					//updating
+					case "Update":
+						showProgress("更新中...",data.percent);
+						break;
+					case "Backup":
+						showProgress("备份现有版本...",data.percent);
+						break;
+					}
+				}
+			});
+			iscontinue && pollable && setTimeout(function(){poll(Action);},2500);;
+		}
+		
+ 
 $(document).ready(function() {
 	//init progressbar 
-	$("#spaceused1").progressBar({height:12,width:120,
-		barImage:'images/progressbg_green.gif'});
-		//sync request to get newest version
-/*	$.getJSON('update_request.php?cmd=GetNewestVersionInfo',function(data){
-		var versioninfo = data.GetNewestVersion.Successful.VersionInfo;
-		alert(versioninfo);
-		$("#version_txt").html("a");
-});*/
+	$("#spaceused1").progressBar({height:12,width:120,	barImage:'images/progressbg_green.gif'});
+				// request to get newest version
+	//getVersion();
+	//poll("");
 		$.ajax({
 			url:"update_request.php",
 			data:{"cmd":"GetNewestVersionInfo"},
 			success:function(data){
-				var versioninfo = $.evalJSON(data);
-				alert(versioninfo);
-				//.GetNewestVersion.Successful.VersionInfo;
-				//$("#version_txt").html(versioninfo);
-				poll();
+				try{
+					data = jQuery.parseJSON(data);
+				}catch(e){
+					//err of return data;
+					//alert(e);	
+					
+				}
+				//no update, 
+				if (!data.Version){
+					$("#version_txt").html("当前为最新版本");
+					$("#update_ctl").attr('disabled',true);
+					return ;
+				}
+				$("#version_txt").html("V"+data.Version+"版本新特性");
+				$("#update_ctl").attr('disabled',false);
+				$("#rollback_ctl").attr('disabled',false);
+				//poll("");
 			},
 			error:function(req,txt,err){
 			},
@@ -88,21 +183,27 @@ $(document).ready(function() {
 			</a>
 			</div>
 			<div  id="update_info">
-				<ul><span class="txt"><span id="version_txt"></span>版本新特性</span>
+				<span id="version_txt"></span>
+				<ul>
 					<li>NextIM 是UC社区最出色，最先进的WEBIM插件</li>
 					<li>采用与Facebook一样的标准HTML界面设计</li>
 					<li>集群服务器1,000,000并发用户支持</li>
 				</ul>
-
+			<div id="errmsg">
+				<font color="red">出错啦,请尝试刷新页面，或者手动升级/回滚</font>	
+			</div>
 			</div>
 			<div id="status">
-				<div id="progress_txt">下载中...</div>
+				<div id="progress"><span id="progress_txt"></span><span id="progress_simbol"></span></div>
 				<span class="progressBar" id="spaceused1"></span>
 			</div>
 		</div>
 			<div id="control">
-			<a name="btn1" id="btn1" class="btn txt" onclick="$('#spaceused1').progressBar(20);">更新</a> <a class="btn" name="btn2" >取消</a>
+			<input name="btn3" id="update_ctl" class="btn" style="width:63px" type="button" value="升级" onclick="versionUpdate();">
+			<input name="btn3" id="rollback_ctl" class="btn" style="width:63px" type="button" value="回滚" onclick="rollBack();">
 		</div>
+		
+		
 		<div id="footer">
 联系(QQ) · 6168557 1034997251 30853554 100786001 <br/>
  Copyright  2007-2009 上海几维信息技术有限公司 - KIWI Inc.  苏ICP备10028328

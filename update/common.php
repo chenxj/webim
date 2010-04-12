@@ -1,4 +1,9 @@
 <?php
+
+try{
+    set_time_limit(0);
+} catch (Exception $e){
+}
 # ./webim/update/common.php
 /*
  * 提供更新所需的函数

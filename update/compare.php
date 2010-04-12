@@ -38,18 +38,19 @@ function get_latest_file_hash()
 
 function get_download_list($latest_file_hash,$user_file_hash)
 {
-    $download_list = array();
+    $update_list = array();
     foreach($latest_file_hash as $rel_path => $data) {
         if( array_key_exists("md5",$data) ){
-            if($latest_file_hash[$rel_path]['md5'] != $user_file_hash[$rel_path]['md5'] ){
-                array_push($download_list,$data['abs_path']);
-            }
+            if($latest_file_hash[$rel_path]['md5'] == $user_file_hash[$rel_path]['md5'] )
+                continue;
         }
-        else {
-                array_push($download_list,$data['abs_path']);
-        }
+        $temp = expolode("/webim/",$data['abs_path']);
+        $install_path = "/webim/" . $temp[1];
+        $download_path = "http://update.nextim.cn" . $install_path;
+
+        $update_list[$install_path] = $download_path;
     }
-    return $download_list;
+    return $update_list;
 }
 
 

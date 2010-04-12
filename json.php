@@ -1,6 +1,10 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
+/*
+// demo 导出json数据
+$json = new Services_JSON();
+$json->encode($array,$iconv);//如果$iconv = 1 表示gbk->utf8，否则不转码 
+*/
 /**
  * Converts to and from JSON format.
  *
@@ -234,7 +238,7 @@ class Services_JSON
     * @return   mixed   JSON string representation of input var or an error if a problem occurs
     * @access   public
     */
-    function encode($var)
+    function encode($var,$iconv='1')
     {
         switch (gettype($var)) {
             case 'boolean':
@@ -251,6 +255,10 @@ class Services_JSON
                 return (float) $var;
 
             case 'string':
+            	if($iconv == 1)
+            	{
+            		$var = iconv("gbk","utf-8",$var);   //先将GBK的编码都转移为UTF-8，这样就统一了编码，解决了GBK转移为UTF-16或者GB2312时候的乱码情况！
+            	}
                 // STRINGS ARE EXPECTED TO BE IN ASCII OR UTF-8 FORMAT
                 $ascii = '';
                 $strlen_var = strlen($var);
@@ -802,5 +810,4 @@ if (class_exists('PEAR_Error')) {
     }
 
 }
-    
 ?>

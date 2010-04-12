@@ -28,10 +28,10 @@ function get_user_file_hash($path)
     return  json_decode($user_file_index,TRUE);
 }
 
+
 function get_latest_file_hash() 
 {
-//    $url = "http://update.nextim.cn/latest_file_index";
-    $url = "latest_file_index";
+    $url = "http://update.nextim.cn/latest_file_index";
     $latest_file_index = file_get_contents($url);
     return  json_decode($latest_file_index,TRUE);
 }

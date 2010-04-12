@@ -66,14 +66,8 @@ function run()
 
     $s = get_download_list($latest_file_hash,$user_file_hash);
     var_dump($s);
-
-
 }
 
-run();
-
-
-
-
+# run();
 
 ?>

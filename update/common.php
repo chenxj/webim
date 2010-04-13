@@ -1,9 +1,5 @@
 <?php
 
-try{
-    set_time_limit(0);
-} catch (Exception $e){
-}
 # ./webim/update/common.php
 /*
  * 提供更新所需的函数
@@ -166,7 +162,8 @@ function getNewestVersionInfo(){ # 获取更新信息, 下载更新索引, 成�
 
 function update($version){ # 执行更新, 参数是将更新到的版本(新版)
 	global $_IMC, $_IMC_LOG_FILE;
-	set_time_limit(0);// 防止超时
+    try{ set_time_limit(0); } catch (Exception $e){ }   // 防止超时
+
 	if(!setState(setStatus("Download", "Waiting", array("Download"=>0)))){
 		logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新文件:写入状态失败！\n");
 		return false;

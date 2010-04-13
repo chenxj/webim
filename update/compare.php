@@ -31,7 +31,7 @@ function get_user_file_hash($path)
 
 function get_latest_file_hash() 
 {
-    $url = "http://update.nextim.cn/webim/update/file_index";
+	$url = "http://update.nextim.cn/webim/update/file_index";
     $latest_file_index = file_get_contents($url);
     return  json_decode($latest_file_index,TRUE);
 }
@@ -60,18 +60,13 @@ function run()
 {
     $path = "./file_index";
     $user_file_hash = get_user_file_hash($path);
+#    var_dump($user_file_hash);
     $latest_file_hash = get_latest_file_hash();
+#    var_dump($latest_file_hash);
 
-    $s = get_download_list($latest_file_hash,$user_file_hash);
-    var_dump($s);
-<<<<<<< HEAD
-    return $s;
-
-
-=======
->>>>>>> 608b3e09e2991b7598a34e92351fe066d22e9393
+    return get_download_list($latest_file_hash,$user_file_hash);
 }
 
-# run();
+#run();
 
 ?>

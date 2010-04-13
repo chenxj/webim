@@ -1,5 +1,4 @@
 <?php
-
 # ./webim/update/common.php
 /*
  * 提供更新所需的函数
@@ -131,13 +130,13 @@ function getNewestVersionInfo(){ # 获取更新信息, 下载更新索引, 成�
 	}
 	if($new_version['Version'] > $_IMC['version']){// if new version
 		//$download_index = file_get_contents($_IMC['update_url'].'version_'.$_IMC['version']."/index");
-		require_once('./compare.php');
+		require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'compare.php');
 		$user_file_hash = get_user_file_hash(USER_FILE_HASH);
-		var_dump($user_file_hash);
+		
 		$latest_file_hash = get_latest_file_hash();
-		var_dump($latest_file_hash);
+		
 		$download_index = get_download_list($latest_file_hash,$user_file_hash);
-		var_dump($s);
+		
 		if($download_index){
 			if(!file_exists('./temp_download')){
 				mkdir('./temp_download');
@@ -150,7 +149,7 @@ function getNewestVersionInfo(){ # 获取更新信息, 下载更新索引, 成�
 			if(!$fp){
 				logto_file($_IMC_LOG_FILE["name"], "Write download_index", "写入更新列表:写入失败！\n");
 			}
-			fwrite($fp, $download_index);// write ./update/temp_download/download_index
+			fwrite($fp, json_encode($download_index));// write ./update/temp_download/download_index
 			fclose($fp);
 			return $version_info;
 		}// if download success
@@ -162,8 +161,7 @@ function getNewestVersionInfo(){ # 获取更新信息, 下载更新索引, 成�
 
 function update($version){ # 执行更新, 参数是将更新到的版本(新版)
 	global $_IMC, $_IMC_LOG_FILE;
-    try{ set_time_limit(0); } catch (Exception $e){ }   // 防止超时
-
+	set_time_limit(0);// 防止超时
 	if(!setState(setStatus("Download", "Waiting", array("Download"=>0)))){
 		logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新文件:写入状态失败！\n");
 		return false;
@@ -201,7 +199,7 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 	foreach($index as $key=>$value){// 下载更新文件 $key--download路径, $value--install路径
 		while($remain > 0 && !$success){
 			if(is_media($key)){// multimedia files
-				$fc = file_get_contents($_IMC['update_url'].$key);
+				$fc = file_get_contents($key);
 				if(!$fc){// if download failed
 					if(-- $remain > 0){
 						continue;// break while-loop
@@ -234,7 +232,7 @@ function update($version){ # 执行更新, 参数是将更新到的版本(新版
 				}
 				$success = true;
 			}else{// php, css, js files
-				$fc = file_get_contents($_IMC['update_url'].$key);
+				$fc = file_get_contents($key);
 				if(!$fc){// if download failed
 					if(-- $remain > 0){
 						continue;// break while-loop

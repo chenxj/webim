@@ -1,26 +1,5 @@
 <?php
-include_once("../json.php"); # json 类
-
-if( !function_exists('json_decode') ) { 
-    function json_encode($data) { 
-        $json = new Services_JSON(); 
-        return( $json->encode($data) ); 
-    } 
-} 
-
-if( !function_exists('json_decode') ) 
-{ 
-    function json_decode($data, $bool) { 
-        if ($bool) { 
-            $json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE); 
-        } 
-        else { 
-            $json = new Services_JSON(); 
-        } 
-        return( $json->decode($data) ); 
-    } 
-}
-
+include_once("common.php");
 
 function get_user_file_hash($path)
 {
@@ -64,9 +43,9 @@ function run()
     $latest_file_hash = get_latest_file_hash();
 #    var_dump($latest_file_hash);
 
-    return get_download_list($latest_file_hash,$user_file_hash);
+    var_dump(get_download_list($latest_file_hash,$user_file_hash));
 }
 
-#run();
+//run();
 
 ?>

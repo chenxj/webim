@@ -116,10 +116,9 @@ function setStatus($action, $mark, $ret_array = array()){ # 设置状态反馈�
 	return json_encode($status);
 }
 
-function getNewestVersionInfo(){ # 获取更新信息, 下载更新索引, 成功返回更新信息(json), 失败或无更新返回 false
+function getDownloadList(){ # 获取更新信息, 下载更新索引, 成功返回 true, 失败或无更新返回 false
 	/* $download_index 为 json 形式 */
-	global $_IMC, $_IMC_LOG_FILE;
-	
+	/*
 	$version_info = file_get_contents($_IMC['update_url']."publish/NewestVersionInfo");
 	if($version_info){
 		$new_version = array();
@@ -130,34 +129,34 @@ function getNewestVersionInfo(){ # 获取更新信息, 下载更新索引, 成�
 	}
 	if($new_version['Version'] > $_IMC['version']){// if new version
 		//$download_index = file_get_contents($_IMC['update_url'].'version_'.$_IMC['version']."/index");
-		require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'compare.php');
-		$user_file_hash = get_user_file_hash(USER_FILE_HASH);
-		
-		$latest_file_hash = get_latest_file_hash();
-		
-		$download_index = get_download_list($latest_file_hash,$user_file_hash);
-		
-		if($download_index){
-			if(!file_exists('./temp_download')){
-				mkdir('./temp_download');
-			}
-			try{
-				$fp = @fopen(INDEX, 'w');
-			}catch(Exception $e){
-				echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Write download_index file error! Check your permission", "percent"=>""));
-			}
-			if(!$fp){
-				logto_file($_IMC_LOG_FILE["name"], "Write download_index", "写入更新列表:写入失败！\n");
-			}
-			fwrite($fp, json_encode($download_index));// write ./update/temp_download/download_index
-			fclose($fp);
-			return $version_info;
-		}// if download success
 	}else if($new_version['Version'] <= $_IMC['version']){// if none new version
 		echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"No updates available", "percent"=>""));
 		return false;
+	}*/
+	global $_IMC, $_IMC_LOG_FILE;
+	require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'compare.php');
+	$user_file_hash = get_user_file_hash(USER_FILE_HASH);
+	$latest_file_hash = get_latest_file_hash();
+	$download_index = get_download_list($latest_file_hash,$user_file_hash);
+	if($download_index){ // if download success
+		if(!file_exists('./temp_download')){
+			mkdir('./temp_download');
+		}
+		try{
+			$fp = @fopen(INDEX, 'w');
+		}catch(Exception $e){
+			echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Write download_index file error! Check your permission", "percent"=>""));
+		}
+		if(!$fp){
+			logto_file($_IMC_LOG_FILE["name"], "Write download_index", "写入更新列表:写入失败！\n");
+		}
+		fwrite($fp, json_encode($download_index));// write ./update/temp_download/download_index
+		fclose($fp);
+		return true;
+	}else{
+		return false;
 	}
-}// func getNewestVersion
+}// func getDownloadList
 
 function update($version){ # 执行更新, 参数是将更新到的版本(新版)
 	global $_IMC, $_IMC_LOG_FILE;

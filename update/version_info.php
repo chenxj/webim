@@ -1,5 +1,4 @@
 <?php
-
 include_once("common.php");
 
 $url = "http://update.nextim.cn/webim/update/version_info";

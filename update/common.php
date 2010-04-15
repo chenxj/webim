@@ -12,19 +12,26 @@ define('USER_FILE_HASH', dirname(__FILE__).DIRECTORY_SEPARATOR.'file_index');
 include_once(IM_ROOT . "json.php"); # json 类
 include_once(IM_ROOT . "config.php"); # webim 配置文件
 
-if( !function_exists('json_encode') ) { # json 编码函数
-	function json_encode($data) {
-		$json = new Services_JSON();
-		return($json->encode($data));
-	}
+
+if( !function_exists('json_decode') ) {
+    function json_encode($data) {
+        $json = new Services_JSON();
+        return( $json->encode($data) );
+    }
+}
+if( !function_exists('json_decode') ) {
+    function json_decode($data, $bool) {
+        if ($bool) {
+            $json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
+        } else {
+            $json = new Services_JSON();
+        }
+        return( $json->decode($data) );
+    }
 }
 
-if( !function_exists('json_decode') ) { # json 解码函数
-	function json_decode($data) {
-		$json = new Services_JSON();
-		return($json->decode($data));
-	}
-}
+
+
 
 function g($key = '') { # 获取页面 GET 变量
 	return $key === '' ? $_GET : (isset($_GET[$key]) ? $_GET[$key] : null);

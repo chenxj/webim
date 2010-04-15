@@ -6,4 +6,5 @@ echo '</br>';
 require('download_list.php');
 echo '</br>';
 require('update.php');
+require('common.php');
 ?>

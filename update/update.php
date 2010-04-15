@@ -21,7 +21,7 @@ function _get_download_index()
 }
 
 
-function update($version,$download_index){ # 执行更新, 参数是将更新到的版本(新版) global $_IMC, $_IMC_LOG_FILE;
+function run($version,$download_index){ # 执行更新, 参数是将更新到的版本(新版) global $_IMC, $_IMC_LOG_FILE;
     global $_IMC;
 	global $_IMC_LOG_FILE;
 	global $_IMC_LOG_TYPE;
@@ -162,7 +162,7 @@ $version = _get_version();
 $download_index  = _get_download_index();
 
 
-if(update($version,$download_index)){
+if(run($version,$download_index)){
 	echo json_encode(array("state"=>"Update", "isok"=>true, "iswait"=>false, "errmsg"=>"", "percent"=>"100"));
 }else{
 	echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Update failed", "percent"=>"0"));

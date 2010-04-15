@@ -2,7 +2,7 @@
 body, html { font-family: Helvetica, Arial, Tahoma; font-size: 13px; line-height: 20px; font-color: #444; } 
 a { text-decoration: none; color: #3366cc; }
 pre { border: 1px dashed #ddd; color: #444; background-color: #eee; width: 100%; }
-#container {margin-top: 120px;margin-left:380px;position:relative;}
+#container {margin-top: 120px;margin-left:380px;}
 #status{margin-left:60px;visibility:;margin-top:20px}
 #control{margin-left:430px;}
 #logo {border:none;margin-bottom:5px;}
@@ -10,8 +10,7 @@ pre { border: 1px dashed #ddd; color: #444; background-color: #eee; width: 100%;
 #update_info ul{margin-left:25px;}
 #spaceused1{margin-left:3px;}
 .logo_txt{margin-left:99px;margin-top:-22px;font-size:13px ; text-shadow:1px 1px 1px #ffb69a}
-//.btn{background:url("images/sprit.png") ;-moz-box-shadow:0 1px 3px rgba(0,0,0,0.618);-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.5);color:black;display:inline-block;width:49px;heigth:28px;padding:2px 6px; margin-left:0;cursor:pointer;margin-top:10px;margin-right:28px;-webkit-border-radius:3px;-moz-border-radius:3px;font-size:15px;font-variant:normal;text-decoration:none;text-align:center;}
-.btn{margin-right:12px;}
+.btn{background:url("images/sprit.png") ;-moz-box-shadow:0 1px 3px rgba(0,0,0,0.5);-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.5);color:black;display:inline-block;width:49px;heigth:28px;padding:2px 6px; margin-left:0;cursor:pointer;margin-top:10px;margin-right:28px;-webkit-border-radius:3px;-moz-border-radius:3px;font-size:15px;font-variant:normal;text-decoration:none;text-align:center;}
 .btn btn1{margin-left:12px;}
 #footer{ width: 100%;margin-top:163px;text-align: center;font-size:12px; border-top: #e5e5e5 1px solid; padding-top: 10px; padding-bottom: 20px; }
 .clearfix:after{visibility:hidden;display:block;font-size:0;content:"";clear:both;height:0;}
@@ -22,7 +21,3 @@ pre { border: 1px dashed #ddd; color: #444; background-color: #eee; width: 100%;
 #status ul li{margin-left:20px}
 #update_info ul span{font:13px ;color:blue;margin:-19px;}
 .txt{-webkit-text-shadow:0 -1px 10px rgba(0 0 0 0.25)}
-#version_txt{margin-left:10px;font-size:14px;color:blue}
-#status{visibility:hidden;}
-#errmsg{display:none; font-size:14px;center:center;margin-left:80px;margin-top:12px;position:absolute;text-align:center}
- 

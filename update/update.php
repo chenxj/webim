@@ -70,8 +70,8 @@ function update($version,$download_index){ # 执行更新, 参数是将更新到
     {   // 下载更新文件 $d_path--download路径, $i_path  install路径
         while($remain > 0 && !$success)
         {
-            $fc = file_get_contents($d_path);
-            if(!$fc){// if download failed
+            $content = file_get_contents($d_path);
+            if(!$content){// if download failed
                 if(-- $remain > 0){
                     continue;// break while-loop
                 }else{
@@ -81,22 +81,10 @@ function update($version,$download_index){ # 执行更新, 参数是将更新到
                 }
             }
 
-            $i_path = ($i_path[0] === '/')?substr($i_path, 1):$i_path;
             $update_list[IM_ROOT.substr($i_path, 6)] = dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($d_path, '/'), 1);
 
-            $write_path = dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($i_path, '/'), 1);
-            try{
-                $fp = @fopen($write_path, 'w');
-            }catch(Exception $e){
-                echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Write script file error! Check your permission", "percent"=>""));
-            }
-            if(!$fp){
-                logto_file($_IMC_LOG_FILE["name"], "DownloadUpdateFile", "写入更新文件失败！\n");
-                return false;
-            }
-            fwrite($fp, $fc);
-            fclose($fp);
-            chmod($write_path,0777);
+            write_downlaod_file($i_path,$content);
+
             if(!setState(setStatus("Download", "Waiting", array("Download"=>$num*100/$total)))){
                 logto_file($_IMC_LOG_FILE["name"], "SetState", "下载文件过程:写入状态失败！\n");
                 return false;

@@ -15,7 +15,7 @@ function get_latest_file_hash()
     return  json_decode($latest_file_index,TRUE);
 }
 
-function get_download_list($latest_file_hash,$user_file_hash)
+function compare_file_hash($latest_file_hash,$user_file_hash)
 {
     $update_list = array();
     foreach($latest_file_hash as $rel_path => $data) {
@@ -33,19 +33,14 @@ function get_download_list($latest_file_hash,$user_file_hash)
 }
 
 
-#==========
-#
-function run()
+function get_downlaod_list()
 {
     $path = "./file_index";
     $user_file_hash = get_user_file_hash($path);
-#    var_dump($user_file_hash);
     $latest_file_hash = get_latest_file_hash();
-#    var_dump($latest_file_hash);
 
-    var_dump(get_download_list($latest_file_hash,$user_file_hash));
+    return compare_file_hash($latest_file_hash,$user_file_hash);
 }
-
-//run();
+echo json_encode(get_downlaod_list());
 
 ?>

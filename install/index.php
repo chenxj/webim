@@ -212,11 +212,11 @@ if(empty($step)) {
 	</script>
 	<table class="showtable">
 	<tr><td>
-	<strong>UCIM是UCHome社区最出色的、技术架构最先进的WEBIM插件!</strong><br>
-	<p>UCIM让您的UCHome网站拥有校内网、同学网、Facebook一样出色的WEBIM!</p>
+	<strong>NextIM是UCHome社区最出色的、技术架构最先进的WEBIM插件!</strong><br>
+	<p>NextIM让您的UCHome网站拥有校内网、同学网、Facebook一样出色的WEBIM!</p>
 	<p>专为UCHome1.5定制开发的WEBIM插件，采用与Facebook一样的标准HTML界面设计(没有任何Flash)，可以与UCHOME1.5网站无缝整合，让UC好友间自由的在线聊天，增加网站的用户粘合度。</p>
 	<p>Facebook IM相似的技术架构，单服务器100,000并发用户支持，集群服务器1,000,000万并发用户支持，支持以SaaS服务模式提供，安装简单方便。 </p>
-	<a href="http://www.nextim.cn" target="_blank"><strong>您可以登录UCIM运营站了解详细</strong></a>
+	<a href="http://www.nextim.cn" target="_blank"><strong>您可以登录NextIM运营站了解详细</strong></a>
 	</td></tr>
 	</table>
 END;
@@ -252,7 +252,7 @@ END;
 	show_header();
 	$domain = '';
 	$apikey= '';
-	$plus = '<tr><td id="msg2"> 配置网站域名和API KEY，您需要在<a href="http://www.nextim.cn">UCIM运营站点</a>注册并获得API KEY。 </td></tr>';
+	$plus = '<tr><td id="msg2"> 配置网站域名和API KEY，您需要在<a href="http://www.nextim.cn">NextIM运营站点</a>注册并获得API KEY。 </td></tr>';
 	print<<<END
 	<form id="theform" method="post" action="$theurl">
 	<div>
@@ -539,7 +539,7 @@ function show_header() {
 	<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title> UCIM2.0透明幻想(Transparent Fantasy)版本程序安装 </title>
+	<title> NextIM2.0透明幻想(Transparent Fantasy)版本程序安装 </title>
 	<style type="text/css">
 	* {font-size:12px; font-family: Verdana, Arial, Helvetica, sans-serif; line-height: 1.5em; word-break: break-all; }
 	body { text-align:center; margin: 0; padding: 0; background: #F5FBFF; }
@@ -597,7 +597,7 @@ function show_header() {
 	</head>
 	<body id="append_parent">
 	<div class="bodydiv">
-	<h1>UCIM2.0版本程序安装 </h1>
+	<h1>NextIM 2.2 版本程序安装 </h1>
 	<div style="width:90%;margin:0 auto;">
 	<table id="menu">
 	<tr>

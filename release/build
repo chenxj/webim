@@ -11,6 +11,7 @@ mkdir $NAME/webim
 
 
 cd $NAME/webim
+echo $NAME
 cp -R $HOME/../* ./
 
 make clean

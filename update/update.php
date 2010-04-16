@@ -1,7 +1,6 @@
 <?php
 include_once('common.php');
 
-error_reporting( E_ALL & ~E_NOTICE);
 
 function _get_version()
 {

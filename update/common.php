@@ -517,7 +517,7 @@ function write_downlaod_file($i_path,$content)
     }
     fwrite($fp, $content);
     fclose($fp);
-    chmod($path,0777);
+    chmod($write_path,0777);
 }
 
 

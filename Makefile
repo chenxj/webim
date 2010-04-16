@@ -13,7 +13,6 @@ all: submake static
 submake:
 	cd static_src && $(MAKE)
 static: 
-	find ./ -type f -name "*.php" -exec sed -i '1s/^\xef\xbb\xbf//' {}  \;
 	@@mkdir -p ${STATIC_DIR}
 	@@cp -r ${STATIC_SRC_FILES} ${STATIC_DIR} 
 

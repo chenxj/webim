@@ -4,7 +4,7 @@
  * 提供更新所需的函数
  * Written by Jinyu
  */
-
+error_reporting(0);
 session_start();
 
 
@@ -517,7 +517,7 @@ function write_downlaod_file($i_path,$content)
     }
     fwrite($fp, $content);
     fclose($fp);
-    chmod($write_path,0777);
+    chmod($path,0777);
 }
 
 

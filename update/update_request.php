@@ -11,7 +11,7 @@
 		if(!$version_info){
 			echo getCurrentState();
 		}else{
-			echo $version_info;
+			echo $version_info
 		}
 	}else if(gp('cmd') === 'Update'){
 		if(!update($version)){

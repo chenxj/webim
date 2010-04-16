@@ -18,7 +18,6 @@ pre { border: 1px dashed #ddd; color: #444; background-color: #eee; width: 100%;
 *:first-child+html .clearfix{zoom:1}
 #status {}
 #status ul{list-style-type:none;}
-#version_txt{font-size:13px;color:blue;}
 #status ul li{margin-left:20px}
 #update_info ul span{font:13px ;color:blue;margin:-19px;}
 .txt{-webkit-text-shadow:0 -1px 10px rgba(0 0 0 0.25)}

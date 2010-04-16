@@ -1,5 +1,6 @@
 <?php
 include_once("common.php");
+error_reporting(0);
 
 function get_user_file_hash($path)
 {

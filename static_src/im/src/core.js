@@ -5,7 +5,7 @@ function getTid(roomIdendify){
 	var url = location;
 	var reg = new RegExp("(^|&|\\?)"+roomIdendify+"=(\\d*)(&|$)","i");
 	if (reg.test(url)){
-		return RegExp.$2;
+		return RegExp.$1;
 	}
 	return "";
 }

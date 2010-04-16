@@ -33,24 +33,27 @@ function versionUpdate(){
 			}
  
 			var data = jQuery.parseJSON(data);
-            if(data.isok==true)
+            if(data.isok)
             {
                 $("#version_txt").html("非常棒！NextIM已经升级至最新版本");
-			    $("#update_ctl").attr('disabled',true);
-                $("#rollback_ctl").attr('disabled',false);
+			   			 // $("#update_ctl").attr('disabled',true);
+               // $("#rollback_ctl").attr('disabled',false);
                 return ;
             }
-                $("#version_txt").html("请确保webim文件夹(包括子目录)为777权限");
+          $("#version_txt").html("请确保webim文件夹(包括子目录)为777权限");
 			    $("#update_ctl").attr('disabled',false);
-                $("#rollback_ctl").attr('disabled',false);
+          $("#rollback_ctl").attr('disabled',false);
  
 		},
 		error:function(req,status,err){
-				$("#update_ctl").attr('disabled',false);
-				pollable = false;
+	 			 $("#version_txt").html("请确保webim文件夹(包括子目录)为777权限");
+			    $("#update_ctl").attr('disabled',false);
+          $("#rollback_ctl").attr('disabled',false);
+				//$("#update_ctl").attr('disabled',false);
+				//pollable = false;
 		}
 	});
-	poll("Update");
+	//poll("Update");
 }
 function rollBack(){
 	pollable = true;
@@ -118,10 +121,10 @@ function checkbtnusable(){
 }
 
 function init(){
-		$("#spaceused1").progressBar({height:12,width:120,	barImage:'images/progressbg_green.gif'});
+		//$("#spaceused1").progressBar({height:12,width:120,	barImage:'images/progressbg_green.gif'});
  		$("#errmsg").css("display","none");
- 		$("#update_ctl").attr('disabled',true);
-		$("#rollback_ctl").attr('disabled',true);
+ 		$("#update_ctl").attr('disabled',false);
+		$("#rollback_ctl").attr('disabled',false);
 }
 
 function control(){
@@ -186,8 +189,8 @@ function poll(preAction){
 		
  
 $(document).ready(function() {
+	init();
 	//init progressbar 
- 
 		$.ajax({
 			url:"check.php",
 			success:function(data){
@@ -197,27 +200,8 @@ $(document).ready(function() {
 					$("#errmsg").css("display","");
 				}
 				
-				//no update, 
-				/*if (!data.Version){
-					$("#version_txt").html("当前为最新版本");
  
-				// request to get newest version
-	//getVersion();
-	//poll("");
-		$.ajax({
-			url:"check.php",
-			success:function(data){
-				data = jQuery.parseJSON(data);
-
-				//no update, 
-				if (data.update_now==false){
-					$("#version_txt").html("NextIM当前为最新版本");
- 
-					$("#update_ctl").attr('disabled',true);
-                    $("#rollback_ctl").attr('disabled',false);
-					return ;
-				}*/
-				if (data.updata_now == 1){
+				if (data.update_now ){
 					$("#version_txt").html("可更新版本 "+data.version );
 				}
  
@@ -259,8 +243,8 @@ $(document).ready(function() {
 			</div>
 		</div>
 			<div id="control">
-			<input name="btn3" id="update_ctl" class="btn" style="width:63px" type="button" value="升级" onclick="versionUpdate();">
-			<input name="btn3" id="rollback_ctl" class="btn" style="width:63px" type="button" value="回滚" onclick="rollBack();">
+			<input name="btn3" id="update_ctl"   style="width:63px" type="button" value="升级" onclick="versionUpdate();">
+			<input name="btn3" id="rollback_ctl"   style="width:63px" type="button" value="回滚" onclick="rollBack();">
 		</div>
 		
 		

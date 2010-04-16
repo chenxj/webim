@@ -15,24 +15,13 @@ function preProcess(data){
 }
 var iscontinue = true;
 var pollable = true;
-var percent = 10;
-var step = 1;
 function versionUpdate(){
- 
 	pollable = true;
     $("#version_txt").html("请等待 NEXTIM 正在自动下载更新文件");
 	$("#update_ctl").attr('disabled',true);
 	$("#rollback_ctl").attr('disabled',true);
 	$.ajax({url:'update.php',
 		success:function(data){
-<<<<<<< HEAD
-			try{
-				var info = jQuery.parseJSON(data);
-			}catch(e){
-					
-			}
-			
-=======
 			var data = jQuery.parseJSON(data);
             if(data.isok==true)
             {
@@ -46,14 +35,12 @@ function versionUpdate(){
                 $("#rollback_ctl").attr('disabled',false);
 
 
->>>>>>> 020010d02fd5de0e4b5df606b3e7a50f4dc6241e
 		},
 		error:function(req,status,err){
 				$("#update_ctl").attr('disabled',false);
 				pollable = false;
 		}
 	});
-	poll("Update");
 }
 function rollBack(){
 	pollable = true;
@@ -73,17 +60,13 @@ function rollBack(){
                         $("#rollback_ctl").attr('disabled',false);
 
 				
-<<<<<<< HEAD
-				
-=======
->>>>>>> 020010d02fd5de0e4b5df606b3e7a50f4dc6241e
 			},
 			error:function(req,status,err){
 				$("#rollback_ctl").attr('disabled',false);
 				pollable = false;
 			}
 	});
-	poll("RollBack");
+
 }
 function progressing(){
 	var dom = $("#progress_simbol");
@@ -98,8 +81,8 @@ function progressing(){
 function showProgress(msg,percent){
 	$("#status").css("visibility","visible");
 	$("#progress_txt").html(msg);
-/*	 $("#spaceused1").progressBar(percent);
-	$("#update_ctl").attr('disabled',true);*/
+	$("#spaceuesd1").progressBar(percent);
+	$("#update_ctl").attr('disabled',true);
 }
 function checkbtnusable(){
 		$.ajax({
@@ -122,91 +105,54 @@ function checkbtnusable(){
 				
 			}});
 }
-
-function init(){
-		$("#spaceused1").progressBar({height:12,width:120,	barImage:'images/progressbg_green.gif'});
- 		$("#errmsg").css("display","none");
- 		$("#update_ctl").attr('disabled',true);
-		$("#rollback_ctl").attr('disabled',true);
-}
-
-function control(){
-		$("#update_ctl").attr('disabled',false);
-		$("#rollback_ctl").attr('disabled',false);	
-}
 function poll(preAction){
-	 
+	
 	var Action = "";
-  
 	$.ajax({
-			url:"status.php",
+			url:"update_request.php",
+			data:{"cmd":"GetCurrentState"},
 			success:function(data){
 				var iscontinue = true;
-				if (data == ""){
-						control();
-						return;
-				}
+				
 				try{
 					data = jQuery.parseJSON(data);
 				}catch(e){
 					//alert(e);	
 					iscontinue=false;
-					return;
 				}
 				
 				Action = data.state;
- 				if (data.percent && data.percent == 100){
- 					percent = 100;	
- 				}else{
- 					percent += (step/20);	
- 				}
-				if (!data.isok){
+ 
+				if (data.isok){
 					//finished
 					$("#status").css("visibility","hidden");
 					return ;
 				}
 				switch (data.state){
 					case "Rollback":
-						showProgress("回滚现有版本...",percent);
+						showProgress("回滚现有版本...",data.percent);
 						break;
 					//downloading...
 					case "Download":
-						showProgress("下载中...",percent);
+						showProgress("下载中...",data.percent);
 						//disable update button
 						break;
 					//updating
 					case "Update":
-						showProgress("更新中...",percent);
+						showProgress("更新中...",data.percent);
 						break;
 					case "Backup":
-						showProgress("备份现有版本...",percent);
+						showProgress("备份现有版本...",data.percent);
 						break;
 					}
-				},
-			error:function(req,txt,err){
-				iscontinue = false;		
-			}
-		});
-			iscontinue && pollable && setTimeout(function(){poll(Action); },2500);
-}
+				}
+			});
+			iscontinue && pollable && setTimeout(function(){poll(Action);},2500);;
+		}
 		
  
 $(document).ready(function() {
 	//init progressbar 
-<<<<<<< HEAD
-		$.ajax({
-			url:"check.php",
-			success:function(data){
-				try{
-					data = jQuery.parseJSON(data);
-				}catch(e){
-					$("#errmsg").css("display","");
-				}
-				
-				//no update, 
-				/*if (!data.Version){
-					$("#version_txt").html("当前为最新版本");
-=======
 				// request to get newest version
 	//getVersion();
 	//poll("");
@@ -218,17 +164,10 @@ $(document).ready(function() {
 				//no update, 
 				if (data.update_now==false){
 					$("#version_txt").html("NextIM当前为最新版本");
->>>>>>> 020010d02fd5de0e4b5df606b3e7a50f4dc6241e
 					$("#update_ctl").attr('disabled',true);
                     $("#rollback_ctl").attr('disabled',false);
 					return ;
-				}*/
-				if (data.updata_now == 1){
-					$("#version_txt").html("可更新版本 "+data.version );
 				}
-<<<<<<< HEAD
-				poll("");
-=======
                 version = data.version;
                 $.ajax({
                     url:"version_info.php",
@@ -239,7 +178,6 @@ $(document).ready(function() {
                         $("#rollback_ctl").attr('disabled',false);
                 }});
 				//poll("");
->>>>>>> 020010d02fd5de0e4b5df606b3e7a50f4dc6241e
 			},
 			error:function(req,txt,err){
 			},
@@ -264,17 +202,6 @@ $(document).ready(function() {
 					<li>采用与Facebook一样的标准HTML界面设计</li>
 					<li>集群服务器1,000,000并发用户支持</li>
 				</ul>
-<<<<<<< HEAD
-			</div>
-			<div id="errmsg">
-				<font color="red">出错啦,请尝试刷新页面</font>	
-			</div>
-			
-			<div id="status">
-				<div id="progress"><span id="progress_txt"></span><span id="progress_simbol"></span></div>
-				<span class="progressBar" id="spaceused12"></span>
-=======
->>>>>>> 020010d02fd5de0e4b5df606b3e7a50f4dc6241e
 			</div>
 		</div>
 			<div id="control">

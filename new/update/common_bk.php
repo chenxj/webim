@@ -4,10 +4,6 @@
  * 提供更新所需的函数
  * Written by Jinyu
  */
-
-session_start();
-
-
 define('IM_ROOT', substr(dirname(__FILE__), 0, -6)); # webim 平台根目录
 define('STATE_FILE', dirname(__FILE__).DIRECTORY_SEPARATOR.'current_state'); # ./webim/update/current_state [file]
 define('INDEX', dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.'download_index'); # ./webim/update/temp_download/download_index [file]
@@ -17,7 +13,7 @@ include_once(IM_ROOT . "json.php"); # json 类
 include_once(IM_ROOT . "config.php"); # webim 配置文件
 
 
-if( !function_exists('json_encode') ) {
+if( !function_exists('json_decode') ) {
     function json_encode($data) {
         $json = new Services_JSON();
         return( $json->encode($data) );
@@ -58,24 +54,42 @@ function gp($key = '',$def = null) { # 获取页面 GET\POST 变量
 
 function clearState(){ # 清空 current_state 文件
 	try{
-        $_SESSION['state']="";
+		$fp = @fopen(STATE_FILE, 'w');
 	}catch(Exception $e){
-        echo "No such Session!\n";
+		echo json_encode(array("state"=>"clearState", "isok"=>false, "iswait"=>false, "errmsg"=>"Clear current_state file error! Check your permission", "percent"=>""));
 	}
+	if(!$fp){
+		return false;
+		exit();
+	}
+	fwrite($fp, "");
+	fclose($fp);
 	return true;
 }// func clear State
 
 function setState($status){ # 设置 current_state 文件
 	try{
-        $_SESSION['state'] = $status;
+		$fp = @fopen(STATE_FILE, 'w');
 	}catch(Exception $e){
-        echo "set Session Failed";
+		echo json_encode(array("state"=>"clearState", "isok"=>false, "iswait"=>false, "errmsg"=>"Set current_state file error! Check your permission", "percent"=>""));
 	}
+	if(!$fp){
+		return false;
+		exit();
+	}
+	fwrite($fp, $status);
+	fclose($fp);
 	return true;
 }// func setState
 
 function getCurrentState(){ # 获取 current_state 内容
-	$state =  $_SESSION['state'];
+	$fp = @fopen(STATE_FILE, 'r');
+	if(!$fp){
+		return false;
+		exit();
+	}
+	$state = fread($fp, filesize(STATE_FILE));
+	fclose($fp);
 	
 	$state_info = json_decode($state);
 	$ori_state = array();
@@ -151,6 +165,172 @@ function getDownloadList(){ # 获取更新信息, 下载更新索引, 成功返�
 	}
 }// func getDownloadList
 
+function update($version){ # 执行更新, 参数是将更新到的版本(新版)
+	global $_IMC, $_IMC_LOG_FILE;
+	set_time_limit(0);// 防止超时
+	if(!setState(setStatus("Download", "Waiting", array("Download"=>0)))){
+		logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新文件:写入状态失败！\n");
+		return false;
+	}
+	
+	$fp = @fopen(INDEX, 'r');
+	if(!$fp){
+		echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Read download_index file error! Check your permission", "percent"=>""));
+		return false;
+	}
+	$tmp = fread($fp, filesize(INDEX));
+	if(!$tmp){
+		if(!setState(setStatus("Download", "Invalid"))){
+			logto_file($_IMC_LOG_FILE["name"], "SetState", "载入更新列表失败:写入状态失败！\n");
+			return false;
+		}
+	}
+	fclose($fp);
+	
+	$tmp = json_decode($tmp);
+	$index = array();// 文件下载列表
+	foreach($tmp as $install=>$download){// 获取下载文件列表
+		$index[$download] = $install;
+	}
+
+	removeDir(dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download');// 删除临时目录下所有文件
+	mkdir(dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download');// 存放下载的临时更新文件
+	
+	$total = count($index);// 下载文件总数
+	$update_list = array();// 更新路径列表
+	$num = 0;
+	$remain = 3;// 下载失败尝试次数
+	$success = false;
+	$complete = true;
+	foreach($index as $key=>$value){// 下载更新文件 $key--download路径, $value--install路径
+		while($remain > 0 && !$success){
+			if(is_media($key)){// multimedia files
+				$fc = file_get_contents($key);
+				if(!$fc){// if download failed
+					if(-- $remain > 0){
+						continue;// break while-loop
+					}else{
+						echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Download update file error!", "percent"=>""));
+						$complete = false;
+						break;
+					}
+				}
+				if($num % 2 == 0){
+					echo json_encode(array("state"=>"Update", "isok"=>true, "iswait"=>false, "errmsg"=>"Downloading update file", "percent"=>$num*100/$total));
+				}
+				$value = ($value[0] === '/')?substr($value, 1):$value;
+				$update_list[IM_ROOT.substr($value, 6)] = dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1);
+				try{
+					$fp = @fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1), 'wb');
+				}catch(Exception $e){
+					echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Write media file error! Check your permission", "percent"=>""));
+				}
+				if(!$fp){
+					logto_file($_IMC_LOG_FILE["name"], "DownloadMediaFile", "写入媒体文件失败！\n");
+					return false;
+				}
+				fwrite($fp, $fc);
+				fclose($fp);
+				$num ++;
+				if(!setState(setStatus("Download", "Waiting", array("Download"=>$num*100/$total)))){
+					logto_file($_IMC_LOG_FILE["name"], "SetState", "下载文件过程:写入状态失败！\n");
+					return false;
+				}
+				$success = true;
+			}else{// php, css, js files
+				$fc = file_get_contents($key);
+				if(!$fc){// if download failed
+					if(-- $remain > 0){
+						continue;// break while-loop
+					}else{
+						echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Download update file error!", "percent"=>""));
+						$complete = false;
+						break;
+					}
+				}
+				if($num % 2 == 0){
+					echo json_encode(array("state"=>"Update", "isok"=>true, "iswait"=>false, "errmsg"=>"Downloading update file", "percent"=>$num*100/$total));
+				}
+				$value = ($value[0] === '/')?substr($value, 1):$value;
+				$update_list[IM_ROOT.substr($value, 6)] = dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1);
+				try{
+					$fp = @fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($key, '/'), 1), 'w');
+				}catch(Exception $e){
+					echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Write script file error! Check your permission", "percent"=>""));
+				}
+				if(!$fp){
+					logto_file($_IMC_LOG_FILE["name"], "DownloadUpdateFile", "写入更新文件失败！\n");
+					return false;
+				}
+				fwrite($fp, $fc);
+				fclose($fp);
+				$num ++;
+				if(!setState(setStatus("Download", "Waiting", array("Download"=>$num*100/$total)))){
+					logto_file($_IMC_LOG_FILE["name"], "SetState", "下载文件过程:写入状态失败！\n");
+					return false;
+				}
+				$success = true;
+			}
+		}// while-loop
+		$success = false;
+	}// foreach-loop
+	if(!$complete){
+		echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Download isn't complete!", "percent"=>""));
+		exit();
+	}
+	
+	if(!setState(setStatus("Download", "Successful"))){ # 下载并保存临时文件完毕
+		logto_file($_IMC_LOG_FILE["name"], "SetState", "下载更新文件成功:写入状态失败！\n");
+		return false;
+	}
+	
+	if(!file_exists('./temp_backup')){
+		mkdir('./temp_backup');
+	}
+	if(!setState(setStatus("Backup", "Waiting", array("Backup"=>0)))){
+		logto_file($_IMC_LOG_FILE["name"], "SetState", "备份工程开始:写入状态失败！\n");
+		return false;
+	}
+	if(backup_project()){ # 备份 webim
+		if(!setState(setStatus("Backup", "Successful"))){
+			logto_file($_IMC_LOG_FILE["name"], "SetState", "备份成功:写入状态失败！\n");
+			return false;
+		}
+	}else{
+		if(!setState(setStatus("Backup", "Failed"))){
+			logto_file($_IMC_LOG_FILE["name"], "SetState", "备份失败:写入状态失败！\n");
+			return false;
+		}
+		logto_file($_IMC_LOG_FILE["name"], "BuckupProject", "备份工程:update函数返回失败！\n");
+		return false;
+	}
+	
+	if(!setState(setStatus("Update", "Waiting", array("Update"=>0)))){
+		logto_file($_IMC_LOG_FILE["name"], "SetState", "更新文件开始:写入状态失败！\n");
+		return false;
+	}
+	if(!update_file($update_list)){ # 更新 webim
+		logto_file($_IMC_LOG_FILE["name"], "SetState", "更新文件失败:写入状态失败！\n");
+		return false;
+	}
+	update_config($version); # 更新配置文件中版本号
+	try{
+		$dp = opendir(IM_ROOT.'update'); # 删除更新锁
+	}catch(Exception $e){
+		echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Open update[dir] error! Check your permission", "percent"=>""));
+	}
+	while($file = readdir($dp) !== false){
+		if($file != '.' && $file != '..' && substr($file, -4) != 'lock'){
+			try{
+				unlink(IM_ROOT.'update'.DIRECTORY_SEPARATOR.$file);
+			}catch(Exception $e){
+				echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Delete lock file error! Check your permission", "percent"=>""));
+			}
+		}
+	}
+	return true;
+}// func update
+
 function is_media($filename){ # 判断给定文件是否为媒体文件，是返回 true
 	// .swf .png .mp3 .jpg .gif
 	if(preg_match('/^(http:\/\/)?([A-Za-z]*[.]?(\/)?)+[A-Za-z0-9_\.]*[\/][a-zA-z0-9_-]*[.](swf|png|mp3|jpg|gif)?$/', $filename)){
@@ -206,7 +386,6 @@ function logto_file($file_name, $type_string, $content_string){
 		echo "不能写入到文件 $file_name";
 		return;
 	}
-    chmod($file_name,0777);
 	fclose($handle);
 }// func logto_file
 
@@ -298,6 +477,7 @@ function __update_file__($file_list){
 	$updateCountAll = count($file_list);
 	$updateCountCur = 0;
 	$rate = 0;
+	var_dump($file_list);
 	
 	foreach($file_list as $installPathName => $Tempfile){
 		
@@ -501,25 +681,6 @@ function roll_back($project_path = null)
 	setState(json_encode($status));
 	return copyDir($_backup_project_path, $project_path, 'Rollback');
 }// func roll_back
-
-function write_downlaod_file($i_path,$content)
-{
-    $i_path = ($i_path[0] === '/')?substr($i_path, 1):$i_path;
-    $write_path = dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($i_path, '/'), 1);
-    try{
-        $fp = @fopen($write_path, 'w');
-    }catch(Exception $e){
-        echo json_encode(array("state"=>"Update", "isok"=>false, "iswait"=>false, "errmsg"=>"Write script file error! Check your permission", "percent"=>""));
-    }
-    if(!$fp){
-        logto_file($_IMC_LOG_FILE["name"], "DownloadUpdateFile", "写入更新文件失败！\n");
-        return false;
-    }
-    fwrite($fp, $content);
-    fclose($fp);
-    chmod($write_path,0777);
-}
-
 
 /*
  *force_update_all

@@ -61,19 +61,16 @@ function rollBack(){
 	$.ajax({url:'rollback.php',
 			success:function(data){
 					var info = jQuery.parseJSON(data);
-                    if(data.is_ok==true)
-                    {
-                        $("#version_txt").html("成功！NextIM已经恢复至至更新前版本");
-                        $("#update_ctl").attr('disabled',false);
-                        $("#rollback_ctl").attr('disabled',false);
-                        return ;
-                    }
-                        $("#version_txt").html("请确保webim文件夹(包括子目录)为777权限");
-                        $("#update_ctl").attr('disabled',false);
-                        $("#rollback_ctl").attr('disabled',false);
-
-				
- 
+          if(data.is_ok==true)
+          {
+              $("#version_txt").html("成功！NextIM已经恢复至至更新前版本");
+              $("#update_ctl").attr('disabled',false);
+              $("#rollback_ctl").attr('disabled',false);
+              return ;
+           }
+            $("#version_txt").html("请确保webim文件夹(包括子目录)为777权限");
+           $("#update_ctl").attr('disabled',false);
+            $("#rollback_ctl").attr('disabled',false);
 			},
 			error:function(req,status,err){
 				$("#rollback_ctl").attr('disabled',false);
@@ -186,7 +183,19 @@ function poll(preAction){
 		});
 			iscontinue && pollable && setTimeout(function(){poll(Action); },2500);
 }
-		
+function getversioninfo(){
+		$.ajax({
+			url:"version_info.php",
+			success:function(data){
+				  
+			},
+			error:function(req,txt,err){
+			},
+			complete:function(){
+			}
+		}
+	);
+}
  
 $(document).ready(function() {
 	init();
@@ -199,20 +208,19 @@ $(document).ready(function() {
 				}catch(e){
 					$("#errmsg").css("display","");
 				}
-				
- 
 				if (data.update_now ){
 					$("#version_txt").html("可更新版本 "+data.version );
-				}
- 
-		 
+				}else{
+	 				$("#update_ctl").attr('disabled',true);
+				}	 
 			},
 			error:function(req,txt,err){
 			},
 			complete:function(){
 			}
 		}
-);
+	);
+	getversioninfo();
 });
 </script>
 </head>
@@ -239,15 +247,12 @@ $(document).ready(function() {
 			<div id="status">
 				<div id="progress"><span id="progress_txt"></span><span id="progress_simbol"></span></div>
 				<span class="progressBar" id="spaceused12"></span>
- 
 			</div>
-		</div>
-			<div id="control">
-			<input name="btn3" id="update_ctl"   style="width:63px" type="button" value="升级" onclick="versionUpdate();">
-			<input name="btn3" id="rollback_ctl"   style="width:63px" type="button" value="回滚" onclick="rollBack();">
-		</div>
-		
-		
+			</div>
+				<div id="control">
+				<input name="btn3" id="update_ctl"   style="width:63px" type="button" value="升级" onclick="versionUpdate();">
+				<input name="btn3" id="rollback_ctl"   style="width:63px" type="button" value="回滚" onclick="rollBack();">
+			</div>
 		<div id="footer">
 联系(QQ) · 6168557 1034997251 30853554 100786001 <br/>
  Copyright  2007-2009 上海几维信息技术有限公司 - KIWI Inc.  苏ICP备10028328

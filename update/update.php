@@ -1,6 +1,6 @@
 <?php
 include_once('common.php');
-
+set_time_limit(0);
 error_reporting( E_ALL & ~E_NOTICE);
 
 function _get_version()

@@ -25,14 +25,13 @@ function versionUpdate(){
 	$("#rollback_ctl").attr('disabled',true);
 	$.ajax({url:'update.php',
 		success:function(data){
-<<<<<<< HEAD
+ 
 			try{
 				var info = jQuery.parseJSON(data);
 			}catch(e){
 					
 			}
-			
-=======
+ 
 			var data = jQuery.parseJSON(data);
             if(data.isok==true)
             {
@@ -44,9 +43,7 @@ function versionUpdate(){
                 $("#version_txt").html("请确保webim文件夹(包括子目录)为777权限");
 			    $("#update_ctl").attr('disabled',false);
                 $("#rollback_ctl").attr('disabled',false);
-
-
->>>>>>> 020010d02fd5de0e4b5df606b3e7a50f4dc6241e
+ 
 		},
 		error:function(req,status,err){
 				$("#update_ctl").attr('disabled',false);
@@ -73,10 +70,7 @@ function rollBack(){
                         $("#rollback_ctl").attr('disabled',false);
 
 				
-<<<<<<< HEAD
-				
-=======
->>>>>>> 020010d02fd5de0e4b5df606b3e7a50f4dc6241e
+ 
 			},
 			error:function(req,status,err){
 				$("#rollback_ctl").attr('disabled',false);
@@ -193,7 +187,7 @@ function poll(preAction){
  
 $(document).ready(function() {
 	//init progressbar 
-<<<<<<< HEAD
+ 
 		$.ajax({
 			url:"check.php",
 			success:function(data){
@@ -206,7 +200,7 @@ $(document).ready(function() {
 				//no update, 
 				/*if (!data.Version){
 					$("#version_txt").html("当前为最新版本");
-=======
+ 
 				// request to get newest version
 	//getVersion();
 	//poll("");
@@ -218,7 +212,7 @@ $(document).ready(function() {
 				//no update, 
 				if (data.update_now==false){
 					$("#version_txt").html("NextIM当前为最新版本");
->>>>>>> 020010d02fd5de0e4b5df606b3e7a50f4dc6241e
+ 
 					$("#update_ctl").attr('disabled',true);
                     $("#rollback_ctl").attr('disabled',false);
 					return ;
@@ -226,20 +220,8 @@ $(document).ready(function() {
 				if (data.updata_now == 1){
 					$("#version_txt").html("可更新版本 "+data.version );
 				}
-<<<<<<< HEAD
-				poll("");
-=======
-                version = data.version;
-                $.ajax({
-                    url:"version_info.php",
-                    success:function(data){
-                        data = jQuery.parseJSON(data);
-                        $("#version_txt").html("NextIM 版本"+version+"新特性"+"</br>"+data);
-                        $("#update_ctl").attr('disabled',false);
-                        $("#rollback_ctl").attr('disabled',false);
-                }});
-				//poll("");
->>>>>>> 020010d02fd5de0e4b5df606b3e7a50f4dc6241e
+ 
+		 
 			},
 			error:function(req,txt,err){
 			},
@@ -264,7 +246,7 @@ $(document).ready(function() {
 					<li>采用与Facebook一样的标准HTML界面设计</li>
 					<li>集群服务器1,000,000并发用户支持</li>
 				</ul>
-<<<<<<< HEAD
+ 
 			</div>
 			<div id="errmsg">
 				<font color="red">出错啦,请尝试刷新页面</font>	
@@ -273,8 +255,7 @@ $(document).ready(function() {
 			<div id="status">
 				<div id="progress"><span id="progress_txt"></span><span id="progress_simbol"></span></div>
 				<span class="progressBar" id="spaceused12"></span>
-=======
->>>>>>> 020010d02fd5de0e4b5df606b3e7a50f4dc6241e
+ 
 			</div>
 		</div>
 			<div id="control">

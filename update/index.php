@@ -187,7 +187,10 @@ function getversioninfo(){
 		$.ajax({
 			url:"version_info.php",
 			success:function(data){
-				  
+				  var info = jQuery.parseJSON(data);
+					for (var i = 0; i < info.length;i++){
+						$("#ud_ls").append("<li>"+info[i]+"</li>");
+					}				  
 			},
 			error:function(req,txt,err){
 			},
@@ -211,6 +214,7 @@ $(document).ready(function() {
 				if (data.update_now ){
 					$("#version_txt").html("可更新版本 "+data.version );
 				}else{
+					$("#version_txt").html("当前为最新版本 "+data.version );
 	 				$("#update_ctl").attr('disabled',true);
 				}	 
 			},
@@ -233,10 +237,8 @@ $(document).ready(function() {
 			</div>
 			<div  id="update_info">
 				<span id="version_txt"></span>
-				<ul>
-					<li>NextIM 是UC社区最出色，最先进的WEBIM插件</li>
-					<li>采用与Facebook一样的标准HTML界面设计</li>
-					<li>集群服务器1,000,000并发用户支持</li>
+				<ul id="ud_ls">
+					 
 				</ul>
  
 			</div>

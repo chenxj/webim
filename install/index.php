@@ -140,7 +140,8 @@ $nowarr = array('','','','');
 
 //检查config是否可写
 if(!@$fp = fopen($webim_configfile, 'a')) {
-	show_msg("文件 $webim_configfile 读写权限设置错误，请设置为可写，再执行安装程序", $ERRORCODE['can_not_write_file']);
+	show_msg("请设置"  .   S_ROOT .  "webim"  .   "及其子目录为可写，再执行安装程序", $ERRORCODE['can_not_write_file']);
+	#show_msg("文件 $webim_configfile 读写权限设置错误，请设置为可写，再执行安装程序", $ERRORCODE['can_not_write_file']);
 } else {
 	@fclose($fp);
 }

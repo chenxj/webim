@@ -1,27 +1,24 @@
 #!/bin/sh
 
-HOME=$PWD
-VERSION=2.1
+RELEASE=$PWD
+VERSION=2.2
 NAME=nextim_$VERSION
-
-rm -rf $NAME*
+rm -rf $NAME
+WEBIM=$RELEASE/$NAME/webim
+cd ../..
+BASE=$PWD
 
 mkdir $NAME
-mkdir $NAME/webim
+cp -R $PWD/webim $NAME/
+mv $NAME $RELEASE
+cd $WEBIM
 
-
-cd $NAME/webim
-echo $NAME
-cp -R $HOME/../* ./
-
-make clean
-make
-
-
-cd $HOME/$NAME/webim
+make clean && make
 rm -rf release
 rm -rf static_*
-rm -rf .git
+find ./ -name ".git*"  | xargs rm -rf
+find ./ -name ".*.swp"  | xargs rm -rf
+find ./ -type f -name "*.php" -exec sed -i '1s/^\xef\xbb\xbf//' {}  \;
 
-cd $HOME
+cd $RELEASE
 zip -r $NAME.zip $NAME

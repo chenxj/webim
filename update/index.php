@@ -26,7 +26,7 @@ function versionUpdate(){
 	pollable = true;
     $("#version_txt").html("请等待 NEXTIM 正在自动下载更新文件");
 	$("#update_ctl").attr('disabled',true);
-	$("#rollback_ctl").attr('disabled',true);
+	//$("#rollback_ctl").attr('disabled',true);
 	$.ajax({url:'update.php',
 		success:function(data){
  
@@ -46,13 +46,13 @@ function versionUpdate(){
             }
           $("#version_txt").html("请确保webim文件夹(包括子目录)为777权限");
 			    $("#update_ctl").attr('disabled',false);
-          $("#rollback_ctl").attr('disabled',false);
+         //$("#rollback_ctl").attr('disabled',false);
  
 		},
 		error:function(req,status,err){
 	 			 $("#version_txt").html("请确保webim文件夹(包括子目录)为777权限");
 			    $("#update_ctl").attr('disabled',false);
-          $("#rollback_ctl").attr('disabled',false);
+        //  $("#rollback_ctl").attr('disabled',false);
 				//$("#update_ctl").attr('disabled',false);
 				//pollable = false;
 		}
@@ -61,7 +61,7 @@ function versionUpdate(){
 }
 function rollBack(){
 	pollable = true;
-	$("#rollback_ctl").attr('disabled',true);
+	//$("#rollback_ctl").attr('disabled',true);
 	$.ajax({url:'rollback.php',
 			success:function(data){
 					var info = jQuery.parseJSON(data);
@@ -69,15 +69,15 @@ function rollBack(){
           {
               $("#version_txt").html("成功！NextIM已经恢复至至更新前版本");
               $("#update_ctl").attr('disabled',false);
-              $("#rollback_ctl").attr('disabled',false);
+              //$("#rollback_ctl").attr('disabled',false);
               return ;
            }
             $("#version_txt").html("请确保webim文件夹(包括子目录)为777权限");
            $("#update_ctl").attr('disabled',false);
-            $("#rollback_ctl").attr('disabled',false);
+            //$("#rollback_ctl").attr('disabled',false);
 			},
 			error:function(req,status,err){
-				$("#rollback_ctl").attr('disabled',false);
+				//$("#rollback_ctl").attr('disabled',false);
 				pollable = false;
 			}
 	});
@@ -113,7 +113,7 @@ function checkbtnusable(){
 				if ((data.state == "Update" || data.state == "Download" || data.state == "Backup") && data.percent != "100"){
 						$("#update_ctl").attr('disabled',true);
 				}else if ((data.state == "Rollback") && data.percent != "100"){
-							$("#rollback_ctl").attr('disabled',true);
+							//$("#rollback_ctl").attr('disabled',true);
 				}
 			},
 			error:function(req,txt,err){
@@ -124,13 +124,14 @@ function checkbtnusable(){
 function init(){
 		//$("#spaceused1").progressBar({height:12,width:120,	barImage:'images/progressbg_green.gif'});
  		$("#errmsg").css("display","none");
- 		$("#update_ctl").attr('disabled',false);
-		$("#rollback_ctl").attr('disabled',false);
+ 		$("#update_ctl").attr('disabled',true);
+ 		$("#version_txt").html("");
+		//$("#rollback_ctl").attr('disabled',false);
 }
 
 function control(){
 		$("#update_ctl").attr('disabled',false);
-		$("#rollback_ctl").attr('disabled',false);	
+		//$("#rollback_ctl").attr('disabled',false);	
 }
 function poll(preAction){
 	 
@@ -214,6 +215,8 @@ $(document).ready(function() {
 					data = jQuery.parseJSON(data);
 				}catch(e){
 					$("#errmsg").css("display","");
+					$("#update_ctl").attr('disabled',true);
+					return;
 				}
 				if (data.update_now ){
 					$("#version_txt").html("可更新版本 "+data.version );

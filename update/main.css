@@ -3,7 +3,7 @@ html,body  { font-family: Helvetica, Arial, Tahoma; font-size: 13px;   font-colo
 a { text-decoration: none; color: #3366cc; }
 pre { border: 1px dashed #ddd; color: #444; background-color: #eee; width: 100%; }
 #container { margin-left:380px;margin-top:100px;}
-.wrapper{min-height:100%; position:relative;height: auto !important;height: 100%;margin: 0 auto -50px;}
+.wrapper{min-height:99%; position:relative;height: auto !important;height: 99%;margin: 0 auto -50px;}
 #status{margin-left:60px; }
 #control{margin-left:430px;}
 #logo {border:none;margin-bottom:5px;}
@@ -32,6 +32,6 @@ pre { border: 1px dashed #ddd; color: #444; background-color: #eee; width: 100%;
 #curr_ver {font-size:11px;color:#545454;margin-left:-110px;margin-top:33px;position:absolute;}
 .txt{-webkit-text-shadow:0 -1px 10px rgba(0 0 0 0.25)}
 #ud_ls li{font-size:13px;margin-left:24px;list-style-type:decimal;margin-top:3px;}
-#header {border-bottom:#e5e5e5 1px solid;}
-#header ul{list-style-type:none;	}
-#header ul li{display:inline;margin-left:6px;margin-top:3px;}
+#header {border-bottom:#e5e5e5 1px solid;margin-top:1px;}
+#header ul{list-style-type:none;margin-bottom:4px;margin-left:4px	}
+#header ul li{display:inline;margin-left:6px;}

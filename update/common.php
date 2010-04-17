@@ -174,7 +174,7 @@ function update_config($version){ # 修改配置文件版本号
 	$configfile = fread($fp, filesize(IM_ROOT.'config.php'));
 	$configfile = trim($configfile);
 	$configfile = substr($configfile, -2) == '?>' ? substr($configfile, 0, -2) : $configfile;
-	$configfile = insertconfig($configfile, '/\$_IMC\["version"\] =\s*.*?;/i', '$_IMC["version"] = "'.$version.'";');
+	$configfile = insertconfig($configfile, '/\$_IMC\["version"\] =\s*".*?";/i', '$_IMC["version"] = "'.$version.'";');
 	$fp = fopen(IM_ROOT.'config.php', 'w');
 	@fwrite($fp, trim($configfile));
 	@fclose($fp);

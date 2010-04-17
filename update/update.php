@@ -80,7 +80,7 @@ function run($version,$download_index){ # 执行更新, 参数是将更新到的
                 }
             }
 
-            $update_list[IM_ROOT.substr($i_path, 6)] = dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($d_path, '/'), 1);
+            $update_list[IM_ROOT.substr($i_path, 6)] = dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr($i_path, 1, strrpos($i_path, '/')-1)."____".substr(strrchr($d_path, '/'), 1);
 
             write_downlaod_file($i_path,$content);
 

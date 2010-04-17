@@ -1,3 +1,7 @@
+<?php
+	include_once('../config.php');
+
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
@@ -15,32 +19,45 @@ function preProcess(data){
 }
 var iscontinue = true;
 var pollable = true;
+var percent = 10;
+var step = 1;
 function versionUpdate(){
+ 
 	pollable = true;
     $("#version_txt").html("请等待 NEXTIM 正在自动下载更新文件");
 	$("#update_ctl").attr('disabled',true);
 	$("#rollback_ctl").attr('disabled',true);
 	$.ajax({url:'update.php',
 		success:function(data){
+ 
+			try{
+				var info = jQuery.parseJSON(data);
+			}catch(e){
+					
+			}
+ 
 			var data = jQuery.parseJSON(data);
-            if(data.isok==true)
+            if(data.isok)
             {
                 $("#version_txt").html("非常棒！NextIM已经升级至最新版本");
-			    $("#update_ctl").attr('disabled',true);
-                $("#rollback_ctl").attr('disabled',false);
+			   			 // $("#update_ctl").attr('disabled',true);
+               // $("#rollback_ctl").attr('disabled',false);
                 return ;
             }
-                $("#version_txt").html("请确保webim文件夹(包括子目录)为777权限");
+          $("#version_txt").html("请确保webim文件夹(包括子目录)为777权限");
 			    $("#update_ctl").attr('disabled',false);
-                $("#rollback_ctl").attr('disabled',false);
-
-
+          $("#rollback_ctl").attr('disabled',false);
+ 
 		},
 		error:function(req,status,err){
-				$("#update_ctl").attr('disabled',false);
-				pollable = false;
+	 			 $("#version_txt").html("请确保webim文件夹(包括子目录)为777权限");
+			    $("#update_ctl").attr('disabled',false);
+          $("#rollback_ctl").attr('disabled',false);
+				//$("#update_ctl").attr('disabled',false);
+				//pollable = false;
 		}
 	});
+	//poll("Update");
 }
 function rollBack(){
 	pollable = true;
@@ -48,25 +65,23 @@ function rollBack(){
 	$.ajax({url:'rollback.php',
 			success:function(data){
 					var info = jQuery.parseJSON(data);
-                    if(data.is_ok==true)
-                    {
-                        $("#version_txt").html("成功！NextIM已经恢复至至更新前版本");
-                        $("#update_ctl").attr('disabled',false);
-                        $("#rollback_ctl").attr('disabled',false);
-                        return ;
-                    }
-                        $("#version_txt").html("请确保webim文件夹(包括子目录)为777权限");
-                        $("#update_ctl").attr('disabled',false);
-                        $("#rollback_ctl").attr('disabled',false);
-
-				
+          if(data.is_ok==true)
+          {
+              $("#version_txt").html("成功！NextIM已经恢复至至更新前版本");
+              $("#update_ctl").attr('disabled',false);
+              $("#rollback_ctl").attr('disabled',false);
+              return ;
+           }
+            $("#version_txt").html("请确保webim文件夹(包括子目录)为777权限");
+           $("#update_ctl").attr('disabled',false);
+            $("#rollback_ctl").attr('disabled',false);
 			},
 			error:function(req,status,err){
 				$("#rollback_ctl").attr('disabled',false);
 				pollable = false;
 			}
 	});
-
+	poll("RollBack");
 }
 function progressing(){
 	var dom = $("#progress_simbol");
@@ -81,8 +96,8 @@ function progressing(){
 function showProgress(msg,percent){
 	$("#status").css("visibility","visible");
 	$("#progress_txt").html(msg);
-	$("#spaceuesd1").progressBar(percent);
-	$("#update_ctl").attr('disabled',true);
+/*	 $("#spaceused1").progressBar(percent);
+	$("#update_ctl").attr('disabled',true);*/
 }
 function checkbtnusable(){
 		$.ajax({
@@ -105,114 +120,162 @@ function checkbtnusable(){
 				
 			}});
 }
+
+function init(){
+		//$("#spaceused1").progressBar({height:12,width:120,	barImage:'images/progressbg_green.gif'});
+ 		$("#errmsg").css("display","none");
+ 		$("#update_ctl").attr('disabled',false);
+		$("#rollback_ctl").attr('disabled',false);
+}
+
+function control(){
+		$("#update_ctl").attr('disabled',false);
+		$("#rollback_ctl").attr('disabled',false);	
+}
 function poll(preAction){
-	
+	 
 	var Action = "";
+  
 	$.ajax({
-			url:"update_request.php",
-			data:{"cmd":"GetCurrentState"},
+			url:"status.php",
 			success:function(data){
 				var iscontinue = true;
-				
+				if (data == ""){
+						control();
+						return;
+				}
 				try{
 					data = jQuery.parseJSON(data);
 				}catch(e){
 					//alert(e);	
 					iscontinue=false;
+					return;
 				}
 				
 				Action = data.state;
- 
-				if (data.isok){
+ 				if (data.percent && data.percent == 100){
+ 					percent = 100;	
+ 				}else{
+ 					percent += (step/20);	
+ 				}
+				if (!data.isok){
 					//finished
 					$("#status").css("visibility","hidden");
 					return ;
 				}
 				switch (data.state){
 					case "Rollback":
-						showProgress("回滚现有版本...",data.percent);
+						showProgress("回滚现有版本...",percent);
 						break;
 					//downloading...
 					case "Download":
-						showProgress("下载中...",data.percent);
+						showProgress("下载中...",percent);
 						//disable update button
 						break;
 					//updating
 					case "Update":
-						showProgress("更新中...",data.percent);
+						showProgress("更新中...",percent);
 						break;
 					case "Backup":
-						showProgress("备份现有版本...",data.percent);
+						showProgress("备份现有版本...",percent);
 						break;
 					}
-				}
-			});
-			iscontinue && pollable && setTimeout(function(){poll(Action);},2500);;
-		}
-		
- 
-$(document).ready(function() {
-	//init progressbar 
-				// request to get newest version
-	//getVersion();
-	//poll("");
+				},
+			error:function(req,txt,err){
+				iscontinue = false;		
+			}
+		});
+			iscontinue && pollable && setTimeout(function(){poll(Action); },2500);
+}
+function getversioninfo(){
 		$.ajax({
-			url:"check.php",
+			url:"version_info.php",
 			success:function(data){
-				data = jQuery.parseJSON(data);
-
-				//no update, 
-				if (data.update_now==false){
-					$("#version_txt").html("NextIM当前为最新版本");
-					$("#update_ctl").attr('disabled',true);
-                    $("#rollback_ctl").attr('disabled',false);
-					return ;
-				}
-                version = data.version;
-                $.ajax({
-                    url:"version_info.php",
-                    success:function(data){
-                        data = jQuery.parseJSON(data);
-                        $("#version_txt").html("NextIM 版本"+version+"新特性"+"</br>"+data);
-                        $("#update_ctl").attr('disabled',false);
-                        $("#rollback_ctl").attr('disabled',false);
-                }});
-				//poll("");
+				  var info = jQuery.parseJSON(data);
+					for (var i = 0; i < info.length;i++){
+						$("#ud_ls").append("<li class='uv'>"+info[i]+"</li>");
+					}				  
 			},
 			error:function(req,txt,err){
 			},
 			complete:function(){
 			}
 		}
-);
+	);
+}
+ 
+$(document).ready(function() {
+	init();
+	//init progressbar 
+		$.ajax({
+			url:"check.php",
+			success:function(data){
+				try{
+					data = jQuery.parseJSON(data);
+				}catch(e){
+					$("#errmsg").css("display","");
+				}
+				if (data.update_now ){
+					$("#version_txt").html("可更新版本 "+data.version );
+				}else{
+					$("#version_txt").html("当前为最新版本 "+data.version );
+	 				$("#update_ctl").attr('disabled',true);
+				}	 
+			},
+			error:function(req,txt,err){
+			},
+			complete:function(){
+			}
+		}
+	);
+	getversioninfo();
 });
 </script>
 </head>
 	<body>
+		<div class="wrapper">
+		<div id="header">
+			<ul>
+				<li><a href="<?php echo $_IMC["install_url"] ?>">本站首页</a></li>
+				<li><a href="http://www.nextim.cn/">NextIM首页</a></li>	
+				<li><a href="http://www.nextim.cn/purchase">定制NextIM</a></li>
+				<li><a href="http://www.nextim.cn/company">关于NextIM</a></li>
+			</ul>	
+		</div>
 		<div id="container">
 			<div id="logo">
-			<a href="http://www.nextim.cn/">
-				<img id="logo" src="images/nextim.gif"/><div class="logo_txt">领先的社区网站WEBIM</div>
-			</a>
+				<a href="http://www.nextim.cn/">
+					<img id="logo" src="images/nextim.gif"/><span id="curr_ver">版本: <?php 	echo $_IMC["version"]; ?></span>
+					<div class="logo_txt">领先的社区网站WEBIM
+							<input name="btn3" id="update_ctl"   style="width:63px" type="button" value="升级" onclick="versionUpdate();">
+					</div>
+				</a>
 			</div>
+			
 			<div  id="update_info">
 				<span id="version_txt"></span>
-				<ul>
-					<li>NextIM 是UC社区最出色，最先进的WEBIM插件</li>
-					<li>采用与Facebook一样的标准HTML界面设计</li>
-					<li>集群服务器1,000,000并发用户支持</li>
+				<ul id="ud_ls">
 				</ul>
 			</div>
+			
+			<div id="errmsg">
+				<font color="red">出错啦,请尝试刷新页面</font>	
+			</div>
+			
+			<div id="status">
+				<div id="progress"><span id="progress_txt"></span><span id="progress_simbol"></span></div>
+				<span class="progressBar" id="spaceused12"></span>
+			</div>
+			
 		</div>
-			<div id="control">
-			<input name="btn3" id="update_ctl" class="btn" style="width:63px" type="button" value="升级" onclick="versionUpdate();">
-			<input name="btn3" id="rollback_ctl" class="btn" style="width:63px" type="button" value="回滚" onclick="rollBack();">
-		</div>
+		<div class="push"></div>
 		
-		
-		<div id="footer">
+ </div>
+ 
+ <div id="footer">
 联系(QQ) · 6168557 1034997251 30853554 100786001 <br/>
  Copyright  2007-2009 上海几维信息技术有限公司 - KIWI Inc.  苏ICP备10028328
 </div>
+
 </body>
 </html>

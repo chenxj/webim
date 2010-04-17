@@ -2,6 +2,7 @@
 
 RELEASE=$PWD
 VERSION=2.2
+echo "${VERSION}" > ../update/version
 NAME=nextim_$VERSION
 rm -rf $NAME
 WEBIM=$RELEASE/$NAME/webim

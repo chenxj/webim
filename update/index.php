@@ -246,10 +246,10 @@ $(document).ready(function() {
 			<div id="logo">
 				<a href="http://www.nextim.cn/">
 					<img id="logo" src="images/nextim.gif"/><span id="curr_ver">版本: <?php 	echo $_IMC["version"]; ?></span>
-					</a>
-					<div class="logo_txt">领先的社区网站WEBIM
+				</a>
+				<div class="logo_txt">领先的社区网站WEBIM
 							<input name="btn3" id="update_ctl"   style="width:63px" type="button" value="升级" onclick="versionUpdate();">
-					</div>
+				</div>
 				
 			</div>
 			

@@ -10,10 +10,10 @@ $platform = which_platform();
 
 switch($platform){
     case 'uchome':
-        include_once($_IMC["install_url"] .'webim/lib/uchome.php');
+        include_once($_IMC["install_path"] .'webim/lib/uchome.php');
         break;
     case 'discuz':
-        include_once($_IMC["install_url"] .'webim/lib/discuz.php');
+        include_once($_IMC["install_path"] .'webim/lib/discuz.php');
         break;
 }
 
@@ -42,6 +42,7 @@ function which_platform(){
 	 *  Uchome ? Discuz ?  PhpWind?
 	 *
 	 */
+    global $_IMC;
 	if(file_exists($_IMC["install_path"].'data')){
 		return "uchome";
 	}

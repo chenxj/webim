@@ -1,10 +1,9 @@
 <?php
-//header("Content-Type: text/html");
-require '../lib/http_client.php';
 
 
 $platform = $_GET['platform'];
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
+include_once($configRoot . 'http_client.php');
 switch($platform){
 	case 'discuz':
 		include_once($configRoot . 'discuz.php');
@@ -17,7 +16,6 @@ switch($platform){
 
 if(empty($space))exit();
 $name = nick($space);
-require $configRoot . 'http_client.php';
 
 $stranger_ids = ids_except($space["uid"], ids_array(gp("stranger_ids")));//陌生人
 

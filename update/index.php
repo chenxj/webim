@@ -237,9 +237,9 @@ $(document).ready(function() {
 		<div id="header">
 			<ul>
 				<li><a href="<?php echo $_IMC["install_url"] ?>">本站首页</a></li>
-				<li><a href="http://www.nextim.cn/">NextIM首页</a></li>	
-				<li><a href="http://www.nextim.cn/purchase">定制NextIM</a></li>
-				<li><a href="http://www.nextim.cn/company">关于NextIM</a></li>
+				<li><a href="http://www.nextim.cn/" target="_blank">NextIM首页</a></li>	
+				<li><a href="http://www.nextim.cn/purchase" target="_blank">定制NextIM</a></li>
+				<li><a href="http://www.nextim.cn/company" target="_blank" >关于NextIM</a></li>
 			</ul>	
 		</div>
 		<div id="container">

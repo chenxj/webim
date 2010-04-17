@@ -1,12 +1,11 @@
 <?php 
 $platform = $_GET['platform'];
-$configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 switch($platform){
 	case 'discuz':
-		include_once($configRoot . 'discuz.php');
+		include_once('discuz.php');
 		break;
 	case 'uchome':
-		include_once($configRoot . 'uchome.php');
+		include_once('uchome.php');
 		break;
 }
 $ids = gp('ids');

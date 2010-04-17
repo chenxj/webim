@@ -3,6 +3,8 @@ $platform = $_GET['platform'];
 $configRoot = $_IMC["install_path"] . 'webim/api/';
 $configRoot = $_IMC["install_path"] . 'webim/api/';
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
+include_once( $configRoot . 'http_client.php');
+
 switch($platform){
 	case 'discuz':
 		include_once($configRoot . 'discuz.php');
@@ -11,7 +13,6 @@ switch($platform){
 		include_once($configRoot . 'uchome.php');
 		break;
 }
-require $configRoot . 'http_client.php';
 $ticket = gp('ticket');
 $room_id = gp('id');
 if(!empty($ticket)) {

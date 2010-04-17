@@ -7,7 +7,7 @@ $cur_version = $_IMC['version'];
 $data = array("version"=>$latest_version);
 
 $platform = which_platform();
-
+ 
 switch($platform){
     case 'uchome':
         include_once($_IMC["install_path"] .'webim/lib/uchome.php');

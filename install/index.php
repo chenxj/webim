@@ -1,5 +1,5 @@
 <?php
-//error_reporting(E_ALL);
+error_reporting(0);
 $_SGLOBAL = $_SCONFIG = $_SBLOCK = array();
 //安装平台根目录
 define('S_ROOT', substr(dirname(__FILE__), 0, -13));

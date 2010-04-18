@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL & ~E_NOTICE);
+error_reporting(0);
 define('WEBIM_ROOT', substr(dirname(__FILE__), 0, -4));
 //API DEFINE
 include_once(WEBIM_ROOT . '/config.php');

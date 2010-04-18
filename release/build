@@ -1,13 +1,12 @@
 #!/bin/sh
 
-
 RELEASE=$PWD
-VERSION=2.2
+VERSION=$1
+sed  -i  "s/\$nextim_version.*=.*/\$nextim_version=\"${VERSION}\"\;/g" ../install/index.php
 DOWN_PATH=/var/www/www.nextim.cn/downloads
 SITE_PATH=/var/www/update.nextim.cn 
-echo "${VERSION}" > ../update/version
 NAME=nextim_$VERSION
-rm -rf $NAME*
+rm -rf nextim*
 WEBIM=$RELEASE/$NAME/webim
 cd ../..
 BASE=$PWD
@@ -30,14 +29,20 @@ python release.py webim $VERSION
 rm release.py && cd ..
 zip -r $NAME.zip $NAME
 
-case $1 in
+
+
+
+case $2 in
     all)
         echo "Compressing archive ..."
         rm -rf  $SITE_PATH/webim
         echo "Copy to  Auto-Update-Runtime"
+        rm -rf $SITE_PATH/webim
         cp -R  $NAME/webim  $SITE_PATH/
         echo "Copy to Download"
         cp $NAME.zip  $DOWN_PATH
+        # change  download links
+        sed -i    "s/nextim_.*zip/${NAME}.zip/g"  /var/www/www.nextim.cn/app/config/bootstrap.php
     ;;
     *)
         exit 1

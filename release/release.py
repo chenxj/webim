@@ -51,8 +51,8 @@ def make_version(content,dir):
     handle.close()
 
 def run():
-    version = "2.2.2"
     path = sys.argv[1]
+    version = sys.argv[2]
     if not path.startswith("./"):
         webimpath = "./" + path
     else:

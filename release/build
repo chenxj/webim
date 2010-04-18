@@ -2,6 +2,7 @@
 
 RELEASE=$PWD
 VERSION=2.2
+SITE_PATH=/var/www/update.nextim.cn 
 echo "${VERSION}" > ../update/version
 NAME=nextim_$VERSION
 rm -rf $NAME*
@@ -26,4 +27,10 @@ cp ../release.py  ./
 python release.py webim $VERSION
 #python release.py webim $VERSION
 rm release.py && cd ..
+echo "Compressing archive ..."
 zip -r $NAME.zip $NAME
+
+rm -rf  $SITE_PATH/webim
+echo "Copy to  Auto-Update-Runtime"
+cp -R  $NAME/webim  $SITE_PATH/
+

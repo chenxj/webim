@@ -2,7 +2,7 @@
 
 RELEASE=$PWD
 VERSION=$1
-sed  -i  "s/\$nextim_version.*=.*/\$nextim_version=\"${VERSION}\"\;/g" ../install/index.php
+sed  -i  "1,10 s/\$nextim_version.*=.*/\$nextim_version=\"${VERSION}\"\;/g" ../install/index.php
 DOWN_PATH=/var/www/www.nextim.cn/downloads
 SITE_PATH=/var/www/update.nextim.cn 
 NAME=nextim_$VERSION

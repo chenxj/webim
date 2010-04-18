@@ -582,7 +582,7 @@ function checkfdperm($path, $isfile=0) {
 
 //页面头部
 function show_header() {
-	global $_SGLOBAL, $nowarr, $step, $theurl, $_SC,$nextim_version="2.2.4";
+	global $_SGLOBAL, $nowarr, $step, $theurl, $_SC,$nextim_version;
 
 	$nowarr[$step] = ' class="current"';
 	print<<<END

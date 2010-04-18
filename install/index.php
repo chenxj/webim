@@ -141,7 +141,7 @@ $nowarr = array('','','','');
 
 //检查config是否可写
 if(!@$fp = fopen($webim_configfile, 'a')) {
-	show_msg("请设置"  .   S_ROOT .  "webim"  .   "及其子目录为可写，再执行安装程序", $ERRORCODE['can_not_write_file']);
+	show_msg("请设置 "  .   S_ROOT .  "webim"  .   "及其子目录 为777权限，再执行安装程序", $ERRORCODE['can_not_write_file']);
 	#show_msg("文件 $webim_configfile 读写权限设置错误，请设置为可写，再执行安装程序", $ERRORCODE['can_not_write_file']);
 } else {
 	@fclose($fp);
@@ -590,7 +590,7 @@ function show_header() {
 	<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title> NextIm2.0透明幻想(Transparent Fantasy)版本程序安装 </title>
+	<title> NextIm2.2透明幻想(Transparent Fantasy)版本程序安装 </title>
 	<style type="text/css">
 	* {font-size:12px; font-family: Verdana, Arial, Helvetica, sans-serif; line-height: 1.5em; word-break: break-all; }
 	body { text-align:center; margin: 0; padding: 0; background: #F5FBFF; }
@@ -648,7 +648,7 @@ function show_header() {
 	</head>
 	<body id="append_parent">
 	<div class="bodydiv">
-	<h1>NextIm2.0版本程序安装 </h1>
+	<h1>NextIm2.2版本程序安装 </h1>
 	<div style="width:90%;margin:0 auto;">
 	<table id="menu">
 	<tr>

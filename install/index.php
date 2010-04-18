@@ -590,7 +590,7 @@ function show_header() {
 	<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title> NextIm2.2透明幻想(Transparent Fantasy)版本程序安装 </title>
+	<title> NextIm {$version} 透明幻想(Transparent Fantasy)版本程序安装 </title>
 	<style type="text/css">
 	* {font-size:12px; font-family: Verdana, Arial, Helvetica, sans-serif; line-height: 1.5em; word-break: break-all; }
 	body { text-align:center; margin: 0; padding: 0; background: #F5FBFF; }
@@ -648,7 +648,7 @@ function show_header() {
 	</head>
 	<body id="append_parent">
 	<div class="bodydiv">
-	<h1>NextIm2.2版本程序安装 </h1>
+	<h1>NextIm {$version}版本程序安装 </h1>
 	<div style="width:90%;margin:0 auto;">
 	<table id="menu">
 	<tr>

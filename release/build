@@ -1,9 +1,13 @@
 #!/bin/sh
 
+
 RELEASE=$PWD
 VERSION=2.2
+DOWN_PATH=/var/www/www.nextim.cn/downloads
+SITE_PATH=/var/www/update.nextim.cn 
+echo "${VERSION}" > ../update/version
 NAME=nextim_$VERSION
-rm -rf $NAME
+rm -rf $NAME*
 WEBIM=$RELEASE/$NAME/webim
 cd ../..
 BASE=$PWD
@@ -22,7 +26,21 @@ find ./ -type f -name "*.php" -exec sed -i '1s/^\xef\xbb\xbf//' {}  \;
 
 cd $RELEASE/$NAME
 cp ../release.py  ./
-python release.py webim
-python release.py webim
+python release.py webim $VERSION
 rm release.py && cd ..
 zip -r $NAME.zip $NAME
+
+case $1 in
+    all)
+        echo "Compressing archive ..."
+        rm -rf  $SITE_PATH/webim
+        echo "Copy to  Auto-Update-Runtime"
+        cp -R  $NAME/webim  $SITE_PATH/
+        echo "Copy to Download"
+        cp $NAME.zip  $DOWN_PATH
+    ;;
+    *)
+        exit 1
+    ;;
+esac
+

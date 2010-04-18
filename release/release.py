@@ -9,6 +9,7 @@
 
 
 
+import sys
 import os
 import commands
 import simplejson
@@ -49,10 +50,8 @@ def make_version(content,dir):
     handle.write(content)
     handle.close()
 
-
-if __name__ == '__main__':
+def run():
     version = "2.2.2"
-    import sys
     path = sys.argv[1]
     if not path.startswith("./"):
         webimpath = "./" + path
@@ -62,3 +61,8 @@ if __name__ == '__main__':
     Json = simplejson.dumps(all_file_hash)
     make_index(Json,webimpath)
     make_version(version,webimpath)
+
+if __name__ == '__main__':
+    run()
+    run()
+

@@ -505,7 +505,8 @@ function roll_back($project_path = null)
 function write_downlaod_file($i_path,$content)
 {
     $i_path = ($i_path[0] === '/')?substr($i_path, 1):$i_path;
-    $write_path = dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($i_path, '/'), 1);
+	$prefix = explode("/", substr($i_path, 0, strrpos($i_path, '/')));
+    $write_path = dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.join("_", $prefix)."____".substr(strrchr($i_path, '/'), 1);
     try{
         $fp = @fopen($write_path, 'w');
     }catch(Exception $e){

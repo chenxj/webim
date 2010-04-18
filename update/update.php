@@ -79,8 +79,9 @@ function run($version,$download_index){ # 执行更新, 参数是将更新到的
                     break;
                 }
             }
-
-            $update_list[IM_ROOT.substr($i_path, 6)] = dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.substr(strrchr($d_path, '/'), 1);
+			$i_path = ($i_path[0] === '/')?substr($i_path, 1):$i_path;
+			$prefix = explode("/", substr($i_path, 0, strrpos($i_path, '/')));
+            $update_list[IM_ROOT.substr($i_path, 6)] = dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_download'.DIRECTORY_SEPARATOR.join("_", $prefix)."____".substr(strrchr($i_path, '/'), 1);
 
             write_downlaod_file($i_path,$content);
 

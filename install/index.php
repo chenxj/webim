@@ -240,6 +240,7 @@ if (submitcheck('imsubmit')) {
 		}
 		$alltables = "";
 		if($platform == 'uchome'){
+		$myisamtype = $_SGLOBAL['db']->version()>'4.1'?" ENGINE=MYISAM".(empty($_SC['dbcharset'])?'':" DEFAULT CHARSET=$_SC[dbcharset]" ):" TYPE=MYISAM";
 			foreach ($tables as $key => $tablename) {
 				$sqltype = $myisamtype;
 				$_SGLOBAL['db']->query("DROP TABLE IF EXISTS $tablename");
@@ -253,6 +254,7 @@ if (submitcheck('imsubmit')) {
 				$alltables .= '</li>';
 			}
 		}else if($platform == 'discuz'){
+			$myisamtype = mysql_get_server_info()>'4.1'?" ENGINE=MYISAM".(empty($_SC['dbcharset'])?'':" DEFAULT CHARSET=$_SC[dbcharset]" ):" TYPE=MYISAM";
 			foreach ($tables as $key => $tablename) {
 				$sqltype = $myisamtype;
 				$db->query("DROP TABLE IF EXISTS $tablename");

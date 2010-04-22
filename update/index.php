@@ -122,11 +122,28 @@ function checkbtnusable(){
 }
 
 function init(){
-		//$("#spaceused1").progressBar({height:12,width:120,	barImage:'images/progressbg_green.gif'});
+		//$("#spaceused1").progressBar({height:12,width:120,barImage:'images/progressbg_green.gif'});
  		$("#errmsg").css("display","none");
  		$("#update_ctl").attr('disabled',true);
  		$("#version_txt").html("");
 		//$("#rollback_ctl").attr('disabled',false);
+}
+
+function run_af_up(){
+	$.ajax({
+		url:"run_after_update.php",
+		success:function(data){
+			var info = new Object();
+			try{
+				info = jQuery.parseJSON(data);
+			}catch(e){
+			
+			}
+			if (data.isok){
+			
+			}
+		},
+		error:function(){}});
 }
 
 function control(){
@@ -142,21 +159,23 @@ function poll(preAction){
 			success:function(data){
 				var iscontinue = true;
 				if (data == ""){
-						control();
-						return;
+					control();
+					return;
 				}
 				try{
 					data = jQuery.parseJSON(data);
 				}catch(e){
-					//alert(e);	
 					iscontinue=false;
 					return;
 				}
 				
 				Action = data.state;
  				if (data.percent && data.percent == 100){
- 					percent = 100;	
- 				}else{
+ 					//percent = 100;	
+					run_af_up();
+ 				}
+				/*
+				else{
  					percent += (step/20);	
  				}
 				if (!data.isok){
@@ -181,6 +200,7 @@ function poll(preAction){
 						showProgress("备份现有版本...",percent);
 						break;
 					}
+					*/
 				},
 			error:function(req,txt,err){
 				iscontinue = false;		
@@ -220,8 +240,9 @@ $(document).ready(function() {
 				}
 				if (data.update_now ){
 					$("#version_txt").html("可更新版本 "+data.version );
+	 				$("#update_ctl").attr('disabled',false);
 				}else{
-					$("#version_txt").html("当前为最新版本 "+data.version );
+					$("#version_txt").html("当前为最新版本 ");
 	 				$("#update_ctl").attr('disabled',true);
 				}	 
 			},

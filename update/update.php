@@ -153,6 +153,7 @@ function run($version,$download_index){ # 执行更新, 参数是将更新到的
 			}
 		}
 	}
+	include_once("run_after_update.php");
 	return true;
 }// func update
 

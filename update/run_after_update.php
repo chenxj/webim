@@ -10,6 +10,7 @@
 	switch($platform)
 	{
 		case 'uchome':
+			define('IN_UCHOME', TRUE);
 			include_once(S_ROOT.'./config.php');
 			include_once(S_ROOT.'./source/function_common.php');
 			dbconnect();
@@ -21,7 +22,6 @@
 			break;
 	}
 
-	
 	// add your code here
 	update_history_table($db_session);
 	
@@ -37,12 +37,14 @@
 		 *  Written by Harvey.
 		 *
 		 */	
-		$res	= $db_cur->query("SELECT * FROM webim_histories LIMIT 1");
-		$value	= $db_cur->fetch_array($res)
+		$res = $db_cur->query("describe webim_histories");
 	
-		if (array_key_exists('uid'))
+		while ($value = $db_cur->fetch_array($res))
 		{
-			$db_cur->query("alter table webim_histories drop column uid");
+			if ($value["Field"] === 'uid')
+			{
+				$db_cur->query("alter table webim_histories drop column uid");
+			}
 		}
 	}
 	

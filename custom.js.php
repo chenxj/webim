@@ -90,7 +90,7 @@ $setting = json_encode(setting());
 		im = imUI.im;
 		var adminids = "<?php echo $_IMC['admin_ids'] ?>";
 		im.admins = adminids?adminids.split(","):"";
-        im.isStrangerOn = "on";
+        	im.isStrangerOn = "on";
 		layout = imUI.layout;
                 imUI.addApp("room");
 		if ( platform === "discuz" ){

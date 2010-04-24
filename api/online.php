@@ -10,13 +10,28 @@ switch($platform){
 		include_once($configRoot . 'uchome.php');
 		break;
 }
+session_start();
 if($platform === "discuz"){
-	require_once($_IMC['install_path'].'/config.inc.php');
-	require_once($_IMC['install_path'].'/uc_client/client.php');
-	$buddynum = uc_friend_totalnum($space['uid']);
-	$buddies = uc_friend_ls($space['uid'], 1, $buddynum, $buddynum);
-	foreach($buddies as $value){
-		$friend_ids[] = $value['friendid'];
+	if(!isset($_SESSION['timestamp'])){
+		require_once($_IMC['install_path'].'/config.inc.php');
+		require_once($_IMC['install_path'].'/uc_client/client.php');
+		$buddynum = uc_friend_totalnum($space['uid']);
+		$buddies = uc_friend_ls($space['uid'], 1, $buddynum, $buddynum);
+		foreach($buddies as $value){
+			$friend_ids[] = $value['friendid'];
+		}
+		$_SESSION['timestamp'] = gp('timestamp');
+	}else{
+		if(gp('timestamp') - $_SESSION['timestamp'] > $_IMC['timestamp']*60*1000){
+			require_once($_IMC['install_path'].'/config.inc.php');
+			require_once($_IMC['install_path'].'/uc_client/client.php');
+			$buddynum = uc_friend_totalnum($space['uid']);
+			$buddies = uc_friend_ls($space['uid'], 1, $buddynum, $buddynum);
+			foreach($buddies as $value){
+				$friend_ids[] = $value['friendid'];
+			}
+			$_SESSION['timestamp'] = gp('timestamp');
+		}
 	}
 }else if($platform === "uchome"){
 	$friend_ids = ids_array($space['friends']);
@@ -43,7 +58,6 @@ if(!$stranger_ids){
 
 //var_dump($stranger_ids);
 //modify by jinyu
-session_start();
 //var_dump($_SESSION['uid']);
 if(!isset($_SESSION['uid'])){
 	$_SESSION['uid'] = $space["uid"];

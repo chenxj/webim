@@ -25,6 +25,6 @@ $_IMC["update"] = 0;
 $_IMC_LOG_TYPE["update_file"] = "UPDATE";
 $_IMC_LOG_TYPE["backup_project"] = "BACKUP";
 $_IMC_LOG_FILE["name"] = "./update.log";
-$_IMC_BACKUP["director"] = "../WEBIM_BAK";
 $_IMC["update_url"] = "http://update.nextim.cn/";
 $_IMC["admin_ids"] = "1,8,888";
+$_IMC["timestamp"] = "10";

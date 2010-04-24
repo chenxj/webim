@@ -25,7 +25,7 @@ if($platform === "discuz"){
 			$_SESSION['friend_ids'] = $friend_ids;
 		}
 	}else{//不是第一次登陆，比较与上次登录的时间差，大于10分钟重新获取好友列表
-		if(gp('timestamp') - $_SESSION['timestamp'] > $_IMC['timestamp']*60*1000){
+		if(gp('timestamp') - $_SESSION['timestamp'] > $_IMC['timestamp']*60){
 			require_once($_IMC['install_path'].'/config.inc.php');
 			require_once($_IMC['install_path'].'/uc_client/client.php');
 			$buddynum = uc_friend_totalnum($space['uid']);

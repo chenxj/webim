@@ -1,6 +1,12 @@
 <?php
 include_once('common.php');
-
+include_once('../config.php');
+/*
+$arrids = explode(',',$_IMC['admin_ids']);
+if (!in_array($space['uid'],$arrids)){
+	header("Location:{$_IMC['install_url']}");	
+}
+*/
 
 function _get_version()
 {

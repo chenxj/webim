@@ -1,6 +1,13 @@
 <?php
+	error_reporting(0);
 	include_once('../config.php');
+	/*
+	$arrids = explode(',',$_IMC['admin_ids']);
 
+	echo $space['uid'];
+	if (!in_array($space['uid'],$arrids)){
+		header("Location:{$_IMC['install_url']}");	
+	}*/ 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -57,7 +64,7 @@ function versionUpdate(){
 				//pollable = false;
 		}
 	});
-	//poll("Update");
+	poll("Update");
 }
 function rollBack(){
 	pollable = true;
@@ -252,7 +259,6 @@ $(document).ready(function() {
 			}
 		}
 	);
-	poll();
 	getversioninfo();
 });
 </script>

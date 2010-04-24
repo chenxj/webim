@@ -35,6 +35,7 @@ function versionUpdate(){
 	$("#update_ctl").attr('disabled',true);
 	//$("#rollback_ctl").attr('disabled',true);
 	$.ajax({url:'update.php',
+
 		success:function(data){
  
 			try{
@@ -46,6 +47,7 @@ function versionUpdate(){
 			var data = jQuery.parseJSON(data);
             if(data.isok)
             {
+		run_af_up();
                 $("#version_txt").html("非常棒！NextIM已经升级至最新版本");
 			   			 // $("#update_ctl").attr('disabled',true);
                // $("#rollback_ctl").attr('disabled',false);
@@ -64,7 +66,8 @@ function versionUpdate(){
 				//pollable = false;
 		}
 	});
-	poll("Update");
+	//poll("Update");
+
 }
 function rollBack(){
 	pollable = true;
@@ -179,7 +182,7 @@ function poll(preAction){
 				Action = data.state;
  				if (data.isok){
  					//percent = 100;	
-					run_af_up();
+					//run_af_up();
  				}
 				/*
 				else{

@@ -170,7 +170,7 @@ function poll(preAction){
 				}
 				
 				Action = data.state;
- 				if (data.percent && data.percent == 100){
+ 				if (data.isok){
  					//percent = 100;	
 					run_af_up();
  				}
@@ -252,6 +252,7 @@ $(document).ready(function() {
 			}
 		}
 	);
+	poll();
 	getversioninfo();
 });
 </script>

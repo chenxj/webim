@@ -213,13 +213,12 @@ function find_buddy($strangers, $friends = array()){
 		$friend_ids = join(',', $friends);
 		$stranger_ids = join(',', $strangers);
         $buddies = array();
-		if(!empty($friends)){
-			$query_fid = $_SGLOBAL['db']->query("SELECT main.uid, main.username FROM ".tname("members")." main WHERE main.uid IN ($firend_ids)");
+		if(!empty($friend_ids)){
+			$query_fid = $_SGLOBAL['db']->query("SELECT main.uid, main.username FROM ".tname("members")." main WHERE main.uid IN ({$friend_ids})");
 			while($value = $_SGLOBAL['db']->fetch_array($query_fid)){
 				$id = $value['uid'];
 				$nick = nick($value);
-				$group = "friend";
-				$buddies[$id]=array('id'=>$id,'name'=> to_utf8($nick),'pic_url' =>avatar($id,'small',true), 'status'=>'' ,'status_time'=>'','url'=>'','group'=> $group, 'default_pic_url' => UC_API.'/images/noavatar_small.gif');
+				$buddies[$id]=array('id'=>$id,'name'=> to_utf8($nick),'pic_url' =>avatar($id,'small',true), 'status'=>'' ,'status_time'=>'','url'=>'','group'=> "friend", 'default_pic_url' => UC_API.'/images/noavatar_small.gif');
 			}
 		}
 		if(!empty($strangers)){
@@ -227,8 +226,7 @@ function find_buddy($strangers, $friends = array()){
 			while($value = $_SGLOBAL['db']->fetch_array($query_sid)){
 				$id = $value['uid'];
 				$nick = nick($value);
-				$group = "stranger";
-				$buddies[$id]=array('id'=>$id,'name'=> to_utf8($nick),'pic_url' =>avatar($id,'small',true), 'status'=>'' ,'status_time'=>'','url'=>'','group'=> $group, 'default_pic_url' => UC_API.'/images/noavatar_small.gif');
+				$buddies[$id]=array('id'=>$id,'name'=> to_utf8($nick),'pic_url' =>avatar($id,'small',true), 'status'=>'' ,'status_time'=>'','url'=>'','group'=> "stranger", 'default_pic_url' => UC_API.'/images/noavatar_small.gif');
 			}
 		}
 		return $buddies;

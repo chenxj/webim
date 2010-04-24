@@ -166,8 +166,10 @@ extend(webim.prototype, objectExtend,{
 			type:"post",
 			dataType: "json",
 			data:{                                
-				buddy_ids: (self.isStrangerOn == "on")?buddy_ids.join(","):"",
-				stranger_ids: (self.isStrangerOn == "on")?self.stranger_ids.join(","):"",
+				buddy_ids: buddy_ids.join(","),
+                //(self.isStrangerOn == "on")?buddy_ids.join(","):"",
+				stranger_ids: self.stranger_ids.join(","),
+                //(self.isStrangerOn == "on")?self.stranger_ids.join(","):"",
 				room_ids:getTid(self.roomIdendify)
 			},
 			url: self.options.urls.online,

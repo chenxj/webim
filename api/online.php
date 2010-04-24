@@ -45,6 +45,8 @@ if(!isset($_SESSION['stranger_ids'])){
 		}
 		$stranger_ids = $_SESSION['stranger_ids'];
 	}
+}if(!isset($_SESSION['friend_ids'])){
+	$_SESSION['friend_ids'] = $friend_ids;
 }
 //var_dump($_SESSION['stranger_ids']);
 
@@ -100,7 +102,9 @@ if(empty($ticket)){
         echo '{status: "'.$client->status.'", "errorMsg":"'.$pageContents.'"}';
         exit();
 }
-$buddy_online_ids = ids_array($pageData->buddies);//在线好友列表ids
+//var_dump($pageData);
+$buddy_online_ids = ids_array($pageData->buddies);//online ids
+//$_SESSION['online_ids'] = $buddy_online_ids;
 $clientnum = $pageData->clientnum;
 $rooms_num = $pageData->roominfo;
 if(is_object($rooms_num)){
@@ -119,20 +123,22 @@ $imserver = 'http://'.$_IMC['imsvr'].':'.$_IMC['impoll'];
 $output['connection'] = array('domain' => $_IMC['domain'], 'ticket'=>$ticket, 'server'=>$imserver);//服务器连接
 
 $output['new_messages'] = $new_messages;
+///
 if($platform === 'uchome'){
 	$output['buddies'] = find_buddy($buddy_ids);
 }else if($platform === 'discuz'){
-	foreach($friend_ids as $id){
-		if(in_array($id, $buddy_online_ids)){
+	foreach($buddy_online_ids as $id){
+		if(in_array($id, $friend_ids)){
 			$friends[] = $id;
-		}
-		$strangers = ids_except($id, $buddy_online_ids);
+        } else {
+            $stranger[] = $id; 
+        }
 	}
 	$output['buddies'] = find_buddy($strangers, $friends);
 }
 $output['rooms'] = $rooms;
 $output['histories'] = find_history($buddy_ids);
-
+//var_dump($output['buddies']);
 new_message_to_histroy(); //新消息转到历史记录
 
 echo json_encode($output);

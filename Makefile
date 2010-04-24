@@ -27,9 +27,9 @@ static:
 debug:  
 	@@mkdir -p ${STATIC_DIR}
 	@@cp -r ${STATIC_SRC_FILES} ${STATIC_DIR} 
-	@@cp ${STATIC_SRC_DIR}/webim.css ${STATIC_DIR}/webim.css
-	@@cp ${STATIC_SRC_DIR}/webim_uc.css ${STATIC_DIR}/webim_uchome.css
-	@@cp ${STATIC_SRC_DIR}/webim_dz.css ${STATIC_DIR}/webim_discuz.css
+	@@cp ${STATIC_SRC_DIR}/webim.css ${STATIC_DIR}/webim.all.css
+	@@cp ${STATIC_SRC_DIR}/webim_uc.css ${STATIC_DIR}/webim_uchome.all.css
+	@@cp ${STATIC_SRC_DIR}/webim_dz.css ${STATIC_DIR}/webim_discuz.all.css
 
 	@@cp ${STATIC_SRC_DIR}/webim.all.js ${STATIC_DIR}/webim.all.js
 	@@cp ${STATIC_SRC_DIR}/webim_uc.all.js ${STATIC_DIR}/webim_uchome.all.js

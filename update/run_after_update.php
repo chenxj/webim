@@ -1,7 +1,8 @@
-﻿<?php
+<?php
 
 	//check the `uid` field
 	include_once('../config.php');
+	include_once('json.php');
 	define('S_ROOT', substr(dirname(__FILE__), 0, -12));
 	
 	$platform = which_platform();
@@ -24,14 +25,16 @@
 
 	// add your code here
 	update_history_table($db_session);
+    update_config();
+    echo json_encode(array("isok"=>true));
 	
 	function update_config(){ # 修改配置文件版本号
-		$fp = fopen(IM_ROOT.'config.php', 'r');
-		$configfile = fread($fp, filesize(IM_ROOT.'config.php'));
+		$fp = fopen('../config.php', 'r');
+		$configfile = fread($fp, filesize('../config.php'));
 		$configfile = trim($configfile);
 		$configfile = substr($configfile, -2) == '?>' ? substr($configfile, 0, -2) : $configfile;
 		$configfile = insertconfig($configfile, '/\$_IMC\["timestamp"\] =\s*.*?;/i', '$_IMC["timestamp"] = 10;');
-		$fp = fopen(IM_ROOT.'config.php', 'w');
+		$fp = fopen('../config.php', 'w');
 		@fwrite($fp, trim($configfile));
 		@fclose($fp);
 	}
@@ -70,5 +73,14 @@
 			return "discuz";
 		}
 	}	
+
+    function insertconfig($s, $find, $replace) {
+        if(preg_match($find, $s)) {
+            $s = preg_replace($find, $replace, $s);
+        } else {
+            $s .= "\r\n".$replace;
+        }
+        return $s;
+    }
 	
 ?>

@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+error_reporting(E_ALL & ~E_NOTICE);
 define('WEBIM_ROOT', substr(dirname(__FILE__), 0, -4));
 //API DEFINE
 include_once(WEBIM_ROOT . '/config.php');
@@ -203,40 +203,35 @@ if(empty($_SGLOBAL['supe_uid'])) {
 }
 $groups = getfriendgroup();
 
-function find_buddy($ids){ 
+function find_buddy($strangers, $friends = array()){
         global $_SGLOBAL,$_IMC,$space, $groups;
-        $ids = ids_array($ids);
-        //删除自己
-        $ids = ids_except($space['uid'], $ids);
-        if(empty($ids))return array();
-        $ids = join(',', $ids);
+        $friends = ids_array($friends);
+		$strangers = ids_array($strangers);
+        
+        if(empty($friends) && empty($strangers))return array();
+        //$ids = join(',', $ids);
+		$friend_ids = join(',', $friends);
+		$stranger_ids = join(',', $strangers);
         $buddies = array();
-		////
-		include_once DISCUZ_ROOT.'./uc_client/client.php';
-
-				$buddynum = uc_friend_totalnum($space['uid']);
-	
-				$buddies = uc_friend_ls($space['uid'], 1, $buddynum, $buddynum);
-
-				if($buddies) {
-				foreach((array)$buddies as $key => $buddy) {
-					$buddylist[$buddy['friendid']] = $buddy;
-				}
-				unset($buddies);
-				}
-	
-		$query = $_SGLOBAL['db']->query("SELECT m.uid, m.username,nickname FROM ".tname('members')."  m left join ".tname('memberfields')." mf  on m.uid=mf.uid WHERE  m.uid IN ($ids)");
-
-        while ($value = $_SGLOBAL['db']->fetch_array($query)) {
-
-                $id = $value['uid'];
-                $nick = nick($value); 
-
-				$group = in_array($value['uid'], array_keys($buddylist))?'friend':'stranger';
-
-                $buddies[$id]=array('id'=>$id,'name'=> to_utf8($nick),'pic_url' =>avatar($id,'small',true), 'status'=>'' ,'status_time'=>'','url'=>'space.php?uid='.$id,'group'=> $group);
-        }
-        return $buddies;
+		if(!empty($friends)){
+			$query_fid = $_SGLOBAL['db']->query("SELECT main.uid, main.username FROM ".tname("members")." main WHERE main.uid IN ($firend_ids)");
+			while($value = $_SGLOBAL['db']->fetch_array($query_fid)){
+				$id = $value['uid'];
+				$nick = nick($value);
+				$group = "friend";
+				$buddies[$id]=array('id'=>$id,'name'=> to_utf8($nick),'pic_url' =>avatar($id,'small',true), 'status'=>'' ,'status_time'=>'','url'=>'','group'=> $group, 'default_pic_url' => UC_API.'/images/noavatar_small.gif');
+			}
+		}
+		if(!empty($strangers)){
+			$query_sid = $_SGLOBAL['db']->query("SELECT main.uid, main.username FROM ".tname("members")." main WHERE main.uid IN ($stranger_ids)");
+			while($value = $_SGLOBAL['db']->fetch_array($query_sid)){
+				$id = $value['uid'];
+				$nick = nick($value);
+				$group = "stranger";
+				$buddies[$id]=array('id'=>$id,'name'=> to_utf8($nick),'pic_url' =>avatar($id,'small',true), 'status'=>'' ,'status_time'=>'','url'=>'','group'=> $group, 'default_pic_url' => UC_API.'/images/noavatar_small.gif');
+			}
+		}
+		return $buddies;
 }
 
 function find_new_message(){

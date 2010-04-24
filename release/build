@@ -21,9 +21,9 @@ rm -rf release
 rm -rf static_*
 find ./ -name ".git*"  | xargs rm -rf
 find ./ -name ".*.swp"  | xargs rm -rf
-find ./ -type f -name "*.php" -exec sed -i '1s/^\xef\xbb\xbf//' {}  \;
 
 cd $RELEASE/$NAME
+find ./ -type f -name "*.php" -exec sed -i '1s/^\xef\xbb\xbf//' {}  \;
 cp ../release.py  ./
 python release.py webim $VERSION
 rm release.py && cd ..

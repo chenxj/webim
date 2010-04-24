@@ -1,6 +1,4 @@
 <?php
-
-
 $platform = $_GET['platform'];
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 include_once($configRoot . 'http_client.php');
@@ -12,30 +10,43 @@ switch($platform){
 		include_once($configRoot . 'uchome.php');
 		break;
 }
-
-
+if($platform === "discuz"){
+	require_once($_IMC['install_path'].'/config.inc.php');
+	require_once($_IMC['install_path'].'/uc_client/client.php');
+	$buddynum = uc_friend_totalnum($space['uid']);
+	$buddies = uc_friend_ls($space['uid'], 1, $buddynum, $buddynum);
+	foreach($buddies as $value){
+		$friend_ids[] = $value['friendid'];
+	}
+}else if($platform === "uchome"){
+	$friend_ids = ids_array($space['friends']);
+}
+//var_dump($friend_ids);
 if(empty($space))exit();
 $name = nick($space);
 
 $stranger_ids = ids_except($space["uid"], ids_array(gp("stranger_ids")));//陌生人
-
+//var_dump($stranger_ids);
 //modify by jinyu
 session_start();
+//var_dump($_SESSION['uid']);
 if(!isset($_SESSION['uid'])){
-	$_SESSION['webim_online_time'] = 0;
 	$_SESSION['uid'] = $space["uid"];
+}
+if(!isset($_SESSION['stranger_ids'])){
+	foreach($friend_ids as $id){
+		$stranger_ids = ids_except($id, $stranger_ids);
+	}
+	$_SESSION['stranger_ids'] = $stranger_ids;
 }else{
-	if(!empty($_SESSION['webim_online_time']) && ($_SESSION['uid'] === $space['uid'])){
-		$_SESSION['webim_online_time'] += 1;
+	if(empty($stranger_ids)){
+		foreach($friend_ids as $id){
+			$_SESSION['stranger_ids'] = ids_except($id, $_SESSION['stranger_ids']);
+		}
+		$stranger_ids = $_SESSION['stranger_ids'];
 	}
 }
-if(!isset($_SESSION['friends']) || $_SESSION['webim_online_time']%50 == 0){
-	$friend_ids = ids_array($space['friends']);
-	$_SESSION['friends'] = $friend_ids;
-}else{
-	$friend_ids = $_SESSION['friends'];
-}
-//
+//var_dump($_SESSION['stranger_ids']);
 
 $buddy_ids = ids_array(gp("buddy_ids"));//正在聊天的联系人
 
@@ -73,12 +84,13 @@ if($platform == 'uchome'){
 }else if($platform == 'discuz'){
 	$data = array ('rooms'=> join(',', $room_ids),'buddies'=>join(',', array_unique(array_merge($friend_ids, $stranger_ids))), 'domain' => $_IMC['domain'], 'apikey' => $_IMC['apikey'], 'endpoint'=> $space['uid'], 'nick'=>to_unicode($nick));
 }
-
+//var_dump($data);
 $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
 $client->post('/presences/online', $data);
 $pageContents = $client->getContent();
 //TODO: handle errors!
 $pageData = json_decode($pageContents);
+//var_dump($pageData);
 if($client->status !="200"||empty($pageData->ticket)){
         $ticket ="";
 }else
@@ -89,7 +101,6 @@ if(empty($ticket)){
         exit();
 }
 $buddy_online_ids = ids_array($pageData->buddies);//在线好友列表ids
-//var_dump($pageData->buddies);
 $clientnum = $pageData->clientnum;
 $rooms_num = $pageData->roominfo;
 if(is_object($rooms_num)){
@@ -108,7 +119,17 @@ $imserver = 'http://'.$_IMC['imsvr'].':'.$_IMC['impoll'];
 $output['connection'] = array('domain' => $_IMC['domain'], 'ticket'=>$ticket, 'server'=>$imserver);//服务器连接
 
 $output['new_messages'] = $new_messages;
-$output['buddies'] = find_buddy($buddy_ids);
+if($platform === 'uchome'){
+	$output['buddies'] = find_buddy($buddy_ids);
+}else if($platform === 'discuz'){
+	foreach($friend_ids as $id){
+		if(in_array($id, $buddy_online_ids)){
+			$friends[] = $id;
+		}
+		$strangers = ids_except($id, $buddy_online_ids);
+	}
+	$output['buddies'] = find_buddy($strangers, $friends);
+}
 $output['rooms'] = $rooms;
 $output['histories'] = find_history($buddy_ids);
 

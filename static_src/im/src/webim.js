@@ -171,7 +171,7 @@ extend(webim.prototype, objectExtend,{
 				stranger_ids: self.stranger_ids.join(","),
                 //(self.isStrangerOn == "on")?self.stranger_ids.join(","):"",
 				room_ids:getTid(self.roomIdendify),
-				timestamp: new Date().getTime()
+				timestamp: parseInt(new Date().getTime()/1000)
 			},
 			url: self.options.urls.online,
 			success: function(data){

@@ -12,7 +12,7 @@ switch($platform){
 }
 session_start();
 if($platform === "discuz"){
-	if(!isset($_SESSION['timestamp'])){
+	if(!isset($_SESSION['timestamp'])){//第一次登陆，获得好友列表，保存第一次登陆的时间戳
 		require_once($_IMC['install_path'].'/config.inc.php');
 		require_once($_IMC['install_path'].'/uc_client/client.php');
 		$buddynum = uc_friend_totalnum($space['uid']);
@@ -21,7 +21,10 @@ if($platform === "discuz"){
 			$friend_ids[] = $value['friendid'];
 		}
 		$_SESSION['timestamp'] = gp('timestamp');
-	}else{
+		if(!isset($_SESSION['friend_ids'])){
+			$_SESSION['friend_ids'] = $friend_ids;
+		}
+	}else{//不是第一次登陆，比较与上次登录的时间差，大于10分钟重新获取好友列表
 		if(gp('timestamp') - $_SESSION['timestamp'] > $_IMC['timestamp']*60*1000){
 			require_once($_IMC['install_path'].'/config.inc.php');
 			require_once($_IMC['install_path'].'/uc_client/client.php');
@@ -31,6 +34,9 @@ if($platform === "discuz"){
 				$friend_ids[] = $value['friendid'];
 			}
 			$_SESSION['timestamp'] = gp('timestamp');
+			$_SESSION['friend_ids'] = $friend_ids;
+		}else{
+			$friend_ids = $_SESSION['friend_ids'];
 		}
 	}
 }else if($platform === "uchome"){
@@ -74,8 +80,6 @@ if(!isset($_SESSION['stranger_ids'])){
 		}
 		$stranger_ids = $_SESSION['stranger_ids'];
 	}
-}if(!isset($_SESSION['friend_ids'])){
-	$_SESSION['friend_ids'] = $friend_ids;
 }
 
 $buddy_ids = ids_array(gp("buddy_ids"));//正在聊天的联系人

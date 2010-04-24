@@ -10,13 +10,34 @@ switch($platform){
 		include_once($configRoot . 'uchome.php');
 		break;
 }
+session_start();
 if($platform === "discuz"){
-	require_once($_IMC['install_path'].'/config.inc.php');
-	require_once($_IMC['install_path'].'/uc_client/client.php');
-	$buddynum = uc_friend_totalnum($space['uid']);
-	$buddies = uc_friend_ls($space['uid'], 1, $buddynum, $buddynum);
-	foreach($buddies as $value){
-		$friend_ids[] = $value['friendid'];
+	if(!isset($_SESSION['timestamp'])){//第一次登陆，获得好友列表，保存第一次登陆的时间戳
+		require_once($_IMC['install_path'].'/config.inc.php');
+		require_once($_IMC['install_path'].'/uc_client/client.php');
+		$buddynum = uc_friend_totalnum($space['uid']);
+		$buddies = uc_friend_ls($space['uid'], 1, $buddynum, $buddynum);
+		foreach($buddies as $value){
+			$friend_ids[] = $value['friendid'];
+		}
+		$_SESSION['timestamp'] = gp('timestamp');
+		if(!isset($_SESSION['friend_ids'])){
+			$_SESSION['friend_ids'] = $friend_ids;
+		}
+	}else{//不是第一次登陆，比较与上次登录的时间差，大于10分钟重新获取好友列表
+		if(gp('timestamp') - $_SESSION['timestamp'] > $_IMC['timestamp']*60){
+			require_once($_IMC['install_path'].'/config.inc.php');
+			require_once($_IMC['install_path'].'/uc_client/client.php');
+			$buddynum = uc_friend_totalnum($space['uid']);
+			$buddies = uc_friend_ls($space['uid'], 1, $buddynum, $buddynum);
+			foreach($buddies as $value){
+				$friend_ids[] = $value['friendid'];
+			}
+			$_SESSION['timestamp'] = gp('timestamp');
+			$_SESSION['friend_ids'] = $friend_ids;
+		}else{
+			$friend_ids = $_SESSION['friend_ids'];
+		}
 	}
 }else if($platform === "uchome"){
 	$friend_ids = ids_array($space['friends']);
@@ -43,7 +64,6 @@ if(!$stranger_ids){
 
 //var_dump($stranger_ids);
 //modify by jinyu
-session_start();
 //var_dump($_SESSION['uid']);
 if(!isset($_SESSION['uid'])){
 	$_SESSION['uid'] = $space["uid"];
@@ -60,8 +80,6 @@ if(!isset($_SESSION['stranger_ids'])){
 		}
 		$stranger_ids = $_SESSION['stranger_ids'];
 	}
-}if(!isset($_SESSION['friend_ids'])){
-	$_SESSION['friend_ids'] = $friend_ids;
 }
 
 $buddy_ids = ids_array(gp("buddy_ids"));//正在聊天的联系人

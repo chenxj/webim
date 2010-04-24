@@ -25,9 +25,18 @@
 	// add your code here
 	update_history_table($db_session);
 	
+	function update_config(){ # 修改配置文件版本号
+		$fp = fopen(IM_ROOT.'config.php', 'r');
+		$configfile = fread($fp, filesize(IM_ROOT.'config.php'));
+		$configfile = trim($configfile);
+		$configfile = substr($configfile, -2) == '?>' ? substr($configfile, 0, -2) : $configfile;
+		$configfile = insertconfig($configfile, '/\$_IMC\["timestamp"\] =\s*.*?;/i', '$_IMC["timestamp"] = 10;');
+		$fp = fopen(IM_ROOT.'config.php', 'w');
+		@fwrite($fp, trim($configfile));
+		@fclose($fp);
+	}
 	
-	
-	
+////////////////	
 	
 	
 	function update_history_table($db_cur)

@@ -4,7 +4,7 @@ $_SGLOBAL = $_SCONFIG = $_SBLOCK = array();
 //安装平台根目录
 define('S_ROOT', substr(dirname(__FILE__), 0, -13));
 $platform = which_platform();
-$nextim_version="2.2.7";
+$nextim_version="2.2.8";
 
 switch($platform){
     case 'uchome':
@@ -724,7 +724,7 @@ function insertconfig($s, $find, $replace) {
 }
 
 function write_webim_config($file,$domain,$apikey,$theme,$charset,$broadcastid=null) {
-	global $url_path, $file_path, $platform;
+	global $url_path, $file_path, $platform , $nextim_version;
 	foreach($file_path as &$var){
 		$var = str_replace('\\', '/', $var);
 		$var = str_replace('//', '/', $var);
@@ -781,7 +781,7 @@ function write_webim_config($file,$domain,$apikey,$theme,$charset,$broadcastid=n
 	$configfile = insertconfig($configfile, '/\$_IMC_BACKUP\["director"\] =\s*.*?;/i', '$_IMC_BACKUP["director"] = "../WEBIM_BAK";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["update_url"\] =\s*.*?;/i', '$_IMC["update_url"] = "http://update.nextim.cn/";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["admin_ids"\] =\s*.*?;/i', '$_IMC["admin_ids"] = "' . $broadcastid . '";');
-	$configfile = insertconfig($configfile, '/\$_IMC\["timestamp"\] =\s*.*?;/i', '$_IMC["timestamp"] = " . 10 . ";');
+    $configfile = insertconfig($configfile, '/\$_IMC\["timestamp"\] =\s*.*?;/i', '$_IMC["timestamp"] = 10;');
 	$fp = fopen($file, 'w');
 	if(!($fp = @fopen($file, 'w'))) {
 		show_msg('请确认文件夹webim可');

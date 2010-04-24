@@ -26,6 +26,21 @@ if(empty($space))exit();
 $name = nick($space);
 
 $stranger_ids = ids_except($space["uid"], ids_array(gp("stranger_ids")));//陌生人
+
+
+/* if $friend_ids or $stranger_ids    = Null
+ *
+ * Change into Array().
+ * */
+if(!$friend_ids){
+    $friend_ids = array();
+}
+if(!$stranger_ids){
+    $stranger_ids = array();
+}
+
+
+
 //var_dump($stranger_ids);
 //modify by jinyu
 session_start();
@@ -48,7 +63,6 @@ if(!isset($_SESSION['stranger_ids'])){
 }if(!isset($_SESSION['friend_ids'])){
 	$_SESSION['friend_ids'] = $friend_ids;
 }
-//var_dump($_SESSION['stranger_ids']);
 
 $buddy_ids = ids_array(gp("buddy_ids"));//正在聊天的联系人
 
@@ -86,7 +100,6 @@ if($platform == 'uchome'){
 }else if($platform == 'discuz'){
 	$data = array ('rooms'=> join(',', $room_ids),'buddies'=>join(',', array_unique(array_merge($friend_ids, $stranger_ids))), 'domain' => $_IMC['domain'], 'apikey' => $_IMC['apikey'], 'endpoint'=> $space['uid'], 'nick'=>to_unicode($nick));
 }
-//var_dump($data);
 $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
 $client->post('/presences/online', $data);
 $pageContents = $client->getContent();

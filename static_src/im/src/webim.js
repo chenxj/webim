@@ -170,7 +170,8 @@ extend(webim.prototype, objectExtend,{
                 //(self.isStrangerOn == "on")?buddy_ids.join(","):"",
 				stranger_ids: self.stranger_ids.join(","),
                 //(self.isStrangerOn == "on")?self.stranger_ids.join(","):"",
-				room_ids:getTid(self.roomIdendify)
+				room_ids:getTid(self.roomIdendify),
+				timestamp: new Date().getTime()
 			},
 			url: self.options.urls.online,
 			success: function(data){

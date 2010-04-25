@@ -1,5 +1,4 @@
 <?php
-
 	error_reporting(0);
 	include_once('../config.php');
 	/*
@@ -36,9 +35,7 @@ function versionUpdate(){
 	$("#update_ctl").attr('disabled',true);
 	//$("#rollback_ctl").attr('disabled',true);
 	$.ajax({url:'update.php',
-
 		success:function(data){
- 
 			try{
 				var info = jQuery.parseJSON(data);
 			}catch(e){
@@ -236,6 +233,26 @@ function getversioninfo(){
 	);
 }
  
+function getversionNum(){
+		$.ajax({
+			url:"getversion.php",
+			success:function(data){
+				try{
+				  data = jQuery.parseJSON(data);
+				}catch(e){
+					return;
+				}
+				  $("#curr_ver_num").html(data.version);
+
+			},
+			error:function(req,txt,err){
+			},
+			complete:function(){
+			}
+		}
+	);
+
+}
 $(document).ready(function() {
 	init();
 	//init progressbar 
@@ -263,6 +280,7 @@ $(document).ready(function() {
 			}
 		}
 	);
+	getversionNum();
 	getversioninfo();
 });
 </script>
@@ -280,7 +298,7 @@ $(document).ready(function() {
 		<div id="container">
 			<div id="logo">
 				<a href="http://www.nextim.cn/">
-					<img id="logo" src="images/nextim.gif"/><span id="curr_ver">版本: <?php 	echo $_IMC["version"]; ?></span>
+					<img id="logo" src="images/nextim.gif"/><span id="curr_ver">版本: <span id="curr_ver_num"></span></span>
 				</a>
 				<div class="logo_txt">领先的社区网站WEBIM
 							<input name="btn3" id="update_ctl"   style="width:63px" type="button" value="升级" onclick="versionUpdate();">

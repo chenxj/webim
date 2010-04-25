@@ -58,7 +58,7 @@ extend(webim.prototype, objectExtend,{
 		var self = this;
 		self._unloadFun = window.onbeforeunload;
 		window.onbeforeunload = function(){
-			self.refresh();
+			//self.refresh();
 		};
 		self.trigger("ready");
 	},

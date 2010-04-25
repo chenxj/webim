@@ -143,17 +143,22 @@ function find_room(){
 	return $rooms;
 }
 
+
 function find_new_message(){
         global $_SGLOBAL,$_IMC,$space;
         $uid = $space['uid'];
         $messages = array();
         $ids = array();
-        $query = $_SGLOBAL['db']->query("SELECT * FROM ".im_tname('histories')." WHERE `from`='$uid' and send = 0 ORDER BY timestamp DESC LIMIT 100");
+	    $_SGLOBAL['db']->query("SET NAMES " . UC_DBCHARSET);
+        $query = $_SGLOBAL['db']->query("SELECT * FROM ".im_tname('histories')." WHERE `to`='$uid' and send = 0 ORDER BY timestamp DESC LIMIT 100");
         while ($value = $_SGLOBAL['db']->fetch_array($query)){
-                array_unshift($messages,array('to'=>$value['to'],'from'=>$value['from'],'style'=>$value['style'],'body'=>to_utf8($value['body']),'timestamp'=>$value['timestamp'], 'type' =>$value['type'], 'new' => 1));
+                array_unshift($messages,array('to'=>$value['to'],'from'=>$value['from'],'style'=>$value['style'],'body'=>$value['body'],'timestamp'=>$value['timestamp'], 'type' =>$value['type'], 'new' => 1));
         }
         return $messages;
 }
+
+
+
 function new_message_to_histroy(){
         global $_SGLOBAL,$_IMC,$space;
         $uid = $space['uid'];

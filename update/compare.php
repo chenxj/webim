@@ -41,7 +41,7 @@ function compare_file_hash($latest_file_hash,$user_file_hash)
 
 function get_downlaod_list()
 {
-    $path = "./file_index";
+    $path =   dirname(__file__) . "/file_index";
     $user_file_hash = get_user_file_hash($path);
     $latest_file_hash = get_latest_file_hash();
 

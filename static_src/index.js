@@ -18,26 +18,26 @@ function imlog(ui){
 	var menu = [{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"album","icon": path + "image\/app\/album.gif","link":"space.php?do=album"},{"title":"blog","icon": path + "image\/app\/blog.gif","link":"space.php?do=blog"},{"title":"thread","icon": path + "image\/app\/mtag.gif","link":"space.php?do=thread"},{"title":"share","icon": path + "image\/app\/share.gif","link":"space.php?do=share"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"}];
 	var log = webim.log;
 	webim.defaults.urls = {
-		online:path + "webim/api/online.php?platform=uchome",
-		online_list:path + "webim/api/online_list.php?platform=uchome",
-		offline:path + "webim/api/offline.php?platform=uchome",
-		message:path + "webim/api/message.php?platform=uchome",
-		refresh:path + "webim/api/refresh.php?platform=uchome",
-		status:path + "webim/api/status.php?platform=uchome"
+		online:path + "webim/api/online.php?platform=discuz",
+		online_list:path + "webim/api/online_list.php?platform=discuz",
+		offline:path + "webim/api/offline.php?platform=discuz",
+		message:path + "webim/api/message.php?platform=discuz",
+		refresh:path + "webim/api/refresh.php?platform=discuz",
+		status:path + "webim/api/status.php?platform=discuz"
 	};
-	webim.setting.defaults.url = path + "webim/api/setting.php?platform=uchome";
+	webim.setting.defaults.url = path + "webim/api/setting.php?platform=discuz";
 	webim.history.defaults.urls = {
-		load: path + "webim/api/histories.php?platform=uchome",
-		clear: path + "webim/api/clear_history.php?platform=uchome"
+		load: path + "webim/api/histories.php?platform=discuz",
+		clear: path + "webim/api/clear_history.php?platform=discuz"
 	};
 	webim.room.defaults.urls = {
-		member: path + "webim/api/members.php?platform=uchome",
-		join: path + "webim/api/join.php?platform=uchome",
-		leave: path + "webim/api/leave.php?platform=uchome"
+		member: path + "webim/api/members.php?platform=discuz",
+		join: path + "webim/api/join.php?platform=discuz",
+		leave: path + "webim/api/leave.php?platform=discuz"
 	};
-	webim.buddy.defaults.url = path + "webim/api/buddies.php?platform=uchome";
-	webim.notification.defaults.url = path + "webim/api/notifications.php?platform=uchome";
-	webim.hotpost.defaults.url = path + "webim/api/hotpost.php?platform=uchome";
+	webim.buddy.defaults.url = path + "webim/api/buddies.php?platform=discuz";
+	webim.notification.defaults.url = path + "webim/api/notifications.php?platform=discuz";
+	webim.hotpost.defaults.url = path + "webim/api/hotpost.php?platform=discuz";
 	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});
 	var soundUrls = {
 		lib: path + "webim/static/assets/sound.swf",

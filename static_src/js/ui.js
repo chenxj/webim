@@ -230,7 +230,11 @@ extend(webimUI.prototype, objectExtend, {
 			           	titlename = (d.type === "unicast")?d.nick:roomData[id].name;
 				   }
            			   if (d.type === "unicast"){
-				   	self.addChat(id, null, null, titlename);
+				   	if (d.from === "0"){
+						self.addBroadcast(id,"update",null,"NextIM");
+					}else{
+				   		self.addChat(id, null, null, titlename);
+					}
           			   }else if (d.type === "broadcast"){
 				   	self.addBroadcast(id,null,null,titlename);
 	  			   }else{
@@ -336,19 +340,31 @@ extend(webimUI.prototype, objectExtend, {
 		a && layout.focusChat(a);
 		// status end
 	},
-	addBroadcast: function(){
-
+	addBroadcast: function(id,type,y,title){
 		var self = this,layout = self.layout,im = self.im,history = self.im.history,u = im.data.user,isadmin =self._isAdmin(u.id);
-		var _info = {id:0,name:tpl("<%=broadcast%>"),isadmin:isadmin};
+		var _info = "";
+
 		if (layout.chat(0))return;
+
+		if (type === "update"){
+			_info = {id:0,name:"NextIM",isadmin:false};
+		}else{
+			_info = {id:0,name:tpl("<%=broadcast%>"),isadmin:isadmin};
+		}
 		var h = history.get(0);
 		if(!h)history.load('0');
-		layout.addBroadcast(_info,extend({user:u,history:h,block:true,emot:isadmin,clearHistory:true,member:false,msgType:"broadcast"},{name:tpl("<%=broadcast%>")}), null);
-		var broadcast = layout.chat(0);
-		broadcast.bind("sendMsg",function(msg){
-			im.sendMsg(msg);		
-			history.handle(msg);
-		});
+		if (type === "update"){
+			layout.addBroadcast(_info,extend({user:u,history:h,block:true,emot:false,clearHistory:false,member:false,msgType:"broadcast"},{name:"NextIM"}), null);
+			layout.chat(0);
+
+		}else{
+			layout.addBroadcast(_info,extend({user:u,history:h,block:true,emot:isadmin,clearHistory:true,member:false,msgType:"broadcast"},{name:tpl("<%=broadcast%>")}), null);
+			var broadcast = layout.chat(0);
+			broadcast.bind("sendMsg",function(msg){
+				im.sendMsg(msg);		
+				history.handle(msg);
+			});
+		}
 	},
 	_isAdmin:function(id){
 		var self = this,im = self.im,ids = im.admins;

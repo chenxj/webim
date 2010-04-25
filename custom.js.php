@@ -13,14 +13,24 @@ switch($platform){
 		break;
 }
 
-
-$menu = array(
-	array("title" => 'doing',"icon" =>"image/app/doing.gif","link" => "space.php?do=doing"),
-	array("title" => 'album',"icon" =>"image/app/album.gif","link" => "space.php?do=album"),
-	array("title" => 'blog',"icon" =>"image/app/blog.gif","link" => "space.php?do=blog"),
-	array("title" => 'thread',"icon" =>"image/app/mtag.gif","link" => "space.php?do=thread"),
-	array("title" => 'share',"icon" =>"image/app/share.gif","link" => "space.php?do=share")
-);
+if($platform === 'uchome'){
+	$menu = array(
+		array("title" => 'doing',"icon" =>"image/app/doing.gif","link" => "space.php?do=doing"),
+		array("title" => 'album',"icon" =>"image/app/album.gif","link" => "space.php?do=album"),
+		array("title" => 'blog',"icon" =>"image/app/blog.gif","link" => "space.php?do=blog"),
+		array("title" => 'thread',"icon" =>"image/app/mtag.gif","link" => "space.php?do=thread"),
+		array("title" => 'share',"icon" =>"image/app/share.gif","link" => "space.php?do=share")
+	);
+}else if($platform === 'discuz'){
+	$menu = array(
+		array("title" => 'search',"icon" =>"","link" => "search.php"),
+		array("title" => 'faq',"icon" =>"","link" => "faq.php"),
+		array("title" => 'nav',"icon" =>"","link" => "misc.php?action=nav"),
+		array("title" => 'feeds',"icon" =>"","link" => "index.php?op=feeds"),
+		array("title" => 'sms',"icon" =>"","link" => "pm.php")
+	);
+}
+$menu[] = array("title" => 'imlogo',"icon" =>"","link" => "http://www.nextim.cn");
 if($_SCONFIG['my_status']) {
 	if(is_array($_SGLOBAL['userapp'])) { 
 		foreach($_SGLOBAL['userapp'] as $value) { 

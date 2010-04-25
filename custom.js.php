@@ -27,6 +27,7 @@ if($platform === 'uchome'){
 		array("title" => 'faq',"icon" =>"","link" => "faq.php"),
 		array("title" => 'nav',"icon" =>"","link" => "misc.php?action=nav"),
 		array("title" => 'feeds',"icon" =>"","link" => "index.php?op=feeds"),
+		array("title" => 'sms',"icon" =>"","link" => "pm.php")
 	);
 }
 $menu[] = array("title" => 'imlogo',"icon" =>"","link" => "http://www.nextim.cn");

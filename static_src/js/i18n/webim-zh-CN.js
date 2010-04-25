@@ -72,7 +72,13 @@ webim.ui.i18n.store('zh-CN',{
         "friend":"好友",
         "stranger":"陌生人",
         "room":"群组",
-	"broadcast":"站长广播"
+	"broadcast":"站长广播",
+	"search": "搜索",
+	"faq": "帮助",
+	"nav": "导航",
+	"feeds": "热点",
+	"sms": "短消息"
+
 });
 webim.ui.i18n.store('zh-CN',{
         "doing": "记录",

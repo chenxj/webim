@@ -68,6 +68,11 @@ webim.ui.i18n.store('zh-CN',{
 		"room":"群組",
 		"broadcast":"站長廣播",
 		"empty room":"尚無群組"
+		"search": "搜索",
+		"faq": "帮助",
+		"nav": "导航",
+		"feeds": "热点",
+		"sms": "短消息"
 });
 webim.ui.i18n.store('zh-CN',{
 		"doing": "記錄",

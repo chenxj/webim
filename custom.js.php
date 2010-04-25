@@ -58,7 +58,7 @@ $setting = json_encode(setting());
                     join: path + "webim/api/join.php?platform=" + platform,
                     leave: path + "webim/api/leave.php?platform=" + platform
     	};
-	webim.buddy.defaults.url = path + "webim/api/buddies.php?platform=" + platform;
+	webim.buddy.defaults.url = path + "webim/api/user_info.php?platform=" + platform;
 	//webim.notification.defaults.url = path + "webim/api/notifications.php?platform=" + platform;
     
 	if ( platform === "discuz" ){
@@ -90,6 +90,7 @@ $setting = json_encode(setting());
 		im = imUI.im;
 		var adminids = "<?php echo $_IMC['admin_ids'] ?>";
 		im.admins = adminids?adminids.split(","):"";
+        	im.isStrangerOn = "on";
 		layout = imUI.layout;
                 imUI.addApp("room");
 		if ( platform === "discuz" ){
@@ -129,9 +130,10 @@ $setting = json_encode(setting());
 	}
 	if (window.ActiveXObject){
 		setTimeout(function(){document.body?create():webim.ui.ready(create);},1000);
-		setTimeout(function(){webim.ui.ready(init);},1000);
+		setTimeout(function(){init();/*webim.ui.ready(init);*/},1000);
 	}else{
 		document.body?create():webim.ui.ready(create);
-		webim.ui.ready(init);
+		//webim.ui.ready(init);
+		init();
 	}
 })(webim);

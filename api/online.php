@@ -1,6 +1,4 @@
 <?php
-
-
 $platform = $_GET['platform'];
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 include_once($configRoot . 'http_client.php');
@@ -12,31 +10,71 @@ switch($platform){
 		include_once($configRoot . 'uchome.php');
 		break;
 }
+<<<<<<< HEAD
 
 global $space;
 
+=======
+session_start();
+if($platform === "discuz"){
+	if(!isset($_SESSION['timestamp']) || (gp('timestamp') - $_SESSION['timestamp'] > $_IMC['timestamp']*60)){//第一次登陆，获得好友列表，保存第一次登陆的时间戳
+		//require_once($_IMC['install_path'].'/config.inc.php');
+		//require_once($_IMC['install_path'].'/uc_client/client.php');
+		$buddynum = uc_friend_totalnum($space['uid']);
+		$buddies = uc_friend_ls($space['uid'], 1, $buddynum, $buddynum);
+		foreach($buddies as $value){
+			$friend_ids[] = $value['friendid'];
+		}
+		$_SESSION['timestamp'] = gp('timestamp');
+		if(!isset($_SESSION['friend_ids'])){
+			$_SESSION['friend_ids'] = $friend_ids;
+		}
+	}else{//不是第一次登陆，比较与上次登录的时间差，大于10分钟重新获取好友列表
+		$friend_ids = $_SESSION['friend_ids'];
+	}
+}else if($platform === "uchome"){
+	$friend_ids = ids_array($space['friends']);
+}
+//var_dump($friend_ids);
+>>>>>>> fb104abfd0f86c52fdf01bd7d3a36c760f35e4c5
 if(empty($space))exit();
 $name = nick($space);
 
 $stranger_ids = ids_except($space["uid"], ids_array(gp("stranger_ids")));//陌生人
 
+
+/* if $friend_ids or $stranger_ids    = Null
+ *
+ * Change into Array().
+ * */
+if(!$friend_ids){
+    $friend_ids = array();
+}
+if(!$stranger_ids){
+    $stranger_ids = array();
+}
+
+
+
+//var_dump($stranger_ids);
 //modify by jinyu
-session_start();
+//var_dump($_SESSION['uid']);
 if(!isset($_SESSION['uid'])){
-	$_SESSION['webim_online_time'] = 0;
 	$_SESSION['uid'] = $space["uid"];
+}
+if(!isset($_SESSION['stranger_ids'])){
+	foreach($friend_ids as $id){
+		$stranger_ids = ids_except($id, $stranger_ids);
+	}
+	$_SESSION['stranger_ids'] = $stranger_ids;
 }else{
-	if(!empty($_SESSION['webim_online_time']) && ($_SESSION['uid'] === $space['uid'])){
-		$_SESSION['webim_online_time'] += 1;
+	if(empty($stranger_ids)){
+		foreach($friend_ids as $id){
+			$_SESSION['stranger_ids'] = ids_except($id, $_SESSION['stranger_ids']);
+		}
+		$stranger_ids = $_SESSION['stranger_ids'];
 	}
 }
-if(!isset($_SESSION['friends']) || $_SESSION['webim_online_time']%50 == 0){
-	$friend_ids = ids_array($space['friends']);
-	$_SESSION['friends'] = $friend_ids;
-}else{
-	$friend_ids = $_SESSION['friends'];
-}
-//
 
 $buddy_ids = ids_array(gp("buddy_ids"));//正在聊天的联系人
 
@@ -73,12 +111,12 @@ if($platform == 'uchome'){
 }else if($platform == 'discuz'){
 	$data = array ('rooms'=> join(',', $room_ids),'buddies'=>join(',', array_unique(array_merge($friend_ids, $stranger_ids))), 'domain' => $_IMC['domain'], 'apikey' => $_IMC['apikey'], 'endpoint'=> $space['uid'], 'nick'=>to_unicode($nick));
 }
-
 $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
 $client->post('/presences/online', $data);
 $pageContents = $client->getContent();
 //TODO: handle errors!
 $pageData = json_decode($pageContents);
+//var_dump($pageData);
 if($client->status !="200"||empty($pageData->ticket)){
         $ticket ="";
 }else
@@ -88,8 +126,9 @@ if(empty($ticket)){
         echo '{status: "'.$client->status.'", "errorMsg":"'.$pageContents.'"}';
         exit();
 }
-$buddy_online_ids = ids_array($pageData->buddies);//在线好友列表ids
-//var_dump($pageData->buddies);
+//var_dump($pageData);
+$buddy_online_ids = ids_array($pageData->buddies);//online ids
+//$_SESSION['online_ids'] = $buddy_online_ids;
 $clientnum = $pageData->clientnum;
 $rooms_num = $pageData->roominfo;
 if(is_object($rooms_num)){
@@ -108,10 +147,22 @@ $imserver = 'http://'.$_IMC['imsvr'].':'.$_IMC['impoll'];
 $output['connection'] = array('domain' => $_IMC['domain'], 'ticket'=>$ticket, 'server'=>$imserver);//服务器连接
 
 $output['new_messages'] = $new_messages;
-$output['buddies'] = find_buddy($buddy_ids);
+///
+if($platform === 'uchome'){
+	$output['buddies'] = find_buddy($buddy_ids);
+}else if($platform === 'discuz'){
+	foreach($buddy_online_ids as $id){
+		if(in_array($id, $friend_ids)){
+			$friends[] = $id;
+        } else {
+            $stranger[] = $id; 
+        }
+	}
+	$output['buddies'] = find_buddy($strangers, $friends);
+}
 $output['rooms'] = $rooms;
 $output['histories'] = find_history($buddy_ids);
-
+//var_dump($output['buddies']);
 new_message_to_histroy(); //新消息转到历史记录
 
 echo json_encode($output);

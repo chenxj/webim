@@ -1,6 +1,13 @@
 <?php
+	error_reporting(0);
 	include_once('../config.php');
+	/*
+	$arrids = explode(',',$_IMC['admin_ids']);
 
+	echo $space['uid'];
+	if (!in_array($space['uid'],$arrids)){
+		header("Location:{$_IMC['install_url']}");	
+	}*/ 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -29,7 +36,6 @@ function versionUpdate(){
 	//$("#rollback_ctl").attr('disabled',true);
 	$.ajax({url:'update.php',
 		success:function(data){
- 
 			try{
 				var info = jQuery.parseJSON(data);
 			}catch(e){
@@ -39,6 +45,7 @@ function versionUpdate(){
 			var data = jQuery.parseJSON(data);
             if(data.isok)
             {
+		run_af_up();
                 $("#version_txt").html("非常棒！NextIM已经升级至最新版本");
 			   			 // $("#update_ctl").attr('disabled',true);
                // $("#rollback_ctl").attr('disabled',false);
@@ -58,6 +65,7 @@ function versionUpdate(){
 		}
 	});
 	//poll("Update");
+
 }
 function rollBack(){
 	pollable = true;
@@ -122,11 +130,28 @@ function checkbtnusable(){
 }
 
 function init(){
-		//$("#spaceused1").progressBar({height:12,width:120,	barImage:'images/progressbg_green.gif'});
+		//$("#spaceused1").progressBar({height:12,width:120,barImage:'images/progressbg_green.gif'});
  		$("#errmsg").css("display","none");
  		$("#update_ctl").attr('disabled',true);
  		$("#version_txt").html("");
 		//$("#rollback_ctl").attr('disabled',false);
+}
+
+function run_af_up(){
+	$.ajax({
+		url:"run_after_update.php",
+		success:function(data){
+			var info = new Object();
+			try{
+				info = jQuery.parseJSON(data);
+			}catch(e){
+			
+			}
+			if (data.isok){
+			
+			}
+		},
+		error:function(){}});
 }
 
 function control(){
@@ -142,21 +167,23 @@ function poll(preAction){
 			success:function(data){
 				var iscontinue = true;
 				if (data == ""){
-						control();
-						return;
+					control();
+					return;
 				}
 				try{
 					data = jQuery.parseJSON(data);
 				}catch(e){
-					//alert(e);	
 					iscontinue=false;
 					return;
 				}
 				
 				Action = data.state;
- 				if (data.percent && data.percent == 100){
- 					percent = 100;	
- 				}else{
+ 				if (data.isok){
+ 					//percent = 100;	
+					//run_af_up();
+ 				}
+				/*
+				else{
  					percent += (step/20);	
  				}
 				if (!data.isok){
@@ -181,6 +208,7 @@ function poll(preAction){
 						showProgress("备份现有版本...",percent);
 						break;
 					}
+					*/
 				},
 			error:function(req,txt,err){
 				iscontinue = false;		
@@ -205,6 +233,26 @@ function getversioninfo(){
 	);
 }
  
+function getversionNum(){
+		$.ajax({
+			url:"getversion.php",
+			success:function(data){
+				try{
+				  data = jQuery.parseJSON(data);
+				}catch(e){
+					return;
+				}
+				  $("#curr_ver_num").html(data.version);
+
+			},
+			error:function(req,txt,err){
+			},
+			complete:function(){
+			}
+		}
+	);
+
+}
 $(document).ready(function() {
 	init();
 	//init progressbar 
@@ -220,8 +268,9 @@ $(document).ready(function() {
 				}
 				if (data.update_now ){
 					$("#version_txt").html("可更新版本 "+data.version );
+	 				$("#update_ctl").attr('disabled',false);
 				}else{
-					$("#version_txt").html("当前为最新版本 "+data.version );
+					$("#version_txt").html("当前为最新版本 ");
 	 				$("#update_ctl").attr('disabled',true);
 				}	 
 			},
@@ -231,6 +280,7 @@ $(document).ready(function() {
 			}
 		}
 	);
+	getversionNum();
 	getversioninfo();
 });
 </script>
@@ -248,7 +298,7 @@ $(document).ready(function() {
 		<div id="container">
 			<div id="logo">
 				<a href="http://www.nextim.cn/">
-					<img id="logo" src="images/nextim.gif"/><span id="curr_ver">版本: <?php 	echo $_IMC["version"]; ?></span>
+					<img id="logo" src="images/nextim.gif"/><span id="curr_ver">版本: <span id="curr_ver_num"></span></span>
 				</a>
 				<div class="logo_txt">领先的社区网站WEBIM
 							<input name="btn3" id="update_ctl"   style="width:63px" type="button" value="升级" onclick="versionUpdate();">

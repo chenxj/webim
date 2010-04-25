@@ -1,5 +1,10 @@
 <?php
 include_once("common.php");
+include_once('../config.php');
+$arrids = explode(',',$_IMC['admin_ids']);
+if (!in_array($space['uid'],$arrids)){
+	header("Location:{$_IMC['install_url']}");	
+}
 error_reporting(0);
 
 function get_user_file_hash($path)
@@ -20,7 +25,7 @@ function compare_file_hash($latest_file_hash,$user_file_hash)
 {
     $update_list = array();
     foreach($latest_file_hash as $rel_path => $data) {
-        if( array_key_exists("md5",$data) ){
+        if( array_key_exists($rel_path,$user_file_hash) ){
             if($latest_file_hash[$rel_path]['md5'] == $user_file_hash[$rel_path]['md5'] )
                 continue;
         }

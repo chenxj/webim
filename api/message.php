@@ -32,7 +32,7 @@ $pageContents = $client->getContent();
 //TODO:send => true if forward message successfully.
 //
 $body = from_utf8($body);
-$columns = "`uid`,`send`,`to`,`from`,`style`,`body`,`timestamp`,`type`";
+$columns = "`send`,`to`,`from`,`style`,`body`,`timestamp`,`type`";
 if($type=="multicast"){//add by free.wang
     $to = $to + $_IMC['room_id_pre'];//add by free.wang
 }//add by free.wang
@@ -40,15 +40,13 @@ if($type=="multicast"){//add by free.wang
 //add by Harvey.
 if ($type == "broadcast"){
 	if(strpos($_IMC["admin_ids"], $from) !== false){
-		$values_from = "'$from','1','$to','$from','$style','$body','$time','$type'";
-        	$values_to = "'$to','$send','$to','$from','$style','$body','$time','$type'";
-        	$_SGLOBAL['db']->query("INSERT INTO ".im_tname('histories')." ($columns) VALUES ($values_from)");
+		$values_from = "'1','$to','$from','$style','$body','$time','$type'";
+        $_SGLOBAL['db']->query("INSERT INTO ".im_tname('histories')." ($columns) VALUES ($values_from)");
 	}
 	require_once('../update/notify_update.php');
 }
 else{
-	$values_from = "'$from','1','$to','$from','$style','$body','$time','$type'";
-	$values_to = "'$to','$send','$to','$from','$style','$body','$time','$type'";
+	$values_from = "'1','$to','$from','$style','$body','$time','$type'";
 	$_SGLOBAL['db']->query("INSERT INTO ".im_tname('histories')." ($columns) VALUES ($values_from)");
 }
 

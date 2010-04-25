@@ -1,6 +1,12 @@
 <?php
 include_once('common.php');
-
+include_once('../config.php');
+/*
+$arrids = explode(',',$_IMC['admin_ids']);
+if (!in_array($space['uid'],$arrids)){
+	header("Location:{$_IMC['install_url']}");	
+}
+*/
 
 function _get_version()
 {
@@ -153,6 +159,7 @@ function run($version,$download_index){ # 执行更新, 参数是将更新到的
 			}
 		}
 	}
+	//include_once("run_after_update.php");
 	return true;
 }// func update
 

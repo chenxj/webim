@@ -9,7 +9,6 @@ CREATE TABLE webim_histories (
   `timestamp` double DEFAULT NULL,
   `todel` tinyint(1) NOT NULL DEFAULT '0',
   `fromdel` tinyint(1) NOT NULL DEFAULT '0',
-  `uid` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `todel` (`todel`),
   KEY `fromdel` (`fromdel`),

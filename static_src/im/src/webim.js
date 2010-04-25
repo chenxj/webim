@@ -58,7 +58,7 @@ extend(webim.prototype, objectExtend,{
 		var self = this;
 		self._unloadFun = window.onbeforeunload;
 		window.onbeforeunload = function(){
-			self.refresh();
+			//self.refresh();
 		};
 		self.trigger("ready");
 	},
@@ -166,9 +166,12 @@ extend(webim.prototype, objectExtend,{
 			type:"post",
 			dataType: "json",
 			data:{                                
-				buddy_ids: (self.isStrangerOn == "on")?buddy_ids.join(","):"",
-				stranger_ids: (self.isStrangerOn == "on")?self.stranger_ids.join(","):"",
-				room_ids:getTid(self.roomIdendify)
+				buddy_ids: buddy_ids.join(","),
+                //(self.isStrangerOn == "on")?buddy_ids.join(","):"",
+				stranger_ids: self.stranger_ids.join(","),
+                //(self.isStrangerOn == "on")?self.stranger_ids.join(","):"",
+				room_ids:getTid(self.roomIdendify),
+				timestamp: parseInt(new Date().getTime()/1000)
 			},
 			url: self.options.urls.online,
 			success: function(data){

@@ -31,12 +31,13 @@ $pageContents = $client->getContent();
 
 //TODO:send => true if forward message successfully.
 //
-$body = from_utf8($body);
 $columns = "`send`,`to`,`from`,`style`,`body`,`timestamp`,`type`";
 if($type=="multicast"){//add by free.wang
     $to = $to + $_IMC['room_id_pre'];//add by free.wang
 }//add by free.wang
 
+
+$_SGLOBAL['db']->query("SET NAMES " . UC_DBCHARSET);
 //add by Harvey.
 if ($type == "broadcast"){
 	if(strpos($_IMC["admin_ids"], $from) !== false){

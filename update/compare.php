@@ -25,7 +25,7 @@ function compare_file_hash($latest_file_hash,$user_file_hash)
 {
     $update_list = array();
     foreach($latest_file_hash as $rel_path => $data) {
-        if( array_key_exists("md5",$data) ){
+        if( array_key_exists($rel_path,$user_file_hash) ){
             if($latest_file_hash[$rel_path]['md5'] == $user_file_hash[$rel_path]['md5'] )
                 continue;
         }

@@ -30,6 +30,8 @@ def get_all_file(dir):
                 continue
             if os.path.getsize(abs_path) == 0:
                 continue
+#            if os.path.basename(abs_path).endswith("png"):
+#                continue
 
             ins_path = "webim/" + (abs_path.split("webim/"))[1]
             md5 = ( commands.getoutput("md5sum " + abs_path).split(" ") )[0]

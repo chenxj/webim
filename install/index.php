@@ -4,7 +4,7 @@ $_SGLOBAL = $_SCONFIG = $_SBLOCK = array();
 //安装平台根目录
 define('S_ROOT', substr(dirname(__FILE__), 0, -13));
 $platform = which_platform();
-$nextim_version="2.2.8";
+$nextim_version="2.2.4";
 
 switch($platform){
     case 'uchome':
@@ -240,6 +240,7 @@ if (submitcheck('imsubmit')) {
 		}
 		$alltables = "";
 		if($platform == 'uchome'){
+		$myisamtype = $_SGLOBAL['db']->version()>'4.1'?" ENGINE=MYISAM".(empty($_SC['dbcharset'])?'':" DEFAULT CHARSET=$_SC[dbcharset]" ):" TYPE=MYISAM";
 			foreach ($tables as $key => $tablename) {
 				$sqltype = $myisamtype;
 				$_SGLOBAL['db']->query("DROP TABLE IF EXISTS $tablename");
@@ -253,6 +254,7 @@ if (submitcheck('imsubmit')) {
 				$alltables .= '</li>';
 			}
 		}else if($platform == 'discuz'){
+			$myisamtype = mysql_get_server_info()>'4.1'?" ENGINE=MYISAM".(empty($_SC['dbcharset'])?'':" DEFAULT CHARSET=$_SC[dbcharset]" ):" TYPE=MYISAM";
 			foreach ($tables as $key => $tablename) {
 				$sqltype = $myisamtype;
 				$db->query("DROP TABLE IF EXISTS $tablename");
@@ -724,7 +726,7 @@ function insertconfig($s, $find, $replace) {
 }
 
 function write_webim_config($file,$domain,$apikey,$theme,$charset,$broadcastid=null) {
-	global $url_path, $file_path, $platform , $nextim_version;
+	global $url_path, $file_path, $platform;
 	foreach($file_path as &$var){
 		$var = str_replace('\\', '/', $var);
 		$var = str_replace('//', '/', $var);
@@ -781,7 +783,6 @@ function write_webim_config($file,$domain,$apikey,$theme,$charset,$broadcastid=n
 	$configfile = insertconfig($configfile, '/\$_IMC_BACKUP\["director"\] =\s*.*?;/i', '$_IMC_BACKUP["director"] = "../WEBIM_BAK";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["update_url"\] =\s*.*?;/i', '$_IMC["update_url"] = "http://update.nextim.cn/";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["admin_ids"\] =\s*.*?;/i', '$_IMC["admin_ids"] = "' . $broadcastid . '";');
-    $configfile = insertconfig($configfile, '/\$_IMC\["timestamp"\] =\s*.*?;/i', '$_IMC["timestamp"] = 10;');
 	$fp = fopen($file, 'w');
 	if(!($fp = @fopen($file, 'w'))) {
 		show_msg('请确认文件夹webim可');

@@ -34,6 +34,7 @@ zip -r $NAME.zip $NAME
 
 
 
+
 case $2 in
     all)
         echo "Compressing archive ..."

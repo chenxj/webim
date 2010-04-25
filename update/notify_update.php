@@ -29,7 +29,7 @@ else{
     {
         $_SGLOBAL['db']->query("SET NAMES " . UC_DBCHARSET);
         $time = microtime(true)*1000;
-        $body = "WebIM有新的更新！请访问以下网址了解详情!".$_IMC['install_url']."update/index.php";
+        $body = "WebIM有新的更新！请访问以下网址了解详情!".$_IMC['install_url']."webim/update/index.php";
         $columns = "`send`,`to`,`from`,`style`,`body`,`timestamp`,`type`";
         $values_from = "'0','$admin','webim','','$body','$time','unicast'";
         $db_obj->query("INSERT INTO ".im_tname('histories')." ($columns) VALUES ($values_from)");

@@ -73,7 +73,7 @@ webim.ui.i18n.store('zh-CN',{
 		"nav": "導航",
 		"feeds": "熱點",
 		"sms": "短消息",
-		"imlogo": "NextIM官方"
+		"imlogo": "NextIM"
 });
 webim.ui.i18n.store('zh-CN',{
 		"doing": "記錄",

@@ -23,14 +23,14 @@ if($platform === 'uchome'){
 	);
 }else if($platform === 'discuz'){
 	$menu = array(
-		array("title" => 'search',"icon" =>"","link" => "search.php"),
-		array("title" => 'faq',"icon" =>"","link" => "faq.php"),
-		array("title" => 'nav',"icon" =>"","link" => "misc.php?action=nav"),
-		array("title" => 'feeds',"icon" =>"","link" => "index.php?op=feeds"),
-		array("title" => 'sms',"icon" =>"","link" => "pm.php")
+		array("title" => 'search',"icon" =>"webim/static/images/search.png","link" => "search.php"),
+		array("title" => 'faq',"icon" =>"webim/static/images/faq.png","link" => "faq.php"),
+		array("title" => 'nav',"icon" =>"webim/static/images/nav.png","link" => "misc.php?action=nav"),
+		array("title" => 'feeds',"icon" =>"webim/static/images/feeds.png","link" => "index.php?op=feeds"),
+		array("title" => 'sms',"icon" =>"webim/static/images/msm.png","link" => "pm.php")
 	);
 }
-$menu[] = array("title" => 'imlogo',"icon" =>"","link" => "http://www.nextim.cn");
+$menu[] = array("title" => 'imlogo',"icon" =>"webim/static/images/nextim.gif","link" => "http://www.nextim.cn");
 if($_SCONFIG['my_status']) {
 	if(is_array($_SGLOBAL['userapp'])) { 
 		foreach($_SGLOBAL['userapp'] as $value) { 

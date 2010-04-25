@@ -13,6 +13,7 @@ switch($platform){
 		break;
 }
 
+global $space;
 
 if(empty($space))exit();
 $name = nick($space);
@@ -47,7 +48,6 @@ for($i=0;$i<count($new_messages);$i++){
 }
 
 //Login webim server.
-$nick = to_utf8($name);
 $setting = setting();
 $block_list = is_array($setting->block_list) ? $setting->block_list : array();
 
@@ -102,7 +102,7 @@ $output['buddy_online_ids'] = join(",", $buddy_online_ids);
 $output['clientnum'] = $clientnum;
 $output['server_time'] = microtime(true)*1000;
 
-$output['user']=array('id'=>$space['uid'], 'name'=>to_utf8($name), 'pic_url'=>avatar($space['uid'],'small',true), 'status'=>'', 'presence' => 'online', 'status_time'=>'', 'url'=>'space.php?uid='.$space['uid']);//用户信息
+$output['user']=array('id'=>$space['uid'], 'name'=>$name, 'pic_url'=>avatar($space['uid'],'small',true), 'status'=>'', 'presence' => 'online', 'status_time'=>'', 'url'=>'space.php?uid='.$space['uid']);//用户信息
 
 $imserver = 'http://'.$_IMC['imsvr'].':'.$_IMC['impoll'];
 $output['connection'] = array('domain' => $_IMC['domain'], 'ticket'=>$ticket, 'server'=>$imserver);//服务器连接

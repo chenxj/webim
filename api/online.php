@@ -10,11 +10,6 @@ switch($platform){
 		include_once($configRoot . 'uchome.php');
 		break;
 }
-<<<<<<< HEAD
-
-global $space;
-
-=======
 session_start();
 if($platform === "discuz"){
 	if(!isset($_SESSION['timestamp']) || (gp('timestamp') - $_SESSION['timestamp'] > $_IMC['timestamp']*60)){//第一次登陆，获得好友列表，保存第一次登陆的时间戳
@@ -36,7 +31,6 @@ if($platform === "discuz"){
 	$friend_ids = ids_array($space['friends']);
 }
 //var_dump($friend_ids);
->>>>>>> fb104abfd0f86c52fdf01bd7d3a36c760f35e4c5
 if(empty($space))exit();
 $name = nick($space);
 

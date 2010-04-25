@@ -1,10 +1,11 @@
 <?php
 include_once("common.php");
 include_once('../config.php');
-$arrids = explode(',',$_IMC['admin_ids']);
+/*$arrids = explode(',',$_IMC['admin_ids']);
 if (!in_array($space['uid'],$arrids)){
 	header("Location:{$_IMC['install_url']}");	
 }
+ */
 error_reporting(0);
 
 function get_user_file_hash($path)

@@ -346,18 +346,16 @@ extend(webimUI.prototype, objectExtend, {
 
 		if (layout.chat(0))return;
 
-		if (type === "update"){
-			_info = {id:0,name:"NextIM",isadmin:false};
-		}else{
-			_info = {id:0,name:tpl("<%=broadcast%>"),isadmin:isadmin};
-		}
 		var h = history.get(0);
 		if(!h)history.load('0');
+
 		if (type === "update"){
-			layout.addBroadcast(_info,extend({user:u,history:h,block:true,emot:false,clearHistory:false,member:false,msgType:"broadcast"},{name:"NextIM"}), null);
+			_info = {id:0,name:"NextIM",isadmin:false};
+			layout.addBroadcast(_info,extend({user:u,history:null,block:true,emot:false,clearHistory:false,member:false,msgType:"broadcast"},{name:"NextIM"}), null);
 			layout.chat(0);
 
 		}else{
+			_info = {id:0,name:tpl("<%=broadcast%>"),isadmin:isadmin};
 			layout.addBroadcast(_info,extend({user:u,history:h,block:true,emot:isadmin,clearHistory:true,member:false,msgType:"broadcast"},{name:tpl("<%=broadcast%>")}), null);
 			var broadcast = layout.chat(0);
 			broadcast.bind("sendMsg",function(msg){

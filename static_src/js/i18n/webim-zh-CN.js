@@ -77,7 +77,8 @@ webim.ui.i18n.store('zh-CN',{
 	"faq": "帮助",
 	"nav": "导航",
 	"feeds": "热点",
-	"sms": "短消息"
+	"sms": "短消息",
+	"imlogo": "NextIM官方"
 
 });
 webim.ui.i18n.store('zh-CN',{

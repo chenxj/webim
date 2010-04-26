@@ -193,7 +193,7 @@ function find_history($ids){
 					array('to'=>$value['to'],
 						'from'=>$value['from'],
 						'style'=>$value['style'],
-						'body'=>to_utf8($value['body']),
+						'body'=>$value['body'],
 						'timestamp'=>$value['timestamp'], 
 						'type' =>$value['type'], 'new' => 0));
 			}
@@ -213,7 +213,7 @@ function find_history($ids){
 						array('to'=>$value['to'],
 							'from'=>$value['from'],
 							'style'=>$value['style'],
-							'body'=>to_utf8($value['body']),
+							'body'=>$value['body'],
 							'timestamp'=>$value['timestamp'], 
 							'type' =>$value['type'], 
 							'new' => 0));
@@ -231,10 +231,10 @@ function find_history($ids){
 					$nick = nick($value); 
 					array_unshift($list,
 						array('to'=>$value['to'],
-							'nick'=>to_utf8($nick),
+							'nick'=>$nick,
 							'from'=>$value['from'],
 							'style'=>$value['style'],
-							'body'=>to_utf8($value['body']), 
+							'body'=>$value['body'], 
 							'type' => $value['type'], 
 							'timestamp'=>$value['timestamp']));
 				}

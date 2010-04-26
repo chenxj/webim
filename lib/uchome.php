@@ -168,8 +168,8 @@ function new_message_to_histroy(){
 //$uid = $space['uid'] : current user
 //$id : user communacated with current user 
 function find_history($ids){
-
 	global $_SGLOBAL,$_IMC,$space;
+    $_SGLOBAL['db']->query("SET NAMES " . UC_DBCHARSET);
 	$uid = $space['uid'];
 	$histories = array();
 	$ids = ids_array($ids);

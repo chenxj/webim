@@ -72,7 +72,7 @@ $setting = json_encode(setting());
 	//webim.notification.defaults.url = path + "webim/api/notifications.php?platform=" + platform;
     
 	if ( platform === "discuz" ){
-		webim.hotpost.defaults.url = path + "webim/api/hotpost.php?platform=" + platform;
+		//webim.hotpost.defaults.url = path + "webim/api/hotpost.php?platform=" + platform;
 		webim.defaults.urls.online = path + "webim/api/online.php?platform=" + platform + "&room_ids=" + getTid();
 	}
 

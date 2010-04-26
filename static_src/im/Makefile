@@ -38,7 +38,6 @@ DZ_WEBIM_FILES = ${SRC_DIR}/core.js\
 	${SRC_DIR}/buddy.js\
 	${SRC_DIR}/room.js\
 	${SRC_DIR}/history.js\
-	${SRC_DIR}/hotpost.js\
 
 
 WEBIM_VER = `cat ${PREFIX}/version.txt`

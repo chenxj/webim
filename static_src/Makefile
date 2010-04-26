@@ -52,7 +52,6 @@ UI_CSS_FILES = ${CSS_BASE_FILES}
 
 UC_UI_CSS_FILES = ${UI_CSS_FILES}
 DZ_UI_CSS_FILES = ${UI_CSS_FILES}\
-		  ${CSS_SRC_DIR}/hotpost.css
 
 UI_JS_FILES = ${JS_SRC_DIR}/intro.js\
 	${JS_BASE_FILES}\
@@ -79,7 +78,6 @@ DZ_UI_ALL_JS_FILES = ${DZ_IM}\
 		${JS_SRC_DIR}/ui.chat.js\
 		${JS_SRC_DIR}/ui.broadcast.js\
 		${JS_SRC_DIR}/ui.room.js\
-		${JS_SRC_DIR}/ui.hotpost.js\
 		${JS_SRC_DIR}/outro.js
 
 UC_UI_ALL_JS_FILES = ${UC_IM}\

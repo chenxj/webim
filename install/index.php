@@ -797,17 +797,26 @@ function write_template(){
 	$path = S_ROOT;
 	foreach($file_path as $key=>$path){
 		@$fp = fopen($path. $templete_folder . 'footer.htm', 'r');
-		$htmfile = fread($fp, filesize($path . $templete_folder . 'footer.htm'));
+		$fileLen = filesize($path . $templete_folder . 'footer.htm');
+		$htmfile = fread($fp, $fileLen);
 		$htmfile = trim($htmfile);
 		list($htmfile, $foot) = explode("</body>", $htmfile);
 		fclose($fp);
-		if($key == "uchome")
-			$htmfile .= "\r\n"."<!--{template webim_uchome}-->\r\n</body>".$foot;
-		else
-			$htmfile .= "\r\n"."<!--{template webim_discuz}-->\r\n</body>".$foot;
-		@$fp = fopen($path . $templete_folder . 'footer.htm', 'w');
-		fwrite($fp, trim($htmfile));
-		fclose($fp);
+		
+		if (strpos($htmfile, '<!--{template webim_') === false)
+		{
+			if($key == "uchome")
+			{
+				$htmfile .= "\r\n"."<!--{template webim_uchome}-->\r\n</body>".$foot;
+			}
+			else
+			{
+				$htmfile .= "\r\n"."<!--{template webim_discuz}-->\r\n</body>".$foot;
+			}
+			@$fp = fopen($path . $templete_folder . 'footer.htm', 'w');
+			fwrite($fp, trim($htmfile));
+			fclose($fp);
+		}
 	}
 }
 
@@ -836,12 +845,15 @@ function write_basic_config($file) {
 	$configfile = substr($configfile, -2) == '?>' ? substr($configfile, 0, -2) : $configfile;
 	fclose($fp);
 
-	$configfile = insertconfig($configfile, '.*', "include_once '".$file_path['$platform']."webim".DIRECTORY_SEPARATOR."config.php';");
-	$fp = fopen($file, 'w');
-	if(!($fp = @fopen($file, 'w'))) {
-		show_msg('请确认文件 config.php 可写', $ERRORCODE['can_not_write_file']);
+	if(strpos($configfile, 'webim'.DIRECTORY_SEPARATOR.'config.php') === false)
+	{
+		$configfile = insertconfig($configfile, '.*', "include_once '".$file_path['$platform']."webim".DIRECTORY_SEPARATOR."config.php';");
+		$fp = fopen($file, 'w');
+		if(!($fp = @fopen($file, 'w'))) {
+			show_msg('请确认文件 config.php 可写', $ERRORCODE['can_not_write_file']);
+		}
+		@fwrite($fp, trim($configfile));
+		@fclose($fp);
 	}
-	@fwrite($fp, trim($configfile));
-	@fclose($fp);
 }
 ?>

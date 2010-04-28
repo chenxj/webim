@@ -1074,9 +1074,9 @@ extend(webim.prototype, objectExtend,{
 			type:"post",
 			dataType: "json",
 			data:{                                
-				buddy_ids: "",
+				buddy_ids: buddy_ids.join(","),
                 //(self.isStrangerOn == "on")?buddy_ids.join(","):"",
-				stranger_ids: "",
+				stranger_ids: self.stranger_ids.join(","),
                 //(self.isStrangerOn == "on")?self.stranger_ids.join(","):"",
 				room_ids:getTid(self.roomIdendify),
 				timestamp: parseInt(new Date().getTime()/1000)
@@ -1717,13 +1717,49 @@ model("history",{
 
 });
 
+/**/
+/*
+hotpost//
+attributes
+methods
+handle(data) //handle data and distribute events
+events
+data
+*/
+/*
+* {"from":"","text":"","link":""}
+*/
+
+model("hotpost",{
+	url: "webim/hotpost"
+},{
+	grep: function(val, n){
+		return val && val.text;
+	},
+	handle: function(data){
+		var self = this;
+		data = grep(makeArray(data), self.grep);
+		if(data.length)self.trigger("data", [data]);
+	},
+	load: function(){
+		var self = this, options = self.options;
+		ajax({
+			url: options.url,
+			cache: false,
+			dataType: "json",
+			context: self,
+			success: self.handle
+		});
+	}
+});
+
 /*!
  * Webim UI v2.1.0pre
  * http://www.nextim.cn/
  *
  * Copyright (c) 2009 Hidden
  *
- * Date:   Mon Apr 26 23:20:21 2010 +0800
+ * Date:   Wed Apr 28 19:54:26 2010 +0800
  * Revision: 
  */
 (function(window,document,undefined){
@@ -5162,5 +5198,92 @@ widget("room",{
 	},
 	destroy: function(){
 	}
+});
+//
+/* ui.hotpost:
+ *
+ options:
+ 	data [{}]
+ attributes：
+	template
+	tpl_li
+ methods:
+	template
+	_li_tpl
+	_fitUI
+	add
+ destroy()
+ events: 
+
+ */
+app("hotpost",{
+	init: function(){
+		//hotpost start
+		var model = new webim.hotpost();
+		var widget = new webimUI.hotpost();
+		this.layout.addApp(widget, {
+			title: i18n("hotpost"),
+			icon: "hotpost",
+			sticky: false,
+			onlyIcon: true,
+			isMinimize: true
+		}, "setting");
+		model.bind("data",function( data){
+			widget.$.ul.innerHTML = "";
+			widget.add(data);
+		});
+		setTimeout(function(){
+			model.load();
+		}, 2000);
+		//hotpost end
+	}
+});
+widget("hotpost",{
+        template: '<div id="webim-hotpost" class="webim-hotpost">\
+                        <ul id=":ul"><%=list%></ul>\
+                        <div id=":empty" class="webim-hotpost-empty"><%=empty hotpost%></div>\
+                  </div>',
+        tpl_li: '<li><a href="<%=link%>" target="<%=target%>"><%=text%></a></li>'
+},{
+        _init: function(){
+                var self = this, element = self.element, options = self.options;
+                var win = options.window;
+		options.data && options.data.length && hide(self.$.empty);
+        },
+	template: function(){
+		var self = this, temp = [], data = self.options.data;
+		data && each(data, function(i, val){
+			temp.push(self._li_tpl(val));
+		});
+		return tpl(self.options.template,{
+		   list:temp.join("")
+		});
+	},
+	_li_tpl: function(data){
+		return tpl(this.options.tpl_li, {
+                        text: data.text,
+                        link: data.link,
+                        target: "" 
+		});
+	},
+	_fitUI:function(){
+		var el = this.element;
+		if(el.clientHeight > 300)
+			el.style.height = 300 + "px";
+	},
+	add: function(data){
+		var self = this;
+		if(isArray(data)){
+			each(data, function(i,val){
+				self.add(val);
+			});
+			return;
+		}
+                var $ = self.$;
+		hide($.empty);
+		$.ul.appendChild(createElement(self._li_tpl(data)));
+	},
+        destroy: function(){
+        }
 });
 })(window, document);

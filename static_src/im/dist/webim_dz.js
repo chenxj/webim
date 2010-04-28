@@ -1074,9 +1074,9 @@ extend(webim.prototype, objectExtend,{
 			type:"post",
 			dataType: "json",
 			data:{                                
-				buddy_ids: "",
+				buddy_ids: buddy_ids.join(","),
                 //(self.isStrangerOn == "on")?buddy_ids.join(","):"",
-				stranger_ids: "",
+				stranger_ids: self.stranger_ids.join(","),
                 //(self.isStrangerOn == "on")?self.stranger_ids.join(","):"",
 				room_ids:getTid(self.roomIdendify),
 				timestamp: parseInt(new Date().getTime()/1000)
@@ -1715,5 +1715,41 @@ model("history",{
 		}
 	}
 
+});
+
+/**/
+/*
+hotpost//
+attributes
+methods
+handle(data) //handle data and distribute events
+events
+data
+*/
+/*
+* {"from":"","text":"","link":""}
+*/
+
+model("hotpost",{
+	url: "webim/hotpost"
+},{
+	grep: function(val, n){
+		return val && val.text;
+	},
+	handle: function(data){
+		var self = this;
+		data = grep(makeArray(data), self.grep);
+		if(data.length)self.trigger("data", [data]);
+	},
+	load: function(){
+		var self = this, options = self.options;
+		ajax({
+			url: options.url,
+			cache: false,
+			dataType: "json",
+			context: self,
+			success: self.handle
+		});
+	}
 });
 

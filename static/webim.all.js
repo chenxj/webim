@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2009 Hidden
  *
- * Date:   Mon Apr 26 23:20:21 2010 +0800
+ * Date:   Wed Apr 28 19:54:26 2010 +0800
  * Revision: 
  */
 (function(window, document, undefined){
@@ -1085,9 +1085,9 @@ extend(webim.prototype, objectExtend,{
 			type:"post",
 			dataType: "json",
 			data:{                                
-				buddy_ids: "",
+				buddy_ids: buddy_ids.join(","),
                 //(self.isStrangerOn == "on")?buddy_ids.join(","):"",
-				stranger_ids: "",
+				stranger_ids: self.stranger_ids.join(","),
                 //(self.isStrangerOn == "on")?self.stranger_ids.join(","):"",
 				room_ids:getTid(self.roomIdendify),
 				timestamp: parseInt(new Date().getTime()/1000)
@@ -1735,7 +1735,7 @@ model("history",{
  *
  * Copyright (c) 2009 Hidden
  *
- * Date:   Mon Apr 26 23:20:21 2010 +0800
+ * Date:   Wed Apr 28 19:54:26 2010 +0800
  * Revision: 
  */
 (function(window,document,undefined){

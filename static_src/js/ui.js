@@ -401,7 +401,7 @@ extend(webimUI.prototype, objectExtend, {
 				else room.initMember(id);
 			}, 500);
 			isArray(info.members) && each(info.members, function(n, info){
-				chat.addMember(info.id, info.name, info.id == im.data.user.id);
+				chat.addMember(info, info.id == im.data.user.id);
 			});
 
 		}else{

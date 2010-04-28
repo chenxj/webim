@@ -1,4 +1,5 @@
 <?php 
+
 $platform = $_GET['platform'];
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 include_once($configRoot . 'http_client.php');
@@ -38,6 +39,8 @@ if($type=="multicast"){//add by free.wang
 
 
 $_SGLOBAL['db']->query("SET NAMES " . UC_DBCHARSET);
+
+$body=from_utf8($body);
 //add by Harvey.
 if ($type == "broadcast"){
 	if(strpos($_IMC["admin_ids"], $from) !== false){

@@ -727,7 +727,7 @@ function insertconfig($s, $find, $replace) {
 
 function write_webim_config($file,$domain,$apikey,$theme,$charset,$broadcastid=null) {
 	global $url_path, $file_path, $platform,$nextim_version;
-	foreach($file_path as &$var){
+	foreach($file_path as $var){
 		$var = str_replace('\\', '/', $var);
 		$var = str_replace('//', '/', $var);
 	}

@@ -104,3 +104,18 @@
 	width:1.8em;
 	background-image:url(../images/icons/room.gif);
 }
+.webim-member ul li{
+}
+.webim-member ul img{
+}
+.webim-member ul a {
+	text-decoration:none;
+	text-align:center
+}
+.webim-member ul a span{
+	left:auto;
+	margin-top:2px;
+	margin-left:2px;
+	position:absolute;
+	
+}

@@ -366,9 +366,9 @@ plugin.add("chat","block",{
 webimUI.chat.defaults.member = true;
 extend(webimUI.chat.prototype, {
 	addMember: function(info, disable){
-		var self = this, ul = self.$.member, li = self.memberLi, id = info.id,name=id.name,pic = info.pic;
+		var self = this, ul = self.$.member, li = self.memberLi, id = info.id,name=info.nick,pic = info.pic;
 		if(li[id])return;
-		var el = createElement('<li><a class="'+ (disable ? 'ui-state-disabled' : '') +'" href="'+ id +'">'+ "<img width='25' src=" pic + "/>" + name +'</a></li>');
+		var el = createElement('<li><a class="'+ (disable ? 'ui-state-disabled' : '') + '" href="' + id + '">' + '<img width="25" src="'+ pic + '" /><span>' + name +'<span></a></li>' );
 		addEvent(el.firstChild,"click",function(e){
 			preventDefault(e);
 			disable || self.trigger("select", [{id: id, name: name}]);

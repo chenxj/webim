@@ -49,7 +49,7 @@ app("room",{
       room.join(id,u);
 		}).bind("addMember", function(room_id, info){
 			var c = layout.chat(room_id);
-			c && c.addMember(info.id, info.name, info.id == im.data.user.id);
+			c && c.addMember(info, info.id == im.data.user.id);
 			updateRoom(room.get(room_id));
 		}).bind("removeMember", function(room_id, info){
 			var c = layout.chat(room_id);

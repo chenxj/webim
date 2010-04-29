@@ -365,10 +365,10 @@ plugin.add("chat","block",{
 });
 webimUI.chat.defaults.member = true;
 extend(webimUI.chat.prototype, {
-	addMember: function(id, name, disable){
-		var self = this, ul = self.$.member, li = self.memberLi;
+	addMember: function(info, disable){
+		var self = this, ul = self.$.member, li = self.memberLi, id = info.id,name=id.name,pic = info.pic;
 		if(li[id])return;
-		var el = createElement('<li><a class="'+ (disable ? 'ui-state-disabled' : '') +'" href="'+ id +'">'+ name +'</a></li>');
+		var el = createElement('<li><a class="'+ (disable ? 'ui-state-disabled' : '') +'" href="'+ id +'">'+ "<img width='25' src=" pic + "/>" + name +'</a></li>');
 		addEvent(el.firstChild,"click",function(e){
 			preventDefault(e);
 			disable || self.trigger("select", [{id: id, name: name}]);

@@ -13,11 +13,25 @@ switch($platform){
 }
 $ticket = gp('ticket');
 $room_id = gp('id');
-if(!empty($ticket)) {
-	$data = array('ticket'=>$ticket, 'domain'=>$_IMC['domain'], 'apikey'=>$_IMC['apikey'], 'rooms'=>$room_id, 'endpoint' => $space['uid']);
-	$client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
-	$client->post('/room/members', $data);
-	$pageContents = $client->getContent();
-	echo $pageContents;
+if(empty($ticket)) {
+    exit;
 }
+$data = array('ticket'=>$ticket, 'domain'=>$_IMC['domain'], 'apikey'=>$_IMC['apikey'], 'rooms'=>$room_id, 'endpoint' => $space['uid']);
+$client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
+$client->post('/room/members', $data);
+$pageContents = $client->getContent();
+$result  = json_decode($pageContents,TRUE);
+unset($client);
+unset($pageContents);
+foreach($result as $group =>$v )
+{
+    foreach($result[$group] as $k=>$v)
+    {
+        $uid = $result[$group][$k]['id'];
+        $pic = avatar($uid);
+        $result[$group][$k]['pic'] = $pic;
+    }
+}
+echo  json_encode($result);
+unset($result);
 ?>

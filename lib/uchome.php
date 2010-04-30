@@ -5,6 +5,15 @@ define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
 include_once($_IMC['uchome_path'].'common.php');
 include_once(IM_ROOT . "json.php");
 
+
+
+if( !function_exists('user_pic') ) {
+function user_pic($uid, $size='small') {
+		return UC_API.'/avatar.php?uid='.$uid.'&size='.$size;
+}
+}
+
+
 function _iconv($s,$t,$data){
 	if( function_exists('iconv') ) {
         return iconv($s,$t,$data);
@@ -119,7 +128,7 @@ function find_buddy($ids){
                 }
                 //$jid = $id.'@'.$_IMC['domain'];
                 //$status_time = empty($value['dateline'])?'':sgmdate('',$value['dateline'],1);
-                $buddies[$id]=array('id'=>$id,'name'=> to_utf8($nick),'pic_url' =>avatar($id,'small',true), 'status'=>'' ,'status_time'=>'','url'=>'space.php?uid='.$id,'group'=> $group, 'default_pic_url' => UC_API.'/images/noavatar_small.gif');
+                $buddies[$id]=array('id'=>$id,'name'=> to_utf8($nick),'pic_url' =>user_pic($id,'small'), 'status'=>'' ,'status_time'=>'','url'=>'space.php?uid='.$id,'group'=> $group, 'default_pic_url' => UC_API.'/images/noavatar_small.gif');
         }
         return $buddies;
 }

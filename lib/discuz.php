@@ -14,8 +14,7 @@ $_SGLOBAL['db'] = $db;
 $_SGLOBAL['timestamp'] = time();
 $_SC['gzipcompress'] = true;
 $_SC['tablepre']=$tablepre;
-$_SC['dbcharset'] = UC_DBCHARSET;
-$_SC['charset']   = UC_CHARSET;
+$_SC['dbcharset'] = $_SC['charset'] = UC_DBCHARSET;
 
 
 //DISCUZ API FUN
@@ -29,8 +28,8 @@ function getspace($uid){
 	return $space;
 }
 }
-if( !function_exists('avatar') ) {
-function avatar($uid, $size='small') {
+if( !function_exists('user_pic') ) {
+function user_pic($uid, $size='small') {
 		return UC_API.'/avatar.php?uid='.$uid.'&size='.$size;
 }
 }
@@ -223,7 +222,7 @@ function find_buddy($strangers, $friends = array()){
 			while($value = $_SGLOBAL['db']->fetch_array($query_fid)){
 				$id = $value['uid'];
 				$nick = nick($value);
-				$buddies[$id]=array('id'=>$id,'name'=> to_utf8($nick),'pic_url' =>avatar($id,'small',true), 'status'=>'' ,'status_time'=>'','url'=>'','group'=> "friend", 'default_pic_url' => UC_API.'/images/noavatar_small.gif');
+				$buddies[$id]=array('id'=>$id,'name'=> to_utf8($nick),'pic_url' =>user_pic($id,'small'), 'status'=>'' ,'status_time'=>'','url'=>'','group'=> "friend", 'default_pic_url' => UC_API.'/images/noavatar_small.gif');
 			}
 		}
 		$_SGLOBAL['db']->query("SET NAMES " . UC_DBCHARSET);
@@ -233,7 +232,7 @@ function find_buddy($strangers, $friends = array()){
 			while($value = $_SGLOBAL['db']->fetch_array($query_sid)){
 				$id = $value['uid'];
 				$nick = nick($value);
-				$buddies[$id]=array('id'=>$id,'name'=>to_utf8($nick),'pic_url' =>avatar($id,'small',true), 'status'=>'' ,'status_time'=>'','url'=>'','group'=> "stranger", 'default_pic_url' => UC_API.'/images/noavatar_small.gif');
+				$buddies[$id]=array('id'=>$id,'name'=>to_utf8($nick),'pic_url' =>user_pic($id,'small'), 'status'=>'' ,'status_time'=>'','url'=>'','group'=> "stranger", 'default_pic_url' => UC_API.'/images/noavatar_small.gif');
 			}
 		}
 		return $buddies;

@@ -28,7 +28,7 @@ foreach($result as $group =>$v )
     foreach($result[$group] as $k=>$v)
     {
         $uid = $result[$group][$k]['id'];
-        $pic = avatar($uid);
+        $pic = user_pic($uid);
         $result[$group][$k]['pic'] = $pic;
     }
 }

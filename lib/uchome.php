@@ -1,4 +1,5 @@
 <?php
+
 include_once '..' . DIRECTORY_SEPARATOR . 'config.php';
 error_reporting(0);
 define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);

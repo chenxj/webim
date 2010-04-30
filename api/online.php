@@ -143,7 +143,7 @@ $output['buddy_online_ids'] = join(",", $buddy_online_ids);
 $output['clientnum'] = $clientnum;
 $output['server_time'] = microtime(true)*1000;
 
-$output['user']=array('id'=>$space['uid'], 'name'=>$name, 'pic_url'=>avatar($space['uid'],'small',true), 'status'=>'', 'presence' => 'online', 'status_time'=>'', 'url'=>'space.php?uid='.$space['uid']);//用户信息
+$output['user']=array('id'=>$space['uid'], 'name'=>$name, 'pic_url'=>user_pic($space['uid']), 'status'=>'', 'presence' => 'online', 'status_time'=>'', 'url'=>'space.php?uid='.$space['uid']);//用户信息
 
 $imserver = 'http://'.$_IMC['imsvr'].':'.$_IMC['impoll'];
 $output['connection'] = array('domain' => $_IMC['domain'], 'ticket'=>$ticket, 'server'=>$imserver);//服务器连接

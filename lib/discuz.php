@@ -1,4 +1,5 @@
 <?php
+
 error_reporting(E_ALL & ~E_NOTICE);
 define('WEBIM_ROOT', substr(dirname(__FILE__), 0, -4));
 //API DEFINE

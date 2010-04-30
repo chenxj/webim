@@ -4,7 +4,7 @@ $_SGLOBAL = $_SCONFIG = $_SBLOCK = array();
 //安装平台根目录
 define('S_ROOT', substr(dirname(__FILE__), 0, -13));
 $platform = which_platform();
-$nextim_version="2.2.24";
+$nextim_version="2.2.25";
 
 switch($platform){
     case 'uchome':

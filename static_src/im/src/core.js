@@ -151,7 +151,11 @@ function grep( elems, callback, inv ) {
 	// Go through the array, only saving the items
 	// that pass the validator function
 	for ( var i = 0, length = elems.length; i < length; i++ ) {
-		if ( !inv !== !callback( elems[ i ], i ) ) {
+		if ( inv == undefined){
+			if (callback(elems[i],i)){
+				ret.push(elems[i]);
+			}
+		}else if ( !inv !== !callback( elems[ i ], i ) ) {
 			ret.push( elems[ i ] );
 		}
 	}

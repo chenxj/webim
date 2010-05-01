@@ -4,3 +4,6 @@ static
 static/*
 static_src/dist
 static_src/im/dist
+update/temp_download
+update/temp_backup
+update/update.log

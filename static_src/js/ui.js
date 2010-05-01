@@ -265,8 +265,17 @@ extend(webimUI.prototype, objectExtend, {
 		function mapFrom(a){ return a.from; }
 
 		im.bind("presence",function(data){
-			offline = grep(data, grepOffline);
-			online = grep(data, grepOnline);
+			var offline = [];
+			var online = [];
+			if (data){
+				for (var i = 0 ; i < data.length; i++){
+					if (data[i].type == "offline"){
+						offline.push(data[i]);
+					}else if (data[i].type == "online"){
+						online.push(data[i]);
+					}
+				}
+			}
 			buddy.online(map(online, mapFrom), buddyUI.window.isMinimize());
 			buddy.offline(map(offline, mapFrom));
 			//chatlink.online(online);

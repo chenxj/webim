@@ -140,7 +140,7 @@ $setting = json_encode(setting());
 	}
 	if (window.ActiveXObject){
 		setTimeout(function(){document.body?create():webim.ui.ready(create);},1000);
-		setTimeout(function(){init();/*webim.ui.ready(init);*/},1000);
+		setTimeout(function(){webim.ui.ready(init);},1000);
 	}else{
 		document.body?create():webim.ui.ready(create);
 		//webim.ui.ready(init);

@@ -783,6 +783,7 @@ function write_webim_config($file,$domain,$apikey,$theme,$charset,$broadcastid=n
 	$configfile = insertconfig($configfile, '/\$_IMC_BACKUP\["director"\] =\s*.*?;/i', '$_IMC_BACKUP["director"] = "../WEBIM_BAK";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["update_url"\] =\s*.*?;/i', '$_IMC["update_url"] = "http://update.nextim.cn/";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["admin_ids"\] =\s*.*?;/i', '$_IMC["admin_ids"] = "' . $broadcastid . '";');
+	$configfile = insertconfig($configfile, '/\$_IMC\["timestamp"\] =\s*.*?;/i', '$_IMC["timestamp"] = 10;');
 	$fp = fopen($file, 'w');
 	if(!($fp = @fopen($file, 'w'))) {
 		show_msg('请确认文件夹webim可');

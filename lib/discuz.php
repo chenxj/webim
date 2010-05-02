@@ -15,7 +15,8 @@ $_SGLOBAL['db'] = $db;
 $_SGLOBAL['timestamp'] = time();
 $_SC['gzipcompress'] = true;
 $_SC['tablepre']=$tablepre;
-$_SC['dbcharset'] = $_SC['charset'] = UC_DBCHARSET;
+$_SC['dbcharset'] = UC_DBCHARSET;
+$_SC['charset'] = UC_CHARSET;
 
 
 //DISCUZ API FUN

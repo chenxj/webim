@@ -8,10 +8,10 @@ include_once(IM_ROOT . "json.php");
 
 
 
-if( !function_exists('user_pic') ) {
-function user_pic($uid, $size='small') {
-		return UC_API.'/avatar.php?uid='.$uid.'&size='.$size;
-}
+function user_pic($uid){
+    if( !function_exists('avatar') ) 
+        return UC_API.'/avatar.php?uid='.$uid.'&size=small';
+    return avatar($uid,"small",true);
 }
 
 
@@ -129,7 +129,7 @@ function find_buddy($ids){
                 }
                 //$jid = $id.'@'.$_IMC['domain'];
                 //$status_time = empty($value['dateline'])?'':sgmdate('',$value['dateline'],1);
-                $buddies[$id]=array('id'=>$id,'name'=> to_utf8($nick),'pic_url' =>user_pic($id,'small'), 'status'=>'' ,'status_time'=>'','url'=>'space.php?uid='.$id,'group'=> $group, 'default_pic_url' => UC_API.'/images/noavatar_small.gif');
+                $buddies[$id]=array('id'=>$id,'name'=> to_utf8($nick),'pic_url' =>user_pic($id), 'status'=>'' ,'status_time'=>'','url'=>'space.php?uid='.$id,'group'=> $group, 'default_pic_url' => UC_API.'/images/noavatar_small.gif');
         }
         return $buddies;
 }

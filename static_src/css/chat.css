@@ -8,7 +8,9 @@
         margin-left: -5.5em;
         margin-top: -1.8em;
 }
-.webim .webim-user-pic img{
+*html  .webim-user-pic {
+	height:50px;
+	position:absolute;
 }
 .webim .webim-user-status{
         height: 3em;

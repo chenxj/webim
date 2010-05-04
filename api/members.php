@@ -30,7 +30,7 @@ foreach($result as $group =>$v )
         $uid = $result[$group][$k]['id'];
         $pic = user_pic($uid);
         $result[$group][$k]['pic'] = $pic;
-        $result[$group][$k]['default_pic_url'] = UC_API.'/images/noavatar_small.gif'
+        $result[$group][$k]['default_pic_url'] = UC_API.'/images/noavatar_small.gif';
     }
 }
 echo  json_encode($result);

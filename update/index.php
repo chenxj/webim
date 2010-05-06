@@ -33,6 +33,8 @@ function versionUpdate(){
 	pollable = true;
     $("#version_txt").html("请等待 NEXTIM 正在自动下载更新文件");
 	$("#update_ctl").attr('disabled',true);
+	$("#load").css('display','');
+	
 	//$("#rollback_ctl").attr('disabled',true);
 	$.ajax({url:'update.php',
 		success:function(data){
@@ -43,16 +45,17 @@ function versionUpdate(){
 			}
  
 			var data = jQuery.parseJSON(data);
-            if(data.isok)
-            {
-		run_af_up();
-                $("#version_txt").html("非常棒！NextIM已经升级至最新版本");
+            		if(data.isok)
+            		{
+				run_af_up();
+               			 $("#version_txt").html("非常棒！NextIM已经升级至最新版本");
 			   			 // $("#update_ctl").attr('disabled',true);
                // $("#rollback_ctl").attr('disabled',false);
-                return ;
-            }
-          $("#version_txt").html("请确保webim文件夹(包括子目录)为777权限");
-			    $("#update_ctl").attr('disabled',false);
+				$("#load").css('display','');
+                		return ;
+           		 }
+         		 $("#version_txt").html("请确保webim文件夹(包括子目录)为777权限");
+			 $("#update_ctl").attr('disabled',false);
          //$("#rollback_ctl").attr('disabled',false);
  
 		},
@@ -132,6 +135,7 @@ function checkbtnusable(){
 function init(){
 		//$("#spaceused1").progressBar({height:12,width:120,barImage:'images/progressbg_green.gif'});
  		$("#errmsg").css("display","none");
+ 		$("#load").css("display","none");
  		$("#update_ctl").attr('disabled',true);
  		$("#version_txt").html("");
 		//$("#rollback_ctl").attr('disabled',false);
@@ -300,8 +304,8 @@ $(document).ready(function() {
 				<a href="http://www.nextim.cn/">
 					<img id="logo" src="images/nextim.gif"/><span id="curr_ver">版本: <span id="curr_ver_num"></span></span>
 				</a>
-				<div class="logo_txt">领先的社区网站WEBIM
-							<input name="btn3" id="update_ctl"   style="width:63px" type="button" value="升级" onclick="versionUpdate();">
+				<div class="logo_txt">领先的社区网站WEBIM <img id="load" src="images/loading.gif" />
+					<input name="btn3" id="update_ctl"   style="width:63px" type="button" value="升级" onclick="versionUpdate();">
 				</div>
 				
 			</div>

@@ -1,13 +1,26 @@
 <?php
-	error_reporting(0);
-	include_once('../config.php');
-	/*
+error_reporting(0);
+include_once('../config.php');
+
+/*
+*  check the platform 
+*  Uchome ? Discuz ?  PhpWind?
+*
+*/
+if(file_exists(S_ROOT.'./data')){
+    include_once("../lib/uchome.php");
+}
+if(file_exists(S_ROOT.'./forumdata')){
+    include_once("../lib/discuz.php");
+}
+
+	
 	$arrids = explode(',',$_IMC['admin_ids']);
 
 	echo $space['uid'];
 	if (!in_array($space['uid'],$arrids)){
 		header("Location:{$_IMC['install_url']}");	
-	}*/ 
+	} 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>

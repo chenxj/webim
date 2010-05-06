@@ -25,7 +25,7 @@ pre { border: 1px dashed #ddd; color: #444; background-color: #eee; width: 100%;
  
 
 #status ul li{margin-left:20px;font-size:13px;}
- 
+#load {margin-left:4px;} 
 #version_txt{font-size:13px;color:blue;margin-left:24px;margin-top:-15px;position:absolute}
 * html version_txt{ display:block;}
 #update_ctl {margin-left:12px;}

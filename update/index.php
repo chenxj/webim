@@ -19,7 +19,7 @@ if(file_exists(S_ROOT.'./forumdata')){
 
 	echo $space['uid'];
 	if (!in_array($space['uid'],$arrids)){
-		header("Location:{$_IMC['install_url']}");	
+//		header("Location:{$_IMC['install_url']}");	
 	} 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -148,7 +148,7 @@ function checkbtnusable(){
 function init(){
 		//$("#spaceused1").progressBar({height:12,width:120,barImage:'images/progressbg_green.gif'});
  		$("#errmsg").css("display","none");
- 		$("#load").css("display","none");
+ 		//$("#load").css("display","none");
  		$("#update_ctl").attr('disabled',true);
  		$("#version_txt").html("");
 		//$("#rollback_ctl").attr('disabled',false);

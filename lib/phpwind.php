@@ -1,14 +1,10 @@
 <?php
-error_reporting(E_ALL & ~E_NOTICE);
-define('WEBIM_ROOT', substr(dirname(__FILE__), 0, -4));
-//API DEFINE
-include_once(WEBIM_ROOT . '/config.php');
-require_once($_IMC['install_path'].'/config.inc.php');
-define('API_COMMFILE','/include/common.inc.php');
-define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
-include_once($_IMC['discuz_path'] . API_COMMFILE);
-include_once(WEBIM_ROOT . "/lib/json.php");
-include_once($_IMC['install_path'].'/uc_client/client.php');
+error_reporting(E_ALL);
+include_once('../../data/bbscache/cache_index.php');
+include_once('../../data/bbscache/forum_cache.php');
+include_once("../../global.php");
+
+
 $_SGLOBAL['supe_uid'] =  $discuz_uid;
 $_SGLOBAL['db'] = $db;
 $_SGLOBAL['timestamp'] = time();
@@ -20,15 +16,12 @@ $_SC['charset']   = UC_CHARSET;
 
 //DISCUZ API FUN
 if( !function_exists('getspace') ) {
-function getspace($uid){
-	global $db;
-    $db->query("SET NAMES ". UC_DBCHARSET);
-    $space = $db->fetch_first("SELECT username,gender,nickname FROM ".tname('members')." m left join ".tname('memberfields')." mf  on m.uid=mf.uid WHERE m.uid='$uid'");
-	$space['uid']=$uid;
-	$space['nickname']=$space['nickname']?$space['nickname']:$space['username'];
-	return $space;
+function getspace(){
+    return User_info();
 }
 }
+
+
 if( !function_exists('avatar') ) {
 function avatar($uid, $size='small') {
 		return UC_API.'/avatar.php?uid='.$uid.'&size='.$size;
@@ -202,7 +195,7 @@ if(empty($_SGLOBAL['supe_uid'])) {
 	$is_login = false;
 } else {
 	$is_login = true;
-	$space = getspace($_SGLOBAL['supe_uid']);
+	$space = getspace();
 }
 $groups = getfriendgroup();
 

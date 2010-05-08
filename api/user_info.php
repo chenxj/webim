@@ -8,7 +8,24 @@ switch($platform){
 	case 'uchome':
 		include_once($configRoot . 'uchome.php');
 		break;
+	case 'phpwind':
+		include_once($configRoot . 'phpwind.php');
+		break;
 }
+if($platform === "phpwind")
+{
+	$ids = gp('ids');
+	if(empty($ids)){
+        	echo "[]";
+        	exit();
+	}
+	echo json_encode(find_buddy($ids));
+        //$output['buddies'] = find_buddy($buddy_ids);
+}
+
+
+
+
 if($platform === 'uchome'){
 	$ids = gp('ids');
 	if(empty($ids)){
@@ -17,7 +34,8 @@ if($platform === 'uchome'){
 	}
 	echo json_encode(find_buddy($ids));
         //$output['buddies'] = find_buddy($buddy_ids);
-}else if($platform === 'discuz'){
+}
+if($platform === 'discuz'){
 /*
 	session_start();
 	$friends = $_SESSION['friend_ids'];

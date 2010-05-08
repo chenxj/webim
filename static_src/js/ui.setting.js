@@ -40,9 +40,11 @@ widget("setting",{
 			$[key] && self._check_event($[key]);
 		});
     addEvent($.offline,"click",function(e){
+      preventDefault(e);
       self.trigger("offline");
     });
     addEvent($.online,"click",function(e){
+      preventDefault(e);
       self.trigger("online");
     });
 	},

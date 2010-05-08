@@ -57,7 +57,7 @@ app("chatlink",{
 widget("chatlink",{
 	filterId: function(link){
 		if(!link)return false;
-		var ex = /space\.php\?uid=(\d+)$|space\-(\d+)\.html$|u\.php?action=show&uid=(\d+)$/i.exec(link);
+		var ex = /space\.php\?uid=(\d+)$|space\-(\d+)\.html$|u\.php\?action=show&uid=(\d+)$/i.exec(link);
 		return ex && (ex[1] || ex[2] || ex[3]);
 	},
 	offline: true

@@ -78,6 +78,9 @@ $setting = json_encode(setting());
 		webim.hotpost.defaults.url = path + "webim/api/hotpost.php?platform=" + platform;
 		webim.defaults.urls.online = path + "webim/api/online.php?platform=" + platform + "&room_ids=" + getTid();
 	}
+	if (platform === "phpwind"){
+		webim.hotpost.defaults.url = path + "webim/api/hotpost.php?platform=" + platform;
+	}
 
 	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});
 	var soundUrls = {
@@ -106,7 +109,7 @@ $setting = json_encode(setting());
         	im.isStrangerOn = "on";
 		layout = imUI.layout;
                 imUI.addApp("room");
-		if ( platform === "discuz" ){
+		if ( platform === "discuz"  || platform === "phpwind"){
 			imUI.addApp("hotpost");
 		}
                 //imUI.addApp("chatlink");

@@ -10,7 +10,11 @@ switch($platform){
 	case 'uchome':
 		include_once($configRoot . 'uchome.php');
 		break;
+	case 'phpwind':
+		include_once($configRoot . 'phpwind.php');
+		break;
 }
+$platform = $_GET['platform'];
 $ticket = gp('ticket');
 $room_id = gp('id');
 if(empty($ticket)) {
@@ -28,9 +32,15 @@ foreach($result as $group =>$v )
     foreach($result[$group] as $k=>$v)
     {
         $uid = $result[$group][$k]['id'];
-        $pic = user_pic($uid);
-        $result[$group][$k]['pic'] = $pic;
-        $result[$group][$k]['default_pic_url'] = UC_API.'/images/noavatar_small.gif';
+	if($platform !== 'phpwind'){
+	        $pic = user_pic($uid);
+        	$result[$group][$k]['pic'] = $pic;
+	        $result[$group][$k]['default_pic_url'] = UC_API.'/images/noavatar_small.gif';
+	}else if($platform === 'phpwind'){
+		$pic = showfacedesign($uid, 1, 'm');
+		$result[$group][$k]['pic'] = $pic[0];
+		$result[$group][$k]['default_pic_url'] = R_P.'/images/face/none.gif';
+	}
     }
 }
 echo  json_encode($result);

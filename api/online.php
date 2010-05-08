@@ -58,6 +58,9 @@ if($platform !== "phpwind"){
 	if(empty($space))exit();
 	$name = $space['username'];
 	$stranger_ids = ids_except($space["uid"], ids_array(gp("stranger_ids")));
+	//$tmp = showfacedesign($space['uid'], 1, 'm');
+	//var_dump($tmp);
+	//echo $tmp[0];
 }
 
 /* if $friend_ids or $stranger_ids = Null
@@ -139,7 +142,7 @@ if($platform == 'uchome'){
 	$data = array ('rooms'=> join(',', $room_ids),'buddies'=>join(',', array_unique(array_merge($friend_ids, $stranger_ids))), 'domain' => $_IMC['domain'], 'apikey' => $_IMC['apikey'], 'endpoint'=> $space['uid'], 'nick'=>$name);
 }
 ///
-var_dump($data);
+# var_dump($data);
 ///
 $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
 $client->post('/presences/online', $data);
@@ -173,7 +176,8 @@ $output['server_time'] = microtime(true)*1000;
 if($platform !== "phpwind"){
 	$output['user']=array('id'=>$space['uid'], 'name'=>$name, 'pic_url'=>user_pic($space['uid']), 'status'=>'', 'presence' => 'online', 'status_time'=>'', 'url'=>'space.php?uid='.$space['uid']);//用户信息
 }else if($platform === "phpwind"){
-	$output['user']=array('id'=>$space['uid'], 'name'=>$name, 'pic_url'=>showfacedesign($space['icon'], 1, 'm'), 'status'=>'', 'presence' => 'online', 'status_time'=>'', 'url'=>"");//用户信息
+	$pic = showfacedesign($space['icon'], 1, 'm');
+	$output['user']=array('id'=>$space['uid'], 'name'=>$name, 'pic_url'=>$pic[0], 'status'=>'', 'presence' => 'online', 'status_time'=>'', 'url'=>"");//用户信息
 }
 
 $imserver = 'http://'.$_IMC['imsvr'].':'.$_IMC['impoll'];

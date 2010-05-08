@@ -115,7 +115,6 @@ function find_buddy($strangers, $friends = array()){
         global $_SGLOBAL, $_IMC;
         $friends = ids_array($friends);
 	$strangers = ids_array($strangers);
-        
 	if(empty($friends) && empty($strangers))return array();
         $buddies = array();
 	//$buddies = getFriends($_SGLOBAL['supe_uid'], 0, 0, false, true);

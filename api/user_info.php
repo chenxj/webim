@@ -10,11 +10,12 @@ switch($platform){
 		break;
 	case 'phpwind':
 		include_once($configRoot . 'phpwind.php');
+		break;
 }
-	$ids = gp('ids');
-	if(empty($ids)){
-        	echo "[]";
-        	exit();
-	}
-	echo json_encode(find_buddy($ids));
+$ids = gp('ids');
+if(empty($ids)){
+       	echo "[]";
+       	exit();
+}
+echo json_encode(find_buddy($ids));
 ?>

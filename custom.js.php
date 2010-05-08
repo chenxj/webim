@@ -11,6 +11,9 @@ switch($platform){
 	case 'uchome':
 		include_once('lib/uchome.php');
 		break;
+	case 'phpwind':
+		include_once('lib/phpwind.php');
+		break;
 }
 
 if($platform === 'uchome'){
@@ -45,7 +48,7 @@ $setting = json_encode(setting());
 //custom
 (function(webim){
     var path = "";
-    var platform = "<?php echo $platform ?>";
+    var platform = "<?php echo $_GET['platform']; ?>";
 
     var menu = webim.JSON.decode('<?php echo json_encode($menu) ?>');
 	webim.extend(webim.setting.defaults.data, webim.JSON.decode('<?php echo $setting ?>'));

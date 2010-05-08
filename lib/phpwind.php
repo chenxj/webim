@@ -127,7 +127,8 @@ function find_buddy($strangers, $friends = array()){
 			$id = $value['uid'];
 			$nick = $value['username'];
 			require_once R_P."require/showimg.php";
-			$buddies[$id]=array('id'=>$id,'name'=>to_utf8($nick),'pic_url' =>showfacedesign($value['icon'], 1, 'm'), 'status'=>'' ,'status_time'=>'','url'=>'','group'=> "friend", 'default_pic_url' => R_P."images/face/none.gif");
+			$pic = showfacedesign($value['icon'], 1, 'm');
+			$buddies[$id]=array('id'=>$id,'name'=>to_utf8($nick),'pic_url' =>$pic[0], 'status'=>'' ,'status_time'=>'','url'=>'','group'=> "friend", 'default_pic_url' => R_P."images/face/none.gif");
 		}
 	}
 
@@ -139,7 +140,8 @@ function find_buddy($strangers, $friends = array()){
 			$id = $value['uid'];
 			$nick = $value['username'];
 			require_once R_P."require/showimg.php";
-			$buddies[$id]=array('id'=>$id,'name'=>to_utf8($nick),'pic_url' =>showfacedesign($value['icon'], 1, 'm'), 'status'=>'' ,'status_time'=>'','url'=>'','group'=> "stranger", 'default_pic_url' => R_P."images/face/none.gif");
+			$pic = showfacedesign($value['icon'], 1, 'm');
+			$buddies[$id]=array('id'=>$id,'name'=>to_utf8($nick),'pic_url' =>$pic[0], 'status'=>'' ,'status_time'=>'','url'=>'','group'=> "stranger", 'default_pic_url' => R_P."images/face/none.gif");
 		}
 	}
 	return $buddies;

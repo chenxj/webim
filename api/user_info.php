@@ -1,20 +1,5 @@
 <?php 
 $platform = $_GET['platform'];
-include_once("../lib/{$platform}.php");
-
-$ids = gp('ids');
-if(empty($ids)){
-        echo "[]";
-        exit();
-}
-echo json_encode(find_buddy($ids));
-        //$output['buddies'] = find_buddy($buddy_ids);
-exit;
-
-
-
-
-if($platform === 'uchome'){
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 switch($platform){
 	case 'discuz':
@@ -27,4 +12,10 @@ switch($platform){
 		include_once($configRoot . 'phpwind.php');
 		break;
 }
+$ids = gp('ids');
+if(empty($ids)){
+       	echo "[]";
+       	exit();
+}
+echo json_encode(find_buddy($ids));
 ?>

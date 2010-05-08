@@ -11,6 +11,9 @@ switch($platform){
 	case 'uchome':
 		include_once('lib/uchome.php');
 		break;
+	case 'phpwind':
+		include_once('lib/phpwind.php');
+		break;
 }
 
 if($platform === 'uchome'){

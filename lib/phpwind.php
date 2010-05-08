@@ -113,7 +113,7 @@ if(empty($_SGLOBAL['supe_uid'])) {
 
 function find_buddy($strangers, $friends = array()){
         global $_SGLOBAL, $_IMC;
-        $friends = ids_array($friends);
+        $friend_ids = ids_array($friends);
 	$strangers = ids_array($strangers);
 	if(empty($friends) && empty($strangers))return array();
         $buddies = array();
@@ -131,7 +131,7 @@ function find_buddy($strangers, $friends = array()){
 		}
 	}
 
-	if(!empty($stranger_ids)){
+	if(!empty($strangers)){
 	        $stranger_ids = join(',', $strangers);
         	$sql = "SELECT main.uid, main.username, main.icon FROM pw_members main WHERE main.uid IN ($stranger_ids)";
 		$query_sid = $_SGLOBAL['db']->query($sql);

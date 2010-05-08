@@ -8,7 +8,8 @@ class nextim
     *  check the platform 
     *  Uchome ? Discuz ?  PhpWind?
     */
-    function nextim(){
+    function __construct() {
+       // nextim(){
         if(file_exists(ROOT.'/data/avatar'))
             $this->platform = "uchome";
         if(file_exists(ROOT.'/forumdata'))
@@ -56,5 +57,6 @@ class nextim
 
 }
 
+new nextim;
 
 ?>

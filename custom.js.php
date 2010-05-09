@@ -48,7 +48,7 @@ $setting = json_encode(setting());
 //custom
 (function(webim){
     var path = "";
-    var platform = "<?php echo $platform ?>";
+    var platform = "<?php echo $_GET['platform']; ?>";
 
     var menu = webim.JSON.decode('<?php echo json_encode($menu) ?>');
 	webim.extend(webim.setting.defaults.data, webim.JSON.decode('<?php echo $setting ?>'));
@@ -77,6 +77,9 @@ $setting = json_encode(setting());
 	if ( platform === "discuz" ){
 		webim.hotpost.defaults.url = path + "webim/api/hotpost.php?platform=" + platform;
 		webim.defaults.urls.online = path + "webim/api/online.php?platform=" + platform + "&room_ids=" + getTid();
+	}
+	if (platform === "phpwind"){
+		webim.hotpost.defaults.url = path + "webim/api/hotpost.php?platform=" + platform;
 	}
 
 	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});

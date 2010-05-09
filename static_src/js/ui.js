@@ -162,11 +162,13 @@ extend(webimUI.prototype, objectExtend, {
 			setting.set(key, val);
 		});
     //handle 
-    settingUI.bind("offline",function(){
+    settingUI.bind("offline",function(e){
+      preventDefault(e);
       im.trigger("stop");
       im.offline();
     });
-    settingUI.bind("online",function(){
+    settingUI.bind("online",function(e){
+      preventDefault(e);
       im.trigger("ready");  
       im.online();
     });

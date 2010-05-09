@@ -10,7 +10,7 @@ switch($platform){
 		include_once($configRoot . 'uchome.php');
 		break;
 	case 'phpwind':
-		include_once($configRoot . 'phpwind.oho');
+		include_once($configRoot . 'phpwind.php');
 		$space = User_info();
 		break;
 }

@@ -183,7 +183,7 @@ function new_message_to_histroy(){
 
 function find_history($ids){
 	include_once(WEBIM_ROOT . "config.php");
-        global $_SGLOBAL, $_IMC;
+        global $_SGLOBAL;
         $uid = $_SGLOBAL['supe_uid'];
         $histories = array();
         $ids = ids_array($ids);

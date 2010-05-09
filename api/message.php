@@ -47,7 +47,10 @@ if($type=="multicast"){//add by free.wang
 if($platform !== "phpwind"){
 	$_SGLOBAL['db']->query("SET NAMES " . UC_DBCHARSET);
 }else if($platform === "phpwind"){
-	$db->query("SET NAMES " . $db_charset);
+	if($db_charset === "utf-8"){
+		$dbcharset = "utf8";
+	}
+	$db->query("SET NAMES " . $dbcharset);
 }
 
 $body=from_utf8($body);

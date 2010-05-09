@@ -8,7 +8,11 @@ switch($platform){
 	case 'uchome':
 		include_once($configRoot . 'uchome.php');
 		break;
+	case 'phpwind':
+		include_once($configRoot . 'phpwind.php');
+		break;
 }
+$platform = $_GET['platform'];
 $ids = gp('ids');
 if($ids===NULL){
         echo "{empty}";

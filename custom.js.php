@@ -1,6 +1,6 @@
 <?php
 header("Content-type: application/javascript");
-include_once 'config.php';
+include_once ('config.php');
 
 $platform = $_GET['platform'];
 

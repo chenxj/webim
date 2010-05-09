@@ -162,7 +162,7 @@ function find_new_message(){
 
 function find_room($fid){
 	include_once(WEBIM_ROOT . "config.php");
-	global $_SGLOBAL, $_IMC;
+	global $_SGLOBAL;
 	$rooms = array();
 	$query = $_SGLOBAL['db']->query("SELECT name FROM pw_forums WHERE fid = '$fid'");
 	while ($value = $_SGLOBAL['db']->fetch_array($query)) {

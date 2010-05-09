@@ -1,8 +1,8 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
+include_once($_IMC['install_path'].'global.php');
 define('WEBIM_ROOT', substr(dirname(__FILE__), 0, -4));
 include_once(WEBIM_ROOT . '/config.php');
-include_once($_IMC['install_path'].'global.php');
 define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
 include_once(WEBIM_ROOT . "/lib/json.php");
 $_SGLOBAL['supe_uid'] = $winduid;

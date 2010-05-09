@@ -1,23 +1,33 @@
 <?php
 include_once("../config.php");
-$url = "http://update.nextim.cn/webim/update/version";
-$latest_version = explode("\n",file_get_contents($url));
-$latest_version = $latest_version[0];
-$cur_version = $_IMC['version'];
-$data = array("version"=>$latest_version);
+# $url = "http://update.nextim.cn/webim/update/version";
+# $latest_version = explode("\n",file_get_contents($url));
+# $latest_version = $latest_version[0];
+# $cur_version = $_IMC['version'];
+# $data = array("version"=>$latest_version);
 
 $platform = which_platform();
  
 switch($platform){
     case 'uchome':
-        include_once($_IMC["install_path"] .'webim/lib/uchome.php');
+        include_once('../lib/uchome.php');
         $db_obj = $_SGLOBAL['db'];
         break;
     case 'discuz':
-        include_once($_IMC["install_path"] .'webim/lib/discuz.php');
+        include_once('../lib/discuz.php');
         $db_obj = $db;
         break;
+    case 'phpwind':
+        include_once('../lib/phpwind.php');
+	$db_obj = $db;
+	break;
 }
+include_once("../config.php");
+$url = "http://update.nextim.cn/webim/update/version";
+$latest_version = explode("\n",file_get_contents($url));
+$latest_version = $latest_version[0];
+$cur_version = $_IMC['version'];
+$data = array("version"=>$latest_version);
 
 $admins = explode(",",$_IMC['admin_ids']);
 
@@ -48,6 +58,9 @@ function which_platform(){
 	}
 	if(file_exists($_IMC["install_path"].'forumdata')){
 		return "discuz";
+	}
+	if(file_exists($_IMC["install_path"].'data/bbscache')){
+		return "phpwind";
 	}
 }
 

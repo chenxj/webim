@@ -1,5 +1,4 @@
 <?php 
-
 $platform = $_GET['platform'];
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 include_once($configRoot . 'http_client.php');
@@ -10,8 +9,12 @@ switch($platform){
 	case 'uchome':
 		include_once($configRoot . 'uchome.php');
 		break;
+	case 'phpwind':
+		include_once($configRoot . 'phpwind.oho');
+		$space = User_info();
+		break;
 }
-
+$platform = $_GET['platform'];
 
 $ticket = gp('ticket');
 $body = gp('body','');
@@ -26,7 +29,11 @@ if($type != "broadcast" && (empty($to)||empty($from))){
 	echo "{success:false}"."{".$to.":".$from."}";exit();
 }
 $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
-$nick = to_unicode(to_utf8(nick($space)));
+if($platform !== 'phpwind'){
+	$nick = to_unicode(to_utf8(nick($space)));
+}else if($platform === 'phpwind'){
+	$nick = to_unicode($space['username']);
+}
 $client->post('/messages', array('domain'=>$_IMC['domain'],'apikey'=>$_IMC['apikey'],'ticket' => $ticket,'nick'=>$nick, 'type'=> $type, 'to'=>$to,'body'=>to_unicode($body),'timestamp'=>(string)$time,'style'=>$style));
 $pageContents = $client->getContent();
 
@@ -37,8 +44,11 @@ if($type=="multicast"){//add by free.wang
     $to = $to + $_IMC['room_id_pre'];//add by free.wang
 }//add by free.wang
 
-
-$_SGLOBAL['db']->query("SET NAMES " . UC_DBCHARSET);
+if($platform !== "phpwind"){
+	$_SGLOBAL['db']->query("SET NAMES " . UC_DBCHARSET);
+}else if($platform === "phpwind"){
+	$db->query("SET NAMES " . $db_charset);
+}
 
 $body=from_utf8($body);
 //add by Harvey.

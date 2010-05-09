@@ -48,9 +48,9 @@ if($platform !== "phpwind"){
 	$_SGLOBAL['db']->query("SET NAMES " . UC_DBCHARSET);
 }else if($platform === "phpwind"){
 	if($db_charset === "utf-8"){
-		$dbcharset = "utf8";
+		$mycharset = "utf8";
 	}
-	$db->query("SET NAMES " . $dbcharset);
+	$db->query("SET NAMES " . $mycharset);
 }
 
 $body=from_utf8($body);

@@ -161,7 +161,8 @@ function find_new_message(){
 }
 
 function find_room($fid){
-	global $_SGLOBAL,$_IMC;
+	global $_SGLOBAL;
+	require(WEBIM_ROOT."config.php");
 	$rooms = array();
 	$query = $_SGLOBAL['db']->query("SELECT name FROM pw_forums WHERE fid = '$fid'");
 	while ($value = $_SGLOBAL['db']->fetch_array($query)) {
@@ -181,8 +182,8 @@ function new_message_to_histroy(){
 }
 
 function find_history($ids){
-	include_once(WEBIM_ROOT . "config.php");
-        global $_SGLOBAL,$_IMC;
+	require(WEBIM_ROOT . "config.php");
+        global $_SGLOBAL;
         $uid = $_SGLOBAL['supe_uid'];
         $histories = array();
         $ids = ids_array($ids);

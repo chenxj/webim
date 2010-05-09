@@ -199,7 +199,13 @@ function find_history($ids){
                         	array_unshift($list,array('to'=>$value['to'],'from'=>$value['from'],'style'=>$value['style'],'body'=>to_utf8($value['body']),'timestamp'=>$value['timestamp'], 'type' =>$value['type'], 'new' => 0));
                         }
                 }else{
-			// unknown...
+			$query = $_SGLOBAL['db']->query("SELECT main.*, s.username FROM ".im_tname('histories')." main 
+							LEFT JOIN pw_members s ON s.uid=main.from
+					             	WHERE `to`='$id' ORDER BY timestamp DESC LIMIT 30");
+			while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+				$nick = $value['username'];
+				array_unshift($list,array('to'=>$value['to'],'nick'=>to_utf8($nick),'from'=>$value['from'],'style'=>$value['style'],'body'=>to_utf8($value['body']),'timestamp'=>$value['timestamp']));
+			}
                 }
                 $histories[$id] = $list;
         }

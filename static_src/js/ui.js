@@ -41,6 +41,7 @@ extend(webimUI.prototype, objectExtend, {
 		});
 		self.buddy = new webimUI.buddy(null,{
 		});
+		self.room = new webimUI.room(null,{});
 		var menuData = self.options.menu;
 	       	self.menu = new webimUI.menu(null,{
 			data: menuData
@@ -71,7 +72,13 @@ extend(webimUI.prototype, objectExtend, {
 			onlyIcon: true,
 			isMinimize: true
 		});
-
+		layout.addApp(self.room, {
+			title: i18n("room"),
+			icon: "room",
+			sticky: false,
+			className: "webim-room-window",
+			isMinimize: true
+		}, "setting");
 	/*	layout.addApp(self.notification, {
 			title: i18n("notification"),
 			icon: "notification",
@@ -116,6 +123,7 @@ extend(webimUI.prototype, objectExtend, {
       			settingUI.online();
 		}).bind("go",function(data){
 			layout.changeState("active");
+      			//hide(layout.app("room").window.element);
 			layout.option("user", data.user);
 			date.init(data.server_time);
 			self._initStatus();

@@ -102,7 +102,6 @@ $setting = json_encode(setting());
 		im.admins = adminids?adminids.split(","):"";
         	im.isStrangerOn = "on";
 		layout = imUI.layout;
-                imUI.addApp("room");
 		if ( platform === "discuz" ){
 			imUI.addApp("hotpost");
 		}
@@ -126,7 +125,7 @@ $setting = json_encode(setting());
 			chatlink.offline(mapIds(data));
 		});
 		im.setStranger(chatlink.idsArray());
-		im.autoOnline() && im.online();
+		im.autoOnline() &&  im.online() ;
 	}
 	function ready(){
 		chatlink.enable();

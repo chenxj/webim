@@ -27,12 +27,7 @@ app("room",{
 			ui.addChat(info.id, {type: "room"});
 			ui.layout.focusChat(info.id);
 		});
-		layout.addApp(roomUI, {
-			title: i18n("room"),
-			icon: "room",
-			sticky: false,
-			isMinimize: true
-		}, "setting");
+		
 		ui.window && ui.window.title(i18n("room"));
 
 		room.bind("join",function(info){
@@ -87,6 +82,7 @@ widget("room",{
 		self.li = {
 		};
 		self._count = 0;
+		hide(self.$);
 		//self._initEvents();
 	},
 	_initEvents: function(){

@@ -210,7 +210,7 @@ $groups = getfriendgroup();
 function find_buddy($strangers, $friends = array()){
         global $_SGLOBAL,$_IMC, $groups;
         $friends = ids_array($friends);
-		$strangers = ids_array($strangers);
+	$strangers = ids_array($strangers);
         
         if(empty($friends) && empty($strangers))return array();
         //$ids = join(',', $ids);

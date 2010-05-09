@@ -6,7 +6,7 @@ include_once(WEBIM_ROOT . '/config.php');
 include_once($_IMC['install_path'].'global.php');
 define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
 include_once(WEBIM_ROOT . "/lib/json.php");
-# include_once(WEBIM_ROOT . "config.php");
+include_once(WEBIM_ROOT . "config.php");
 $_SGLOBAL['supe_uid'] = $winduid;
 $_SGLOBAL['db'] = $db;
 $_SGLOBAL['timestamp'] = time();

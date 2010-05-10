@@ -9,6 +9,11 @@ switch($platform){
 	case 'uchome':
 		include_once($configRoot . 'uchome.php');
 		break;
+	case 'phpwind':
+		include_once($configRoot . 'phpwind.php');
+		$space = user_info();
+		break;
+
 }
 
 $ticket = gp('ticket');

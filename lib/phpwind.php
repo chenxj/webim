@@ -1,7 +1,5 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
-include_once("../base/base.class.php" . '/config.php');
-nextim_obj = new nextim();
 define('WEBIM_ROOT', substr(dirname(__FILE__), 0, -4));
 include_once(WEBIM_ROOT . '/config.php');
 include_once($_IMC['install_path'].'global.php');
@@ -115,9 +113,8 @@ if(empty($_SGLOBAL['supe_uid'])) {
 
 function find_buddy($strangers, $friends = array()){
         global $_SGLOBAL, $_IMC;
-        $friends = ids_array($friends);
+        $friend_ids = ids_array($friends);
 	$strangers = ids_array($strangers);
-        
 	if(empty($friends) && empty($strangers))return array();
         $buddies = array();
 	//$buddies = getFriends($_SGLOBAL['supe_uid'], 0, 0, false, true);
@@ -134,7 +131,7 @@ function find_buddy($strangers, $friends = array()){
 		}
 	}
 
-	if(!empty($stranger_ids)){
+	if(!empty($strangers)){
 	        $stranger_ids = join(',', $strangers);
         	$sql = "SELECT main.uid, main.username, main.icon FROM pw_members main WHERE main.uid IN ($stranger_ids)";
 		$query_sid = $_SGLOBAL['db']->query($sql);

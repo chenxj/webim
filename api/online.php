@@ -142,7 +142,7 @@ if($platform == 'uchome'){
 	$data = array ('rooms'=> join(',', $room_ids),'buddies'=>join(',', array_unique(array_merge($friend_ids, $stranger_ids))), 'domain' => $_IMC['domain'], 'apikey' => $_IMC['apikey'], 'endpoint'=> $space['uid'], 'nick'=>$name);
 }
 ///
-# var_dump($data);
+//var_dump($data);
 ///
 $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
 $client->post('/presences/online', $data);

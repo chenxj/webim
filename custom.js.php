@@ -11,6 +11,9 @@ switch($platform){
 	case 'uchome':
 		include_once('lib/uchome.php');
 		break;
+	case 'phpwind':
+		include_once('lib/phpwind.php');
+		break;
 }
 
 if($platform === 'uchome'){
@@ -45,7 +48,7 @@ $setting = json_encode(setting());
 //custom
 (function(webim){
     var path = "";
-    var platform = "<?php echo $platform ?>";
+    var platform = "<?php echo $_GET['platform']; ?>";
 
     var menu = webim.JSON.decode('<?php echo json_encode($menu) ?>');
 	webim.extend(webim.setting.defaults.data, webim.JSON.decode('<?php echo $setting ?>'));
@@ -75,6 +78,9 @@ $setting = json_encode(setting());
 		webim.hotpost.defaults.url = path + "webim/api/hotpost.php?platform=" + platform;
 		webim.defaults.urls.online = path + "webim/api/online.php?platform=" + platform + "&room_ids=" + getTid();
 	}
+	if (platform === "phpwind"){
+		webim.hotpost.defaults.url = path + "webim/api/hotpost.php?platform=" + platform;
+	}
 
 	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});
 	var soundUrls = {
@@ -102,7 +108,6 @@ $setting = json_encode(setting());
 		im.admins = adminids?adminids.split(","):"";
         	im.isStrangerOn = "on";
 		layout = imUI.layout;
-                imUI.addApp("room");
 		if ( platform === "discuz" ){
 			imUI.addApp("hotpost");
 		}
@@ -126,7 +131,7 @@ $setting = json_encode(setting());
 			chatlink.offline(mapIds(data));
 		});
 		im.setStranger(chatlink.idsArray());
-		im.autoOnline() && im.online();
+		im.autoOnline() &&  im.online() ;
 	}
 	function ready(){
 		chatlink.enable();

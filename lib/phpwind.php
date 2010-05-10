@@ -1,12 +1,10 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
-# include_once($_IMC['install_path'].'global.php');
+include_once('../../global.php');
 define('WEBIM_ROOT', substr(dirname(__FILE__), 0, -4));
 include_once(WEBIM_ROOT . '/config.php');
-include_once($_IMC['install_path'].'global.php');
-define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
 include_once(WEBIM_ROOT . "/lib/json.php");
-include_once(WEBIM_ROOT . "config.php");
+
 $_SGLOBAL['supe_uid'] = $winduid;
 $_SGLOBAL['db'] = $db;
 $_SGLOBAL['timestamp'] = time();
@@ -182,8 +180,10 @@ function new_message_to_histroy(){
 }
 
 function find_history($ids){
-	include_once(WEBIM_ROOT . "config.php");
-        global $_SGLOBAL;
+        global $_SGLOBAL,$_IMC;
+    var_dump($_IMC);
+        echo  "ok?";
+    exit;
         $uid = $_SGLOBAL['supe_uid'];
         $histories = array();
         $ids = ids_array($ids);

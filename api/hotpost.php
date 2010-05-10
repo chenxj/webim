@@ -1,6 +1,8 @@
 <?php 
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
-include_once($configRoot . 'discuz.php');
+$platform = $_GET['platform'];
+if($platform === "discuz"){
+	include_once($configRoot . 'discuz.php');
 	
 	$today = $timestamp - ($timestamp + $timeoffset * 3600) % 86400;
 	
@@ -19,8 +21,18 @@ $pm['daterange'] = 5;
 		}
 		$value['date'] = gmdate($dateformat, $value['lastpost'] + $timeoffset * 3600);
 		$value['time'] = gmdate($timeformat, $value['lastpost'] + $timeoffset * 3600);
-				$pmlist[]= array('from'=>$value['author'],'text'=>$value['subject'].'<span style=color:red>('.$value['replies'].')</span>','link'=>'viewthread.php?tid='.$value['tid'],'time'=>$value['time']);
-			}
-
-	exit(json_encode($pmlist));
+		$pmlist[]= array('from'=>$value['author'],'text'=>$value['subject'].'<span style=color:red>('.$value['replies'].')</span>','link'=>'viewthread.php?tid='.$value['tid'],'time'=>$value['time']);
+	}
+}else{
+	include_once($configRoot . 'phpwind.php');
+	$element = L::loadClass('element');
+	$element->setDefaultNum(10);
+	$article = $element->hitSort();
+	foreach ($article as $key => $value) {
+		#$article[$key] = array($value['addition']['tid'],substrs($value['title'],30),$value['value']);
+		$pmlist[] = array('from'=>to_utf8($value['addition']['author']), 'test'=>$value['title'].'<span style=color:red>('.$value['addition']['hits'].')</span>', 'link'=>$value['url'], 'time'=>"");
+	}
+}
+# var_dump($pmlist);
+exit(json_encode($pmlist));
 ?>

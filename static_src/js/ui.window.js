@@ -205,13 +205,18 @@ widget("window", {
 			else self.minimize();
 			stop(e);
 		});
-		addEvent(tab,"mouseover",function(){
+		addEvent(tab,"mouseover",function(e){
 			addClass(this, "ui-state-hover");
+			addClass(this,"webim-opacity");
 			removeClass(this, "ui-state-default");
+			self.restore();
+			stop(e);
 		});
-		addEvent(tab,"mouseout",function(){
+		addEvent(tab,"mouseout",function(e){
 			removeClass(this, "ui-state-hover");
 			this.className.indexOf("ui-state-") == -1 && addClass(this, "ui-state-default");
+			setTimeout(function(){self.minimize();},4000);
+			stop(e);
 		});
 		addEvent(tab,"mousedown",stop);
 		disableSelection(tab);

@@ -2,10 +2,10 @@ function now() {
 	return (new Date).getTime();
 }
 function getTid(roomIdendify){
-	var url = location;
-	var reg = new RegExp("(^|&|\\?)"+roomIdendify+"=(\\d*)(&|$)","i");
+	var url = location.href;
+	var reg = new RegExp("(^|&|\\?)tid=(\\d*)(&|$)","i");
 	if (reg.test(url)){
-		return RegExp.$1;
+		return RegExp.$2;
 	}
 	return "";
 }

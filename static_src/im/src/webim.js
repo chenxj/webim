@@ -49,7 +49,7 @@ extend(webim.prototype, objectExtend,{
 		self.room = new webim.room();
 		self.history = new webim.history();
 		//self.notification = new webim.notification();
-                //self.hotpost= new webim.hotpost();
+                self.hotpost= new webim.hotpost();
 		self.connection = new comet(null,{jsonp:true});
 		self._initEvents();
 		//self.online();
@@ -171,6 +171,8 @@ extend(webim.prototype, objectExtend,{
 				stranger_ids: self.stranger_ids.join(","),
                 //(self.isStrangerOn == "on")?self.stranger_ids.join(","):"",
 				room_ids:getTid(self.roomIdendify),
+				fid:getFid(),
+				tid:getTid(),
 				timestamp: parseInt(new Date().getTime()/1000)
 			},
 			url: self.options.urls.online,

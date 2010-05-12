@@ -96,7 +96,7 @@ if(!isset($_SESSION['stranger_ids'])){
 
 $buddy_ids = ids_array(gp("buddy_ids"));//正在聊天的联系人
 
-# $new_messages = find_new_message();//查找离线消息
+ $new_messages = find_new_message();//查找离线消息
 for($i=0;$i<count($new_messages);$i++){
         $msg_uid = $new_messages[$i]["from"];
         array_push($buddy_ids, $msg_uid);
@@ -202,7 +202,7 @@ if($platform === 'uchome'){
 	$output['buddies'] = find_buddy($strangers, $friends);
 }
 $output['rooms'] = $rooms;
-# $output['histories'] = find_history($buddy_ids);
+ $output['histories'] = find_history($buddy_ids);
 # new_message_to_histroy(); //新消息转到历史记录
 
 echo json_encode($output);

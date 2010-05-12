@@ -27,7 +27,13 @@ app("room",{
 			ui.addChat(info.id, {type: "room"});
 			ui.layout.focusChat(info.id);
 		});
-		
+		layout.addApp(roomUI, {
+			title: i18n("room"),
+			icon: "room",
+			sticky: false,
+			isMinimize: true
+		}, "setting");
+
 		ui.window && ui.window.title(i18n("room"));
 
 		room.bind("join",function(info){
@@ -37,11 +43,11 @@ app("room",{
 		}).bind("block", function(id, list){
 			setting.set("block_list",list);
 			updateRoom(room.get(id));
-      room.leave(id,u);
+		        room.leave(id,u);
 		}).bind("unblock", function(id, list){
 			setting.set("block_list",list);
 			updateRoom(room.get(id));
-      room.join(id,u);
+      			room.join(id,u);
 		}).bind("addMember", function(room_id, info){
 			var c = layout.chat(room_id);
 			c && c.addMember(info, info.id == im.data.user.id);

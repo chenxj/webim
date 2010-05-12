@@ -107,6 +107,7 @@ $setting = json_encode(setting());
 		var adminids = "<?php echo $_IMC['admin_ids'] ?>";
 		im.admins = adminids?adminids.split(","):"";
         	im.isStrangerOn = "on";
+		imUI.addApp("room");
 		layout = imUI.layout;
 		if ( platform === "discuz"  || platform === "phpwind" ){
 			imUI.addApp("hotpost");

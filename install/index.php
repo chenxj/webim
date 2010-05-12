@@ -16,22 +16,22 @@ switch($platform){
         echo $platform;
         include_once(S_ROOT.'./global.php');
         echo $platform;
-		$cache_path = "data/sql_config.php";
-        define('IN_UCHOME', TRUE);
-        include_once($basic_configfile);
+	$cache_path = "data/sql_config.php";
+        //define('IN_UCHOME', TRUE); ???
+        //include_once($basic_configfile);
         $display_name = 'phpwind';
         $basic_configfile = S_ROOT.'./data/sql_config.php';
-		$templete_folder = 'template/wind/';
+	$templete_folder = 'template/wind/';
+	include_once($basic_configfile);
         break;
-
     case 'uchome':
-		$cache_path = "data/tpl_cache";
+	$cache_path = "data/tpl_cache";
         define('IN_UCHOME', TRUE);
         $basic_configfile = S_ROOT.'./config.php';
         include_once(S_ROOT.'./config.php');
         include_once(S_ROOT.'./source/function_common.php');
         $display_name = 'uchome';
-		$templete_folder = 'template/default/';
+	$templete_folder = 'template/default/';
         break;
     case 'discuz':
         define('IN_DISCUZ', TRUE);
@@ -50,8 +50,8 @@ switch($platform){
         $_SC['dbcharset']=$dbcharset;
         $_SC['charset']='utf-8';
         $display_name = 'discuz';
-		$cache_path = "forumdata/cache";
-		$templete_folder = 'templates/default/';
+	$cache_path = "forumdata/cache";
+	$templete_folder = 'templates/default/';
         break;
 }
 echo $platform;
@@ -159,12 +159,9 @@ if(!@$fp = fopen($basic_configfile, 'a')) {
 	@fclose($fp);
 }
 
-//if (submitcheck('imsubmit')) {
-
-	//install
 if($step == 2)
 {
-    global $platform;
+	global $platform;
 	if($platform == 'uchome'){
 		dbconnect();
 	}
@@ -174,6 +171,7 @@ if($step == 2)
 	$charset = trim($_POST['charset']);
 	$broadcastid = trim($_POST['broadcastID']);
 	
+	/*
 	foreach($_POST['ext_url_path'] as $key=>$value){
 		if(!endsWith($value, '/')){
 			$value = trim($value).'/';
@@ -186,18 +184,23 @@ if($step == 2)
 		}
 		$file_path[trim($key)] = trim($value);
 	}
+	*/
 
 	if(empty($domain) || empty($apikey)) {
 		show_msg('网站域名和API KEY不能为空',$ERRORCODE['invalid_input']);
 	} else {
-		write_basic_config($basic_configfile);
+		if($platform != "phpwind"){
+			write_basic_config($basic_configfile);
+		}
 		write_webim_config($webim_configfile,$domain,$apikey,$theme,$charset,$broadcastid);
 		write_template();// write template htm file
+		/*
 		if($display_name == "uchome"){
 			write_ext_config($file_path['uchome']."config.php");
 		}else if($display_name == "discuz"){
 			write_ext_config($file_path['discuz']."config.inc.php");
 		}
+		*/
 		$newsql = file_get_contents($sqlfile);
 		if($platform == 'uchome'){
 			if($_SC['tablepre'] != 'uchome_') $newsql = str_replace('uchome_', $_SC['tablepre'], $newsql);
@@ -220,7 +223,7 @@ if($step == 2)
 					}
 				}
 			}//uchome
-			else if($platform == 'discuz'){
+			else if($platform == 'discuz' || $platform == 'phpwind'){
 				$tablename = 'webim_histories';//$_SC['tablepre'].'im_histories';
 
 				$tablestatus = $db->fetch_first("SHOW TABLE STATUS LIKE '$tablename'");
@@ -239,7 +242,7 @@ if($step == 2)
 			dbconnect();
 			$newsql = sreadfile($sqlfile);    
 			if($_SC['tablepre'] != 'uchome_') $newsql = str_replace('uchome_', $_SC['tablepre'], $newsql);
-		}else if($platform == 'discuz'){
+		}else if($platform == 'discuz' || $platform =='phpwind'){
 			$newsql = file_get_contents($sqlfile);
 		}
 		$tables = $sqls = array();
@@ -250,7 +253,7 @@ if($step == 2)
 		}
 		$alltables = "";
 		if($platform == 'uchome'){
-		$myisamtype = $_SGLOBAL['db']->version()>'4.1'?" ENGINE=MYISAM".(empty($_SC['dbcharset'])?'':" DEFAULT CHARSET=$_SC[dbcharset]" ):" TYPE=MYISAM";
+			$myisamtype = $_SGLOBAL['db']->version()>'4.1'?" ENGINE=MYISAM".(empty($_SC['dbcharset'])?'':" DEFAULT CHARSET=$_SC[dbcharset]" ):" TYPE=MYISAM";
 			foreach ($tables as $key => $tablename) {
 				$sqltype = $myisamtype;
 				$_SGLOBAL['db']->query("DROP TABLE IF EXISTS $tablename");
@@ -263,7 +266,7 @@ if($step == 2)
 				$alltables .= '<br>';
 				$alltables .= '</li>';
 			}
-		}else if($platform == 'discuz'){
+		}else if($platform == 'discuz' || $platform == 'phpwind'){
 			$myisamtype = mysql_get_server_info()>'4.1'?" ENGINE=MYISAM".(empty($_SC['dbcharset'])?'':" DEFAULT CHARSET=$_SC[dbcharset]" ):" TYPE=MYISAM";
 			foreach ($tables as $key => $tablename) {
 				$sqltype = $myisamtype;
@@ -305,6 +308,8 @@ if($step == 2)
 			@touch(S_ROOT.'./data/webiminstall.lock');
 		}else if($platform == 'discuz'){
 			@touch(S_ROOT.'./forumdata/webiminstall.lock');
+		}else if($platform == 'phpwind'){
+			@touch(S_ROOT.'./data/webiminstall.lock');
 		}
 	
 		obclean();
@@ -378,8 +383,8 @@ END;
 		$theme = empty($_POST['theme']) ? '' : $_POST['theme'];
 		$charset = empty($_POST['charset']) ? '' : $_POST['charset'];
 		$broadcastid = empty($_POST['broadcastID']) ? '' : $_POST['broadcastID'];
-		$ext_url_path = empty($_POST['ext_url_path']) ? '' : $_POST['ext_url_path'][$display_name];
-		$ext_file_path = empty($_POST['ext_file_path']) ? '' : $_POST['ext_file_path'][$display_name];
+		//$ext_url_path = empty($_POST['ext_url_path']) ? '' : $_POST['ext_url_path'][$display_name];
+		//$ext_file_path = empty($_POST['ext_file_path']) ? '' : $_POST['ext_file_path'][$display_name];
 		print <<<END
 		<form id="theform" method="post" onsubmit="dosubmit()" action="$theurl?step=1">
 		<table class=button>
@@ -392,8 +397,6 @@ END;
 		<input type="hidden" name="theme" value="$theme" />
 		<input type="hidden" name="charset" value="$charset" />
 		<input type="hidden" name="broadcastID" value="$broadcastid" />
-		<input type="hidden" name="ext_url_path" value="$ext_url_path" />
-		<input type="hidden" name="ext_file_path" value="$ext_file_path" />
 		<input type="hidden" name="formhash" value="$formhash">
 		<input type="step" name="formhash" value="2">
 		</form>
@@ -480,23 +483,10 @@ END;
 						<input type="text"  id="broadcastID" name="broadcastID" size="60" value="1,8,888">
 						<span style="color:red">
 							<br>NextIm允许使用站点广播功能。启用了广播功能的用户，能够发送广播消息。<br>广播消息将会被站点所有的用户接收。<br>
-							如填写：1,8,888"，代表用户id为1，8以及888的用户拥有广播的权限。<br>
+							如填写：1,8,888，代表用户id为1，8以及888的用户拥有广播的权限。<br>
 						</span> 
 					</td>
 	</tr>
-	<!--
-				<td colspan=2>如果您需要安装$display_name 平台下的NextIM ,请配置以下选项</td>
-	
-				<tr>
-					<td>$display_name 本地文件路径:</td>
-					<td><input type="text" id="ext_file_path" name="ext_file_path" size="60" value=""></td>
-				</tr>
-				<tr>
-					<td>$display_name URL路径:</td>
-					<td><input type="text" id="ext_url_path" name="ext_url_path" size="60" value="http://"></td>
-					<input type="hidden" id="ext_url_path" name="step" size="60" value="2">
-				</tr>
-    -->
 	</tbody>
 	</table>
 	<br>
@@ -518,7 +508,7 @@ END;
 		@touch(S_ROOT.'./data/webiminstall.lock');
 		@include($basic_configfile);
 	}else if($platform == 'discuz'){
-        $cache_path = "forumdata/cache";
+        	$cache_path = "forumdata/cache";
 		@touch(S_ROOT.'./forumdata/webiminstall.lock');
 		@include($basic_configfile);
 	}
@@ -552,9 +542,5 @@ END;
 EOF;
 	show_msg($msg, 999);
 }
-//}//install end
-
-//check permission
-
 
 ?>

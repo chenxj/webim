@@ -15,7 +15,6 @@ switch($platform){
 		$platform = $_GET['platform'];
 		break;
 }
-}
 
 $ticket = gp('ticket');
 $room_id = gp('id');

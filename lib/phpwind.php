@@ -158,6 +158,20 @@ function find_new_message(){
         return $messages;
 }
 
+function find_fid($tid){
+	include_once(WEBIM_ROOT . "config.php");
+	global $_SGLOBAL;
+	$rooms = array();
+	$query = $_SGLOBAL['db']->query("SELECT f.name, f.fid FROM pw_forums f LEFT JOIN pw_threads t ON t.fid=f.fid WHERE t.tid = '$tid'");
+	while ($value = $_SGLOBAL['db']->fetch_array($query)){
+		$name = $value['name'];
+		$id = (string)($_IMC['room_id_pre'] + $value['fid']);
+		$eid = 'channel:'.$id.'@'.$_IMC['domain'];
+		$rooms[$id]=array('id'=>$id,'name'=>$name,'pic_url'=>"", 'status'=>'','status_time'=>'');
+	}
+	return $rooms;
+}
+
 function find_room($fid){
 	include_once(WEBIM_ROOT . "config.php");
 	global $_SGLOBAL;

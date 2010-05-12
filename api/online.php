@@ -120,7 +120,11 @@ if($platform == 'discuz'){
 }
 
 if($platform == 'phpwind'){
-	$rooms = find_room(gp('room_ids'));
+	if(gp('room_ids') != ""){
+		$rooms = find_room(gp('room_ids'));
+	}else if(gp('tid') != ""){
+		$rooms = find_fid(gp('tid'));
+	}
 	$room_ids = array();
 }
 

@@ -30,7 +30,7 @@ $pm['daterange'] = 5;
 	$article = $element->hitSort();
 	foreach ($article as $key => $value) {
 		#$article[$key] = array($value['addition']['tid'],substrs($value['title'],30),$value['value']);
-		$pmlist[] = array('from'=>to_utf8($value['addition']['author']), 'test'=>$value['title'].'<span style=color:red>('.$value['addition']['hits'].')</span>', 'link'=>$value['url'], 'time'=>"");
+		$pmlist[] = array('from'=>to_utf8($value['addition']['author']), 'text'=>$value['title'].'<span style=color:red>('.$value['addition']['hits'].')</span>', 'link'=>$value['url'], 'time'=>"");
 	}
 }
 # var_dump($pmlist);

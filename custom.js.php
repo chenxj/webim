@@ -108,7 +108,7 @@ $setting = json_encode(setting());
 		im.admins = adminids?adminids.split(","):"";
         	im.isStrangerOn = "on";
 		layout = imUI.layout;
-		if ( platform === "discuz" ){
+		if ( platform === "discuz"  || platform === "phpwind" ){
 			imUI.addApp("hotpost");
 		}
                 //imUI.addApp("chatlink");

@@ -13,13 +13,10 @@ if(file_exists('../../forumdata')){
 }
 switch($platform){
     case 'phpwind':
-        echo $platform;
         include_once(S_ROOT.'./global.php');
-        echo $platform;
 	$cache_path = "data/sql_config.php";
-        //define('IN_UCHOME', TRUE); ???
-        //include_once($basic_configfile);
-        $display_name = 'phpwind';
+       	include("common.php"); 
+	$display_name = 'phpwind';
         $basic_configfile = S_ROOT.'./data/sql_config.php';
 	$templete_folder = 'template/wind/';
 	include_once($basic_configfile);
@@ -54,13 +51,8 @@ switch($platform){
 	$templete_folder = 'templates/default/';
         break;
 }
-echo $platform;
 
-include("common.php");
-
-
-
-
+$platform = which_platform();
 //timestamp
 $_SGLOBAL['timestamp'] = time();
 
@@ -108,17 +100,11 @@ foreach($writeable as $path)
 	}
 }
 
-
-///
-//$display_name = '';
-//用于在安装界面显示用户需要输入路径的另一平台名称
-///
 $url_path = $file_path = array();
 list($url_path[$platform],$else) = explode('/webim/', "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']);   //平台请求路径
-//$url_path[$platform] = $url_path[$platform] . "/";
 $url_path[$platform] .= "/";
 $file_path[$platform] = S_ROOT;//$_ROOT 平台文件夹路径
-//$config_file_path = $file_path[0].'./webim/config.php';//IM 配置文件绝对路径 已被 webim_configfile 替代
+
 //GPC filter
 if(!(get_magic_quotes_gpc())) {
 	$_GET = saddslashes($_GET);
@@ -225,8 +211,11 @@ if($step == 2)
 			}//uchome
 			else if($platform == 'discuz' || $platform == 'phpwind'){
 				$tablename = 'webim_histories';//$_SC['tablepre'].'im_histories';
-
-				$tablestatus = $db->fetch_first("SHOW TABLE STATUS LIKE '$tablename'");
+                                if($platform == 'discuz'){
+        				$tablestatus = $db->fetch_first("SHOW TABLE STATUS LIKE '$tablename'");
+        			}else{
+        			        $tablestatus = $db->get_one("SHOW TABLE STATUS LIKE '$tablename'");
+        			}
 				if($tablestatus){ 
 					$tblexist = true;
 				}else{

@@ -26,6 +26,28 @@ function which_platform(){
 	}
 }
 
+function saddslashes($string) {
+        if(is_array($string)) {
+                foreach($string as $key => $val) {
+                        $string[$key] = saddslashes($val);
+                }
+        } else {
+                $string = addslashes($string);
+        }
+        return $string;
+}
+
+function obclean() {
+        global $_SC;
+
+        ob_end_clean();
+        if ($_SC['gzipcompress'] && function_exists('ob_gzhandler')) {
+                ob_start('ob_gzhandler');
+        } else {
+                ob_start();
+        }
+}
+
 function checkfdperm($path, $isfile=0) {
 	if($isfile) {
 		$file = $path;
@@ -216,24 +238,10 @@ function write_webim_config($file,$domain,$apikey,$theme,$charset,$broadcastid=n
     	foreach($file_path as &$var){ 
         	$var = str_replace("\\", '/', $var); $var = str_replace("//", '/', $var);
 	}
-	/*
-	if(isset($file_path["uchome"])){
-		$uchome_path = $file_path['uchome'];
-		$uchome_url = $url_path['uchome'];
-	}
-	if(isset($file_path["discuz"])){
-		$discuz_path = $file_path['discuz'];
-		$discuz_url = $url_path['discuz'];
-	}
-	*/
-	if($platform == "uchome"){
-		$install_url = $url_path['uchome'];
-		$install_path = $file_path['uchome'];
-	}else if($platform == "discuz"){
-		$install_url = $url_path['discuz'];
-		$install_path = $file_path['discuz'];
-	}
-
+	
+	$install_url = $url_path[$platform];
+	$install_path = $file_path[$platform];
+	
 	$fp = fopen($file, 'r');
 	$configfile = fread($fp, filesize($file));
 	$configfile = trim($configfile);
@@ -303,6 +311,7 @@ function write_template(){
 		}
 	}else if($platform === "phpwind"){
 		// non-realize
+		echo "phpwind write template file";
 	}
 }
 

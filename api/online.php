@@ -1,20 +1,16 @@
 <?php
-$platform = $_GET['platform'];
+error_reporting(E_ALL);
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 include_once($configRoot . 'http_client.php');
-include_once($configRoot . 'discuz.php');
+include_once($configRoot . 'common.php');
 
-/*
- * 获取当前用户信息
- */
-function userinfo(){
-    $space =  array();
-    $space['uid'] = 1;
-    $space['nick'] = "free.wang";
-    return array();
-}
 
-$space =  userinfo();
+
+$space = my_info();
+
+
+
+
 
 /* if $friend_ids or $stranger_ids = Null
  *
@@ -28,20 +24,17 @@ $buddy_ids = ids_array(gp("buddy_ids"));//正在聊天的联系人
 // $setting = setting();
 // $block_list = is_array($setting->block_list) ? $setting->block_list : array();
 $block_list = array();
-
-
-
-$room_ids[] = crc32($_SERVER['PHP_SELF']);
-
-foreach($rooms as $key => $value){
-	if(in_array($key, $block_list)){
-		$rooms[$key]['blocked'] = true;
-	}else
-        $rooms[$key]['pic_url'] = "webim/static/images/group_chat_head.png";
-        $rooms[$key]['name'] = "来吧,激情plu!";
-	array_push($room_ids, $rooms[$key]['id']);
+$room_ids = array();
+$rooms = find_room();
+foreach($rooms as $room_id => $value){
+	if(in_array($room_id, $block_list)){
+		$rooms[$room_id]['blocked'] = true;
+	} else {
+        $rooms[$room_id]['pic_url'] = "webim/static/images/group_chat_head.png";
+        $rooms[$room_id]['name'] = "来吧,激情plu!";
+    }
+    $room_ids[] = $room_id;
 }
-
 
 $param = array(
     'rooms'=> join(',', $room_ids),
@@ -49,7 +42,7 @@ $param = array(
     'domain' => $_IMC['domain'], 
     'apikey' => $_IMC['apikey'], 
     'endpoint'=> $space['uid'], 
-    'nick'=>$space['nick'];
+    'nick'=>$space['nick']
 );
 
 ///
@@ -86,7 +79,7 @@ $output['clientnum'] = $clientnum;
 $output['server_time'] = microtime(true)*1000;
 $output['user']=array(
     'id'=>$space['uid'], 
-    'name'=>$name, 
+    'name'=> $space['nick'], 
     'pic_url'=>user_pic($space['uid']), 
     'status'=>'', 
     'presence' => 'online', 

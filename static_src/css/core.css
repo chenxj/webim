@@ -18,7 +18,7 @@ body {
         padding:0;
 }
 .webim img{
-        border:0;
+        border:solid 0.1em;
 }
 .webim{
         font-size: 10px;

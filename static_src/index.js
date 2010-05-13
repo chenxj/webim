@@ -18,26 +18,26 @@ function imlog(ui){
 	var menu = [{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"album","icon": path + "image\/app\/album.gif","link":"space.php?do=album"},{"title":"blog","icon": path + "image\/app\/blog.gif","link":"space.php?do=blog"},{"title":"thread","icon": path + "image\/app\/mtag.gif","link":"space.php?do=thread"},{"title":"share","icon": path + "image\/app\/share.gif","link":"space.php?do=share"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"}];
 	var log = webim.log;
 	webim.defaults.urls = {
-		online:path + "webim/api/online.php?platform=phpwind",
-		online_list:path + "webim/api/online_list.php?platform=phpwind",
-		offline:path + "webim/api/offline.php?platform=phpwind",
-		message:path + "webim/api/message.php?platform=phpwind",
-		refresh:path + "webim/api/refresh.php?platform=phpwind",
-		status:path + "webim/api/status.php?platform=phpwind"
+		online:path + "webim/api/test/online.php?platform=phpwind",
+		online_list:path + "webim/api/test/online_list.php?platform=phpwind",
+		offline:path + "webim/api/test/offline.php?platform=phpwind",
+		message:path + "webim/api/test/message.php?platform=phpwind",
+		refresh:path + "webim/api/test/refresh.php?platform=phpwind",
+		status:path + "webim/api/test/status.php?platform=phpwind"
 	};
-	webim.setting.defaults.url = path + "webim/api/setting.php?platform=phpwind";
+	webim.setting.defaults.url = path + "webim/api/test/setting.php?platform=phpwind";
 	webim.history.defaults.urls = {
-		load: path + "webim/api/histories.php?platform=phpwind",
-		clear: path + "webim/api/clear_history.php?platform=phpwind"
+		load: path + "webim/api/test/histories.php?platform=phpwind",
+		clear: path + "webim/api/test/clear_history.php?platform=phpwind"
 	};
 	webim.room.defaults.urls = {
-		member: path + "webim/api/members.php?platform=phpwind",
-		join: path + "webim/api/join.php?platform=phpwind",
-		leave: path + "webim/api/leave.php?platform=phpwind"
+		member: path + "webim/api/test/members.php?platform=phpwind",
+		join: path + "webim/api/test/join.php?platform=phpwind",
+		leave: path + "webim/api/test/leave.php?platform=phpwind"
 	};
-	webim.buddy.defaults.url = path + "webim/api/buddies.php?platform=phpwind";
-	webim.notification.defaults.url = path + "webim/api/notifications.php?platform=phpwind";
-	webim.hotpost.defaults.url = path + "webim/api/hotpost.php?platform=phpwind";
+	webim.buddy.defaults.url = path + "webim/api/test/buddies.php?platform=phpwind";
+	webim.notification.defaults.url = path + "webim/api/test/notifications.php?platform=phpwind";
+	webim.hotpost.defaults.url = path + "webim/api/test/hotpost.php?platform=phpwind";
 	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});
 	var soundUrls = {
 		lib: path + "webim/static/assets/sound.swf",

@@ -4,6 +4,17 @@ $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 include_once($configRoot . 'http_client.php');
 include_once($configRoot . 'discuz.php');
 
+/*
+ * 获取当前用户信息
+ */
+function userinfo(){
+    $space =  array();
+    $space['uid'] = 1;
+    $space['nick'] = "free.wang";
+    return array();
+}
+
+$space =  userinfo();
 
 /* if $friend_ids or $stranger_ids = Null
  *
@@ -13,9 +24,10 @@ $friend_ids = array();
 
 $buddy_ids = ids_array(gp("buddy_ids"));//正在聊天的联系人
 
-//Login webim server.
- $setting = setting();
-$block_list = is_array($setting->block_list) ? $setting->block_list : array();
+// Login webim server.
+// $setting = setting();
+// $block_list = is_array($setting->block_list) ? $setting->block_list : array();
+$block_list = array();
 
 
 
@@ -26,6 +38,7 @@ foreach($rooms as $key => $value){
 		$rooms[$key]['blocked'] = true;
 	}else
         $rooms[$key]['pic_url'] = "webim/static/images/group_chat_head.png";
+        $rooms[$key]['name'] = "来吧,激情plu!";
 	array_push($room_ids, $rooms[$key]['id']);
 }
 
@@ -36,7 +49,7 @@ $param = array(
     'domain' => $_IMC['domain'], 
     'apikey' => $_IMC['apikey'], 
     'endpoint'=> $space['uid'], 
-    'nick'=>$name
+    'nick'=>$space['nick'];
 );
 
 ///
@@ -71,30 +84,29 @@ $output = array();
 $output['buddy_online_ids'] = join(",", $buddy_online_ids);
 $output['clientnum'] = $clientnum;
 $output['server_time'] = microtime(true)*1000;
-if($platform !== "phpwind"){
-	$output['user']=array('id'=>$space['uid'], 'name'=>$name, 'pic_url'=>user_pic($space['uid']), 'status'=>'', 'presence' => 'online', 'status_time'=>'', 'url'=>'space.php?uid='.$space['uid']);//用户信息
-}else if($platform === "phpwind"){
-	$pic = showfacedesign($space['icon'], 1, 'm');
-	$output['user']=array('id'=>$space['uid'], 'name'=>$name, 'pic_url'=>$pic[0], 'status'=>'', 'presence' => 'online', 'status_time'=>'', 'url'=>"");//用户信息
-}
-
+$output['user']=array(
+    'id'=>$space['uid'], 
+    'name'=>$name, 
+    'pic_url'=>user_pic($space['uid']), 
+    'status'=>'', 
+    'presence' => 'online', 
+    'status_time'=>'', 
+    'url'=>'space.php?uid='.$space['uid']
+);
+//用户信息
 $imserver = 'http://'.$_IMC['imsvr'].':'.$_IMC['impoll'];
 $output['connection'] = array('domain' => $_IMC['domain'], 'ticket'=>$ticket, 'server'=>$imserver);//服务器连接
 
 $output['new_messages'] = $new_messages;
 ///
-if($platform === 'uchome'){
-	$output['buddies'] = find_buddy($buddy_ids);
-}else if($platform === 'discuz' || $platform === 'phpwind'){
-	foreach($buddy_online_ids as $id){
-		if(in_array($id, $friend_ids)){
-			$friends[] = $id;
-        } else {
-            $stranger[] = $id; 
-        }
-	}
-	$output['buddies'] = find_buddy($strangers, $friends);
+foreach($buddy_online_ids as $id){
+    if(in_array($id, $friend_ids)){
+        $friends[] = $id;
+    } else {
+        $stranger[] = $id; 
+    }
 }
+$output['buddies'] = find_buddy($strangers, $friends);
 $output['rooms'] = $rooms;
 # $output['histories'] = find_history($buddy_ids);
 # new_message_to_histroy(); //新消息转到历史记录

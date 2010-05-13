@@ -2,153 +2,51 @@
 $platform = $_GET['platform'];
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 include_once($configRoot . 'http_client.php');
-switch($platform){
-	case 'discuz':
-		include_once($configRoot . 'discuz.php');
-		break;
-	case 'uchome':
-		include_once($configRoot . 'uchome.php');
-		break;
-	case 'phpwind':
-		include_once($configRoot . 'phpwind.php');
-		$platform = $_GET['platform'];
-		break;
-}
+include_once($configRoot . 'discuz.php');
 
-session_start();
-if($platform === "discuz"){
-	if(!isset($_SESSION['timestamp']) || (gp('timestamp') - $_SESSION['timestamp'] > $_IMC['timestamp']*60)){//第一次登陆，获得好友列表，保存第一次登陆的时间戳
-		require_once($_IMC['install_path'].'/config.inc.php');
-		require_once($_IMC['install_path'].'/uc_client/client.php');
-		$buddynum = uc_friend_totalnum($space['uid']);
-		$buddies = uc_friend_ls($space['uid'], 1, $buddynum, $buddynum);
-		foreach($buddies as $value){
-			$friend_ids[] = $value['friendid'];
-		}
-		$_SESSION['timestamp'] = gp('timestamp');
-		if(!isset($_SESSION['friend_ids'])){
-			$_SESSION['friend_ids'] = $friend_ids;
-		}
-	}else{//不是第一次登陆，比较与上次登录的时间差，大于10分钟重新获取好友列表
-		$friend_ids = $_SESSION['friend_ids'];
-	}
-}else if($platform === "uchome"){
-	$friend_ids = ids_array($space['friends']);
-}else if($platform === "phpwind"){
-	if(!isset($_SESSION['timestamp']) || (gp('timestamp') - $_SESSION['timestamp'] > $_IMC['timestamp']*60)){
-		$buddies = getFriends($_SGLOBAL['supe_uid'], 0, 0, false, true);
-		foreach($buddies as $var){
-			$friend_ids[] = $var['uid'];
-		}
-		$_SESSION['timestamp'] = gp('timestamp');
-                if(!isset($_SESSION['friend_ids'])){
-                        $_SESSION['friend_ids'] = $friend_ids;
-                }
-	}else{
-		$friend_ids = $_SESSION['friend_ids'];
-	}
-}
-
-if($platform !== "phpwind"){
-	if(empty($space))exit();
-	$name = to_utf8(nick($space));
-	$stranger_ids = ids_except($space["uid"], ids_array(gp("stranger_ids")));//陌生人
-}else if($platform === "phpwind"){
-	$space = User_info();
-	if(empty($space))exit();
-	$name = $space['username'];
-	$stranger_ids = ids_except($space["uid"], ids_array(gp("stranger_ids")));
-	//$tmp = showfacedesign($space['uid'], 1, 'm');
-	//var_dump($tmp);
-	//echo $tmp[0];
-}
 
 /* if $friend_ids or $stranger_ids = Null
  *
  * Change into Array().
  * */
-if(!$friend_ids){
-    $friend_ids = array();
-}
-if(!$stranger_ids){
-    $stranger_ids = array();
-}
-
-//var_dump($stranger_ids);
-//modify by jinyu
-//var_dump($_SESSION['uid']);
-if(!isset($_SESSION['uid'])){
-	$_SESSION['uid'] = $space["uid"];
-}
-if(!isset($_SESSION['stranger_ids'])){
-	foreach($friend_ids as $id){
-		$stranger_ids = ids_except($id, $stranger_ids);
-	}
-	$_SESSION['stranger_ids'] = $stranger_ids;
-}else{
-	if(empty($stranger_ids)){
-		foreach($friend_ids as $id){
-			$_SESSION['stranger_ids'] = ids_except($id, $_SESSION['stranger_ids']);
-		}
-		$stranger_ids = $_SESSION['stranger_ids'];
-	}
-}
+$friend_ids = array();
 
 $buddy_ids = ids_array(gp("buddy_ids"));//正在聊天的联系人
 
-# $new_messages = find_new_message();//查找离线消息
-for($i=0;$i<count($new_messages);$i++){
-        $msg_uid = $new_messages[$i]["from"];
-        array_push($buddy_ids, $msg_uid);
-        array_push($stranger_ids, $msg_uid);
-}
-
 //Login webim server.
-# $setting = setting();
+ $setting = setting();
 $block_list = is_array($setting->block_list) ? $setting->block_list : array();
 
-//fix by jinyu
-if($platform == 'uchome'){
-	$rooms = find_room();
-	$room_ids = array();
-}
 
 
-if($platform == 'discuz'){
-	$rooms = find_room(gp('room_ids'));
-	$room_ids = array();
-}
-
-if($platform == 'phpwind'){
-	$rooms = find_room(gp('room_ids'));
-	$room_ids = array();
-}
+$room_ids[] = crc32($_SERVER['PHP_SELF']);
 
 foreach($rooms as $key => $value){
 	if(in_array($key, $block_list)){
 		$rooms[$key]['blocked'] = true;
 	}else
-        	$rooms[$key]['pic_url'] = "webim/static/images/group_chat_head.png";
+        $rooms[$key]['pic_url'] = "webim/static/images/group_chat_head.png";
 	array_push($room_ids, $rooms[$key]['id']);
 }
 
-//fix by jinyu
-if($platform == 'uchome'){
-	$data = array ('rooms'=> join(',', $room_ids),'buddies'=>join(',', array_unique(array_merge($friend_ids, $buddy_ids, $stranger_ids))), 'domain' => $_IMC['domain'], 'apikey' => $_IMC['apikey'], 'endpoint'=> $space['uid'], 'nick'=>to_unicode($name));
-}else if($platform == 'discuz' || $platform == 'phpwind'){
-	if($platform == "phpwind"){
-		require(WEBIM_ROOT . '/config.php');
-	}
-	$data = array ('rooms'=> join(',', $room_ids),'buddies'=>join(',', array_unique(array_merge($friend_ids, $stranger_ids))), 'domain' => $_IMC['domain'], 'apikey' => $_IMC['apikey'], 'endpoint'=> $space['uid'], 'nick'=>$name);
-}
+
+$param = array(
+    'rooms'=> join(',', $room_ids),
+    'buddies'=>join(',', array_unique(array_merge($friend_ids, $stranger_ids))), 
+    'domain' => $_IMC['domain'], 
+    'apikey' => $_IMC['apikey'], 
+    'endpoint'=> $space['uid'], 
+    'nick'=>$name
+);
+
 ///
 //var_dump($data);
 ///
 $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
-$client->post('/presences/online', $data);
+$client->post('/presences/online', $param);
 $pageContents = $client->getContent();
-//TODO: handle errors!
 $pageData = json_decode($pageContents);
+
 //var_dump($pageData);
 if($client->status !="200"||empty($pageData->ticket)){
         $ticket ="";

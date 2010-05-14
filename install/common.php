@@ -267,7 +267,7 @@ function write_webim_config($file,$domain,$apikey,$theme,$charset,$broadcastid=n
 	//$configfile = insertconfig($configfile, '/\$_IMC\["uchome_path"\] =\s*.*?;/i', '$_IMC["uchome_path"] = "'.$uchome_path.'";');
 	//$configfile = insertconfig($configfile, '/\$_IMC\["uchome_url"\] =\s*.*?;/i', '$_IMC["uchome_url"] = "'.$uchome_url.'";');
 	//$configfile = insertconfig($configfile, '/\$_IMC\["discuz_path"\] =\s*.*?;/i', '$_IMC["discuz_path"] = "'.$discuz_path.'";');
-	//$configfile = insertconfig($configfile, '/\$_IMC\["discuz_url"\] =\s*.*?;/i', '$_IMC["discuz_url"] = "'.$discuz_url.'";');
+	$configfile = insertconfig($configfile, '/\$_IMC\["platform"\] =\s*.*?;/i', '$_IMC["platform"] = "'.$platform.'";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["install_url"\] =\s*.*?;/i', '$_IMC["install_url"] = "'.$install_url.'";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["install_path"\] =\s*.*?;/i', '$_IMC["install_path"] = "'.$install_path.'";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["version"\] =\s*.*?;/i', '$_IMC["version"] = "'.$nextim_version.'";');

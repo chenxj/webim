@@ -42,7 +42,7 @@ $param = array(
 );
 
 ///
-var_dump($param);
+//var_dump($param);
 ///
 $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
 $client->post('/presences/online', $param);

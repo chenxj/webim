@@ -5,7 +5,7 @@ include_once( $configRoot . 'http_client.php');
 include_once( $configRoot . 'common.php');
 
 
-
+$space = my_info();
 $ticket = gp('ticket');
 $room_id = gp('id');
 if(empty($ticket)) {

@@ -123,20 +123,27 @@ function _iconv($s,$t,$data){
 		return $chs->convert($data);
 	}
 }
+
+
+
 if( !function_exists('json_encode') ) {
     function json_encode($data) {
         $json = new Services_JSON();
         return( $json->encode($data) );
     }
 }
-
-// Future-friendly json_decode
 if( !function_exists('json_decode') ) {
-    function json_decode($data) {
-        $json = new Services_JSON();
+    function json_decode($data, $bool) {
+        if ($bool) {
+            $json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
+        } else {
+            $json = new Services_JSON();
+        }
         return( $json->decode($data) );
     }
 }
+
+
 function g($key = '') {
 	return $key === '' ? $_GET : (isset($_GET[$key]) ? $_GET[$key] : null);
 }

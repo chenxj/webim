@@ -12,6 +12,7 @@ $space = my_info();
  * Change into Array().
  * */
 $friend_ids = array();
+$stranger_ids = array();
 
 $buddy_ids = ids_array(gp("buddy_ids"));//正在聊天的联系人
 
@@ -41,7 +42,7 @@ $param = array(
 );
 
 ///
-//var_dump($data);
+var_dump($param);
 ///
 $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
 $client->post('/presences/online', $param);

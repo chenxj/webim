@@ -214,7 +214,7 @@ if($step == 2)
                                 if($platform == 'discuz'){
         				$tablestatus = $db->fetch_first("SHOW TABLE STATUS LIKE '$tablename'");
         			}else{
-        			        $tablestatus = $db->get_one("SHOW TABLE STATUS LIKE '$tablename'");
+        			        $tablestatus = $db->query("SHOW TABLE STATUS LIKE '$tablename'");
         			}
 				if($tablestatus){ 
 					$tblexist = true;
@@ -273,13 +273,25 @@ if($step == 2)
 		{
 			unlink(S_ROOT . $templete_folder . "webim_$platform.htm");
 		}
-		if (file_exists("webim_$platform.htm"))
-		{
-			copy("webim_$platform.htm", S_ROOT . $templete_folder . "webim_$platform.htm");
-		}
-		else
-		{
-			show_msg("找不到文件：" . S_ROOT . "webim/webim_$platform.htm", $ERRORCODE['file_not_exist']);			
+		if($platform == "uchome" || $platform == "discuz"){
+			if (file_exists("webim_$platform.htm")){
+				copy("webim_$platform.htm", S_ROOT . $templete_folder . "webim_$platform.htm");
+			}
+		}else if($platform == "phpwind"){
+			if(file_exists(S_ROOT . $templete_folder . "webim.js")){
+				unlink(S_ROOT . $templete_folder . "webim.js");
+			}else{
+				show_msg("找不到文件：" . S_ROOT . "webim/webim_$platform.htm", $ERRORCODE['file_not_exist']);
+			}
+			$fp = fopen(S_ROOT . $templete_folder . "webim.js", "a");
+			$webimjs = "webim_template = '<link href="webim/static/webim.min.css" media="all" type="text/css" rel="stylesheet"/>';\n";
+			$webimjs .= "webim_template += '<link href="webim/static/themes/{$_IMC['theme']}/ui.theme.css" media="all" type="text/css" rel="stylesheet"/>';\n";
+			$webimjs .= "webim_template += '<script src="webim/static/webim_discuz.all.min.js" type="text/javascript"></script>';\n";
+			$webimjs .= "webim_template += '<script src="webim/static/i18n/webimzh-{$_IMC['local']}.js" type="text/javascript"></script>';\n";
+			$webimjs .= "webim_template += '<script src="webim/custom.js.php?platform=phpwind" type="text/javascript"></script>';\n";
+			$webimjs .= "document.write(webim_template);";
+			fwrite($fp, $webimjs);
+			fclose($fp);
 		}
 		
 		//delete cache files

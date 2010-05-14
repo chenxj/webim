@@ -1,20 +1,12 @@
 <?php
+error_reporting(0);
 header("Content-type: application/javascript");
 include_once ('config.php');
 
-$platform = $_GET['platform'];
+$platform = $_IMC['platform'] ? $_IMC['platform'] : $_GET['platform'];
 
-switch($platform){
-	case 'discuz':
-		include_once('lib/discuz.php');
-		break;
-	case 'uchome':
-		include_once('lib/uchome.php');
-		break;
-	case 'phpwind':
-		include_once('lib/phpwind.php');
-		break;
-}
+include_once("lib/{$platform}.php");
+
 
 if($platform === 'uchome'){
 	$menu = array(

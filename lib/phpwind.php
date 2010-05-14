@@ -1,12 +1,12 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
 define('WEBIM_ROOT', substr(dirname(__FILE__), 0, -4));
-include_once(WEBIM_ROOT.'/../global.php');
-include_once(WEBIM_ROOT.'/../require/showimg.php');
-include_once(WEBIM_ROOT . '/config.php');
-include_once(WEBIM_ROOT . "/lib/json.php");
+include(WEBIM_ROOT.'/../global.php');
+include(WEBIM_ROOT.'/../require/showimg.php');
+include(WEBIM_ROOT . "/lib/json.php");
+include(WEBIM_ROOT . '/config.php');
 
-
+$platform = $_IMC['platform'];
 $_SGLOBAL['supe_uid'] = $winduid;
 $_SGLOBAL['db'] = $db;
 $_SGLOBAL['timestamp'] = time();

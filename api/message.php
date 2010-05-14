@@ -1,17 +1,9 @@
 <?php 
-
-$platform = $_GET['platform'];
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 include_once($configRoot . 'http_client.php');
-switch($platform){
-	case 'discuz':
-		include_once($configRoot . 'discuz.php');
-		break;
-	case 'uchome':
-		include_once($configRoot . 'uchome.php');
-		break;
-}
+include_once($configRoot . 'common.php');
 
+$space = my_info();
 
 $ticket = gp('ticket');
 $body = gp('body','');
@@ -20,15 +12,21 @@ $to = gp('to');
 $send = gp('offline') == "1" ? false : true;
 $type = gp('type');
 $from = $space['uid'];
+$nick = $space['nick'];
 $time = microtime(true)*1000;
+
+
+
+
 //change by chenxj
 if($type != "broadcast" && (empty($to)||empty($from))){
 	echo "{success:false}"."{".$to.":".$from."}";exit();
 }
+echo 123;
 $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
-$nick = to_unicode(to_utf8(nick($space)));
 $client->post('/messages', array('domain'=>$_IMC['domain'],'apikey'=>$_IMC['apikey'],'ticket' => $ticket,'nick'=>$nick, 'type'=> $type, 'to'=>$to,'body'=>to_unicode($body),'timestamp'=>(string)$time,'style'=>$style));
 $pageContents = $client->getContent();
+var_dump($pageContents);
 
 //TODO:send => true if forward message successfully.
 //

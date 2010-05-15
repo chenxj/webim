@@ -76,13 +76,13 @@ widget("buddy",{
 			preventDefault(e);
 			self.trigger("offline");
 		});
-    */
+    
 		//broadcast 
 		addEvent(broadcast.firstChild,"click",function(e){
 			preventDefault(e);
 			self.trigger("broadcastselect");	
 		});
-
+*/
 	},
 	_titleCount: function(){
 		var self = this, _count = self._count, win = self.window, empty = self.$.empty, element = self.element;

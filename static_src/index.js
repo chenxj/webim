@@ -47,22 +47,30 @@ function imlog(ui){
 	var body , imUI, im, layout;
 	function create(){
 		body = document.body;
-		imUI = new webim.ui(null,{menu: menu});
+		var admins = ["25","26","1","6"];
+		imUI = new webim.ui(null,{menu: menu,admins:admins,uid:6,broadcastID:0});
 		im = imUI.im;
-		im.admins = ["25","26"];
+		im.isadmin = true;
+		im.uid = 6;
+		im.broadcastID = 0;
 		layout = imUI.layout;
-		//imUI.addApp("hotpost");
 		imUI.addApp("room");
+		imUI.addApp("broadcast");
+		imUI.addApp("hotpost");
 		imUI.addApp("chatlink");
 		body.appendChild(layout.element);
-		//need timeout
+		hide(layout.app("room").window.element);
+		hide(layout.app("broadcast").window.element);
+	//need timeout
 		setTimeout(function(){imUI.initSound(soundUrls)},1000);
 		//log
 	//	imlog(imUI);
 	}
 	function init(){
 		layout.buildUI();
-		im.autoOnline() && im.online();
+		if(im.autoOnline()){
+	       	 im.online();
+		}
 	}
 	(document.body ? create() : webim.ui.ready(create));
 	webim.ui.ready(init);

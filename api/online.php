@@ -3,6 +3,11 @@ error_reporting(E_ALL);
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 include_once($configRoot . 'http_client.php');
 include_once($configRoot . 'common.php');
+<<<<<<< HEAD:api/online.php
+=======
+
+
+>>>>>>> f07f6d6fdc9bc598c66fb44392a72d51bfed45ff:api/online.php
 
 $space = my_info();
 /* if $friend_ids or $stranger_ids = Null

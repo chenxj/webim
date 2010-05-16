@@ -1,11 +1,16 @@
 <?php
 error_reporting(0);
 header("Content-type: application/javascript");
+<<<<<<< HEAD:custom.js.php
 
 include_once ('config.php');
 $platform = $_IMC['platform'] ? $_IMC['platform'] : $_GET['platform'];
 include_once("lib/{$platform}.php");
 
+=======
+include_once 'config.php';
+/*
+>>>>>>> f07f6d6fdc9bc598c66fb44392a72d51bfed45ff:custom.js.php
 
 if($platform === 'uchome'){
 	$menu = array(
@@ -32,14 +37,18 @@ if($_SCONFIG['my_status']) {
 		}
 	}
 }
-$setting = json_encode(setting());
+*/
 
 ?>
 
 //custom
 (function(webim){
     var path = "";
+<<<<<<< HEAD:custom.js.php
     var platform = "<?php echo $platform; ?>";
+=======
+    var platform = "<?php echo $platform ?>";
+>>>>>>> f07f6d6fdc9bc598c66fb44392a72d51bfed45ff:custom.js.php
 
     var menu = webim.JSON.decode('<?php echo json_encode($menu) ?>');
 	webim.extend(webim.setting.defaults.data, webim.JSON.decode('<?php echo $setting ?>'));
@@ -68,9 +77,6 @@ $setting = json_encode(setting());
 	if ( platform === "discuz" ){
 		webim.hotpost.defaults.url = path + "webim/api/hotpost.php?platform=" + platform;
 		webim.defaults.urls.online = path + "webim/api/online.php?platform=" + platform + "&room_ids=" + getTid();
-	}
-	if (platform === "phpwind"){
-		webim.hotpost.defaults.url = path + "webim/api/hotpost.php?platform=" + platform;
 	}
 
 	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});
@@ -109,7 +115,12 @@ $setting = json_encode(setting());
         	im.isStrangerOn = "on";
 		imUI.addApp("room");
 		layout = imUI.layout;
+<<<<<<< HEAD:custom.js.php
 		if ( platform === "discuz"  || platform === "phpwind" ){
+=======
+                imUI.addApp("room");
+		if ( platform === "discuz" ){
+>>>>>>> f07f6d6fdc9bc598c66fb44392a72d51bfed45ff:custom.js.php
 			imUI.addApp("hotpost");
 		}
                 //imUI.addApp("chatlink");
@@ -135,7 +146,7 @@ $setting = json_encode(setting());
 			chatlink.offline(mapIds(data));
 		});
 		im.setStranger(chatlink.idsArray());
-		im.autoOnline() &&  im.online() ;
+		im.autoOnline() && im.online();
 	}
 	function ready(){
 		chatlink.enable();

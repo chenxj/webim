@@ -17,15 +17,33 @@ sendCast
 function ieCacheSelection(e){
         document.selection && (this.caretPos = document.selection.createRange());
 }
-
+app("broadcast",{
+	init:function(){
+		var self = this,im = self.im,broadcast = im.broadcast,u = im.data.user;
+		var model = self.broadcast =  new webim.broadcast();
+		var widget = self.layout.panels[im.broadcastID] = new webimUI.broadcast(false,{isadmin:im.isadmin,uid:im.uid,broadcastID:im.broadcastID});
+		this.layout.addApp(widget,{
+			title:i18n("broadcast"),
+			icon:"broadcast",
+			sticky:false,
+			onlyIcon:true,
+			isMinimize:true,
+			widget:widget,
+			model:model	
+		},"setting");
+		widget.bind("sendMsg",function(msg){
+			msg.from = im.userid;
+			msg.type = "broadcast";
+			im.sendMsg(msg);
+			im.history.handle(msg);
+		}).bind("history",function(msg){
+			this.history.clear();
+			im.history.load("0");
+		});
+	}		
+});
 widget("broadcast",{
-	template:'<div class="webim-chat"> \
-                      <div id=":header" class="webim-broadcast-header ui-widget-subheader">  \
-                            <div id=":user" class="webim-user"> \
-                                  <a id=":userPic" class="webim-user-pic" href="space.php?uid=0"><img width="50" height="50" src="webim/static/images/icons/broadcast.png" defaultsrc="" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;"></a> \
-				  	<span id=":userStatus" title="" class="webim-user-status"></span>\
-                             </div> \
-                       </div> \
+	template:'<div id=":webim-broadcast-window" class="webim-chat"> \
                        <div id=":content" class="webim-chat-content"> \
                        </div> \
                        <div id=":actions" class="webim-chat-actions"> \
@@ -47,7 +65,7 @@ widget("broadcast",{
                        </div>'		
 		},{
     _preInit:function(){
-	var self = this,options = self.options,info = options.info,isadmin = info.isadmin;
+	var self = this,options = self.options,isadmin = options.isadmin;
         if (isadmin){
 		options.template = options.template.replace("%dynContentIcon%",'<em class="webim-icon webim-icon-chat"></em>');
 		options.template = options.template.replace("%dynContentTools%",'<div id=":tools" class="webim-chat-tools ui-helper-clearfix ui-state-default"></div>');
@@ -57,13 +75,14 @@ widget("broadcast",{
 		options.template = options.template.replace("%dynContentIcon%",'');
 		options.template = options.template.replace("%dynContentTools%",'');
 	}	
-    },
+
+ },
+    
     _init:function(){
         var self = this,element = self.element,options = self.options,win = self.window = options.window,info = options.info;
         var history = self.history = new webimUI.history(null,{
             user:0,
             info:options.info
-        
 	});
         self.$.content.insertBefore(history.element,self.$.content.firstChild);
         if(win){
@@ -72,17 +91,18 @@ widget("broadcast",{
         }
         self.update(options.info);
 	//add history 
+
         history.add(options.history);
         plugin.call(self,"init",[null,self.ui()]);
-        self._adjustContent();
+       self._adjustContent();
     },
 	_initEvents: function(){
-		var self = this, options = self.options,isadmin = options.info.isadmin, $ = self.$, placeholder = i18n("input notice"), gray = "webim-gray", input = $.input;
+		var self = this, options = self.options,isadmin = options.isadmin, $ = self.$, placeholder = i18n("input notice"), gray = "webim-gray", input = $.input;
 
 		self.history.bind("update", function(){
 			self._adjustContent();
 		}).bind("clear", function(){
-			self.notice(i18n("clear history notice"), 3000);
+			//self.notice(i18n("clear history notice"), 3000);
 		});
 		//输入法中，进入输入法模式时keydown,keypress触发，离开输入法模式时keyup事件发生。
 		//autocomplete之类事件放入keyup，回车发送事件放入keydown,keypress
@@ -130,8 +150,8 @@ widget("broadcast",{
 		var self = this, options = self.options, info = options.info;
 		var msg = {
 			type: options.msgType,
-			to: info.id,
-			from: options.user.id,
+			to: options.broadcastID,
+			from: options.uid,
 			offline: 0,//info.presence == "online" ? 0 : 1,
 			body: val,
 			timestamp: (new Date()).getTime()
@@ -228,21 +248,24 @@ widget("broadcast",{
     },
     plugins:{}
 });
-webimUI.chat.defaults.emot = true;
+webimUI.broadcast.defaults.emot = true;
 plugin.add("broadcast","emot",{
     init:function(e,ui){
-        var b = ui.self;
-        var emot = new webimUI.emot();
-        emot.bind("select",function(alt){
-          b.focus();
-          b.insert(alt,true);
-	});
-	  var tm = createElement(tpl('<a href="#chat-emot" title="<%=emot%>"><em class="webim-icon webim-icon-emot"></em></a>'));
-	  addEvent(tm,"click",function(e){
-	  	preventDefault(e);
-		emot.toggle();
-	  });
-	ui.$.toolContent.appendChild(emot.element);
-	ui.$.tools.appendChild(tm);
+	    if (ui.self.options.isadmin){
+       		 var b = ui.self;
+                 var emot = new webimUI.emot();
+        	 emot.bind("select",function(alt){
+          		b.focus();
+          		b.insert(alt,true);
+		});
+	  	var tm = createElement(tpl('<a href="#chat-emot" title="<%=emot%>"><em class="webim-icon webim-icon-emot"></em></a>'));
+	  	addEvent(tm,"click",function(e){
+	  		preventDefault(e);
+			emot.toggle();
+	  	});
+		ui.$.toolContent.appendChild(emot.element);
+		ui.$.tools.appendChild(tm);
+  	 }
    }
  });
+ 

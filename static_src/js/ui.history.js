@@ -51,7 +51,7 @@ widget("history",{
 
 		var name = other ? logItem.nick : fromSelf ? user.name : (info.name ? '<a href="' + info.url + '">' + info.name + '</a>' : info.id);
 		if (last && last.to == to && last.from == from && time - last.timestamp < 60000){
-			shouldTilte = false;
+		//	shouldTilte = false;
 		}
 		//markup.push(self._renderDateBreak(time));
 		if (shouldTilte) {

@@ -1,10 +1,11 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
 define('WEBIM_ROOT', substr(dirname(__FILE__), 0, -4));
-include_once(WEBIM_ROOT . '/config.php');
-include_once($_IMC['install_path'].'global.php');
-define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
+include_once(WEBIM_ROOT.'/../global.php');
+include_once(WEBIM_ROOT.'/../require/showimg.php');
 include_once(WEBIM_ROOT . "/lib/json.php");
+
+$platform = $_IMC['platform'];
 $_SGLOBAL['supe_uid'] = $winduid;
 $_SGLOBAL['db'] = $db;
 $_SGLOBAL['timestamp'] = time();
@@ -158,8 +159,23 @@ function find_new_message(){
         return $messages;
 }
 
+function find_fid($tid){
+	include_once(WEBIM_ROOT . "config.php");
+	global $_SGLOBAL;
+	$rooms = array();
+	$query = $_SGLOBAL['db']->query("SELECT f.name, f.fid FROM pw_forums f LEFT JOIN pw_threads t ON t.fid=f.fid WHERE t.tid = '$tid'");
+	while ($value = $_SGLOBAL['db']->fetch_array($query)){
+		$name = $value['name'];
+		$id = (string)($_IMC['room_id_pre'] + $value['fid']);
+		$eid = 'channel:'.$id.'@'.$_IMC['domain'];
+		$rooms[$id]=array('id'=>$id,'name'=>$name,'pic_url'=>"", 'status'=>'','status_time'=>'');
+	}
+	return $rooms;
+}
+
 function find_room($fid){
-	global $_SGLOBAL,$_IMC;
+	include_once(WEBIM_ROOT . "config.php");
+	global $_SGLOBAL;
 	$rooms = array();
 	$query = $_SGLOBAL['db']->query("SELECT name FROM pw_forums WHERE fid = '$fid'");
 	while ($value = $_SGLOBAL['db']->fetch_array($query)) {
@@ -199,7 +215,13 @@ function find_history($ids){
                         	array_unshift($list,array('to'=>$value['to'],'from'=>$value['from'],'style'=>$value['style'],'body'=>to_utf8($value['body']),'timestamp'=>$value['timestamp'], 'type' =>$value['type'], 'new' => 0));
                         }
                 }else{
-			// unknown...
+			$query = $_SGLOBAL['db']->query("SELECT main.*, s.username FROM ".im_tname('histories')." main 
+							LEFT JOIN pw_members s ON s.uid=main.from
+					             	WHERE `to`='$id' ORDER BY timestamp DESC LIMIT 30");
+			while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+				$nick = $value['username'];
+				array_unshift($list,array('to'=>$value['to'],'nick'=>to_utf8($nick),'from'=>$value['from'],'style'=>$value['style'],'body'=>to_utf8($value['body']),'timestamp'=>$value['timestamp']));
+			}
                 }
                 $histories[$id] = $list;
         }

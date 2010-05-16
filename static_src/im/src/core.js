@@ -2,8 +2,25 @@ function now() {
 	return (new Date).getTime();
 }
 function getTid(roomIdendify){
+	var id = roomIdendify?roomIdendify:"tid";
+	var url = location.href;
+	var reg = new RegExp("(^|&|\\?)"+ id +"=(\\d*)(&|$)|read-html-(\\d*)\\.html|read\\.php\\?tid-(\\d*)\\.html","i");
+	if (reg.test(url)){
+		return RegExp.$2 || RegExp.$4 || RegExp.$5;
+	}
+	return "";
+}
+function getFid(){
+	var url = location.href;
+	var reg = new RegExp("(^|&|\\?)fid=(\\d*)(&|$)|thread-htm-fid-(\\d*)\\.html|thread\\.php\\?fid-(\\d*)\\.html","i");
+	if (reg.test(url)){
+		return RegExp.$2 || RegExp.$4 || RegExp.$5;
+	}
+	return "";
+}
+function getId(val){
 	var url = location;
-	var reg = new RegExp("(^|&|\\?)"+roomIdendify+"=(\\d*)(&|$)","i");
+	var reg = new RegExp("(^|&|\\?)"+ val +"=(\\d*)(&|$)","i");
 	if (reg.test(url)){
 		return RegExp.$1;
 	}

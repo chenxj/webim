@@ -1,6 +1,5 @@
 <?php
 header("Content-type: application/javascript");
-include_once ('config.php');
 
 $platform = $_GET['platform'];
 
@@ -16,6 +15,7 @@ switch($platform){
 		break;
 }
 
+include_once ('config.php');
 if($platform === 'uchome'){
 	$menu = array(
 		array("title" => 'doing',"icon" =>"image/app/doing.gif","link" => "space.php?do=doing"),
@@ -98,14 +98,23 @@ $setting = json_encode(setting());
 		}
 		return "";
 	}
-
+	function isAdmin(ids,userid){
+		for (var i = 0; i < ids.length; i++){
+			if (ids[i] == userid)return true;
+		}
+		return false;
+	}
 	var body , imUI, im, layout, chatlink;
 	function create(){
 		body = document.body;
 		imUI = new webim.ui(null,{menu: menu});
 		im = imUI.im;
 		var adminids = "<?php echo $_IMC['admin_ids'] ?>";
+		var userid = "<?php echo $_SGLOBAL['supe_uid']?>";
 		im.admins = adminids?adminids.split(","):"";
+		im.isadmin = isAdmin(adminids,userid);
+		im.userid = userid;
+		im.broadcastID = 0;
         	im.isStrangerOn = "on";
 		imUI.addApp("room");
 		layout = imUI.layout;
@@ -113,6 +122,9 @@ $setting = json_encode(setting());
 			imUI.addApp("hotpost");
 		}
                 //imUI.addApp("chatlink");
+		imUI.addApp("broadcast");
+		webim.hide(layout.app("broadcast").window.element);
+		webim.hide(layout.app("room").window.element);
 		body.appendChild(layout.element);
                 setTimeout(function(){imUI.initSound(soundUrls)},1000);
 		im.bind("ready",ready).bind("go",go).bind("stop",stop);

@@ -27,11 +27,18 @@ app("broadcast",{
 			icon:"broadcast",
 			sticky:false,
 			onlyIcon:true,
-			isMinimize:true	
+			isMinimize:true,
+			widget:widget,
+			model:model	
 		},"setting");
 		widget.bind("sendMsg",function(msg){
+			msg.from = im.userid;
+			msg.type = "broadcast";
 			im.sendMsg(msg);
 			im.history.handle(msg);
+		}).bind("history",function(msg){
+			this.history.clear();
+			im.history.load("0");
 		});
 	}		
 });
@@ -84,9 +91,10 @@ widget("broadcast",{
         }
         self.update(options.info);
 	//add history 
+
         history.add(options.history);
         plugin.call(self,"init",[null,self.ui()]);
-        self._adjustContent();
+       self._adjustContent();
     },
 	_initEvents: function(){
 		var self = this, options = self.options,isadmin = options.isadmin, $ = self.$, placeholder = i18n("input notice"), gray = "webim-gray", input = $.input;
@@ -94,7 +102,7 @@ widget("broadcast",{
 		self.history.bind("update", function(){
 			self._adjustContent();
 		}).bind("clear", function(){
-			self.notice(i18n("clear history notice"), 3000);
+			//self.notice(i18n("clear history notice"), 3000);
 		});
 		//输入法中，进入输入法模式时keydown,keypress触发，离开输入法模式时keyup事件发生。
 		//autocomplete之类事件放入keyup，回车发送事件放入keydown,keypress
@@ -243,18 +251,21 @@ widget("broadcast",{
 webimUI.broadcast.defaults.emot = true;
 plugin.add("broadcast","emot",{
     init:function(e,ui){
-        var b = ui.self;
-        var emot = new webimUI.emot();
-        emot.bind("select",function(alt){
-          b.focus();
-          b.insert(alt,true);
-	});
-	  var tm = createElement(tpl('<a href="#chat-emot" title="<%=emot%>"><em class="webim-icon webim-icon-emot"></em></a>'));
-	  addEvent(tm,"click",function(e){
-	  	preventDefault(e);
-		emot.toggle();
-	  });
-	ui.$.toolContent.appendChild(emot.element);
-	ui.$.tools.appendChild(tm);
+	    if (ui.self.options.isadmin){
+       		 var b = ui.self;
+                 var emot = new webimUI.emot();
+        	 emot.bind("select",function(alt){
+          		b.focus();
+          		b.insert(alt,true);
+		});
+	  	var tm = createElement(tpl('<a href="#chat-emot" title="<%=emot%>"><em class="webim-icon webim-icon-emot"></em></a>'));
+	  	addEvent(tm,"click",function(e){
+	  		preventDefault(e);
+			emot.toggle();
+	  	});
+		ui.$.toolContent.appendChild(emot.element);
+		ui.$.tools.appendChild(tm);
+  	 }
    }
  });
+ 

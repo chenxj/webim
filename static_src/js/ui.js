@@ -265,9 +265,9 @@ extend(webimUI.prototype, objectExtend, {
 				   	self.addBroadcast(id,null,null,titlename);
 	  			   }else{
 			              self.addChat(id,{type:"room"});  
-          			}
-			 	c = layout.chat(id);
-			  }
+       		   		   }
+			 	   c = layout.chat(id);
+			  	}
 				c && setting.get("msg_auto_pop") && !layout.activeTabId && layout.focusChat(id);
 				c.window.notifyUser("information", count);
 				var p = c.window.pos;

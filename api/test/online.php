@@ -205,5 +205,5 @@ $output['rooms'] = $rooms;
  $output['histories'] = find_history($buddy_ids);
 # new_message_to_histroy(); //新消息转到历史记录
 
-echo '{"buddy_online_ids":"2","clientnum":"0","server_time":1273754388680,"user":{"id":"6","name":"chenxjq","pic_url":"images\/face\/none.gif","status":"","presence":"online","status_time":"","url":""},"connection":{"domain":"localhost","ticket":"'.$ticket.'","server":"http:\/\/im.nextim.cn:8000"},"new_messages":[],"buddies":[],"rooms":{"2":{"id":"2","name":"\u65b0\u529f\u80fd\u4ecb\u7ecd","pic_url":"images\/group_chat_head.png","status":"","status_time":"","count":1}},"histories":[]}';
+echo '{"buddy_online_ids":"2","clientnum":"0","server_time":1273754388680,"user":{"id":"6","name":"chenxjq","pic_url":"images\/face\/none.gif","status":"","presence":"online","status_time":"","url":""},"connection":{"domain":"localhost","ticket":"'.$ticket.'","server":"http:\/\/192.168.66.128:8000"},"new_messages":[],"buddies":[],"rooms":{"2":{"id":"2","name":"\u65b0\u529f\u80fd\u4ecb\u7ecd","pic_url":"images\/group_chat_head.png","status":"","status_time":"","count":1}},"histories":[]}';
 ?>

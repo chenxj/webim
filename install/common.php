@@ -315,9 +315,13 @@ function write_template(){
 	                $fileLen = filesize($path . $templete_folder . 'footer.htm');
         	      	$htmfile = fread($fp, $fileLen);
                 	$htmfile = trim($htmfile);
-                   	list($htmfile, $foot) = explode("</body>", $htmfile);
+                   	list($htmfile, $foot) = explode("?>", $htmfile);
                   	fclose($fp);
-			$htmfile .= "\r\n".'<script language="JavaScript" src="template/wind/webim.js"></script>'."\r\n</body>".$foot;
+
+
+
+			$htmfile .= "\r\n" . 'include(dirname(dirname(dirname(__FILE__))) . "/webim/config.php");' . "\r\n" ;
+			$htmfile .= "\r\n" . 'include_once PrintEot("webim_phpwind")' . "\r\n?>" . $foot;
 			@$fp = fopen($path . $templete_folder . 'footer.htm', 'w');
 			fwrite($fp, trim($htmfile));
 			fclose($fp);

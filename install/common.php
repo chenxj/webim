@@ -2,13 +2,11 @@
 //error_reporting(0);
 $_SGLOBAL = $_SCONFIG = $_SBLOCK = array();
 //安装平台根目录
-//define('S_ROOT', substr(dirname(__FILE__), 0, -13));
+define('S_ROOT', substr(dirname(__FILE__), 0, -13));
 //$platform = which_platform();
 $nextim_version="2.2.28";
 $theurl = 'index.php';
 $sqlfile = S_ROOT.'/webim/install/data/webim.sql';
-
-
 
 /*
 *  check the platform 
@@ -369,21 +367,22 @@ function write_basic_config($file) { # do not use in PHPWIND Install
 }
 
 function write_global(){
-		Global $file_path, $platform;
-		$fp = fopen($file_path['$platform']."global.php", 'r');
-		$configfile = fread($fp, filesize($file));
-		$configfile = trim($configfile);
-		$configfile = substr($configfile, -2) == '?>' ? substr($configfile, 0, -2) : $configfile;
-		fclose($fp);
-		if(strpos($configfile, 'webim'.DIRECTORY_SEPARATOR.'config.php') === false){
-			$configfile = insertconfig($configfile, '.*', "include_once '".$file_path['$platform']."webim".DIRECTORY_SEPARATOR."config.php';");
-			$fp = fopen($file, 'w');
-		   	if(!($fp = @fopen($file, 'w'))) {
-	      			how_msg('请确认文件 config.php 可写', $ERRORCODE['can_not_write_file']);
-	       		
-	    	@fwrite($fp, trim($configfile));
-	    	@fclose($fp);
-		}
+	global $file_path, $platform;
+	$file = $file_path[$platform]."global.php";
+	$fp = fopen($file, 'r');
+	$configfile = fread($fp, filesize($file));
+	$configfile = trim($configfile);
+	$configfile = substr($configfile, -2) == '?>' ? substr($configfile, 0, -2) : $configfile;
+	fclose($fp);
+	if(strpos($configfile, 'webim'.DIRECTORY_SEPARATOR.'config.php') === false){
+		$configfile = insertconfig($configfile, '.*', "include '".$file_path['$platform']."webim".DIRECTORY_SEPARATOR."config.php';");
+		$fp = fopen($file, 'w');
+		if(!($fp = @fopen($file, 'w'))) {
+      			show_msg('请确认文件 global.php 可写', $ERRORCODE['can_not_write_file']);
+       		}
+    		@fwrite($fp, trim($configfile));
+    		@fclose($fp);
+	}
 }
 
 ?>

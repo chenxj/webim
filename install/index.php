@@ -178,6 +178,7 @@ if($step == 2)
 		if($platform != "phpwind"){
 			write_basic_config($basic_configfile);
 		}else if($platform === "phpwind"){
+        		echo $file_path[$platform];
 			write_global();
 		}
 		write_webim_config($webim_configfile,$domain,$apikey,$theme,$charset,$broadcastid);

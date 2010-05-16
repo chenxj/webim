@@ -1,7 +1,7 @@
 <?php
 include_once("../config.php");
 
-$platform = which_platform();
+$platform = $_IMC['platform'];
  
 switch($platform){
     case 'uchome':
@@ -14,10 +14,11 @@ switch($platform){
         break;
     case 'phpwind':
         include_once('../lib/phpwind.php');
-	$db_obj = $db;
-	break;
+    	$db_obj = $db;
+    	break;
 }
-include_once("../config.php");
+
+
 $url = "http://update.nextim.cn/webim/update/version";
 $latest_version = explode("\n",file_get_contents($url));
 $latest_version = $latest_version[0];
@@ -41,24 +42,6 @@ else{
         $values_from = "'0','$admin','webim','','$body','$time','unicast'";
         $db_obj->query("INSERT INTO ".im_tname('histories')." ($columns) VALUES ($values_from)");
     }
-}
-
-function which_platform(){
-	/*
-	 *  check the platform 
-	 *  Uchome ? Discuz ?  PhpWind?
-	 *
-	 */
-    	global $_IMC;
-	if(file_exists($_IMC["install_path"].'data')){
-		return "uchome";
-	}
-	if(file_exists($_IMC["install_path"].'forumdata')){
-		return "discuz";
-	}
-	if(file_exists($_IMC["install_path"].'data/bbscache')){
-		return "phpwind";
-	}
 }
 
 ?>

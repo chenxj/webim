@@ -57,6 +57,7 @@ extend(webimUI.prototype, objectExtend, {
 		}, null,"shortcut");
 		layout.addShortcut(menuData);
 
+		/*
 		layout.addApp(self.buddy, {
 			title: i18n("chat"),
 			icon: "buddy",
@@ -65,7 +66,7 @@ extend(webimUI.prototype, objectExtend, {
 			//       onlyIcon: true,
 			isMinimize: !im.status.get("b"),
 			titleVisibleLength: 19
-		});
+		});*/
 		layout.addApp(self.setting, {
 			title: i18n("setting"),
 			icon: "setting",
@@ -138,7 +139,7 @@ extend(webimUI.prototype, objectExtend, {
 			layout.option("user", data.user);
 			date.init(data.server_time);
 			self._initStatus();
-			!buddyUI.window.isMinimize() && buddy.loadDelay();
+			//!buddyUI.window.isMinimize() && buddy.loadDelay();
 			buddyUI.notice("count", buddy.count({presence:"online"}));
 			setting.set(data.setting);
 		}).bind("stop", function(type){
@@ -207,10 +208,11 @@ extend(webimUI.prototype, objectExtend, {
 		}).bind("broadcastselect",function(e){
 			//self.addBroadcast(e);
 		});
+		/*
 		buddyUI.window.bind("displayStateChange",function(type){
 			if(type != "minimize")buddy.loadDelay();
 		});
-		/*broadcastUI.bind("sendMsg",function(msg){
+		broadcastUI.bind("sendMsg",function(msg){
 			im.sendMsg(msg);		
 			history.handle(msg);
 		});*/
@@ -469,7 +471,7 @@ extend(webimUI.prototype, objectExtend, {
 			tabIds: layout.tabIds,
 			p: layout.prevCount, //tab prevCount
 			a: layout.activeTabId, //tab activeTabId
-			b: layout.app("buddy").window.isMinimize() ? 0 : 1 //is buddy open
+		//	b: layout.app("buddy").window.isMinimize() ? 0 : 1 //is buddy open
 		}
 		self.im.status.set(d);
 	}

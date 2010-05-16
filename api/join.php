@@ -10,10 +10,6 @@ switch($platform){
 	case 'uchome':
 		include_once($configRoot . 'uchome.php');
 		break;
-	case 'phpwind':
-		include_once($configRoot . 'phpwind.php');
-		$platform = $_GET['platform'];
-		break;
 }
 
 $ticket = gp('ticket');

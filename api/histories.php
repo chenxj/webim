@@ -1,6 +1,14 @@
 <?php 
 $platform = $_GET['platform'];
-include_once("../lib/{$platform}.php");
+$configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
+switch($platform){
+	case 'discuz':
+		include_once($configRoot . 'discuz.php');
+		break;
+	case 'uchome':
+		include_once($configRoot . 'uchome.php');
+		break;
+}
 $ids = gp('ids');
 if($ids===NULL){
         echo "{empty}";

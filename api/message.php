@@ -1,20 +1,9 @@
 <?php 
-$platform = $_GET['platform'];
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 include_once($configRoot . 'http_client.php');
-switch($platform){
-	case 'discuz':
-		include_once($configRoot . 'discuz.php');
-		break;
-	case 'uchome':
-		include_once($configRoot . 'uchome.php');
-		break;
-	case 'phpwind':
-		include_once($configRoot . 'phpwind.php');
-		$space = User_info();
-		break;
-}
-$platform = $_GET['platform'];
+include_once($configRoot . 'common.php');
+
+$space = my_info();
 
 $ticket = gp('ticket');
 $body = gp('body','');
@@ -23,19 +12,21 @@ $to = gp('to');
 $send = gp('offline') == "1" ? false : true;
 $type = gp('type');
 $from = $space['uid'];
+$nick = $space['nick'];
 $time = microtime(true)*1000;
+
+
+
+
 //change by chenxj
 if($type != "broadcast" && (empty($to)||empty($from))){
 	echo "{success:false}"."{".$to.":".$from."}";exit();
 }
+echo 123;
 $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
-if($platform !== 'phpwind'){
-	$nick = to_unicode(to_utf8(nick($space)));
-}else if($platform === 'phpwind'){
-	$nick = to_unicode($space['username']);
-}
 $client->post('/messages', array('domain'=>$_IMC['domain'],'apikey'=>$_IMC['apikey'],'ticket' => $ticket,'nick'=>$nick, 'type'=> $type, 'to'=>$to,'body'=>to_unicode($body),'timestamp'=>(string)$time,'style'=>$style));
 $pageContents = $client->getContent();
+var_dump($pageContents);
 
 //TODO:send => true if forward message successfully.
 //
@@ -44,25 +35,17 @@ if($type=="multicast"){//add by free.wang
     $to = $to + $_IMC['room_id_pre'];//add by free.wang
 }//add by free.wang
 
-if($platform !== "phpwind"){
-	$_SGLOBAL['db']->query("SET NAMES " . UC_DBCHARSET);
-}else if($platform === "phpwind"){
-	if($db_charset === "utf-8"){
-		$mycharset = "utf8";
-	}
-	$db->query("SET NAMES " . $mycharset);
-}
+
+$_SGLOBAL['db']->query("SET NAMES " . UC_DBCHARSET);
 
 $body=from_utf8($body);
 //add by Harvey.
 if ($type == "broadcast"){
 	if(strpos($_IMC["admin_ids"], $from) !== false){
 		$values_from = "'1','$to','$from','$style','$body','$time','$type'";
-	        $_SGLOBAL['db']->query("INSERT INTO ".im_tname('histories')." ($columns) VALUES ($values_from)");
+        $_SGLOBAL['db']->query("INSERT INTO ".im_tname('histories')." ($columns) VALUES ($values_from)");
 	}
-	echo 'x';
 	require_once('../update/notify_update.php');
-	echo 'u';
 }
 else{
 	$values_from = "'1','$to','$from','$style','$body','$time','$type'";

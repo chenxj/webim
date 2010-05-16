@@ -8,10 +8,6 @@ switch($platform){
 	case 'uchome':
 		include_once($configRoot . 'uchome.php');
 		break;
-	case 'phpwind':
-		include_once($configRoot . 'phpwind.php');
-		break;
-
 }
 
 include_once S_ROOT.'./uc_client/client.php';

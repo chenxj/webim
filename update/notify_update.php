@@ -1,10 +1,5 @@
 <?php
 include_once("../config.php");
-# $url = "http://update.nextim.cn/webim/update/version";
-# $latest_version = explode("\n",file_get_contents($url));
-# $latest_version = $latest_version[0];
-# $cur_version = $_IMC['version'];
-# $data = array("version"=>$latest_version);
 
 $platform = which_platform();
  
@@ -37,7 +32,9 @@ if ($latest_version == $cur_version){
 else{
     foreach($admins as $admin)
     {
-        $_SGLOBAL['db']->query("SET NAMES " . UC_DBCHARSET);
+	if($platform === "uchome" || $platform === "discuz"){
+	        $_SGLOBAL['db']->query("SET NAMES " . UC_DBCHARSET);
+	}
         $time = microtime(true)*1000;
         $body = "WebIM有新的更新！请访问以下网址了解详情!".$_IMC['install_url']."webim/update/index.php";
         $columns = "`send`,`to`,`from`,`style`,`body`,`timestamp`,`type`";
@@ -52,7 +49,7 @@ function which_platform(){
 	 *  Uchome ? Discuz ?  PhpWind?
 	 *
 	 */
-    global $_IMC;
+    	global $_IMC;
 	if(file_exists($_IMC["install_path"].'data')){
 		return "uchome";
 	}

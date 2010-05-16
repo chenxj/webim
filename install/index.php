@@ -4,13 +4,13 @@ $_SGLOBAL = $_SCONFIG = $_SBLOCK = array();
 //安装平台根目录
 define('S_ROOT', substr(dirname(__FILE__), 0, -13));
 $platform = which_platform();
-$nextim_version="2.2.27";
+$nextim_version="2.2.28";
 
 switch($platform){
     case 'uchome':
 		$cache_path = "data/tpl_cache";
         define('IN_UCHOME', TRUE);
-        $basic_configfile = S_ROOT.'./config.php';
+        $basic_configfile = S_ROOT.'config.php';
         include_once(S_ROOT.'./config.php');
         include_once(S_ROOT.'./source/function_common.php');
         $display_name = 'uchome';
@@ -18,7 +18,7 @@ switch($platform){
         break;
     case 'discuz':
         define('IN_DISCUZ', TRUE);
-        $basic_configfile = S_ROOT.'./config.inc.php';
+        $basic_configfile = S_ROOT.'config.inc.php';
         include_once(S_ROOT.'./include/common.inc.php');
         if (file_exists('../lib/discuz_function.php'))
 		{
@@ -62,6 +62,7 @@ if(file_exists(S_ROOT.'/forumdata/webiminstall.lock')) {
 
 //Add by Harvey.
 $writeable = array(
+	$basic_configfile,
 	S_ROOT . $templete_folder, 
 	S_ROOT . $templete_folder . 'footer.htm', 
 	S_ROOT . $cache_path);
@@ -153,6 +154,8 @@ if(!@$fp = fopen($basic_configfile, 'a')) {
 }
 
 if (submitcheck('imsubmit')) {
+    global $platform;
+    echo $platform;
 	//install
 	$step = 1;
 	if($platform == 'uchome'){
@@ -310,6 +313,13 @@ if (submitcheck('imsubmit')) {
 <li>
 	webim/config.php
 </li>
+</br>
+<pre>
+备注:
+    如果您使用的不是默认模板,
+            1.<font color="red">复制</font>webim/install/webim_{$platform}.htm到template/<您使用的模板目录>
+            2.修改template/<您使用的模板目录>/footer.htm,在 &lt;/body&gt;前加入<font color="red">&lt;!--{template webim_{$platform}}--&gt;</font>
+</pre>
 </ul>
 	<p style="text-align:center">
 	<table class=button>

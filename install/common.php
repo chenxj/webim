@@ -267,7 +267,7 @@ function write_webim_config($file,$domain,$apikey,$theme,$charset,$broadcastid=n
 	//$configfile = insertconfig($configfile, '/\$_IMC\["uchome_path"\] =\s*.*?;/i', '$_IMC["uchome_path"] = "'.$uchome_path.'";');
 	//$configfile = insertconfig($configfile, '/\$_IMC\["uchome_url"\] =\s*.*?;/i', '$_IMC["uchome_url"] = "'.$uchome_url.'";');
 	//$configfile = insertconfig($configfile, '/\$_IMC\["discuz_path"\] =\s*.*?;/i', '$_IMC["discuz_path"] = "'.$discuz_path.'";');
-	//$configfile = insertconfig($configfile, '/\$_IMC\["discuz_url"\] =\s*.*?;/i', '$_IMC["discuz_url"] = "'.$discuz_url.'";');
+	$configfile = insertconfig($configfile, '/\$_IMC\["platform"\] =\s*.*?;/i', '$_IMC["platform"] = "'.$platform.'";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["install_url"\] =\s*.*?;/i', '$_IMC["install_url"] = "'.$install_url.'";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["install_path"\] =\s*.*?;/i', '$_IMC["install_path"] = "'.$install_path.'";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["version"\] =\s*.*?;/i', '$_IMC["version"] = "'.$nextim_version.'";');
@@ -310,8 +310,22 @@ function write_template(){
 			}
 		}
 	}else if($platform === "phpwind"){
-		// non-realize
-		echo "phpwind write template file";
+		foreach($file_path as $key=>$path){
+			@$fp = fopen($path. $templete_folder . 'footer.htm', 'r');
+	                $fileLen = filesize($path . $templete_folder . 'footer.htm');
+        	      	$htmfile = fread($fp, $fileLen);
+                	$htmfile = trim($htmfile);
+                   	list($htmfile, $foot) = explode("?>", $htmfile);
+                  	fclose($fp);
+
+
+
+			$htmfile .= "\r\n" . 'include(dirname(dirname(dirname(__FILE__))) . "/webim/config.php");' . "\r\n" ;
+			$htmfile .= "\r\n" . 'include_once PrintEot("webim_phpwind")' . "\r\n?>" . $foot;
+			@$fp = fopen($path . $templete_folder . 'footer.htm', 'w');
+			fwrite($fp, trim($htmfile));
+			fclose($fp);
+		}
 	}
 }
 
@@ -352,6 +366,24 @@ function write_basic_config($file) { # do not use in PHPWIND Install
 		@fwrite($fp, trim($configfile));
 		@fclose($fp);
 	}
+}
+
+function write_global(){
+		Global $file_path, $platform;
+		$fp = fopen($file_path['$platform']."global.php", 'r');
+		$configfile = fread($fp, filesize($file));
+		$configfile = trim($configfile);
+		$configfile = substr($configfile, -2) == '?>' ? substr($configfile, 0, -2) : $configfile;
+		fclose($fp);
+		if(strpos($configfile, 'webim'.DIRECTORY_SEPARATOR.'config.php') === false){
+			$configfile = insertconfig($configfile, '.*', "include_once '".$file_path['$platform']."webim".DIRECTORY_SEPARATOR."config.php';");
+			$fp = fopen($file, 'w');
+		   	if(!($fp = @fopen($file, 'w'))) {
+	      			how_msg('请确认文件 config.php 可写', $ERRORCODE['can_not_write_file']);
+	       		
+	    	@fwrite($fp, trim($configfile));
+	    	@fclose($fp);
+		}
 }
 
 ?>

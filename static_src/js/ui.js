@@ -42,6 +42,7 @@ extend(webimUI.prototype, objectExtend, {
 		self.buddy = new webimUI.buddy(null,{
 		});
 		//self.room = new webimUI.room(null,{});
+		//self.broadcast = new webimUI.broadcast(null,{});
 		var menuData = self.options.menu;
 	       	self.menu = new webimUI.menu(null,{
 			data: menuData
@@ -72,7 +73,15 @@ extend(webimUI.prototype, objectExtend, {
 			onlyIcon: true,
 			isMinimize: true
 		});
-		/*layout.addApp(self.room, {
+		/*layout.addApp(self.broadcast,{
+			title:i18n("broadcast"),
+			icon:"broadcast",
+			onlyIcon:true,
+			isMinimize:true,
+			className:"webim-broadcast",
+			sticky:false		
+		});
+		layout.addApp(self.room, {
 			title: i18n("room"),
 			icon: "room",
 			sticky: false,
@@ -90,6 +99,7 @@ extend(webimUI.prototype, objectExtend, {
  			im.setting.get("play_sound") ? sound.enable() : sound.disable() ;
 		im.setting.get("minimize_layout") ? layout.collapse() : layout.expand(); 
 		self.buddy.offline();
+
 		//document.body.appendChild(layout.element);
 		//layout.buildUI();
 
@@ -114,11 +124,12 @@ extend(webimUI.prototype, objectExtend, {
 		sound.init(urls || this.options.soundUrls);
 	},
 	_initEvents: function(){
-		var self = this, im = self.im, buddy = im.buddy, history = im.history, status = im.status, setting = im.setting, buddyUI = self.buddy,chatlink = im.chatlink, layout = self.layout, /*notificationUI = self.notification,*/ settingUI = self.setting, room = im.room;
+		var self = this, im = self.im, buddy = im.buddy, history = im.history, status = im.status, setting = im.setting, buddyUI = self.buddy,chatlink = im.chatlink, layout = self.layout, /*notificationUI = self.notification,*/ settingUI = self.setting, room = im.room,broadcastUI = self.broadcast;
 		//im events
 		im.bind("ready",function(){
 			layout.changeState("ready");
       			show(layout.app("room").window.element);
+      			show(layout.app("broadcast").window.element);
 			buddyUI.online();
       			settingUI.online();
 		}).bind("go",function(data){
@@ -133,6 +144,7 @@ extend(webimUI.prototype, objectExtend, {
 		}).bind("stop", function(type){
 			layout.changeState("stop");
 		        hide(layout.app("room").window.element);
+		        hide(layout.app("broadcast").window.element);
 			type == "offline" && layout.removeAllChat();
 			layout.updateAllChat();
 			buddyUI.offline();
@@ -193,11 +205,15 @@ extend(webimUI.prototype, objectExtend, {
 		}).bind("online",function(){
 			im.online();
 		}).bind("broadcastselect",function(e){
-			self.addBroadcast(e);
+			//self.addBroadcast(e);
 		});
 		buddyUI.window.bind("displayStateChange",function(type){
 			if(type != "minimize")buddy.loadDelay();
 		});
+		/*broadcastUI.bind("sendMsg",function(msg){
+			im.sendMsg(msg);		
+			history.handle(msg);
+		});*/
 		//some buddies online.
 		buddy.bind("online", function(data){
 			buddyUI.add(data);
@@ -235,7 +251,7 @@ extend(webimUI.prototype, objectExtend, {
 				if(!c){	
 				   var titlename = "";
 				   if (d.type === "broadcast"){
-				   	titlename = "站长广播";
+				   	titlename = i18n("broadcast");
 				   }else{
 			           	titlename = (d.type === "unicast")?d.nick:roomData[id].name;
 				   }
@@ -249,9 +265,9 @@ extend(webimUI.prototype, objectExtend, {
 				   	self.addBroadcast(id,null,null,titlename);
 	  			   }else{
 			              self.addChat(id,{type:"room"});  
-          			}
-			 	c = layout.chat(id);
-			  }
+       		   		   }
+			 	   c = layout.chat(id);
+			  	}
 				c && setting.get("msg_auto_pop") && !layout.activeTabId && layout.focusChat(id);
 				c.window.notifyUser("information", count);
 				var p = c.window.pos;

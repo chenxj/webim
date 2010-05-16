@@ -46,6 +46,7 @@ extend(webim.prototype, objectExtend,{
 		self.status = new webim.status();
 		self.setting = new webim.setting();
 		self.buddy = new webim.buddy();
+		//self.broadcast = new webim.broadcast();
 		self.room = new webim.room();
 		self.history = new webim.history();
 		//self.notification = new webim.notification();

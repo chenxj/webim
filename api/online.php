@@ -1,21 +1,14 @@
 <?php
-$platform = $_GET['platform'];
+//include_once("../config.php");
+$platform = $_IMC['platform'] ? $_IMC['platform'] : $_GET['platform'];
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 include_once($configRoot . 'http_client.php');
-switch($platform){
-	case 'discuz':
-		include_once($configRoot . 'discuz.php');
-		break;
-	case 'uchome':
-		include_once($configRoot . 'uchome.php');
-		break;
-	case 'phpwind':
-		include_once($configRoot . 'phpwind.php');
-		$platform = $_GET['platform'];
-		break;
-}
+include_once($configRoot . "{$platform}.php");
+include_once("../config.php");
+$platfrom = $_IMC['platform'];
 
 session_start();
+
 if($platform === "discuz"){
 	if(!isset($_SESSION['timestamp']) || (gp('timestamp') - $_SESSION['timestamp'] > $_IMC['timestamp']*60)){//第一次登陆，获得好友列表，保存第一次登陆的时间戳
 		require_once($_IMC['install_path'].'/config.inc.php');

@@ -1,12 +1,12 @@
 <?php
 $platform = $_GET['platform'];
-$platform = "phpwind";
+//$platform = "phpwind";
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 include_once( $configRoot . 'http_client.php');
 
 include_once($configRoot . "{$platform}.php");
-
-$platform = "phpwind";
+include_once("../config.php");
+$platform = $_IMC["platform"];
 $ticket = gp('ticket');
 $room_id = gp('id');
 if(empty($ticket)) {

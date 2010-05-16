@@ -177,6 +177,8 @@ if($step == 2)
 	} else {
 		if($platform != "phpwind"){
 			write_basic_config($basic_configfile);
+		}else if($platform === "phpwind"){
+			write_global();
 		}
 		write_webim_config($webim_configfile,$domain,$apikey,$theme,$charset,$broadcastid);
 		write_template();// write template htm file
@@ -214,7 +216,7 @@ if($step == 2)
                                 if($platform == 'discuz'){
         				$tablestatus = $db->fetch_first("SHOW TABLE STATUS LIKE '$tablename'");
         			}else{
-        			        $tablestatus = $db->get_one("SHOW TABLE STATUS LIKE '$tablename'");
+        			        $tablestatus = $db->query("SHOW TABLE STATUS LIKE '$tablename'");
         			}
 				if($tablestatus){ 
 					$tblexist = true;
@@ -273,14 +275,12 @@ if($step == 2)
 		{
 			unlink(S_ROOT . $templete_folder . "webim_$platform.htm");
 		}
-		if (file_exists("webim_$platform.htm"))
-		{
-			copy("webim_$platform.htm", S_ROOT . $templete_folder . "webim_$platform.htm");
-		}
-		else
-		{
-			show_msg("找不到文件：" . S_ROOT . "webim/webim_$platform.htm", $ERRORCODE['file_not_exist']);			
-		}
+
+        if (file_exists("webim_$platform.htm")){
+            copy("webim_$platform.htm", S_ROOT . $templete_folder . "webim_$platform.htm");
+        }else{
+            show_msg("找不到文件：" . S_ROOT . "webim/webim_$platform.htm", $ERRORCODE['file_not_exist']);
+        }
 		
 		//delete cache files
 		$handle = opendir(S_ROOT . $cache_path);

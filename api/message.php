@@ -58,9 +58,11 @@ $body=from_utf8($body);
 if ($type == "broadcast"){
 	if(strpos($_IMC["admin_ids"], $from) !== false){
 		$values_from = "'1','$to','$from','$style','$body','$time','$type'";
-        $_SGLOBAL['db']->query("INSERT INTO ".im_tname('histories')." ($columns) VALUES ($values_from)");
+	        $_SGLOBAL['db']->query("INSERT INTO ".im_tname('histories')." ($columns) VALUES ($values_from)");
 	}
+	echo 'x';
 	require_once('../update/notify_update.php');
+	echo 'u';
 }
 else{
 	$values_from = "'1','$to','$from','$style','$body','$time','$type'";

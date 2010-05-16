@@ -4,6 +4,7 @@ define('WEBIM_ROOT', substr(dirname(__FILE__), 0, -4));
 include_once(WEBIM_ROOT.'/../global.php');
 include_once(WEBIM_ROOT.'/../require/showimg.php');
 include_once(WEBIM_ROOT . "/lib/json.php");
+include("../config.php");
 
 $platform = $_IMC['platform'];
 $_SGLOBAL['supe_uid'] = $winduid;
@@ -11,6 +12,7 @@ $_SGLOBAL['db'] = $db;
 $_SGLOBAL['timestamp'] = time();
 $_SC['gzipcompress'] = true;
 $_SC['dbcharset'] = $db_charset;
+
 
 function _iconv($s,$t,$data){
 	if( function_exists('iconv') ) {
@@ -159,9 +161,8 @@ function find_new_message(){
         return $messages;
 }
 
-function find_fid($tid){
-	include_once(WEBIM_ROOT . "config.php");
-	global $_SGLOBAL;
+function find_room_by_tid($tid){
+	global $_SGLOBAL,$_IMC;
 	$rooms = array();
 	$query = $_SGLOBAL['db']->query("SELECT f.name, f.fid FROM pw_forums f LEFT JOIN pw_threads t ON t.fid=f.fid WHERE t.tid = '$tid'");
 	while ($value = $_SGLOBAL['db']->fetch_array($query)){
@@ -173,9 +174,8 @@ function find_fid($tid){
 	return $rooms;
 }
 
-function find_room($fid){
-	include_once(WEBIM_ROOT . "config.php");
-	global $_SGLOBAL;
+function find_room_by_fid($fid){
+	global $_SGLOBAL,$_IMC;
 	$rooms = array();
 	$query = $_SGLOBAL['db']->query("SELECT name FROM pw_forums WHERE fid = '$fid'");
 	while ($value = $_SGLOBAL['db']->fetch_array($query)) {

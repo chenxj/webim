@@ -60,9 +60,7 @@ if ($type == "broadcast"){
 		$values_from = "'1','$to','$from','$style','$body','$time','$type'";
 	        $_SGLOBAL['db']->query("INSERT INTO ".im_tname('histories')." ($columns) VALUES ($values_from)");
 	}
-	echo 'x';
 	require_once('../update/notify_update.php');
-	echo 'u';
 }
 else{
 	$values_from = "'1','$to','$from','$style','$body','$time','$type'";

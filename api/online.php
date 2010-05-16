@@ -1,9 +1,11 @@
 <?php
-include_once("../config.php");
+//include_once("../config.php");
 $platform = $_IMC['platform'] ? $_IMC['platform'] : $_GET['platform'];
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 include_once($configRoot . 'http_client.php');
 include_once($configRoot . "{$platform}.php");
+include_once("../config.php");
+$platfrom = $_IMC['platform'];
 
 session_start();
 

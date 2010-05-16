@@ -368,4 +368,22 @@ function write_basic_config($file) { # do not use in PHPWIND Install
 	}
 }
 
+function write_global(){
+		Global $file_path, $platform;
+		$fp = fopen($file_path['$platform']."global.php", 'r');
+		$configfile = fread($fp, filesize($file));
+		$configfile = trim($configfile);
+		$configfile = substr($configfile, -2) == '?>' ? substr($configfile, 0, -2) : $configfile;
+		fclose($fp);
+		if(strpos($configfile, 'webim'.DIRECTORY_SEPARATOR.'config.php') === false){
+			$configfile = insertconfig($configfile, '.*', "include_once '".$file_path['$platform']."webim".DIRECTORY_SEPARATOR."config.php';");
+			$fp = fopen($file, 'w');
+		   	if(!($fp = @fopen($file, 'w'))) {
+	      			how_msg('请确认文件 config.php 可写', $ERRORCODE['can_not_write_file']);
+	       		
+	    	@fwrite($fp, trim($configfile));
+	    	@fclose($fp);
+		}
+}
+
 ?>

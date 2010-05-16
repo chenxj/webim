@@ -177,6 +177,8 @@ if($step == 2)
 	} else {
 		if($platform != "phpwind"){
 			write_basic_config($basic_configfile);
+		}else if($platform === "phpwind"){
+			write_global();
 		}
 		write_webim_config($webim_configfile,$domain,$apikey,$theme,$charset,$broadcastid);
 		write_template();// write template htm file

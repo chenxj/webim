@@ -1,19 +1,11 @@
 <?php
+error_reporting(0);
 header("Content-type: application/javascript");
 
-$platform = $_GET['platform'];
+$platform = $_IMC['platform'] ? $_IMC['platform'] : $_GET['platform'];
 
-switch($platform){
-	case 'discuz':
-		include_once('lib/discuz.php');
-		break;
-	case 'uchome':
-		include_once('lib/uchome.php');
-		break;
-	case 'phpwind':
-		include_once('lib/phpwind.php');
-		break;
-}
+include_once("lib/{$platform}.php");
+
 
 include_once ('config.php');
 if($platform === 'uchome'){
@@ -48,7 +40,7 @@ $setting = json_encode(setting());
 //custom
 (function(webim){
     var path = "";
-    var platform = "<?php echo $_GET['platform']; ?>";
+    var platform = "<?php echo $platform; ?>";
 
     var menu = webim.JSON.decode('<?php echo json_encode($menu) ?>');
 	webim.extend(webim.setting.defaults.data, webim.JSON.decode('<?php echo $setting ?>'));

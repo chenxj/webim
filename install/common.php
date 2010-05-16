@@ -267,7 +267,7 @@ function write_webim_config($file,$domain,$apikey,$theme,$charset,$broadcastid=n
 	//$configfile = insertconfig($configfile, '/\$_IMC\["uchome_path"\] =\s*.*?;/i', '$_IMC["uchome_path"] = "'.$uchome_path.'";');
 	//$configfile = insertconfig($configfile, '/\$_IMC\["uchome_url"\] =\s*.*?;/i', '$_IMC["uchome_url"] = "'.$uchome_url.'";');
 	//$configfile = insertconfig($configfile, '/\$_IMC\["discuz_path"\] =\s*.*?;/i', '$_IMC["discuz_path"] = "'.$discuz_path.'";');
-	//$configfile = insertconfig($configfile, '/\$_IMC\["discuz_url"\] =\s*.*?;/i', '$_IMC["discuz_url"] = "'.$discuz_url.'";');
+	$configfile = insertconfig($configfile, '/\$_IMC\["platform"\] =\s*.*?;/i', '$_IMC["platform"] = "'.$platform.'";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["install_url"\] =\s*.*?;/i', '$_IMC["install_url"] = "'.$install_url.'";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["install_path"\] =\s*.*?;/i', '$_IMC["install_path"] = "'.$install_path.'";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["version"\] =\s*.*?;/i', '$_IMC["version"] = "'.$nextim_version.'";');
@@ -310,8 +310,22 @@ function write_template(){
 			}
 		}
 	}else if($platform === "phpwind"){
-		// non-realize
-		echo "phpwind write template file";
+		foreach($file_path as $key=>$path){
+			@$fp = fopen($path. $templete_folder . 'footer.htm', 'r');
+	                $fileLen = filesize($path . $templete_folder . 'footer.htm');
+        	      	$htmfile = fread($fp, $fileLen);
+                	$htmfile = trim($htmfile);
+                   	list($htmfile, $foot) = explode("?>", $htmfile);
+                  	fclose($fp);
+
+
+
+			$htmfile .= "\r\n" . 'include(dirname(dirname(dirname(__FILE__))) . "/webim/config.php");' . "\r\n" ;
+			$htmfile .= "\r\n" . 'include_once PrintEot("webim_phpwind")' . "\r\n?>" . $foot;
+			@$fp = fopen($path . $templete_folder . 'footer.htm', 'w');
+			fwrite($fp, trim($htmfile));
+			fclose($fp);
+		}
 	}
 }
 

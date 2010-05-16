@@ -385,7 +385,6 @@ END;
 		<input type="hidden" name="charset" value="$charset" />
 		<input type="hidden" name="broadcastID" value="$broadcastid" />
 		<input type="hidden" name="formhash" value="$formhash">
-		<input type="step" name="formhash" value="2">
 		</form>
 END;
 	}

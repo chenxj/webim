@@ -12,6 +12,35 @@ $_SGLOBAL['db'] = $db;
 $_SGLOBAL['timestamp'] = time();
 $_SC['gzipcompress'] = true;
 $_SC['dbcharset'] = $db_charset;
+$_SC['charset'] = $charset;
+
+
+
+/*
+ * 判断平台编码是否为UTF-8
+ */
+function _is_charset_utf8()
+{
+    global $_SC;
+    if($_SC['charset'] == "utf8" || $_SC['charset'] == "utf-8")
+        return true;
+    else
+        return false;
+}
+
+/*
+ * 判断平台DB编码是否为UTF-8
+ */
+function _is_dbcharset_utf8()
+{
+    global $_SC;
+    if($_SC['dbcharset'] == "utf8" || $_SC['dbcharset'] == "utf-8")
+        return true;
+    else
+        return false;
+}
+
+
 
 
 function _iconv($s,$t,$data){
@@ -72,7 +101,7 @@ function setting(){
 
 function to_utf8($s) {
 	global $_SC;
-	if($_SC['charset'] == 'utf-8') {
+	if(_is_charset_utf8()) {
 		return $s;
 	} else {
 		return  _iconv($_SC['charset'],'utf-8',$s);
@@ -81,7 +110,7 @@ function to_utf8($s) {
 
 function from_utf8($s) {
 	global $_SC;
-	if($_SC['charset'] == 'utf-8') {
+	if(_is_charset_utf8()) {
 		return $s;
 	} else {
 		return  _iconv('utf-8',$_SC['charset'],$s);

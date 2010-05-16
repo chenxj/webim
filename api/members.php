@@ -4,8 +4,7 @@ $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 include_once( $configRoot . 'http_client.php');
 include_once( $configRoot . 'common.php');
 
-
-
+$space = my_info();
 $ticket = gp('ticket');
 $room_id = gp('id');
 if(empty($ticket)) {
@@ -16,8 +15,6 @@ $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
 $client->post('/room/members', $data);
 $pageContents = $client->getContent();
 $result  = json_decode($pageContents,TRUE);
-unset($client);
-unset($pageContents);
 foreach($result as $group =>$v )
 {
     foreach($result[$group] as $k=>$v)

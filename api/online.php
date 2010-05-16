@@ -4,8 +4,6 @@ $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 include_once($configRoot . 'http_client.php');
 include_once($configRoot . 'common.php');
 
-
-
 $space = my_info();
 /* if $friend_ids or $stranger_ids = Null
  *

@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 error_reporting(E_ALL & ~E_NOTICE);
 define('WEBIM_ROOT', substr(dirname(__FILE__), 0, -4));
 //API DEFINE
@@ -17,6 +17,27 @@ $_SC['gzipcompress'] = true;
 $_SC['tablepre']=$tablepre;
 $_SC['dbcharset'] = UC_DBCHARSET;
 $_SC['charset'] = UC_CHARSET;
+
+
+
+function _randint(){
+    $num = "";
+    for($i;$i<=5;$i++)
+    {
+       $num .= (string)(mt_rand(0,9)); 
+    }
+    return $num;
+}
+
+/*
+ * 获取当前用户信息
+ */
+function my_info(){
+    $space =  array();
+    $space['uid'] = _randint();
+    $space['nick'] = "user" . $space['uid'];
+    return $space;
+}
 
 
 //DISCUZ API FUN
@@ -253,26 +274,20 @@ function find_new_message(){
         return $messages;
 }
 
-
-function find_room($tid){
-    global $_SGLOBAL,$_IMC,$space;
-	$rooms = array();
-	//uchome_mtag table
-//	$query = $_SGLOBAL['db']->query("SELECT t.tagid, t.membernum, t.tagname, t.pic
-//		FROM ".tname('threads')." main
-//		LEFT JOIN ".tname('mtag')." t ON t.tagid = main.tagid
-//		WHERE main.uid = '$space[uid]'");
-	$_SGLOBAL['db']->query("SET NAMES " . UC_DBCHARSET);
-	$query = $_SGLOBAL['db']->query("SELECT subject
-		FROM ".tname('threads')." 
-		WHERE tid = '$tid'");
-	while ($value = $_SGLOBAL['db']->fetch_array($query)) {
-		$subject = $value['subject'];
-		$id = (string)($_IMC['room_id_pre'] + $tid);
-		$eid = 'channel:'.$id.'@'.$_IMC['domain'];
-		$pic = empty($value['pic']) ? 'image/nologo.jpg' : $value['pic'];
-		$rooms[$id]=array('id'=>$id,'name'=> to_utf8($subject), 'pic_url'=>"", 'status'=>'','status_time'=>'');
+/*
+ * $room_ids = array(1,2,3,4,5);
+ *            or
+ * $room_ids = "1,2,3,4,5";
+ */
+function find_room(){
+    $room_id = crc32($_SERVER['PHP_SELF']);
+	$room_list[] = $room_id;
+    $rooms = array();
+    foreach($room_list as $room){
+		$subject = "激情星际,永远的传奇!";
+		$rooms[$room_id]=array('id'=>$room_id,'name'=> $subject, 'pic_url'=>"", 'status'=>'','status_time'=>'');
 	}
+//    var_dump($rooms);
 	return $rooms;
 }
 

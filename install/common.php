@@ -26,6 +26,7 @@ function which_platform(){
 	}
 }
 
+<<<<<<< HEAD:install/common.php
 function saddslashes($string) {
         if(is_array($string)) {
                 foreach($string as $key => $val) {
@@ -36,10 +37,16 @@ function saddslashes($string) {
         }
         return $string;
 }
+=======
+>>>>>>> 96d397fbc20b370ba0908717c4912632f6611dd6:install/common.php
 
+<<<<<<< HEAD:install/common.php
 function obclean() {
         global $_SC;
+=======
+>>>>>>> 96d397fbc20b370ba0908717c4912632f6611dd6:install/common.php
 
+<<<<<<< HEAD:install/common.php
         ob_end_clean();
         if ($_SC['gzipcompress'] && function_exists('ob_gzhandler')) {
                 ob_start('ob_gzhandler');
@@ -47,6 +54,8 @@ function obclean() {
                 ob_start();
         }
 }
+=======
+>>>>>>> 96d397fbc20b370ba0908717c4912632f6611dd6:install/common.php
 
 function checkfdperm($path, $isfile=0) {
 	if($isfile) {
@@ -235,20 +244,48 @@ function insertconfig($s, $find, $replace) {
 
 function write_webim_config($file,$domain,$apikey,$theme,$charset,$broadcastid=null) {
 	global $url_path, $file_path, $platform,$nextim_version;
+<<<<<<< HEAD:install/common.php
     	foreach($file_path as &$var){ 
         	$var = str_replace("\\", '/', $var); $var = str_replace("//", '/', $var);
+=======
+    foreach($file_path as &$var){ 
+        $var = str_replace("\\", '/', $var); $var = str_replace("//", '/', $var);
 	}
+	if(isset($file_path["uchome"])){
+		$uchome_path = $file_path['uchome'];
+		$uchome_url = $url_path['uchome'];
+>>>>>>> 96d397fbc20b370ba0908717c4912632f6611dd6:install/common.php
+	}
+<<<<<<< HEAD:install/common.php
 	
 	$install_url = $url_path[$platform];
 	$install_path = $file_path[$platform];
 	
+=======
+	if(isset($file_path["discuz"])){
+		$discuz_path = $file_path['discuz'];
+		$discuz_url = $url_path['discuz'];
+	}
+	if($platform == "uchome"){
+		$install_url = $url_path['uchome'];
+		$install_path = $file_path['uchome'];
+	}else if($platform == "discuz"){
+		$install_url = $url_path['discuz'];
+		$install_path = $file_path['discuz'];
+	}
+
+>>>>>>> 96d397fbc20b370ba0908717c4912632f6611dd6:install/common.php
 	$fp = fopen($file, 'r');
 	$configfile = fread($fp, filesize($file));
 	$configfile = trim($configfile);
 	$configfile = substr($configfile, -2) == '?>' ? substr($configfile, 0, -2) : $configfile;
 	fclose($fp);
 
+<<<<<<< HEAD:install/common.php
     	$configfile = insertconfig($configfile, '/\<\?php/i', '<?php');
+=======
+    $configfile = insertconfig($configfile, '/\<\?php/i', '<?php');
+>>>>>>> 96d397fbc20b370ba0908717c4912632f6611dd6:install/common.php
 	$configfile = insertconfig($configfile, '/\$_IMC = array\(\);/i', '$_IMC = array();');
 	$configfile = insertconfig($configfile, '/\$_IMC\["enable"\] =\s*.*?;/i', '$_IMC["enable"] = true;');
 	$configfile = insertconfig($configfile, '/\$_IMC\["domain"\] =\s*".*?";/i', '$_IMC["domain"] = "'.$domain.'";');
@@ -264,10 +301,17 @@ function write_webim_config($file,$domain,$apikey,$theme,$charset,$broadcastid=n
 	$configfile = insertconfig($configfile, '/\$_IMC\["groupchat"\] =\s*.*?;/i', '$_IMC["groupchat"] = true;');
 	$configfile = insertconfig($configfile, '/\$_IMC\["emot"\] =\s*".*?";/i', '$_IMC["emot"] = "default";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["opacity"\] =\s*.*?;/i', '$_IMC["opacity"] = 80;');
+<<<<<<< HEAD:install/common.php
 	//$configfile = insertconfig($configfile, '/\$_IMC\["uchome_path"\] =\s*.*?;/i', '$_IMC["uchome_path"] = "'.$uchome_path.'";');
 	//$configfile = insertconfig($configfile, '/\$_IMC\["uchome_url"\] =\s*.*?;/i', '$_IMC["uchome_url"] = "'.$uchome_url.'";');
 	//$configfile = insertconfig($configfile, '/\$_IMC\["discuz_path"\] =\s*.*?;/i', '$_IMC["discuz_path"] = "'.$discuz_path.'";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["platform"\] =\s*.*?;/i', '$_IMC["platform"] = "'.$platform.'";');
+=======
+	$configfile = insertconfig($configfile, '/\$_IMC\["uchome_path"\] =\s*.*?;/i', '$_IMC["uchome_path"] = "'.$uchome_path.'";');
+	$configfile = insertconfig($configfile, '/\$_IMC\["uchome_url"\] =\s*.*?;/i', '$_IMC["uchome_url"] = "'.$uchome_url.'";');
+	$configfile = insertconfig($configfile, '/\$_IMC\["discuz_path"\] =\s*.*?;/i', '$_IMC["discuz_path"] = "'.$discuz_path.'";');
+	$configfile = insertconfig($configfile, '/\$_IMC\["discuz_url"\] =\s*.*?;/i', '$_IMC["discuz_url"] = "'.$discuz_url.'";');
+>>>>>>> 96d397fbc20b370ba0908717c4912632f6611dd6:install/common.php
 	$configfile = insertconfig($configfile, '/\$_IMC\["install_url"\] =\s*.*?;/i', '$_IMC["install_url"] = "'.$install_url.'";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["install_path"\] =\s*.*?;/i', '$_IMC["install_path"] = "'.$install_path.'";');
 	$configfile = insertconfig($configfile, '/\$_IMC\["version"\] =\s*.*?;/i', '$_IMC["version"] = "'.$nextim_version.'";');
@@ -290,8 +334,13 @@ function write_webim_config($file,$domain,$apikey,$theme,$charset,$broadcastid=n
 function write_template(){
 	global $templete_folder;
 	global $file_path;
+<<<<<<< HEAD:install/common.php
     	global $platform;
+=======
+    global $platform;
+>>>>>>> 96d397fbc20b370ba0908717c4912632f6611dd6:install/common.php
 	$path = S_ROOT;
+<<<<<<< HEAD:install/common.php
 	if($platform === "uchome" || $platform === "discuz"){
 		foreach($file_path as $key=>$path){
 			@$fp = fopen($path. $templete_folder . 'footer.htm', 'r');
@@ -322,6 +371,19 @@ function write_template(){
 
 			$htmfile .= "\r\n" . 'include(dirname(dirname(dirname(__FILE__))) . "/webim/config.php");' . "\r\n" ;
 			$htmfile .= "\r\n" . 'include_once PrintEot("webim_phpwind")' . "\r\n?>" . $foot;
+=======
+	foreach($file_path as $key=>$path){
+		@$fp = fopen($path. $templete_folder . 'footer.htm', 'r');
+		$fileLen = filesize($path . $templete_folder . 'footer.htm');
+		$htmfile = fread($fp, $fileLen);
+		$htmfile = trim($htmfile);
+		list($htmfile, $foot) = explode("</body>", $htmfile);
+		fclose($fp);
+		
+		if (strpos($htmfile, '<!--{template webim_') === false)
+		{
+			$htmfile .= "\r\n"."<!--{template webim_{$platform}}-->\r\n</body>".$foot;
+>>>>>>> 96d397fbc20b370ba0908717c4912632f6611dd6:install/common.php
 			@$fp = fopen($path . $templete_folder . 'footer.htm', 'w');
 			fwrite($fp, trim($htmfile));
 			fclose($fp);
@@ -329,7 +391,10 @@ function write_template(){
 	}
 }
 
+<<<<<<< HEAD:install/common.php
 /*
+=======
+>>>>>>> 96d397fbc20b370ba0908717c4912632f6611dd6:install/common.php
 function write_ext_config($file) {
 	global $file_path, $platform;
 	$fp = fopen($file, 'r');
@@ -346,9 +411,16 @@ function write_ext_config($file) {
 	@fwrite($fp, trim($configfile));
 	@fclose($fp);
 }
+<<<<<<< HEAD:install/common.php
 */
+=======
+>>>>>>> 96d397fbc20b370ba0908717c4912632f6611dd6:install/common.php
 
+<<<<<<< HEAD:install/common.php
 function write_basic_config($file) { # do not use in PHPWIND Install
+=======
+function write_basic_config($file) {
+>>>>>>> 96d397fbc20b370ba0908717c4912632f6611dd6:install/common.php
 	global $file_path, $platform;
 	$fp = fopen($file, 'r');
 	$configfile = fread($fp, filesize($file));
@@ -368,6 +440,7 @@ function write_basic_config($file) { # do not use in PHPWIND Install
 	}
 }
 
+<<<<<<< HEAD:install/common.php
 function write_global(){
 		Global $file_path, $platform;
 		$fp = fopen($file_path['$platform']."global.php", 'r');
@@ -385,5 +458,12 @@ function write_global(){
 	    	@fclose($fp);
 		}
 }
+=======
+
+
+
+
+
+>>>>>>> 96d397fbc20b370ba0908717c4912632f6611dd6:install/common.php
 
 ?>

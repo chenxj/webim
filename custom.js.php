@@ -40,7 +40,7 @@ $setting = json_encode(setting());
 //custom
 (function(webim){
     var path = "";
-    var platform = "<?php echo $_GET['platform']; ?>";
+    var platform = "<?php echo $platform; ?>";
 
     var menu = webim.JSON.decode('<?php echo json_encode($menu) ?>');
 	webim.extend(webim.setting.defaults.data, webim.JSON.decode('<?php echo $setting ?>'));

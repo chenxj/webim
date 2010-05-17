@@ -2,12 +2,11 @@
 error_reporting(0);
 header("Content-type: application/javascript");
 
+include_once ('config.php');
 $platform = $_IMC['platform'] ? $_IMC['platform'] : $_GET['platform'];
-
 include_once("lib/{$platform}.php");
 
 
-include_once ('config.php');
 if($platform === 'uchome'){
 	$menu = array(
 		array("title" => 'doing',"icon" =>"image/app/doing.gif","link" => "space.php?do=doing"),

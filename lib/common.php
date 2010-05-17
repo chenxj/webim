@@ -19,6 +19,19 @@ $_SC['dbcharset'] = UC_DBCHARSET;
 $_SC['charset'] = UC_CHARSET;
 
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+function my_info(){
+    global $cusername,$cuid;
+    $space =  array();
+    $space['nick'] = $cusername;
+    $space['uid'] =  $cuid;
+    return $space;
+}
+>>>>>>> 73e92bfd1afe423814b0f3958132cf53ebe0c000
+>>>>>>> 16ecedb25244cdb945a8391a009bb0eec11158fd
 
 function _randint(){
     $num = "";
@@ -32,7 +45,15 @@ function _randint(){
 /*
  * 获取当前用户信息
  */
+<<<<<<< HEAD
 function my_info(){
+=======
+<<<<<<< HEAD
+function my_info(){
+=======
+function random_my_info(){
+>>>>>>> 73e92bfd1afe423814b0f3958132cf53ebe0c000
+>>>>>>> 16ecedb25244cdb945a8391a009bb0eec11158fd
     $space =  array();
     $space['uid'] = _randint();
     $space['nick'] = "user" . $space['uid'];

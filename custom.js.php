@@ -91,6 +91,7 @@ $setting = json_encode(setting());
 	}
 	function isAdmin(ids,userid){
 		if (ids === userid)return;
+
 		for (var i = 0; i < ids.length; i++){
 			if (ids[i] == userid)return true;
 		}

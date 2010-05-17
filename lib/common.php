@@ -10,7 +10,7 @@ define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
 include_once($_IMC['discuz_path'] . API_COMMFILE);
 include_once(WEBIM_ROOT . "/lib/json.php");
 include_once($_IMC['install_path'].'/uc_client/client.php');
-$_SGLOBAL['supe_uid'] =  $discuz_uid;
+$_SGLOBAL['supe_uid'] =  $cuid;
 $_SGLOBAL['db'] = $db;
 $_SGLOBAL['timestamp'] = time();
 $_SC['gzipcompress'] = true;

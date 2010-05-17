@@ -4,7 +4,7 @@ header("Content-type: application/javascript");
 
 include_once ('config.php');
 $platform = $_IMC['platform'] ? $_IMC['platform'] : $_GET['platform'];
-include_once("lib/{$platform}.php");
+include_once("lib/common.php");
 
 
 if($platform === 'uchome'){
@@ -104,7 +104,7 @@ $setting = json_encode(setting());
 		var adminids = "<?php echo $_IMC['admin_ids'] ?>";
 		var userid = "<?php echo $_SGLOBAL['supe_uid']?>";
 		im.admins = adminids?adminids.split(","):"";
-		im.isadmin = isAdmin(adminids,userid);
+		im.isadmin = isAdmin(im.admins,userid);
 		im.userid = userid;
 		im.broadcastID = 0;
         	im.isStrangerOn = "on";

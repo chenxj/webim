@@ -65,7 +65,7 @@ UC_WEBIM_MIN_JS = ${DIST_DIR}/webim_uc.min.js
 DZ_WEBIM_MIN_JS = ${DIST_DIR}/webim_dz.min.js
 
 
-all: dist ucim dzim  min
+all: dist ucim dzim  min 
 	@@echo "webim build complete."
 
 dist:

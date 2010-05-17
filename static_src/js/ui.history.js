@@ -54,7 +54,7 @@ widget("history",{
 			shouldTilte = false;
 		}
 		//markup.push(self._renderDateBreak(time));
-		if (shouldTilte) {
+		if (shouldTilte || logItem.type === "broadcast" || logItem.to == "0") {
 			self._lastLogItem = logItem;
 			var t = (new date(time));
 			markup.push('<h4><span class="webim-gray">');

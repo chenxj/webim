@@ -3,24 +3,18 @@ error_reporting(E_ALL);
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 include_once($configRoot . 'http_client.php');
 include_once($configRoot . 'common.php');
-<<<<<<< HEAD
 
 
 
 $space = my_info();
 
-=======
 
-$space = my_info();
 /* if $friend_ids or $stranger_ids = Null
  *
  * Change into Array().
  * */
-$friend_ids = array();
->>>>>>> 73e92bfd1afe423814b0f3958132cf53ebe0c000
 
 
-<<<<<<< HEAD
 
 
 /* if $friend_ids or $stranger_ids = Null
@@ -31,8 +25,6 @@ $friend_ids = array();
 
 $buddy_ids = ids_array(gp("buddy_ids"));//正在聊天的联系人
 
-=======
->>>>>>> 73e92bfd1afe423814b0f3958132cf53ebe0c000
 // Login webim server.
 // $setting = setting();
 // $block_list = is_array($setting->block_list) ? $setting->block_list : array();

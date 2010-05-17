@@ -254,3 +254,4 @@ function bindReady() {
 	addEvent( window, "load", triggerReady );
 }
 webim.hide = hide;
+webim.show = show;

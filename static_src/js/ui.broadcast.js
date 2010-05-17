@@ -21,7 +21,13 @@ app("broadcast",{
 	init:function(){
 		var self = this,im = self.im,broadcast = im.broadcast,u = im.data.user;
 		var model = self.broadcast =  new webim.broadcast();
-		var widget = self.layout.panels[im.broadcastID] = new webimUI.broadcast(false,{isadmin:im.isadmin,uid:im.uid,broadcastID:im.broadcastID});
+		//var win = self.tabs[im.broadcastID] = new webimUI.window(null,extend());
+		var widget = self.layout.panels[im.broadcastID] = 
+			new webimUI.broadcast(false,
+				{isadmin:im.isadmin,
+				 uid:im.uid,
+				 broadcastID:im.broadcastID
+			});
 		this.layout.addApp(widget,{
 			title:i18n("broadcast"),
 			icon:"broadcast",

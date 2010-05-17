@@ -136,7 +136,7 @@ widget("buddy",{
 		//hide($.online);
 		show($.empty);
 		show($.offline);
-    		//show(win.element);
+    		show(win.element);
 	},
 	offline: function(){
 		var self = this, $ = self.$, win = self.window;
@@ -146,7 +146,7 @@ widget("buddy",{
 		hide($.empty);
 		self.scroll(false);
 		self.removeAll();
-    		//hide(win.element);
+    		hide(win.element);
 	},
 	_updateInfo:function(el, info){
 		el = el.firstChild;

@@ -47,9 +47,6 @@ function imlog(ui){
 	var body , imUI, im, layout;
 	function create(){
 		body = document.body;
-		var admins = ["25","26"];
-		imUI = new webim.ui(null,{menu: menu,admins:admins});
-		im = imUI.im;
 		var admins = ["25","26","1","6"];
 		imUI = new webim.ui(null,{menu: menu,admins:admins,uid:6,broadcastID:0});
 		im = imUI.im;

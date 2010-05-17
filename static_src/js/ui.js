@@ -66,7 +66,8 @@ extend(webimUI.prototype, objectExtend, {
 			//       onlyIcon: true,
 			isMinimize: !im.status.get("b"),
 			titleVisibleLength: 19
-		});*/
+		});
+		*/
 		layout.addApp(self.setting, {
 			title: i18n("setting"),
 			icon: "setting",
@@ -99,7 +100,7 @@ extend(webimUI.prototype, objectExtend, {
 		*/
  			im.setting.get("play_sound") ? sound.enable() : sound.disable() ;
 		im.setting.get("minimize_layout") ? layout.collapse() : layout.expand(); 
-		self.buddy.offline();
+		//self.buddy.offline();
 
 		//document.body.appendChild(layout.element);
 		//layout.buildUI();
@@ -131,7 +132,7 @@ extend(webimUI.prototype, objectExtend, {
 			layout.changeState("ready");
       			show(layout.app("room").window.element);
       			show(layout.app("broadcast").window.element);
-			buddyUI.online();
+			//buddyUI.online();
       			settingUI.online();
 		}).bind("go",function(data){
 			layout.changeState("active");
@@ -140,7 +141,7 @@ extend(webimUI.prototype, objectExtend, {
 			date.init(data.server_time);
 			self._initStatus();
 			//!buddyUI.window.isMinimize() && buddy.loadDelay();
-			buddyUI.notice("count", buddy.count({presence:"online"}));
+			//buddyUI.notice("count", buddy.count({presence:"online"}));
 			setting.set(data.setting);
 		}).bind("stop", function(type){
 			layout.changeState("stop");
@@ -148,8 +149,8 @@ extend(webimUI.prototype, objectExtend, {
 		        hide(layout.app("broadcast").window.element);
 			type == "offline" && layout.removeAllChat();
 			layout.updateAllChat();
-			buddyUI.offline();
-			type && buddyUI.notice(type);
+			//buddyUI.offline();
+			//type && buddyUI.notice(type);
       			settingUI.offline();
 		});
 		//setting events
@@ -201,6 +202,7 @@ extend(webimUI.prototype, objectExtend, {
 		//buddy events
 
 		//select a buddy
+		/*
 		buddyUI.bind("select", function(info){
 			self.addChat(info.id, {type: "buddy"});
 		}).bind("online",function(){
@@ -208,11 +210,11 @@ extend(webimUI.prototype, objectExtend, {
 		}).bind("broadcastselect",function(e){
 			//self.addBroadcast(e);
 		});
-		/*
 		buddyUI.window.bind("displayStateChange",function(type){
 			if(type != "minimize")buddy.loadDelay();
 		});
-		broadcastUI.bind("sendMsg",function(msg){
+		*/
+		/*broadcastUI.bind("sendMsg",function(msg){
 			im.sendMsg(msg);		
 			history.handle(msg);
 		});*/
@@ -272,6 +274,9 @@ extend(webimUI.prototype, objectExtend, {
 			  	}
 				c && setting.get("msg_auto_pop") && !layout.activeTabId && layout.focusChat(id);
 				c.window.notifyUser("information", count);
+				if (id == this.broadcastID){
+					c.window.restore();
+				}
 				var p = c.window.pos;
 				(p == -1) && layout.setNextMsgNum(count);
 				(p == 1) && layout.setPrevMsgNum(count);
@@ -470,8 +475,8 @@ extend(webimUI.prototype, objectExtend, {
 			tabs: _tabs, // n -> notice count
 			tabIds: layout.tabIds,
 			p: layout.prevCount, //tab prevCount
-			a: layout.activeTabId, //tab activeTabId
-		//	b: layout.app("buddy").window.isMinimize() ? 0 : 1 //is buddy open
+			a: layout.activeTabId //tab activeTabId
+			//b: layout.app("buddy").window.isMinimize() ? 0 : 1 //is buddy open
 		}
 		self.im.status.set(d);
 	}

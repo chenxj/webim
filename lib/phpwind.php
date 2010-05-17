@@ -195,7 +195,7 @@ function find_room_by_tid($tid){
 	$rooms = array();
 	$query = $_SGLOBAL['db']->query("SELECT f.name, f.fid FROM pw_forums f LEFT JOIN pw_threads t ON t.fid=f.fid WHERE t.tid = '$tid'");
 	while ($value = $_SGLOBAL['db']->fetch_array($query)){
-		$name = $value['name'];
+		$name = to_utf8($value['name']);
 		$id = (string)($_IMC['room_id_pre'] + $value['fid']);
 		$eid = 'channel:'.$id.'@'.$_IMC['domain'];
 		$rooms[$id]=array('id'=>$id,'name'=>$name,'pic_url'=>"", 'status'=>'','status_time'=>'');
@@ -208,7 +208,7 @@ function find_room_by_fid($fid){
 	$rooms = array();
 	$query = $_SGLOBAL['db']->query("SELECT name FROM pw_forums WHERE fid = '$fid'");
 	while ($value = $_SGLOBAL['db']->fetch_array($query)) {
-		$name = $value['name'];
+		$name = to_utf8($value['name']);
 		$id = (string)($_IMC['room_id_pre'] + $fid);
 		$eid = 'channel:'.$id.'@'.$_IMC['domain'];
 		# $pic = empty($value['pic']) ? 'image/nologo.jpg' : $value['pic'];

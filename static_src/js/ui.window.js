@@ -190,7 +190,7 @@ widget("window", {
 		remove(self.element);
 	},
 	_initEvents:function(){
-		var self = this, element = self.element, $ = self.$, tab = $.tab;
+		var self = this, element = self.element, $ = self.$, tab = $.tab,options = self.options;
 		var stop = function(e){
 			stopPropagation(e);
 			preventDefault(e);
@@ -201,7 +201,10 @@ widget("window", {
 		};
 		addEvent($.header, "click", minimize);
 		addEvent(tab, "click", function(e){
-			if(self.isMinimize())self.restore();
+			if(self.isMinimize()){
+				self.restore();
+				options.widget&& options.widget.trigger("history");
+			}
 			else self.minimize();
 			stop(e);
 		});

@@ -1,5 +1,5 @@
 #webim-room{
-        padding: .3em 0;
+        padding:  0 .4em;
 
 }
 #webim-room .webim-room-search{
@@ -31,7 +31,7 @@
         padding: 1em 2em;
 }
 #webim-room .webim-room-content{
-        padding: .2em .5em 0;
+        padding: .2em ;
         position:relative;
 }
 /*fuck ie6  why ?*/
@@ -77,8 +77,7 @@
 }
 #webim-room ul li a{
         display:block;
-        margin-left:3em;
-        padding: .3em 0;
+        margin-left:2.5em;
 }
 #webim-room ul li a img{
         display:block;
@@ -91,6 +90,9 @@
 }
 #webim-room ul li a strong{
         display: block;
+	position:absolute;
+	margin-left:0.5em;
+	margin-top:0.5em;
         font-weight: normal;
 }
 #webim-room ul li a span{
@@ -120,5 +122,4 @@
 	
 }
 .webim-room-window{
-display:none;
 }

@@ -217,7 +217,7 @@ if($step == 2)
                                 if($platform == 'discuz'){
         				$tablestatus = $db->fetch_first("SHOW TABLE STATUS LIKE '$tablename'");
         			}else{
-        			        $tablestatus = $db->query("SHOW TABLE STATUS LIKE '$tablename'");
+        			        $tablestatus = $db->query("SHOW TABLES LIKE '%$tablename%'");
         			}
 				if($tablestatus){ 
 					$tblexist = true;

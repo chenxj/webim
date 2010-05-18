@@ -4,6 +4,7 @@ define('WEBIM_ROOT', substr(dirname(__FILE__), 0, -4));
 include_once(WEBIM_ROOT.'/../global.php');
 include_once(WEBIM_ROOT.'/../require/showimg.php');
 include_once(WEBIM_ROOT . "/lib/json.php");
+include("../config.php");
 
 $platform = $_IMC['platform'];
 $_SGLOBAL['supe_uid'] = $winduid;
@@ -11,6 +12,36 @@ $_SGLOBAL['db'] = $db;
 $_SGLOBAL['timestamp'] = time();
 $_SC['gzipcompress'] = true;
 $_SC['dbcharset'] = $db_charset;
+$_SC['charset'] = $charset;
+
+
+
+/*
+ * 判断平台编码是否为UTF-8
+ */
+function _is_charset_utf8()
+{
+    global $_SC;
+    if($_SC['charset'] == "utf8" || $_SC['charset'] == "utf-8")
+        return true;
+    else
+        return false;
+}
+
+/*
+ * 判断平台DB编码是否为UTF-8
+ */
+function _is_dbcharset_utf8()
+{
+    global $_SC;
+    if($_SC['dbcharset'] == "utf8" || $_SC['dbcharset'] == "utf-8")
+        return true;
+    else
+        return false;
+}
+
+
+
 
 function _iconv($s,$t,$data){
 	if( function_exists('iconv') ) {
@@ -70,7 +101,7 @@ function setting(){
 
 function to_utf8($s) {
 	global $_SC;
-	if($_SC['charset'] == 'utf-8') {
+	if(_is_charset_utf8()) {
 		return $s;
 	} else {
 		return  _iconv($_SC['charset'],'utf-8',$s);
@@ -79,7 +110,7 @@ function to_utf8($s) {
 
 function from_utf8($s) {
 	global $_SC;
-	if($_SC['charset'] == 'utf-8') {
+	if(_is_charset_utf8()) {
 		return $s;
 	} else {
 		return  _iconv('utf-8',$_SC['charset'],$s);
@@ -159,13 +190,12 @@ function find_new_message(){
         return $messages;
 }
 
-function find_fid($tid){
-	include_once(WEBIM_ROOT . "config.php");
-	global $_SGLOBAL;
+function find_room_by_tid($tid){
+	global $_SGLOBAL,$_IMC;
 	$rooms = array();
 	$query = $_SGLOBAL['db']->query("SELECT f.name, f.fid FROM pw_forums f LEFT JOIN pw_threads t ON t.fid=f.fid WHERE t.tid = '$tid'");
 	while ($value = $_SGLOBAL['db']->fetch_array($query)){
-		$name = $value['name'];
+		$name = to_utf8($value['name']);
 		$id = (string)($_IMC['room_id_pre'] + $value['fid']);
 		$eid = 'channel:'.$id.'@'.$_IMC['domain'];
 		$rooms[$id]=array('id'=>$id,'name'=>$name,'pic_url'=>"", 'status'=>'','status_time'=>'');
@@ -173,13 +203,12 @@ function find_fid($tid){
 	return $rooms;
 }
 
-function find_room($fid){
-	include_once(WEBIM_ROOT . "config.php");
-	global $_SGLOBAL;
+function find_room_by_fid($fid){
+	global $_SGLOBAL,$_IMC;
 	$rooms = array();
 	$query = $_SGLOBAL['db']->query("SELECT name FROM pw_forums WHERE fid = '$fid'");
 	while ($value = $_SGLOBAL['db']->fetch_array($query)) {
-		$name = $value['name'];
+		$name = to_utf8($value['name']);
 		$id = (string)($_IMC['room_id_pre'] + $fid);
 		$eid = 'channel:'.$id.'@'.$_IMC['domain'];
 		# $pic = empty($value['pic']) ? 'image/nologo.jpg' : $value['pic'];

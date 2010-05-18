@@ -315,14 +315,14 @@ function write_template(){
                 	$htmfile = trim($htmfile);
                    	list($htmfile, $foot) = explode("?>", $htmfile);
                   	fclose($fp);
-
-
-
-			$htmfile .= "\r\n" . 'include(dirname(dirname(dirname(__FILE__))) . "/webim/config.php");' . "\r\n" ;
-			$htmfile .= "\r\n" . 'include_once PrintEot("webim_phpwind")' . "\r\n?>" . $foot;
-			@$fp = fopen($path . $templete_folder . 'footer.htm', 'w');
-			fwrite($fp, trim($htmfile));
-			fclose($fp);
+                  	if(strpos($htmfile, 'PrintEot("webim_phpwind")') === false)
+                  	{
+			        $htmfile .= "\r\n" . 'include(dirname(dirname(dirname(__FILE__))) . "/webim/config.php");' . "\r\n" ;
+		        	$htmfile .= "\r\n" . 'include_once PrintEot("webim_phpwind")' . "\r\n?>" . $foot;
+			        @$fp = fopen($path . $templete_folder . 'footer.htm', 'w');
+			        fwrite($fp, trim($htmfile));
+			        fclose($fp);
+                        }
 		}
 	}
 }

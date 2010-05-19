@@ -1,0 +1,127 @@
+#webim-buddy{
+        padding: .3em 0;
+
+}
+#webim-buddy .webim-buddy-search{
+        padding: 0em 1.6em 0em 0em;
+        margin: .3em .5em .5em;
+        display: none;
+        
+}
+#webim-buddy .webim-buddy-search input{
+        border: none;
+        background: none;
+	display: block;
+	width:95%;
+        padding: .2em;
+	/*
+	*/
+}
+#webim-buddy .webim-buddy-search em{
+        float: right;
+	display: inline;
+        margin: .1em -1.5em 0 0;
+}
+#webim-buddy .webim-buddy-online{
+        padding: 1em;
+        text-align: center;
+        display: none;
+}
+
+#webim-buddy .webim-buddy-online a{
+        padding: 1em 2em;
+}
+#webim-buddy .webim-buddy-content{
+        padding: .2em .5em 0;
+        position:relative;
+}
+/*fuck ie6  why ?*/
+* html  #webim-buddy .webim-buddy-content{
+        position: fixed;
+}
+
+#webim-buddy.webim-buddy-scroll .webim-buddy-content{
+        height: 25em;
+        overflow-y: auto;
+}
+#webim-buddy.webim-buddy-scroll .webim-buddy-search{
+        display: block;
+}
+
+#webim-buddy .webim-buddy-offline{
+        display: none;
+	float: right;
+	/*
+        position: absolute;
+        top: .3em;
+        right: .5em;
+	*/
+}
+#webim-buddy .webim-buddy-empty{
+        display: none;
+        padding: 0 0 1em;
+}
+
+#webim-buddy .webim-buddy-offline a{
+}
+#webim-buddy ul{
+	list-style: none;
+}
+#webim-buddy ul h4{
+        background:none;
+        font-weight: normal;
+        border-width: 0;
+        border-bottom-width: 1px;
+        padding: .2em .5em 0;
+}
+#webim-buddy ul li{
+}
+#webim-buddy ul li a{
+        display:block;
+        margin-left:3em;
+        padding: .3em 0;
+}
+#webim-buddy ul li a img{
+        display:block;
+        float:left;
+        margin-left: -2.5em;
+}
+/*fuck ie6  why ?*/
+* html  #webim-buddy ul li a img{
+        position: fixed;
+}
+#webim-buddy ul li a strong{
+        display: block;
+        font-weight: normal;
+}
+#webim-buddy ul li a span{
+        display: block;
+}
+.webim-state-stop .webim-buddy-window{
+        width:0;
+        display:none;
+        position:absolute;
+}
+.webim-broadcast a{
+	text-align:left;
+	display:block;
+
+	margin-left:10px;
+	margin-top:5px;
+}
+.webim-broadcast  strong {
+	top:auto;
+	bottom:auto;
+	left:auto;
+	right:auto;
+	margin-top:-20px;
+	margin-left:30px;
+	position:absolute;
+	font-style:normal;
+	font-size:12px;
+	font-weight:400;
+}
+.webim-broadcast img{
+	display:block;
+
+}

@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta content="ie=7" http-equiv="x-ua-compatible" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+		<title>webim ui</title>
+		<!-- base start -->
+		<script type="text/javascript" src="im/src/core.js" ></script>
+		<script type="text/javascript" src="im/src/objectExtend.js" ></script>
+		<script type="text/javascript" src="im/src/ajax.js" ></script>
+		<script type="text/javascript" src="im/src/json.js" ></script>
+		<script type="text/javascript" src="im/src/comet.js" ></script>
+		<script type="text/javascript" src="im/src/cookie.js" ></script>
+		<script type="text/javascript" src="im/src/log.js" ></script>
+		<!-- base end -->
+		<!-- webim start -->
+		<script type="text/javascript" src="im/src/webim.js" ></script>
+		<script type="text/javascript" src="im/src/setting.js" ></script>
+		<script type="text/javascript" src="im/src/status.js" ></script>
+                <script type="text/javascript" src="im/src/broadcast.js" ></script>
+		<script type="text/javascript" src="im/src/buddy.js" ></script>
+		<script type="text/javascript" src="im/src/room.js" ></script>
+		<script type="text/javascript" src="im/src/notification.js" ></script>
+		<script type="text/javascript" src="im/src/history.js" ></script>
+                <script type="text/javascript" src="im/src/hotpost.js" ></script>
+		<!-- webim end -->
+		<!-- webim ui start -->
+		<link href="css/core.css" media="all" type="text/css" rel="stylesheet"/>
+		<link href="css/ui.core.css" media="all" type="text/css" rel="stylesheet"/>
+		<link href="css/icons.css" media="all" type="text/css" rel="stylesheet"/>
+		<link href="css/layout.css" media="all" type="text/css" rel="stylesheet"/>
+		<link href="css/setting.css" media="all" type="text/css" rel="stylesheet"/>
+		<link href="css/notification.css" media="all" type="text/css" rel="stylesheet"/>
+		<link href="css/hotpost.css" media="all" type="text/css" rel="stylesheet"/>
+		<link href="css/buddy.css" media="all" type="text/css" rel="stylesheet"/>
+		<link href="css/room.css" media="all" type="text/css" rel="stylesheet"/>
+		<link href="css/emot.css" media="all" type="text/css" rel="stylesheet"/>
+		<link href="css/chat.css" media="all" type="text/css" rel="stylesheet"/>
+		<link href="css/menu.css" media="all" type="text/css" rel="stylesheet"/>
+		<link href="css/history.css" media="all" type="text/css" rel="stylesheet"/>
+		<link href="css/chatlink.css" media="all" type="text/css" rel="stylesheet"/>
+		<link href="themes/flick/ui.theme.css" media="all" type="text/css" rel="stylesheet"/>
+		<link href="../../template/default/style.css" media="all" type="text/css" rel="stylesheet"/>
+		<script type="text/javascript" src="swfobject-2.1.js" ></script>
+		<script type="text/javascript" src="js/core.js" ></script>
+		<script type="text/javascript" src="js/date.js" ></script>
+		<script type="text/javascript" src="js/notice.js" ></script>
+		<script type="text/javascript" src="js/i18n.js" ></script>
+		<script type="text/javascript" src="js/ui.js" ></script>
+		<script type="text/javascript" src="js/ui.window.js" ></script>
+		<script type="text/javascript" src="js/ui.layout.js" ></script>
+		<script type="text/javascript" src="js/ui.menu.js" ></script>
+		<script type="text/javascript" src="js/ui.hotpost.js" ></script>
+		<script type="text/javascript" src="js/ui.broadcast.js" ></script>
+		<script type="text/javascript" src="js/ui.buddy.js" ></script>	
+		<script type="text/javascript" src="js/ui.room.js" ></script>	
+		<script type="text/javascript" src="js/ui.chat.js" ></script>
+		<script type="text/javascript" src="js/ui.emot.js" ></script>
+		<script type="text/javascript" src="js/ui.chatlink.js" ></script>
+		<script type="text/javascript" src="js/ui.history.js" ></script>
+		<script type="text/javascript" src="js/ui.setting.js" ></script>
+		<script type="text/javascript" src="js/ui.notification.js" ></script>
+		<script type="text/javascript" src="js/i18n/webim-zh-CN.js" ></script>
+		<!-- webim ui end -->
+		<script type="text/javascript">
+			document.location.hash = "space.php?uid=3";
+		</script>
+		<script type="text/javascript" src="index.js"></script>
+		<!--
+		<script type="text/javascript" src="../custom.js.php"></script>
+		-->
+	</head>
+	<body>
+		<div>
+			<h1>webim ui</h1>
+		</div>
+		<div id="space_mymenu">
+			<h2>个人菜单</h2>
+			<ul class="line_list">
+				<li>
+				<img src="image/icon/profile.gif"/><a onclick="getindex('info');" href="javascript:;">个人资料</a>
+				</li>
+				<li>
+				<img src="image/icon/doing.gif"/><a onclick="getindex('doing');" href="javascript:;">记录</a></li>
+				<li>
+				<img src="image/icon/blog.gif"/><a onclick="getindex('blog');" href="javascript:;">日志</a></li>
+				<li><img src="image/icon/album.gif"/><a onclick="getindex('album');" href="javascript:;">相册</a></li>
+				<li><img src="image/icon/thread.gif"/><a onclick="getindex('thread');" href="javascript:;">话题</a></li>
+				<li><img src="image/icon/poll.gif"/><a onclick="getindex('poll');" href="javascript:;">投票</a></li>
+				<li><img src="image/icon/event.gif"/><a onclick="getindex('event');" href="javascript:;">活动</a></li>
+				<li><img src="image/icon/share.gif"/><a onclick="getindex('share');" href="javascript:;">分享</a></li>
+				<li><img src="image/icon/friend.gif"/><a onclick="getindex('friend');" href="javascript:;">好友</a></li>
+			</ul>
+		</div>
+		<ul>
+			<li  id="feed_10_li" class="s_clear ">
+			<div  style="overflow: hidden; width: 100%;">
+				<a style="display: none;" title="显示更多选项"  id="a_feed_menu_10" class="float_more" href="cp.php?ac=feed&amp;op=menu&amp;feedid=10">菜单</a>
+				<a title="只看此类动态" href="space.php?uid=10&amp;do=feed&amp;view=me&amp;appid=2&amp;icon=profile" class="type"><img src="image/icon/profile.gif"/></a>
+				<a href="space.php?uid=10" target="_blank">test9</a> 开通了自己的个人主页 
+
+				<span class="gray">10-30 12:05</span>
+
+			</div>
+			</li>
+		</ul>
+		<ul class="avatar_list">
+			<li>
+			<div class="avatar48"><a href="space.php?uid=11"><img onerror="this.onerror=null;this.src=''"/></a></div>
+			<p title="在线" class="online_icon_p"><a title="test8" href="space.php?uid=11">test8</a></p>
+			<p class="gray">10月30日</p>
+			</li>
+			<li>
+			<div class="avatar48"><a href="space.php?uid=10"><img onerror="this.onerror=null;this.src=''" src=""/></a></div>
+			<p><a title="test9" href="space.php?uid=10">test9</a></p>
+			<p class="gray">10月30日</p>
+			</li>
+			<li>
+			<div class="avatar48"><a href="space.php?uid=3"><img onerror="this.onerror=null;this.src=''" src=""/></a></div>
+			<p><a title="test1" href="space.php?uid=3">test1</a></p>
+			<p class="gray">10月30日</p>
+			</li>
+		</ul>
+		<div id="flash-test"></div>
+		<script type="text/javascript">
+			swfobject.embedSWF("flash.swf", "flash-test", "600", "400", "9.0.0", null, null, {}, {});
+		</script>
+	</body>
+</html>
+

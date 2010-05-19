@@ -1,0 +1,113 @@
+
+/*webim user*/
+.webim .webim-user{
+        margin-left: 6em;
+}
+.webim .webim-user-pic{
+        float: left;
+        margin-left: -5.5em;
+        margin-top: -1.8em;
+}
+*html  .webim-user-pic {
+	height:50px;
+	position:absolute;
+}
+.webim .webim-user-status{
+        height: 3em;
+        display: block;
+}
+* html  .webim-user-status{
+	height:1em;
+	display:none;
+}
+/**/
+.webim .webim-chat .webim-chat-header{
+	border-left-width:0;
+	border-right-width:0;
+}
+*html .webim-chat-header{
+	height:3em;
+}
+.webim .webim-chat-content{
+        height: 9.8em;
+        overflow-y:auto;
+        overflow-x:visible;
+        *background:url(about:blank);
+}
+.webim .webim-chat-status{
+        font-style: italic;
+        margin-left: .8em;
+
+}
+.webim .webim-chat .webim-chat-actions{
+        border-width:0;
+        border-top-width:1px;
+}
+.webim .webim-chat-t{
+        width:100%;
+        border-spacing:0;
+        border:0;
+}
+.webim .webim-chat-t em{
+        margin: .1em .2em;
+}
+.webim .webim-chat-input-wrap{
+}
+.webim .webim-chat-input{
+        border:none;
+        background: transparent;
+        overflow: auto;
+        width: 100%;
+        height: 3em;
+        padding: .3em 0 .2em;
+}
+.webim .webim-chat .webim-chat-notice{
+        border-right-width:0;
+        border-left-width:0;
+        display: none;
+        padding: 0 .5em;
+        position: relative;
+}
+.webim .webim-chat .webim-chat-notice-wrap{
+}
+.webim .webim-chat .webim-chat-tools{
+        padding: 0 .3em;
+        border-left-width: 0;
+        border-right-width: 0;
+}
+.webim .webim-chat-tools a, .webim .webim-chat-tools a em{
+        float: left;
+}
+.webim .webim-chat-tools a{
+        padding: .2em;
+}
+.webim .webim-chat-tool-content{
+        position: relative;
+        height:0;
+}
+
+/*member*/
+.webim .webim-member{
+	margin-top:  -2.1em;
+	height: 17.4em;
+	width: 9em;
+	left: -9.1em;
+	position: absolute;
+}
+.webim .webim-chat .webim-member .webim-bgiframe{
+	top: -.1em;
+	left: -.1em;
+	width: 7.2em;
+	height: 16.2em;
+}
+.webim .webim-member ul{
+	height: 17.4em;
+	width: 9em;
+	position: absolute;
+        overflow-y:auto;
+        overflow-x:hidden;
+	list-style: none;
+}
+.webim .webim-member li{
+	margin: 0.1em 0.1em 0.1em 0.5em;
+}

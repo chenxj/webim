@@ -26,7 +26,6 @@ widget("chat",{
         template:'<div class="webim-chat"> \
                                                 <div id=":header" class="webim-chat-header ui-widget-subheader">  \
                                                         <div id=":user" class="webim-user"> \
-                                                                <a id=":userPic" class="webim-user-pic" href="#id"><img width="50" height="50" src="" defaultsrc="" onerror="this.onerror=null;var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" /></a> \
                                                                 <span id=":userStatus" title="" class="webim-user-status">Hello</span> \
                                                         </div> \
                                                 </div> \
@@ -225,10 +224,12 @@ widget("chat",{
 	},
 	_updateInfo:function(info){
 		var self = this, $ = self.$;
+		/*
 		$.userPic.setAttribute("href", info.url);
 		$.userPic.firstChild.setAttribute("defaultsrc", info.default_pic_url ? info.default_pic_url : "");
 		$.userPic.firstChild.setAttribute("src", info.pic_url);
 		$.userStatus.innerHTML = info.status;
+		*/
 		self.window.title(info.name);
 	},
 	insert:function(value, isCursorPos){

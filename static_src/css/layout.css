@@ -272,7 +272,9 @@
 .webim-layout .webim-panels .webim-window{
         position: relative;
 }
-
+.webim-layout .webim-panels .webim-window-window{
+	right:-16.3em;
+}
 /*ie6: need clear css expression when remove the window.*/
 * html .webim-layout .webim-panels .webim-window .webim-bgiframe{
 	height: 27em;

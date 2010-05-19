@@ -29,13 +29,14 @@ app("room",{
 		    u = im.data.user, 
 		    layout = ui.layout;
 		var roomUI = ui.room = new webim.ui.room(null).bind("select",function(info){
-			ui.addChat(info.id, {type: "room"},{className:"webim-room-widget"});
+			ui.addChat(info.id, {type: "room"});
 			ui.layout.focusChat(info.id);
 		});
 		layout.addApp(roomUI, {
 			title: i18n("room"),
 			icon: "room",
 			sticky: false,
+			className:"webim-room-window",
 			isMinimize: true
 		}, "setting");
 
@@ -89,7 +90,7 @@ app("room",{
 	}
 });
 widget("room",{
-        template: '<div id="webim-room" class="webim-room">\
+        template: '<div id="webim-room" class="webim-room ">\
                         <div id=":search" class="webim-room-search ui-state-default ui-corner-all"><em class="ui-icon ui-icon-search"></em><input id=":searchInput" type="text" value="" /></div>\
                         <div class="webim-room-content">\
                                 <div id=":empty" class="webim-room-empty"><%=empty room%></div>\

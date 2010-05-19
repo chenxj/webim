@@ -429,7 +429,6 @@ extend(webimUI.prototype, objectExtend, {
 				emot:true, 
 				clearHistory: false, 
 				member: true, 
-				className:"webim-room-window",
 				msgType: "multicast"
 			}, options), winOptions);
 			if(!h) history.load(id);

@@ -99,7 +99,7 @@ widget("window", {
 			remove($.tabTip);
 		}
 		options.count && self.notifyUser("information", options.count);
-		options.className && addClass(self,"webim-room-widget");
+		options.className && addClass(self,options.className);
 		//self._initEvents();
 		//self._fitUI();
 		//setTimeout(function(){self.trigger("ready");},0);

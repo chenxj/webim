@@ -24,6 +24,7 @@
 .webim .webim-chat .webim-chat-header{
 	border-left-width:0;
 	border-right-width:0;
+	display:none;
 }
 *html .webim-chat-header{
 	height:3em;

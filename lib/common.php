@@ -19,10 +19,15 @@ $_SC['dbcharset'] = UC_DBCHARSET;
 $_SC['charset'] = UC_CHARSET;
 
 function my_info(){
+//    return random_my_info();
     global $cusername,$cuid;
     $space =  array();
-    $space['nick'] = $cusername;
-    $space['uid'] =  $cuid;
+    $space['nick'] =  $cusername;
+    $space['uid']  =  $cuid;
+    if(!$space['nick']){
+   	$space['uid'] =  _randint();
+   	$space['nick'] = "guest" . $space['uid'];
+	}
     return $space;
 }
 

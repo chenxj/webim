@@ -253,5 +253,3 @@ function bindReady() {
 	// A fallback to window.onload, that will always work
 	addEvent( window, "load", triggerReady );
 }
-webim.hide = hide;
-webim.show = show;

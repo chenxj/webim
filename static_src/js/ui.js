@@ -41,8 +41,6 @@ extend(webimUI.prototype, objectExtend, {
 		});
 		self.buddy = new webimUI.buddy(null,{
 		});
-		//self.room = new webimUI.room(null,{});
-		//self.broadcast = new webimUI.broadcast(null,{});
 		var menuData = self.options.menu;
 	       	self.menu = new webimUI.menu(null,{
 			data: menuData
@@ -57,7 +55,6 @@ extend(webimUI.prototype, objectExtend, {
 		}, null,"shortcut");
 		layout.addShortcut(menuData);
 
-		/*
 		layout.addApp(self.buddy, {
 			title: i18n("chat"),
 			icon: "buddy",
@@ -67,7 +64,6 @@ extend(webimUI.prototype, objectExtend, {
 			isMinimize: !im.status.get("b"),
 			titleVisibleLength: 19
 		});
-		*/
 		layout.addApp(self.setting, {
 			title: i18n("setting"),
 			icon: "setting",
@@ -75,22 +71,8 @@ extend(webimUI.prototype, objectExtend, {
 			onlyIcon: true,
 			isMinimize: true
 		});
-		/*layout.addApp(self.broadcast,{
-			title:i18n("broadcast"),
-			icon:"broadcast",
-			onlyIcon:true,
-			isMinimize:true,
-			className:"webim-broadcast",
-			sticky:false		
-		});
-		layout.addApp(self.room, {
-			title: i18n("room"),
-			icon: "room",
-			sticky: false,
-			className: "webim-room-window",
-			isMinimize: true
-		}, "setting");
-		layout.addApp(self.notification, {
+
+	/*	layout.addApp(self.notification, {
 			title: i18n("notification"),
 			icon: "notification",
 			sticky: false,
@@ -100,8 +82,7 @@ extend(webimUI.prototype, objectExtend, {
 		*/
  			im.setting.get("play_sound") ? sound.enable() : sound.disable() ;
 		im.setting.get("minimize_layout") ? layout.collapse() : layout.expand(); 
-		//self.buddy.offline();
-
+		self.buddy.offline();
 		//document.body.appendChild(layout.element);
 		//layout.buildUI();
 
@@ -126,31 +107,28 @@ extend(webimUI.prototype, objectExtend, {
 		sound.init(urls || this.options.soundUrls);
 	},
 	_initEvents: function(){
-		var self = this, im = self.im, buddy = im.buddy, history = im.history, status = im.status, setting = im.setting, buddyUI = self.buddy,chatlink = im.chatlink, layout = self.layout, /*notificationUI = self.notification,*/ settingUI = self.setting, room = im.room,broadcastUI = self.broadcast;
+		var self = this, im = self.im, buddy = im.buddy, history = im.history, status = im.status, setting = im.setting, buddyUI = self.buddy,chatlink = im.chatlink, layout = self.layout, /*notificationUI = self.notification,*/ settingUI = self.setting, room = im.room;
 		//im events
 		im.bind("ready",function(){
 			layout.changeState("ready");
       			show(layout.app("room").window.element);
-      			show(layout.app("broadcast").window.element);
-			//buddyUI.online();
+			buddyUI.online();
       			settingUI.online();
 		}).bind("go",function(data){
 			layout.changeState("active");
-      			//hide(layout.app("room").window.element);
 			layout.option("user", data.user);
 			date.init(data.server_time);
 			self._initStatus();
-			//!buddyUI.window.isMinimize() && buddy.loadDelay();
-			//buddyUI.notice("count", buddy.count({presence:"online"}));
+			!buddyUI.window.isMinimize() && buddy.loadDelay();
+			buddyUI.notice("count", buddy.count({presence:"online"}));
 			setting.set(data.setting);
 		}).bind("stop", function(type){
 			layout.changeState("stop");
 		        hide(layout.app("room").window.element);
-		        hide(layout.app("broadcast").window.element);
 			type == "offline" && layout.removeAllChat();
 			layout.updateAllChat();
-			//buddyUI.offline();
-			//type && buddyUI.notice(type);
+			buddyUI.offline();
+			type && buddyUI.notice(type);
       			settingUI.offline();
 		});
 		//setting events
@@ -176,13 +154,11 @@ extend(webimUI.prototype, objectExtend, {
 			setting.set(key, val);
 		});
     //handle 
-    settingUI.bind("offline",function(e){
-      preventDefault(e);
+    settingUI.bind("offline",function(){
       im.trigger("stop");
       im.offline();
     });
-    settingUI.bind("online",function(e){
-      preventDefault(e);
+    settingUI.bind("online",function(){
       im.trigger("ready");  
       im.online();
     });
@@ -202,22 +178,16 @@ extend(webimUI.prototype, objectExtend, {
 		//buddy events
 
 		//select a buddy
-		/*
 		buddyUI.bind("select", function(info){
 			self.addChat(info.id, {type: "buddy"});
 		}).bind("online",function(){
 			im.online();
 		}).bind("broadcastselect",function(e){
-			//self.addBroadcast(e);
+			self.addBroadcast(e);
 		});
 		buddyUI.window.bind("displayStateChange",function(type){
 			if(type != "minimize")buddy.loadDelay();
 		});
-		*/
-		/*broadcastUI.bind("sendMsg",function(msg){
-			im.sendMsg(msg);		
-			history.handle(msg);
-		});*/
 		//some buddies online.
 		buddy.bind("online", function(data){
 			buddyUI.add(data);
@@ -255,28 +225,21 @@ extend(webimUI.prototype, objectExtend, {
 				if(!c){	
 				   var titlename = "";
 				   if (d.type === "broadcast"){
-				   	titlename = i18n("broadcast");
+				   	titlename = "站长广播";
 				   }else{
 			           	titlename = (d.type === "unicast")?d.nick:roomData[id].name;
 				   }
            			   if (d.type === "unicast"){
-				   	if (d.from === "0"){
-						self.addBroadcast(id,"update",null,"NextIM");
-					}else{
-				   		self.addChat(id, null, null, titlename);
-					}
+				   	self.addChat(id, null, null, titlename);
           			   }else if (d.type === "broadcast"){
 				   	self.addBroadcast(id,null,null,titlename);
 	  			   }else{
 			              self.addChat(id,{type:"room"});  
-       		   		   }
-			 	   c = layout.chat(id);
-			  	}
+          			}
+			 	c = layout.chat(id);
+			  }
 				c && setting.get("msg_auto_pop") && !layout.activeTabId && layout.focusChat(id);
 				c.window.notifyUser("information", count);
-				if (id == this.broadcastID){
-					c.window.restore();
-				}
 				var p = c.window.pos;
 				(p == -1) && layout.setNextMsgNum(count);
 				(p == 1) && layout.setPrevMsgNum(count);
@@ -298,17 +261,8 @@ extend(webimUI.prototype, objectExtend, {
 		function mapFrom(a){ return a.from; }
 
 		im.bind("presence",function(data){
-			var offline = [];
-			var online = [];
-			if (data){
-				for (var i = 0 ; i < data.length; i++){
-					if (data[i].type == "offline"){
-						offline.push(data[i]);
-					}else if (data[i].type == "online"){
-						online.push(data[i]);
-					}
-				}
-			}
+			offline = grep(data, grepOffline);
+			online = grep(data, grepOnline);
 			buddy.online(map(online, mapFrom), buddyUI.window.isMinimize());
 			buddy.offline(map(offline, mapFrom));
 			//chatlink.online(online);
@@ -382,29 +336,19 @@ extend(webimUI.prototype, objectExtend, {
 		a && layout.focusChat(a);
 		// status end
 	},
-	addBroadcast: function(id,type,y,title){
+	addBroadcast: function(){
+
 		var self = this,layout = self.layout,im = self.im,history = self.im.history,u = im.data.user,isadmin =self._isAdmin(u.id);
-		var _info = "";
-
+		var _info = {id:0,name:tpl("<%=broadcast%>"),isadmin:isadmin};
 		if (layout.chat(0))return;
-
 		var h = history.get(0);
 		if(!h)history.load('0');
-
-		if (type === "update"){
-			_info = {id:0,name:"NextIM",isadmin:false};
-			layout.addBroadcast(_info,extend({user:u,history:null,block:true,emot:false,clearHistory:false,member:false,msgType:"broadcast"},{name:"NextIM"}), null);
-			layout.chat(0);
-
-		}else{
-			_info = {id:0,name:tpl("<%=broadcast%>"),isadmin:isadmin};
-			layout.addBroadcast(_info,extend({user:u,history:h,block:true,emot:isadmin,clearHistory:true,member:false,msgType:"broadcast"},{name:tpl("<%=broadcast%>")}), null);
-			var broadcast = layout.chat(0);
-			broadcast.bind("sendMsg",function(msg){
-				im.sendMsg(msg);		
-				history.handle(msg);
-			});
-		}
+		layout.addBroadcast(_info,extend({user:u,history:h,block:true,emot:isadmin,clearHistory:true,member:false,msgType:"broadcast"},{name:tpl("<%=broadcast%>")}), null);
+		var broadcast = layout.chat(0);
+		broadcast.bind("sendMsg",function(msg){
+			im.sendMsg(msg);		
+			history.handle(msg);
+		});
 	},
 	_isAdmin:function(id){
 		var self = this,im = self.im,ids = im.admins;
@@ -443,7 +387,7 @@ extend(webimUI.prototype, objectExtend, {
 				else room.initMember(id);
 			}, 500);
 			isArray(info.members) && each(info.members, function(n, info){
-				chat.addMember(info, info.id == im.data.user.id);
+				chat.addMember(info.id, info.name, info.id == im.data.user.id);
 			});
 
 		}else{
@@ -475,8 +419,8 @@ extend(webimUI.prototype, objectExtend, {
 			tabs: _tabs, // n -> notice count
 			tabIds: layout.tabIds,
 			p: layout.prevCount, //tab prevCount
-			a: layout.activeTabId //tab activeTabId
-			//b: layout.app("buddy").window.isMinimize() ? 0 : 1 //is buddy open
+			a: layout.activeTabId, //tab activeTabId
+			b: layout.app("buddy").window.isMinimize() ? 0 : 1 //is buddy open
 		}
 		self.im.status.set(d);
 	}

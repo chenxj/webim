@@ -26,7 +26,7 @@ widget("chat",{
         template:'<div class="webim-chat"> \
                                                 <div id=":header" class="webim-chat-header ui-widget-subheader">  \
                                                         <div id=":user" class="webim-user"> \
-                                                                <a id=":userPic" class="webim-user-pic" href="#id"><img width="50" height="50" src="" defaultsrc="" onerror="this.onerror=null;var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" /></a> \
+                                                                <a id=":userPic" class="webim-user-pic" href="#id"><img width="50" height="50" src="about:blank" defaultsrc="" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;"></a> \
                                                                 <span id=":userStatus" title="" class="webim-user-status">Hello</span> \
                                                         </div> \
                                                 </div> \
@@ -365,10 +365,10 @@ plugin.add("chat","block",{
 });
 webimUI.chat.defaults.member = true;
 extend(webimUI.chat.prototype, {
-	addMember: function(info, disable){
-		var self = this, ul = self.$.member, li = self.memberLi, id = info.id,name=info.nick,pic = info.pic;
+	addMember: function(id, name, disable){
+		var self = this, ul = self.$.member, li = self.memberLi;
 		if(li[id])return;
-		var el = createElement('<li><a class="'+ (disable ? 'ui-state-disabled' : '') + '" href="' + id + '">' + '<img width="25" defaultsrc="' + info.default_pic_url + '" src="'+ pic + '"  onerror="this.onerror=null;var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" /><span>' + name +'<span></a></li>' );
+		var el = createElement('<li><a class="'+ (disable ? 'ui-state-disabled' : '') +'" href="'+ id +'">'+ name +'</a></li>');
 		addEvent(el.firstChild,"click",function(e){
 			preventDefault(e);
 			disable || self.trigger("select", [{id: id, name: name}]);

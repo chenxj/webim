@@ -13,7 +13,7 @@ model("setting",{
 	data:{
 		play_sound:true,
 		buddy_sticky:true,
-		minimize_layout: true,
+		minimize_layout: false,
 		msg_auto_pop:true
 	}
 },{

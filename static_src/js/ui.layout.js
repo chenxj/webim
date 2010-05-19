@@ -31,7 +31,7 @@ widget("layout",{
                     <div id="webim-flashlib-c">\
                     </div>\
                     </div>\
-<div id=":layout" class="webim-layout webim-layout-minimize"><iframe class="webim-bgiframe" frameborder="0" tabindex="-1" src="about:blank;" ></iframe><div class="webim-layout-bg ui-state-default ui-toolbar"></div><div class="webim-ui ui-helper-clearfix">\
+<div id=":layout" class="webim-layout"><iframe class="webim-bgiframe" frameborder="0" tabindex="-1" src="about:blank;" ></iframe><div class="webim-layout-bg ui-state-default ui-toolbar"></div><div class="webim-ui ui-helper-clearfix">\
                             <div id=":shortcut" class="webim-shortcut">\
                             </div>\
                             <div class="webim-layout-r">\
@@ -422,7 +422,7 @@ widget("layout",{
 			var win = self.tabs[id] = new webimUI.window(null, extend({
 				isMinimize: self.activeTabId || !self.options.chatAutoPop,
 				tabWidth: self.tabWidth -2,
-				title:i18n("broadcast")
+				title:"站长广播"
 			},winOptions)).bind("close", function(){ self._onChatClose(id)}).bind("displayStateChange", function(state){ self._onChatChange(id,state)});
 			self.tabIds.push(id);
 			self.$.tabs.insertBefore(win.element, self.$.tabs.firstChild);

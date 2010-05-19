@@ -1,31 +1,7 @@
 function now() {
 	return (new Date).getTime();
 }
-function getTid(roomIdendify){
-	var id = roomIdendify?roomIdendify:"tid";
-	var url = location.href;
-	var reg = new RegExp("(^|&|\\?)"+ id +"=(\\d*)(&|$)|read-html-(\\d*)\\.html|read\\.php\\?tid-(\\d*)\\.html","i");
-	if (reg.test(url)){
-		return RegExp.$2 || RegExp.$4 || RegExp.$5;
-	}
-	return "";
-}
-function getFid(){
-	var url = location.href;
-	var reg = new RegExp("(^|&|\\?)fid=(\\d*)(&|$)|thread-htm-fid-(\\d*)\\.html|thread\\.php\\?fid-(\\d*)\\.html","i");
-	if (reg.test(url)){
-		return RegExp.$2 || RegExp.$4 || RegExp.$5;
-	}
-	return "";
-}
-function getId(val){
-	var url = location;
-	var reg = new RegExp("(^|&|\\?)"+ val +"=(\\d*)(&|$)","i");
-	if (reg.test(url)){
-		return RegExp.$1;
-	}
-	return "";
-}
+
 var _toString = Object.prototype.toString;
 function isFunction( obj ){
 	return _toString.call(obj) === "[object Function]";
@@ -168,11 +144,7 @@ function grep( elems, callback, inv ) {
 	// Go through the array, only saving the items
 	// that pass the validator function
 	for ( var i = 0, length = elems.length; i < length; i++ ) {
-		if ( inv == undefined){
-			if (callback(elems[i],i)){
-				ret.push(elems[i]);
-			}
-		}else if ( !inv !== !callback( elems[ i ], i ) ) {
+		if ( !inv !== !callback( elems[ i ], i ) ) {
 			ret.push( elems[ i ] );
 		}
 	}

@@ -23,10 +23,7 @@ widget("setting",{
         tpl_check: '<li id=":<%=name%>"><input type="checkbox" <%=checked%> id="webim-setting-<%=name%>" name="<%=name%>"/><label for="webim-setting-<%=name%>"><%=label%></label></li>'
 },{
         _init: function(){
-    		 var $ = this.$;
-     		 hide($.offline);
-      		show($.online);
-   		//this._initEvents();
+                //this._initEvents();
         },
 	template: function(){
 		var self = this, temp = [], data = self.options.data;
@@ -43,18 +40,16 @@ widget("setting",{
 			$[key] && self._check_event($[key]);
 		});
     addEvent($.offline,"click",function(e){
-      preventDefault(e);
       self.trigger("offline");
     });
     addEvent($.online,"click",function(e){
-      preventDefault(e);
       self.trigger("online");
     });
 	},
   offline:function(){
     var $ = this.$;
-      hide($.offline);
-      show($.online);   
+      hide($.offline);//.style.display="none";
+      show($.online);//.style.display="block";   
   },
   online:function(){
       var $ = this.$;

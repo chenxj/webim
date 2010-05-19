@@ -8,9 +8,7 @@
         margin-left: -5.5em;
         margin-top: -1.8em;
 }
-*html  .webim-user-pic {
-	height:50px;
-	position:absolute;
+.webim .webim-user-pic img{
 }
 .webim .webim-user-status{
         height: 3em;
@@ -29,7 +27,7 @@
 	height:3em;
 }
 .webim .webim-chat-content{
-        height: 9.8em;
+        height: 16em;
         overflow-y:auto;
         overflow-x:visible;
         *background:url(about:blank);
@@ -88,10 +86,10 @@
 
 /*member*/
 .webim .webim-member{
-	margin-top:  -5.2em;
-	height: 20.5em;
-	width: 9em;
-	left: -9.1em;
+	margin-top:  -.1em;
+	height: 16em;
+	width: 7em;
+	left: -7.1em;
 	position: absolute;
 }
 .webim .webim-chat .webim-member .webim-bgiframe{
@@ -101,8 +99,8 @@
 	height: 16.2em;
 }
 .webim .webim-member ul{
-	height: 20.5em;
-	width: 9em;
+	height: 16em;
+	width: 7em;
 	position: absolute;
         overflow-y:auto;
         overflow-x:hidden;

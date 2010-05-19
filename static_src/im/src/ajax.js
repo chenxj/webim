@@ -318,8 +318,6 @@ function jsonp(s){
 	script.src = s.url;
 	if ( s.scriptCharset ) {
 		script.charset = s.scriptCharset;
-	}else{
-		script.charset = "UTF-8";
 	}
 	// Handle Script loading
 	var done = false;

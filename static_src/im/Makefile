@@ -17,7 +17,6 @@ BASE_FILES = ${SRC_DIR}/core.js\
 	${SRC_DIR}/status.js\
 	${SRC_DIR}/buddy.js\
 	${SRC_DIR}/room.js\
-	${SRC_DIR}/broadcast.js\
 	${SRC_DIR}/history.js\
 
 
@@ -38,7 +37,6 @@ DZ_WEBIM_FILES = ${SRC_DIR}/core.js\
 	${SRC_DIR}/status.js\
 	${SRC_DIR}/buddy.js\
 	${SRC_DIR}/room.js\
-	${SRC_DIR}/broadcast.js\
 	${SRC_DIR}/history.js\
 	${SRC_DIR}/hotpost.js\
 

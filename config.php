@@ -1,9 +1,9 @@
 <?php
 $_IMC = array();
 $_IMC["enable"] = true;
-$_IMC["domain"] = "plu.cn";
-$_IMC["apikey"] = "4bed633c-8d4c-4cd0-8f10-76c1d39056dd";
-$_IMC["imsvr"] = "im.nextim.cn";
+$_IMC["domain"] = "localhost";
+$_IMC["apikey"] = "public";
+$_IMC["imsvr"] = "192.168.66.128";
 $_IMC["impost"] = 9000;
 $_IMC["impoll"] = 8000;
 $_IMC["theme"] = "flick";
@@ -18,8 +18,8 @@ $_IMC["uchome_path"] = "";
 $_IMC["uchome_url"] = "";
 $_IMC["discuz_path"] = "/home/www/bbs/";
 $_IMC["discuz_url"] = "http://bbs.plu.cn/";
-$_IMC["install_url"] = "http://bbs.plu.cn/";
-$_IMC["install_path"] = "/home/www/bbs/";
+$_IMC["install_url"] = "http://a.nextim.cn/pw/u/";
+$_IMC["install_path"] = "/var/www/pw/u/";
 $_IMC["version"] = "2.2.28";
 $_IMC["update"] = 0;
 $_IMC_LOG_TYPE["update_file"] = "UPDATE";

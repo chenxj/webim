@@ -13,8 +13,8 @@ function imlog(ui){
 	//webim.extend(webim.setting.defaults.data,{});
 	//webim.extend(webim.setting.defaults.data,{block_list: ["1000001"]});
 	
-	path = document.location.href.split("/webim");
-	path = path.length > 1 ? (path[0] + "/") : "";
+	//path = document.location.href.split("/webim");
+	//path = path.length > 1 ? (path[0] + "/") : "";
 	var menu = [{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"album","icon": path + "image\/app\/album.gif","link":"space.php?do=album"},{"title":"blog","icon": path + "image\/app\/blog.gif","link":"space.php?do=blog"},{"title":"thread","icon": path + "image\/app\/mtag.gif","link":"space.php?do=thread"},{"title":"share","icon": path + "image\/app\/share.gif","link":"space.php?do=share"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"},{"title":"doing","icon": path + "image\/app\/doing.gif","link":"space.php?do=doing"}];
 	var log = webim.log;
 	webim.defaults.urls = {
@@ -51,6 +51,8 @@ function imlog(ui){
 		imUI = new webim.ui(null,{menu: menu,admins:admins,uid:6,broadcastID:0});
 		im = imUI.im;
 		im.isadmin = true;
+		im.bridge = document.getElementById("webim_bridge");
+		im.crossdomain = true;
 		im.uid = 6;
 		im.broadcastID = 0;
 		layout = imUI.layout;

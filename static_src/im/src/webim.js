@@ -117,24 +117,27 @@ extend(webim.prototype, objectExtend,{
 	sendMsg: function(msg){
 		var self = this;
 		msg.ticket = self.data.connection.ticket;
-		ajax({
+		var ajaxconf = {
 			type: 'post',
 			url: self.options.urls.message,
 			type: 'post',
 			cache: false,
 			data: msg
-		});
+		};
+		self.ajaxUtile(ajaxconf);
+
 	},
 	sendStatus: function(msg){
 		var self = this;
 		msg.ticket = self.data.connection.ticket;
-		ajax({
+		var ajaxconf = {
 			type: 'post',
 			url: self.options.urls.status,
 			type: 'post',
 			cache: false,
 			data: msg
-		});
+		};
+		self.ajaxUtile(ajaxconf);
 	},
 	//        online_list:function(){
 	//                var self = this;
@@ -156,14 +159,19 @@ extend(webim.prototype, objectExtend,{
 	},
 	stranger_ids:[],
 	online:function(){
-		var self = this, status = self.status, buddy_ids = [], tabs = status.get("tabs"), tabIds = status.get("tabIds");
+		var self = this, 
+		status = self.status, 
+		buddy_ids = [], 
+		tabs = status.get("tabs"), 
+		tabIds = status.get("tabIds");
+
 		//set auto open true
 		status.set("o", false);
 		self.ready();
 		tabIds && tabIds.length && tabs && each(tabs, function(k,v){
 			v["t"] == "buddy" && buddy_ids.push(k);
 		});
-		ajax({
+		var ajaxconf = {
 			type:"post",
 			dataType: "json",
 			data:{                                
@@ -189,7 +197,8 @@ extend(webim.prototype, objectExtend,{
 			error: function(data){
 				self.stop("online error");
 			}
-		});
+		};
+		self.ajaxUtile(ajaxconf);
 
 	},
 	offline:function(){
@@ -197,7 +206,7 @@ extend(webim.prototype, objectExtend,{
 		self.status.set("o", true);
 		self.connection.close();
 		self.stop("offline");
-		ajax({
+		var ajaxconf = {
 			type: 'post',
 			url: self.options.urls.offline,
 			type: 'post',
@@ -206,13 +215,14 @@ extend(webim.prototype, objectExtend,{
 				status: 'offline',
 				ticket: data.connection.ticket
 			}
-		});
+		};
+		self.ajaxUtile(ajaxconf);
 
 	},
 	refresh:function(){
 		var self = this, data = self.data;
 		if(!data || !data.connection || !data.connection.ticket) return;
-		ajax({
+		var ajaxconf = {
 			type: 'post',
 			url: self.options.urls.refresh,
 			type: 'post',
@@ -220,7 +230,14 @@ extend(webim.prototype, objectExtend,{
 			data: {
 				ticket: data.connection.ticket
 			}
-		});
+		};
+		ajaxUtile(ajaxconf);
+	},
+	ajaxUtile:function(conf){
+		if (this.crossdomain && this.bridge)
+			this.bridge.contentWindow.ajax(conf);
+		else
+			ajax(conf);		
 	}
 
 });
@@ -258,7 +275,11 @@ extend(webim,{
 	grep: grep,
 	map: map,
 	JSON: JSON,
-	ajax: ajax,
+	ajax:function(){ 
+		if (webim.crossdomain && webim.bridge)
+			return webim.bridge.contentWindow.ajax;
+		return ajax;
+	},
 	model: model,
 	objectExtend: objectExtend
 });

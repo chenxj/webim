@@ -9,7 +9,7 @@ function imlog(ui){
 	});
 }
 (function(webim){
-	var path = "";
+	var path = "http://b.nextim.cn/pw/u/";
 	//webim.extend(webim.setting.defaults.data,{});
 	//webim.extend(webim.setting.defaults.data,{block_list: ["1000001"]});
 	
@@ -61,7 +61,6 @@ function imlog(ui){
 		body.appendChild(layout.element);
 		hide(layout.app("room").window.element);
 		hide(layout.app("broadcast").window.element);
-	//need timeout
 		setTimeout(function(){imUI.initSound(soundUrls)},1000);
 		//log
 	//	imlog(imUI);

@@ -153,7 +153,7 @@ $setting = json_encode(setting());
 		setTimeout(function(){webim.ui.ready(init);},1000);
 	}else{
 		document.body?create():webim.ui.ready(create);
-		//webim.ui.ready(init);
-		init();
+		webim.ui.ready(init);
+		//init();
 	}
 })(webim);

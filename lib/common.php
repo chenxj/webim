@@ -10,7 +10,7 @@ define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
 include_once($_IMC['discuz_path'] . API_COMMFILE);
 include_once(WEBIM_ROOT . "/lib/json.php");
 include_once($_IMC['install_path'].'/uc_client/client.php');
-$_SGLOBAL['supe_uid'] =  $cuid;
+$_SGLOBAL['supe_uid'] =  $_IMC_PLF['uid'];
 $_SGLOBAL['db'] = $db;
 $_SGLOBAL['timestamp'] = time();
 $_SC['gzipcompress'] = true;
@@ -20,10 +20,10 @@ $_SC['charset'] = UC_CHARSET;
 
 function my_info(){
 //    return random_my_info();
-    global $cusername,$cuid;
+    global $_IMC_PLF;
     $space =  array();
-    $space['nick'] =  $cusername;
-    $space['uid']  =  $cuid;
+    $space['nick'] =  $_IMC_PLF['username'];
+    $space['uid']  =  $_IMC_PLF['uid'];
     if(!$space['nick']){
    	$space['uid'] =  _randint();
    	$space['nick'] = "guest" . $space['uid'];

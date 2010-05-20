@@ -455,7 +455,6 @@ widget("layout",{
 				!win.isMinimize() && self._changeActive(id);
 				self._fitUI();
 		}//else self.focusChat(id);
-		options.className && !hasClass(win,options.className) && addClass(win,options.className);
 	},
 	removeChat: function(ids){
 		ids = idsArray(ids);

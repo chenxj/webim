@@ -112,3 +112,8 @@
 .webim .webim-member li{
 	margin: 0.1em 0.1em 0.1em 0.5em;
 }
+.member-short{
+	position:absolute;
+	left:.2em;
+	top:.2em;
+}

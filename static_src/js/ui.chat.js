@@ -24,35 +24,37 @@ function ieCacheSelection(e){
 }
 widget("chat",{
         template:'<div class="webim-chat"> \
-                                                <div id=":header" class="webim-chat-header ui-widget-subheader">  \
-                                                        <div id=":user" class="webim-user"> \
-                                                                <span id=":userStatus" title="" class="webim-user-status">Hello</span> \
-                                                        </div> \
-                                                </div> \
-                                                                                                                                        <div class="webim-chat-notice-wrap"><div id=":notice" class="webim-chat-notice ui-state-highlight"></div></div> \
-                                                <div id=":content" class="webim-chat-content"> \
-                                                                                                                <div id=":status" class="webim-chat-status webim-gray"></div> \
-                                                </div> \
-                                                <div id=":actions" class="webim-chat-actions"> \
-                                                        <div id=":toolContent" class="webim-chat-tool-content"></div>\
-                                                        <div id=":tools" class="webim-chat-tools ui-helper-clearfix ui-state-default"></div>\
-                                                        <table class="webim-chat-t" cellSpacing="0"> \
-                                                                <tr> \
-                                                                        <td style="vertical-align:top;"> \
-                                                                        <em class="webim-icon webim-icon-chat"></em>\
-                                                                        </td> \
-                                                                        <td style="vertical-align:top;width:100%;"> \
-                                                                        <div class="webim-chat-input-wrap">\
-                                                                                <textarea id=":input" class="webim-chat-input webim-gray"><%=input notice%></textarea> \
-                                                                        </div> \
-                                                                        </td> \
-                                                                </tr> \
-                                                        </table> \
-                                                </div> \
-                                        </div>'
+                         <div id=":header" class="webim-chat-header ui-widget-subheader">  \
+                             <div id=":user" class="webim-user"> \
+                                  <span id=":userStatus" title="" class="webim-user-status">Hello</span> \
+                             </div> \
+                         </div> \
+                         <div id=":content" class="webim-chat-content"> \
+                               <div id=":status" class="webim-chat-status webim-gray"></div> \
+                         </div> \
+                         <div id=":actions" class="webim-chat-actions"> \
+                              <div id=":toolContent" class="webim-chat-tool-content"></div>\
+                              <div id=":tools" class="webim-chat-tools ui-helper-clearfix ui-state-default"></div>\
+                                 <table class="webim-chat-t" cellSpacing="0"> \
+                                        <tr> \
+                                          <td style="vertical-align:top;"> \
+                                              <em class="webim-icon webim-icon-chat"></em>\
+                                          </td> \
+                                         <td style="vertical-align:top;width:100%;"> \
+                                         <div class="webim-chat-input-wrap">\
+                                           <textarea id=":input" class="webim-chat-input webim-gray"><%=input notice%></textarea> \
+                                         </div> \
+                                         </td> \
+                                        </tr> \
+                                 </table> \
+                               </div> \
+                         </div>'
 },{
 	_init: function(){
-		var self = this, element = self.element, options = self.options, win = self.window = options.window;
+		var self = this, 
+		    element = self.element, 
+		    options = self.options, 
+		    win = self.window = options.window;
 		var history = self.history = new webimUI.history(null,{
 			user: options.user,
 			info: options.info
@@ -367,7 +369,8 @@ plugin.add("chat","block",{
 webimUI.chat.defaults.member = true;
 extend(webimUI.chat.prototype, {
 	addMember: function(info, disable){
-		var self = this, ul = self.$.member, li = self.memberLi, id = info.id,name=info.nick,pic = info.pic;
+		var self = this, ul = self.$.member, li = self.memberLi, 
+		    id = info.id,name=info.nick,pic = info.pic;
 		if(li[id])return;
 		var el = createElement('<li><a class="'+ (disable ? 'ui-state-disabled' : '') + '" href="' + id + '">' + '<img width="25" defaultsrc="' + info.default_pic_url + '" src="'+ pic + '"  onerror="this.onerror=null;var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" /><span>' + name +'<span></a></li>' );
 		addEvent(el.firstChild,"click",function(e){
@@ -389,9 +392,17 @@ extend(webimUI.chat.prototype, {
 plugin.add("chat","member",{
 	init:function(e, ui){
 		var chat = ui.self, $ = ui.$;
-		chat.memberLi = {};
+		chat.memberLi = {}, self = this;
 		var member = createElement('<div class="webim-member ui-widget-content ui-corner-left"><iframe id=":bgiframe" class="webim-bgiframe" frameborder="0" tabindex="-1" src="about:blank;" ></iframe><ul></ul></div>');
 		$.member = member.lastChild;
+		var shorter = createElement('<span class="member-short ui-widget-header"><a id=":membershort"><em class="ui-icon ui-icon-membershort"></em></a></span>');
 		$.content.parentNode.insertBefore(member, $.content);
+		$.content.parentNode.insertBefore(shorter,$.content);
+		addEvent(shorter,"click",function(e){
+			preventDefault(e);
+			var d = this.parentNode.children[1].style.display;
+			if (d == "none")  this.parentNode.children[1].style.display= "block";
+			else  this.parentNode.children[1].style.display= "none";
+		});
 	}
 });

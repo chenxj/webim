@@ -59,4 +59,12 @@ body {
 a .webim-icon, a .ui-icon{
 		cursor: pointer;
 }
-
+.webim-icon-broadcast{
+	background-position:-32px -32px;
+}
+.ui-display{
+	display:block;
+}
+.ui-display-none{
+	display:none;
+}

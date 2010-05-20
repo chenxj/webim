@@ -36,7 +36,7 @@ foreach($rooms as $room_id => $value){
 		$rooms[$room_id]['blocked'] = true;
 	} else {
         $rooms[$room_id]['pic_url'] = "webim/static/images/group_chat_head.png";
-        $rooms[$room_id]['name'] = "来吧,激情plu!";
+        $rooms[$room_id]['name'] = "NextIM";
     }
     $room_ids[] = $room_id;
 }

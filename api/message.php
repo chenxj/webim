@@ -22,11 +22,9 @@ $time = microtime(true)*1000;
 if($type != "broadcast" && (empty($to)||empty($from))){
 	echo "{success:false}"."{".$to.":".$from."}";exit();
 }
-echo 123;
 $client = new HttpClient($_IMC['imsvr'], $_IMC['impost']);
 $client->post('/messages', array('domain'=>$_IMC['domain'],'apikey'=>$_IMC['apikey'],'ticket' => $ticket,'nick'=>$nick, 'type'=> $type, 'to'=>$to,'body'=>to_unicode($body),'timestamp'=>(string)$time,'style'=>$style));
 $pageContents = $client->getContent();
-var_dump($pageContents);
 
 //TODO:send => true if forward message successfully.
 //

@@ -177,8 +177,50 @@ function ready(fn){
 
 }
 
-var isReady = false, readyList = [];
+var isReady = false,isIfmReady = false, readyList = [];
 function triggerReady() {
+	if (crossdomain && !isIfmReady){
+		var ibridgedoc = document.getElementById("webim_bridge").contentWindow.document;
+		isIfmReady = true;
+		if (ibridgedoc.readyState === "complete"){
+			triggerReady();
+		}else{
+			if (ibridgedoc.addEventListener){
+				ibridgedoc.addEventListener("DOMContentLoaded",function(){
+						ibridgedoc.removeEventListener("DOMContentLoaded",arguments.callee,false);
+						triggerReady();
+				},false);
+			}else if (ibridgedoc.attachEvent){
+				
+				ibridgedoc.attachEvent("onreadyStatechange",function(){
+					if (ibridgedoc.readyState === "complete"){
+						ibridgedoc.detachEvent("onreadyStatechange",
+							arguments.callee);
+
+						triggerReady();		
+					}
+				});
+				if ( document.documentElement.doScroll 
+						&& window == window.top ) 
+					(function() {
+						if ( isReady ) {
+							return;
+						}
+
+						try {
+				// If IE is used, use the trick by Diego Perini
+				// http://javascript.nwbox.com/IEContentLoaded/
+							document.documentElement.doScroll("left");
+						} catch( error ) {
+							setTimeout( arguments.callee, 0 );
+							return;
+						}
+						triggerReady();
+					})();
+			}
+		}
+		return;
+	}
 	// Make sure that the DOM is not already loaded
 	if ( !isReady ) {
 		// Remember that the DOM is ready
@@ -199,6 +241,12 @@ function triggerReady() {
 	}
 }
 
+function buildBridge(){
+	if (crossdomain){
+	
+	}else{
+	}
+}
 var readyBound = false;
 function bindReady() {
 	if ( readyBound ) return;

@@ -97,17 +97,22 @@ $setting = json_encode(setting());
 		return false;
 	}
 	var body , imUI, im, layout, chatlink;
+	window.crossdomain = true;
+	document.domain = "nextim.cn";
 	function create(){
 		body = document.body;
 		imUI = new webim.ui(null,{menu: menu});
 		im = imUI.im;
+		im.bridge = $("webim_bridge");
 		var adminids = "<?php echo $_IMC['admin_ids'] ?>";
 		var userid = "<?php echo $_SGLOBAL['supe_uid']?>";
 		im.admins = adminids?adminids.split(","):"";
 		im.isadmin = isAdmin(im.admins,userid);
+		im.crossdomain = true;
 		im.userid = userid;
 		im.broadcastID = 0;
         	im.isStrangerOn = "on";
+		im.platform = platform;
 		imUI.addApp("room");
 		layout = imUI.layout;
 		if ( platform === "discuz"  || platform === "phpwind" ){
@@ -152,7 +157,11 @@ $setting = json_encode(setting());
 		setTimeout(function(){document.body?create():webim.ui.ready(create);},1000);
 		setTimeout(function(){webim.ui.ready(init);},1000);
 	}else{
-		document.body?create():webim.ui.ready(create);
+		if (document.body && $("webim_bridge")){
+			create();
+		}else{
+			webim.ui.ready(create);
+		}
 		webim.ui.ready(init);
 		//init();
 	}

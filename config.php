@@ -16,10 +16,10 @@ $_IMC["emot"] = "default";
 $_IMC["opacity"] = 80;
 $_IMC["uchome_path"] = "";
 $_IMC["uchome_url"] = "";
-$_IMC["discuz_path"] = "/home/www/bbs/";
-$_IMC["discuz_url"] = "http://bbs.plu.cn/";
-$_IMC["install_url"] = "http://a.nextim.cn/pw/u/";
-$_IMC["install_path"] = "/var/www/pw/u/";
+$_IMC["discuz_path"] = "/var/www/bbs";
+$_IMC["discuz_url"] = "http://a.nextim.cn/pw/u";
+$_IMC["install_url"] = "http://a.nextim.cn/pw/u";
+$_IMC["install_path"] = "/var/www/pw/u";
 $_IMC["version"] = "2.2.28";
 $_IMC["update"] = 0;
 $_IMC_LOG_TYPE["update_file"] = "UPDATE";
@@ -30,6 +30,7 @@ $_IMC["update_url"] = "http://update.nextim.cn/";
 $_IMC["admin_ids"] = "1,8,888,489839";
 $_IMC["timestamp"] = 10;
 $_IMC["platform"] = "discuz";
+$_IMC["crossdomain"] = true;
 
 /*
  * =================================================================

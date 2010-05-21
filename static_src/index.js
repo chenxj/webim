@@ -45,13 +45,14 @@ function imlog(ui){
 	};
 
 	var body , imUI, im, layout;
+	window.crossdomain = true;
 	function create(){
 		body = document.body;
 		var admins = ["25","26","1","6"];
 		imUI = new webim.ui(null,{menu: menu,admins:admins,uid:6,broadcastID:0});
 		im = imUI.im;
 		im.isadmin = true;
-		im.bridge = document.getElementById("webim_bridge");
+		im.bridge = $("webim_bridge");
 		im.crossdomain = true;
 		im.uid = 6;
 		im.broadcastID = 0;
@@ -73,7 +74,7 @@ function imlog(ui){
 	       	 im.online();
 		}
 	}
-	(document.body ? create() : webim.ui.ready(create));
+	if(document.body&& $("webim_bridge").contentWindow){  create(); } else{webim.ui.ready(create)};
 	webim.ui.ready(init);
 
 })(window.webim);

@@ -12,6 +12,15 @@ IMAGE_SRC_DIR = ${SRC_DIR}/images
 THEME_SRC_DIR = ${SRC_DIR}/themes
 ASSET_SRC_DIR = ${SRC_DIR}/assets
 
+BRIDGE = ${BUILD_DIR}/makebridge.py
+WEBIM_BRIDGE_MIN = ${DIST_DIR}/bridge.min.js
+WEBIM_UC_BRIDGE_MIN = ${DIST_DIR}/bridge_uc.min.js
+WEBIM_DZ_BRIDGE_MIN = ${DIST_DIR}/bridge_dz.min.js
+WEBIM_BRIDGE = im/${DIST_DIR}/bridge.js
+WEBIM_UC_BRIDGE = ${DIST_DIR}/bridge_uc.js
+WEBIM_DZ_BRIDGE = ${DIST_DIR}/bridge_dz.js
+
+
 CSS_BASE_FILES = ${CSS_SRC_DIR}/core.css\
 	${CSS_SRC_DIR}/ui.core.css\
 	${CSS_SRC_DIR}/icons.css\
@@ -63,22 +72,7 @@ UI_ALL_JS_FILES = ${IM}\
 
 DZ_UI_ALL_JS_FILES = ${DZ_IM}\
 		${JS_SRC_DIR}/intro.js\
-		     ${JS_SRC_DIR}/core.js\
-		${JS_SRC_DIR}/date.js\
-		${JS_SRC_DIR}/notice.js\
-		${JS_SRC_DIR}/i18n.js\
-		${JS_SRC_DIR}/ui.js\
-		${JS_SRC_DIR}/ui.window.js\
-		${JS_SRC_DIR}/ui.layout.js\
-		${JS_SRC_DIR}/ui.emot.js\
-		${JS_SRC_DIR}/ui.chatlink.js\
-		${JS_SRC_DIR}/ui.setting.js\
-		${JS_SRC_DIR}/ui.buddy.js\
-		${JS_SRC_DIR}/ui.history.js\
-		${JS_SRC_DIR}/ui.menu.js\
-		${JS_SRC_DIR}/ui.chat.js\
-		${JS_SRC_DIR}/ui.broadcast.js\
-		${JS_SRC_DIR}/ui.room.js\
+		     ${JS_BASE_FILES}\
 		${JS_SRC_DIR}/ui.hotpost.js\
 		${JS_SRC_DIR}/outro.js
 
@@ -123,7 +117,7 @@ UC_UI_MIN_ALL_JS = ${DIST_DIR}/webim_uc.all.min.js
 
 
 
-all: submake dist copy dzim ucim i18n min 
+all: submake dist copy dzim ucim i18n min makebridge 
 	@@echo "webim build complete."
 submake:
 	cd im && $(MAKE)
@@ -146,6 +140,7 @@ dzim:
 
 	@@cat ${DZ_UI_ALL_JS_FILES} | \
 	       ${REPLACE} > ${DZ_UI_ALL_JS};
+
 ucim:
 	@@cat ${UC_UI_CSS_FILES} | \
 		sed 's/\.\.\/images/images/' | \
@@ -154,15 +149,13 @@ ucim:
 	@@cat ${UC_UI_ALL_JS_FILES} | \
 	       ${REPLACE} > ${UC_UI_ALL_JS};
 
-
-
-
 copy:
 	@@cp -r ${IMAGE_SRC_DIR} ${DIST_DIR}/images 
 	@@cp -r ${ASSET_SRC_DIR} ${DIST_DIR}/assets 
 	@@mkdir -p ${DIST_DIR}/themes
 	@@cp -r ${THEME_SRC_DIR}/* ${DIST_DIR}/themes/
 	@@echo "Copy images assets themes."
+	@@cp ${WEBIM_BRIDGE} ${DIST_DIR}
 
 min:
 	@@echo "Building"
@@ -177,8 +170,12 @@ min:
 	@@${MINJAR} --type js ${UC_UI_ALL_JS} > ${UC_UI_MIN_ALL_JS}
 	@@${MINJAR} --type js ${DZ_UI_ALL_JS} > ${DZ_UI_MIN_ALL_JS}
 	@@echo ${UI_MIN_ALL_JS} "Built"
-	@@echo
 
+makebridge:
+	@@echo "make bridge"
+	python ${BRIDGE} ${UI_MIN_ALL_JS} > ${WEBIM_BRIDGE_MIN}
+	python ${BRIDGE} ${UC_UI_MIN_ALL_JS} > ${WEBIM_UC_BRIDGE_MIN}
+	python ${BRIDGE} ${DZ_UI_MIN_ALL_JS} > ${WEBIM_DZ_BRIDGE_MIN}
 i18n:
 	@@mkdir -p ${DIST_DIR}/i18n
 	@@${UNICODE} ${I18N_SRC_DIR}/webim-zh-CN.js > ${DIST_DIR}/i18n/webim-zh-CN.js

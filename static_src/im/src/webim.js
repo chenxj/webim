@@ -275,11 +275,7 @@ extend(webim,{
 	grep: grep,
 	map: map,
 	JSON: JSON,
-	ajax:function(){ 
-		if (webim.crossdomain && webim.bridge)
-			return webim.bridge.contentWindow.ajax;
-		return ajax;
-	},
+	ajax:ajax,
 	model: model,
 	objectExtend: objectExtend
 });

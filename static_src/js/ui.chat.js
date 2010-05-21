@@ -116,8 +116,10 @@ widget("chat",{
 
 		}else{
 			self._noticeTxt = text;
-			content.innerHTML = text;
-			show(content);
+			if(content) { 
+				content.innerHTML = text;
+				show(content);
+			}
 		}
 	},
 	_adjustContent: function(){
@@ -392,11 +394,12 @@ extend(webimUI.chat.prototype, {
 plugin.add("chat","member",{
 	init:function(e, ui){
 		var chat = ui.self, $ = ui.$;
-		chat.memberLi = {}, self = this;
+		chat.memberLi = {} ;
+		var self = this;
 		var member = createElement('<div class="webim-member ui-widget-content ui-corner-left"><iframe id=":bgiframe" class="webim-bgiframe" frameborder="0" tabindex="-1" src="about:blank;" ></iframe><ul></ul></div>');
 		$.member = member.lastChild;
-		var shorter = createElement('<span class="member-short ui-widget-header"><a id=":membershort"><em class="ui-icon ui-icon-membershort"></em></a></span>');
 		$.content.parentNode.insertBefore(member, $.content);
+		var shorter = createElement('<span class="member-short ui-widget-header"><a id=":membershort"><em class="ui-icon ui-icon-membershort"></em></a></span>');
 		$.content.parentNode.insertBefore(shorter,$.content);
 		addEvent(shorter,"click",function(e){
 			preventDefault(e);

@@ -7,8 +7,6 @@ include_once($configRoot . 'common.php');
 
 
 $space = my_info();
-
-
 /* if $friend_ids or $stranger_ids = Null
  *
  * Change into Array().

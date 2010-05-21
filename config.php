@@ -29,16 +29,10 @@ $_IMC["platform"] = "discuz";
  * =================================================================
  * This line below for Engineer Configure Platform Info for NextIM
  * =================================================================
+ *
  */
+$_IMC_PLF = array();
 /* User Name in Platform Session  */
-$_IMC_PLF['username'] = $cusername;
+$_IMC_PLF['username'] = $_SESSION['Auth']['Account']['nicename'];
 /* User ID in Platform Session  */
-$_IMC_PLF['uid']      = $cuid;
-
-
-
-
-
-
-
-
+$_IMC_PLF['uid']      = $_SESSION['Auth']['Account']['id'];

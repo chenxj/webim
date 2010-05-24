@@ -98,7 +98,7 @@ extend(webimUI.prototype, objectExtend, {
 			isMinimize: true
 		});
 		*/
- 			im.setting.get("play_sound") ? sound.enable() : sound.disable() ;
+ 		im.setting.get("play_sound") ? sound.enable() : sound.disable() ;
 		im.setting.get("minimize_layout") ? layout.collapse() : layout.expand(); 
 		//self.buddy.offline();
 

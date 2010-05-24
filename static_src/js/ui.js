@@ -309,7 +309,8 @@ extend(webimUI.prototype, objectExtend, {
 					}
 				}
 			}
-			buddy.online(map(online, mapFrom), buddyUI.window.isMinimize());
+			if (buddyUI.window)
+				buddy.online(map(online, mapFrom), buddyUI.window.isMinimize());
 			buddy.offline(map(offline, mapFrom));
 			//chatlink.online(online);
 			online.length && buddyUI.notice("buddyOnline", online.pop()["nick"]);

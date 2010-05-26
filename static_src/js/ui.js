@@ -508,7 +508,8 @@ var _countDisplay = function(element, count){
 };
 
 function mapElements(obj){
-	var elements = obj.getElementsByTagName("*"), el, id, need = {}, pre = ":", preLen = pre.length;
+	var elements = obj.getElementsByTagName("*"), el, id, need = {}, 
+	    pre = ":", preLen = pre.length;
 	for(var i = elements.length - 1; i > -1; i--){
 		el = elements[i];
 		id = el.id;
@@ -584,7 +585,8 @@ function widget(name, defaults, prototype){
 
 		isFunction(self._preInit) && self._preInit();
 		//template
-		self.element = element || (self.template && createElement(self.template())) || ( self.options.template && createElement(tpl(self.options.template)));
+		self.element = element || (self.template && createElement(self.template())) 
+			|| ( self.options.template && createElement(tpl(self.options.template)));
 		if(self.element){
 			self.options.className && addClass(self.element, self.options.className);
 			self.$ = mapElements(self.element);

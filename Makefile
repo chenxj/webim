@@ -24,6 +24,10 @@ static:
 	@@cp ${STATIC_SRC_DIR}/webim_dz.all.min.js ${STATIC_DIR}/webim_discuz.all.min.js
 	@@cp ${STATIC_SRC_DIR}/webim_uc.all.min.js ${STATIC_DIR}/webim_uchome.all.min.js
 
+	@@cp ${STATIC_SRC_DIR}/bridge.js ${STATIC_DIR}/webim_bridge.js
+	@@cp ${STATIC_SRC_DIR}/bridge_dz.min.js ${STATIC_DIR}/webim_bridge_dz.min.js
+	@@cp ${STATIC_SRC_DIR}/bridge_uc.min.js ${STATIC_DIR}/webim_bridge_uc.min.js
+
 debug:  
 	@@mkdir -p ${STATIC_DIR}
 	@@cp -r ${STATIC_SRC_FILES} ${STATIC_DIR} 

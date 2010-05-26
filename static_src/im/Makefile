@@ -6,9 +6,15 @@ DIST_DIR = ${PREFIX}/dist
 
 SRC_DIR = ${PREFIX}/src
 
-BASE_FILES = ${SRC_DIR}/core.js\
+BRIDGE_FILES = ${SRC_DIR}/core.js\
+	       ${SRC_DIR}/ajax.js\
+	       ${SRC_DIR}/inter.js\
+
+BRIDGE_FILES_ALL = ${DIST_DIR}/bridge.js\
+
+
+BASE_FILES = ${BRIDGE_FILES}\
 	${SRC_DIR}/objectExtend.js\
-	${SRC_DIR}/ajax.js\
 	${SRC_DIR}/json.js\
 	${SRC_DIR}/comet.js\
 	${SRC_DIR}/cookie.js\
@@ -27,20 +33,10 @@ WEBIM_FILES = ${SRC_DIR}/intro.js\
 
 UC_WEBIM_FILES = ${WEBIM_FILES}
 
-DZ_WEBIM_FILES = ${SRC_DIR}/core.js\
-	${SRC_DIR}/objectExtend.js\
-	${SRC_DIR}/ajax.js\
-	${SRC_DIR}/json.js\
-	${SRC_DIR}/comet.js\
-	${SRC_DIR}/cookie.js\
-	${SRC_DIR}/webim.js\
-	${SRC_DIR}/setting.js\
-	${SRC_DIR}/status.js\
-	${SRC_DIR}/buddy.js\
-	${SRC_DIR}/room.js\
-	${SRC_DIR}/broadcast.js\
-	${SRC_DIR}/history.js\
+DZ_WEBIM_FILES = ${SRC_DIR}/intro.js\
+	${BASE_FILES}\
 	${SRC_DIR}/hotpost.js\
+	${SRC_DIR}/outro.js
 
 
 WEBIM_VER = `cat ${PREFIX}/version.txt`
@@ -65,7 +61,7 @@ UC_WEBIM_MIN_JS = ${DIST_DIR}/webim_uc.min.js
 DZ_WEBIM_MIN_JS = ${DIST_DIR}/webim_dz.min.js
 
 
-all: dist ucim dzim  min 
+all: dist ucim dzim  min bridge
 	@@echo "webim build complete."
 
 dist:
@@ -82,6 +78,11 @@ dzim:
 ucim:
 	@@cat ${UC_WEBIM_FILES}| \
 		${REPLACE} > ${UC_WEBIM_JS};
+bridge:
+	@@echo "build bridge"
+	@@cat ${SRC_DIR}/core.js ${SRC_DIR}/ajax.js> ${BRIDGE_FILES_ALL}
+
+
 min:
 	@@echo "Building"
 	@@echo " - Compressing using Minifier"

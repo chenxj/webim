@@ -1,6 +1,7 @@
 <?php
 session_start();
 error_reporting(E_ALL & ~E_NOTICE);
+//error_reporting(0);
 define('WEBIM_ROOT', substr(dirname(__FILE__), 0, -4));
 //API DEFINE
 include_once(WEBIM_ROOT . '/config.php');
@@ -10,7 +11,7 @@ define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
 include_once($_IMC['discuz_path'] . API_COMMFILE);
 include_once(WEBIM_ROOT . "/lib/json.php");
 include_once($_IMC['install_path'].'/uc_client/client.php');
-$_SGLOBAL['supe_uid'] =  $_IMC_PLF['uid'];
+$_SGLOBAL['supe_uid'] =  $cuid;
 $_SGLOBAL['db'] = $db;
 $_SGLOBAL['timestamp'] = time();
 $_SC['gzipcompress'] = true;
@@ -24,10 +25,16 @@ function my_info(){
     $space =  array();
     $space['nick'] =  $_IMC_PLF['username'];
     $space['uid']  =  $_IMC_PLF['uid'];
-    if(!$space['nick']){
-   	$space['uid'] =  _randint();
-   	$space['nick'] = "guest" . $space['uid'];
+    if(!$space['nick'] || !$space['uid'] ){
+	if(!$_SESSION['uid']){
+		$space['uid'] =  _randint();
+		$space['nick'] = "guest" . $space['uid'];
+	//	$_SESSION['uid'] = $space['uid'];
+	} else {
+		$space['uid'] = $_SESSION['uid'];
+		$space['nick'] = "guest" . $space['uid'];
 	}
+    }
     return $space;
 }
 
@@ -230,13 +237,13 @@ function im_tname($name){
 }
 
 //var_dump($_SGLOBAL['supe_uid']);
-$is_login = false;
-if(empty($_SGLOBAL['supe_uid'])) {
-	$is_login = false;
-} else {
-	$is_login = true;
-	$space = getspace($_SGLOBAL['supe_uid']);
-}
+//$is_login = false;
+//if(empty($_SGLOBAL['supe_uid'])) {
+//	$is_login = false;
+//} else {
+//	$is_login = true;
+//	$space = getspace($_SGLOBAL['supe_uid']);
+//}
 $groups = getfriendgroup();
 
 function find_buddy($strangers, $friends = array()){
@@ -292,7 +299,8 @@ function find_new_message(){
  */
 function find_room(){
     $room_id = crc32($_SERVER['PHP_SELF']);
-	$room_list[] = $room_id;
+	$room_id = "9999999";
+    $room_list[] = $room_id;
     $rooms = array();
     foreach($room_list as $room){
 		$subject = "激情星际,永远的传奇!";

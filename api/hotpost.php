@@ -20,7 +20,7 @@ $pm['daterange'] = 5;
 		}
 		$value['date'] = gmdate($dateformat, $value['lastpost'] + $timeoffset * 3600);
 		$value['time'] = gmdate($timeformat, $value['lastpost'] + $timeoffset * 3600);
-				$pmlist[]= array('from'=>$value['author'],'text'=>to_utf8($value['subject']).'<span style=color:red>('.$value['replies'].')</span>','link'=>'viewthread.php?tid='.$value['tid'],'time'=>$value['time']);
+				$pmlist[]= array('from'=>$value['author'],'text'=>to_utf8($value['subject']).'<span style=color:red>('.$value['replies'].')</span>','link'=>$_IMC['discuz_url'] . 'viewthread.php?tid='.$value['tid'],'time'=>$value['time']);
 			}
 
 	exit(json_encode($pmlist));

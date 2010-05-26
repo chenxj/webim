@@ -1,38 +1,14 @@
 <?php
-error_reporting(0);
 header("Content-type: application/javascript");
 
 include_once ('config.php');
 $platform = $_IMC['platform'] ? $_IMC['platform'] : $_GET['platform'];
 include_once("lib/common.php");
 
-
-if($platform === 'uchome'){
-	$menu = array(
-		array("title" => 'doing',"icon" =>"image/app/doing.gif","link" => "space.php?do=doing"),
-		array("title" => 'album',"icon" =>"image/app/album.gif","link" => "space.php?do=album"),
-		array("title" => 'blog',"icon" =>"image/app/blog.gif","link" => "space.php?do=blog"),
-		array("title" => 'thread',"icon" =>"image/app/mtag.gif","link" => "space.php?do=thread"),
-		array("title" => 'share',"icon" =>"image/app/share.gif","link" => "space.php?do=share")
-	);
-}else if($platform === 'discuz'){
-	$menu = array(
-		array("title" => 'search',"icon" =>"webim/static/images/search.png","link" => "search.php"),
-		array("title" => 'faq',"icon" =>"webim/static/images/faq.png","link" => "faq.php"),
-		array("title" => 'nav',"icon" =>"webim/static/images/nav.png","link" => "misc.php?action=nav"),
-		array("title" => 'feeds',"icon" =>"webim/static/images/feeds.png","link" => "index.php?op=feeds"),
-		array("title" => 'sms',"icon" =>"webim/static/images/msm.png","link" => "pm.php")
-	);
-}
-$menu[] = array("title" => 'imlogo',"icon" =>"webim/static/images/nextim.gif","link" => "http://www.nextim.cn");
-if($_SCONFIG['my_status']) {
-	if(is_array($_SGLOBAL['userapp'])) { 
-		foreach($_SGLOBAL['userapp'] as $value) { 
-			$menu[] = array("title" => iconv(UC_DBCHARSET,'utf-8',$value['appname']),"icon" =>"http://appicon.manyou.com/icons/".$value['appid'],"link" => "userapp.php?id=".$value['appid']);
-		}
-	}
-}
-$setting = json_encode(setting());
+$menu = array(
+	array("title" => 'advise',"icon" =>"webim/static/images/search.png","link" => "http://bbs.plu.cn/forum-20-1.html"),
+);
+$setting = "";//array();//json_encode(setting());
 
 ?>
 
@@ -75,8 +51,8 @@ $setting = json_encode(setting());
 
 	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});
 	var soundUrls = {
-		lib: path + "webim/static/assets/sound.swf",
-		msg: path + "webim/static/assets/sound/msg.mp3"
+		lib: path + "webim/static/assets/sound.swf1",
+		msg: path + "webim/static/assets/sound/msg.mp31"
 	};
 	function mapIds(data){
 		return webim.map(data, function(v,i){ return v.id});
@@ -148,12 +124,6 @@ $setting = json_encode(setting());
 		chatlink.disable();
 		chatlink.offline(chatlink.idsArray());
 	}
-	if (window.ActiveXObject){
-		setTimeout(function(){document.body?create():webim.ui.ready(create);},1000);
-		setTimeout(function(){webim.ui.ready(init);},1000);
-	}else{
-		document.body?create():webim.ui.ready(create);
-		webim.ui.ready(init);
-		//init();
-	}
+	document.body?create():webim.ui.ready(create);
+	webim.ui.ready(init);
 })(webim);

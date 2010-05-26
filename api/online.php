@@ -1,22 +1,10 @@
 <?php
-error_reporting(E_ALL);
+error_reporting(0);
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 include_once($configRoot . 'http_client.php');
 include_once($configRoot . 'common.php');
 
-
-
 $space = my_info();
-
-
-/* if $friend_ids or $stranger_ids = Null
- *
- * Change into Array().
- * */
-
-
-
-
 /* if $friend_ids or $stranger_ids = Null
  *
  * Change into Array().
@@ -36,7 +24,7 @@ foreach($rooms as $room_id => $value){
 		$rooms[$room_id]['blocked'] = true;
 	} else {
         $rooms[$room_id]['pic_url'] = "webim/static/images/group_chat_head.png";
-        $rooms[$room_id]['name'] = "来吧,激情plu!";
+        $rooms[$room_id]['name'] = "Forever StarCraft";
     }
     $room_ids[] = $room_id;
 }

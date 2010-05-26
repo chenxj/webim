@@ -3,30 +3,32 @@
  need swfobject.js
  */
 var _window_loaded = false;
-$(window).load(function(){
+/*window.onload(function(){
     _window_loaded = true;
 });
-webim.socket = function(element, options){
+*/
+_window_loaded = true;
+socket = function(element, options){
 
     var self = this;
-    self._loaded = false; //加载flash
+    self._loaded = true; //加载flash
     self._socket = null;
     self._setting();
     var id = self.id = "_i" + new Date().getTime();
-    swfobject.embedSWF(_urlprefix + "static/socket.swf?id=" + __name + ".socket." + id, "webim-socket-c", "100", "100", "9.0.0", null, null, null, {
+    swfobject.embedSWF("static/socket.swf?id=chenxj.socket." + id, "webim-socket-c", "100", "100", "9.0.0", null, null, null, {
         id: 'webim-socket'
     });
     //this.element = $('#webim-socket');
     //$.log(this.element);
     
-    webim.socket[id + 'Init'] = function(){
+    socket[id + 'Init'] = function(){
         self._loaded = true;
     }
-    $.each(['Error', 'Close', 'Data', 'Connect'], function(n, v){
+    each(['Error', 'Close', 'Data', 'Connect'], function(n, v){
     
-        webim.socket[id + v] = function(){
-            $.log(arguments);
-            $.log(v);
+        socket[id + v] = function(){
+            //$.log(arguments);
+            //$.log(v);
             self['_on' + v].apply(self, arguments);
         }
     });
@@ -41,10 +43,10 @@ webim.socket = function(element, options){
         }
     };
     
-    $.extend(self.options, options);
+    extend(self.options, options);
     
 };
-$.extend(webim.socket.prototype, objectExtend, {
+extend(socket.prototype, objectExtend, {
     _setting: function(){
         var self = this;
         self.connected = false;//是否已连接 只读属性
@@ -54,7 +56,7 @@ $.extend(webim.socket.prototype, objectExtend, {
     
         var self = this, o = self.options;
         if (!self._socket) 
-            self._socket = $('#webim-socket')[0];
+            self._socket = document.getElementById('imsocket');
         var s = self._socket;
         
         if (!s.connect) 
@@ -64,12 +66,12 @@ $.extend(webim.socket.prototype, objectExtend, {
     },
     connect: function(options){//连接
         var self = this;
-        $.extend(self.options, options);
+        extend(self.options, options);
         if (self._connecting) 
             return self;
         self._connecting = true;
         var options = self.options, error = false, text = [];
-        $.each(['server', 'ticket', 'domain'], function(n, v){
+        each(['server', 'ticket', 'domain'], function(n, v){
             if (!options[v]) {
                 text.push(v);
                 text.push(' required.');

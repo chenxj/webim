@@ -180,7 +180,9 @@ function ready(fn){
 var isReady = false,isIfmReady = false, readyList = [];
 function triggerReady() {
 	if (crossdomain && !isIfmReady){
-		var ibridgedoc = document.getElementById("webim_bridge").contentWindow.document;
+		var ibridgedoc;
+		if (document.getElementById("webim_bridge"))
+			ibridgedoc = document.getElementById("webim_bridge").contentWindow.document;
 		isIfmReady = true;
 		if (ibridgedoc.readyState === "complete"){
 			triggerReady();

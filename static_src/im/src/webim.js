@@ -51,7 +51,7 @@ extend(webim.prototype, objectExtend,{
 		self.history = new webim.history();
 		//self.notification = new webim.notification();
                 self.hotpost= new webim.hotpost();
-		self.connection = new comet(null,{jsonp:true});
+		self.connection = new socket(null,{jsonp:true});
 		self._initEvents();
 		//self.online();
 	},

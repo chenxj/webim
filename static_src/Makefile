@@ -117,7 +117,7 @@ UC_UI_MIN_ALL_JS = ${DIST_DIR}/webim_uc.all.min.js
 
 
 
-all: submake dist copy dzim ucim i18n min makebridge 
+all: submake dist copy dzim ucim i18n min 
 	@@echo "webim build complete."
 submake:
 	cd im && $(MAKE)
@@ -155,7 +155,6 @@ copy:
 	@@mkdir -p ${DIST_DIR}/themes
 	@@cp -r ${THEME_SRC_DIR}/* ${DIST_DIR}/themes/
 	@@echo "Copy images assets themes."
-	@@cp ${WEBIM_BRIDGE} ${DIST_DIR}
 
 min:
 	@@echo "Building"
@@ -176,6 +175,7 @@ makebridge:
 	python ${BRIDGE} ${UI_MIN_ALL_JS} > ${WEBIM_BRIDGE_MIN}
 	python ${BRIDGE} ${UC_UI_MIN_ALL_JS} > ${WEBIM_UC_BRIDGE_MIN}
 	python ${BRIDGE} ${DZ_UI_MIN_ALL_JS} > ${WEBIM_DZ_BRIDGE_MIN}
+	@@cp ${WEBIM_BRIDGE} ${DIST_DIR}
 i18n:
 	@@mkdir -p ${DIST_DIR}/i18n
 	@@${UNICODE} ${I18N_SRC_DIR}/webim-zh-CN.js > ${DIST_DIR}/i18n/webim-zh-CN.js

@@ -399,7 +399,15 @@ extend(webimUI.prototype, objectExtend, {
 
 		}else{
 			_info = {id:0,name:tpl("<%=broadcast%>"),isadmin:isadmin};
-			layout.addBroadcast(_info,extend({user:u,history:h,block:true,emot:isadmin,clearHistory:true,member:false,msgType:"broadcast"},{name:tpl("<%=broadcast%>")}), null);
+			layout.addBroadcast(_info,
+				extend({user:u,
+					history:h,
+					block:true,
+					emot:isadmin,
+					clearHistory:true,
+					member:false,
+					msgType:"broadcast"},
+					{name:tpl("<%=broadcast%>")}), null);
 			var broadcast = layout.chat(0);
 			broadcast.bind("sendMsg",function(msg){
 				im.sendMsg(msg);		
@@ -435,6 +443,25 @@ extend(webimUI.prototype, objectExtend, {
 			if(!h) history.load(id);
 			var chat = layout.chat(id);
 			chat.bind("sendMsg", function(msg){
+				var send = true;
+				if (!im.lastMsg){
+					im.lastMsg = msg;
+				}else if (im.lastMsg.trim() == msg.trim()){
+					if (im.sendcount && im.sendcount > 3){
+					
+					}else{
+						im.sendcount++;
+					}
+					
+				}
+				if (im.holdMsg){
+				
+				}else{
+					im.msgs = [];
+					im.msgs.push(msg);
+					im.holdMsg = setTimeout(function(){
+						im.sendMsg(im.msgs.join('\n'));},550);
+				}
 				im.sendMsg(msg);
 				history.handle(msg);
 			}).bind("select", function(info){

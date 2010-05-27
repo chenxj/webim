@@ -6,7 +6,32 @@ include_once ('config.php');
 $platform = $_IMC['platform'] ? $_IMC['platform'] : $_GET['platform'];
 include_once("lib/common.php");
 
-//$menu[] = array("title" => 'imlogo',"icon" =>"webim/static/images/nextim.gif","link" => "http://www.nextim.cn");
+
+if($platform === 'uchome'){
+	$menu = array(
+		array("title" => 'doing',"icon" =>"image/app/doing.gif","link" => "space.php?do=doing"),
+		array("title" => 'album',"icon" =>"image/app/album.gif","link" => "space.php?do=album"),
+		array("title" => 'blog',"icon" =>"image/app/blog.gif","link" => "space.php?do=blog"),
+		array("title" => 'thread',"icon" =>"image/app/mtag.gif","link" => "space.php?do=thread"),
+		array("title" => 'share',"icon" =>"image/app/share.gif","link" => "space.php?do=share")
+	);
+}else if($platform === 'discuz'){
+	$menu = array(
+		array("title" => 'search',"icon" =>"webim/static/images/search.png","link" => "search.php"),
+		array("title" => 'faq',"icon" =>"webim/static/images/faq.png","link" => "faq.php"),
+		array("title" => 'nav',"icon" =>"webim/static/images/nav.png","link" => "misc.php?action=nav"),
+		array("title" => 'feeds',"icon" =>"webim/static/images/feeds.png","link" => "index.php?op=feeds"),
+		array("title" => 'sms',"icon" =>"webim/static/images/msm.png","link" => "pm.php")
+	);
+}
+$menu[] = array("title" => 'imlogo',"icon" =>"webim/static/images/nextim.gif","link" => "http://www.nextim.cn");
+if($_SCONFIG['my_status']) {
+	if(is_array($_SGLOBAL['userapp'])) { 
+		foreach($_SGLOBAL['userapp'] as $value) { 
+			$menu[] = array("title" => iconv(UC_DBCHARSET,'utf-8',$value['appname']),"icon" =>"http://appicon.manyou.com/icons/".$value['appid'],"link" => "userapp.php?id=".$value['appid']);
+		}
+	}
+}
 $setting = json_encode(setting());
 
 ?>

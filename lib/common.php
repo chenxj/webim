@@ -1,5 +1,4 @@
 <?php
-session_id($_COOKIE["CAKEPHP"]); 
 session_start();
 //error_reporting(E_ALL & ~E_NOTICE);
 error_reporting(0);
@@ -9,7 +8,6 @@ include_once(WEBIM_ROOT . '/config.php');
 define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
 include_once(WEBIM_ROOT . "/lib/json.php");
 $_SGLOBAL['supe_uid'] =  $_IMC_PLF['uid'];
-
 
 function my_info(){
 //    return random_my_info();
@@ -44,6 +42,17 @@ function random_my_info(){
 }
 
 
+//DISCUZ API FUN
+if( !function_exists('getspace') ) {
+function getspace($uid){
+	global $db;
+    $db->query("SET NAMES ". UC_DBCHARSET);
+    $space = $db->fetch_first("SELECT username,gender,nickname FROM ".tname('members')." m left join ".tname('memberfields')." mf  on m.uid=mf.uid WHERE m.uid='$uid'");
+	$space['uid']=$uid;
+	$space['nickname']=$space['nickname']?$space['nickname']:$space['username'];
+	return $space;
+}
+}
 if( !function_exists('user_pic') ) {
 function user_pic($uid, $size='small') {
 		return UC_API.'/avatar.php?uid='.$uid.'&size='.$size;
@@ -211,6 +220,15 @@ function im_tname($name){
         return "`webim_".$name."`";
 }
 
+//var_dump($_SGLOBAL['supe_uid']);
+$is_login = false;
+if(empty($_SGLOBAL['supe_uid'])) {
+	$is_login = false;
+} else {
+	$is_login = true;
+	$space = getspace($_SGLOBAL['supe_uid']);
+}
+$groups = getfriendgroup();
 
 function find_buddy($strangers, $friends = array()){
         global $_SGLOBAL,$_IMC, $groups;

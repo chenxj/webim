@@ -3,27 +3,8 @@ error_reporting(0);
 header("Content-type: application/javascript");
 
 include_once ('config.php');
-$platform = $_IMC['platform'] ? $_IMC['platform'] : $_GET['platform'];
 include_once("lib/common.php");
 
-
-if($platform === 'uchome'){
-	$menu = array(
-		array("title" => 'doing',"icon" =>"image/app/doing.gif","link" => "space.php?do=doing"),
-		array("title" => 'album',"icon" =>"image/app/album.gif","link" => "space.php?do=album"),
-		array("title" => 'blog',"icon" =>"image/app/blog.gif","link" => "space.php?do=blog"),
-		array("title" => 'thread',"icon" =>"image/app/mtag.gif","link" => "space.php?do=thread"),
-		array("title" => 'share',"icon" =>"image/app/share.gif","link" => "space.php?do=share")
-	);
-}else if($platform === 'discuz'){
-	$menu = array(
-		array("title" => 'search',"icon" =>"webim/static/images/search.png","link" => "search.php"),
-		array("title" => 'faq',"icon" =>"webim/static/images/faq.png","link" => "faq.php"),
-		array("title" => 'nav',"icon" =>"webim/static/images/nav.png","link" => "misc.php?action=nav"),
-		array("title" => 'feeds',"icon" =>"webim/static/images/feeds.png","link" => "index.php?op=feeds"),
-		array("title" => 'sms',"icon" =>"webim/static/images/msm.png","link" => "pm.php")
-	);
-}
 $menu[] = array("title" => 'imlogo',"icon" =>"webim/static/images/nextim.gif","link" => "http://www.nextim.cn");
 if($_SCONFIG['my_status']) {
 	if(is_array($_SGLOBAL['userapp'])) { 
@@ -32,13 +13,13 @@ if($_SCONFIG['my_status']) {
 		}
 	}
 }
-$setting = json_encode(setting());
+//$setting = json_encode(setting());
 
 ?>
 
 //custom
 (function(webim){
-    var path = "";
+    var path = "http://webim.replays.net/";
     var platform = "<?php echo $platform; ?>";
 
     var menu = webim.JSON.decode('<?php echo json_encode($menu) ?>');
@@ -97,17 +78,22 @@ $setting = json_encode(setting());
 		return false;
 	}
 	var body , imUI, im, layout, chatlink;
+	window.crossdomain = true;
+	document.domain = "replays.net";
 	function create(){
 		body = document.body;
 		imUI = new webim.ui(null,{menu: menu});
 		im = imUI.im;
+		im.bridge = document.getElementById("webim_bridge");
 		var adminids = "<?php echo $_IMC['admin_ids'] ?>";
 		var userid = "<?php echo $_SGLOBAL['supe_uid']?>";
 		im.admins = adminids?adminids.split(","):"";
 		im.isadmin = isAdmin(im.admins,userid);
+		im.crossdomain = true;
 		im.userid = userid;
 		im.broadcastID = 0;
         	im.isStrangerOn = "on";
+		im.platform = platform;
 		imUI.addApp("room");
 		layout = imUI.layout;
 		if ( platform === "discuz"  || platform === "phpwind" ){
@@ -152,8 +138,12 @@ $setting = json_encode(setting());
 		setTimeout(function(){document.body?create():webim.ui.ready(create);},1000);
 		setTimeout(function(){webim.ui.ready(init);},1000);
 	}else{
-		document.body?create():webim.ui.ready(create);
-		//webim.ui.ready(init);
-		init();
+		if (document.body && document.getElementById("webim_bridge")){
+			create();
+		}else{
+			webim.ui.ready(create);
+		}
+		webim.ui.ready(init);
+		//init();
 	}
 })(webim);

@@ -1,27 +1,16 @@
 <?php
-error_reporting(E_ALL);
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 include_once($configRoot . 'http_client.php');
 include_once($configRoot . 'common.php');
-
-
+error_reporting(0);
 
 $space = my_info();
-
-
-/* if $friend_ids or $stranger_ids = Null
- *
- * Change into Array().
- * */
-
-
-
-
 /* if $friend_ids or $stranger_ids = Null
  *
  * Change into Array().
  * */
 $friend_ids = array();
+$stranger_ids = array();
 
 $buddy_ids = ids_array(gp("buddy_ids"));//正在聊天的联系人
 
@@ -36,7 +25,7 @@ foreach($rooms as $room_id => $value){
 		$rooms[$room_id]['blocked'] = true;
 	} else {
         $rooms[$room_id]['pic_url'] = "webim/static/images/group_chat_head.png";
-        $rooms[$room_id]['name'] = "NextIM";
+        $rooms[$room_id]['name'] = "Forever StarCraft";
     }
     $room_ids[] = $room_id;
 }

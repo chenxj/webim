@@ -1,8 +1,8 @@
 <?php
 $_IMC = array();
 $_IMC["enable"] = true;
-$_IMC["domain"] = "plu.cn";
-$_IMC["apikey"] = "4bed633c-8d4c-4cd0-8f10-76c1d39056dd";
+$_IMC["domain"] = "replays.net";
+$_IMC["apikey"] = "4bfb88c9-3374-4b81-bdb9-4572d39056dd";
 $_IMC["imsvr"] = "im.nextim.cn";
 $_IMC["impost"] = 9000;
 $_IMC["impoll"] = 8000;
@@ -14,6 +14,12 @@ $_IMC["room_id_pre"] = 1000000;
 $_IMC["groupchat"] = true;
 $_IMC["emot"] = "default";
 $_IMC["opacity"] = 80;
+$_IMC["uchome_path"] = "";
+$_IMC["uchome_url"] = "";
+$_IMC["discuz_path"] = "/home/www/bbs/";
+$_IMC["discuz_url"] = "http://bbs.plu.cn/";
+$_IMC["install_url"] = "http://bbs.plu.cn/";
+$_IMC["install_path"] = "/home/www/bbs/";
 $_IMC["version"] = "2.2.28";
 $_IMC["update"] = 0;
 $_IMC_LOG_TYPE["update_file"] = "UPDATE";
@@ -34,8 +40,6 @@ $_IMC["platform"] = "discuz";
 $_IMC_PLF['username'] = $cusername;
 /* User ID in Platform Session  */
 $_IMC_PLF['uid']      = $cuid;
-
-
 
 
 

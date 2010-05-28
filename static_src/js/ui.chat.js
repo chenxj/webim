@@ -396,16 +396,24 @@ plugin.add("chat","member",{
 		var chat = ui.self, $ = ui.$;
 		chat.memberLi = {} ;
 		var self = this;
-		var member = createElement('<div class="webim-member ui-widget-content ui-corner-left"><iframe id=":bgiframe" class="webim-bgiframe" frameborder="0" tabindex="-1" src="about:blank;" ></iframe><ul></ul></div>');
+		var member = createElement('<div class="webim-member ui-display-n ui-widget-content ui-corner-left"><iframe id=":bgiframe" class="webim-bgiframe" frameborder="0" tabindex="-1" src="about:blank;" ></iframe><ul id="webim-memberlist"></ul></div>');
 		$.member = member.lastChild;
 		$.content.parentNode.insertBefore(member, $.content);
 		var shorter = createElement('<span class="member-short ui-widget-header"><a id=":membershort"><em class="ui-icon ui-icon-membershort"></em></a></span>');
 		$.content.parentNode.insertBefore(shorter,$.content);
 		addEvent(shorter,"click",function(e){
 			preventDefault(e);
-			var d = this.parentNode.children[1].style.display;
-			if (d == "none")  this.parentNode.children[1].style.display= "block";
-			else  this.parentNode.children[1].style.display= "none";
+			var dm = document.getElementById('webim-memberlist').parentNode;
+			if (hasClass(dm,'ui-display-n')){
+				removeClass(dm,'ui-display-n');
+			}else{
+				addClass(dm,'ui-display-n');
+			}
+			/*
+			var d = dm.style.display;//this.parentNode.children[1].style.display;
+			if (d == "none")  dm.style.display="block";//this.parentNode.children[1].style.display= "block";
+			else  dm.style.display="none";//this.parentNode.children[1].style.display= "none";
+			*/
 		});
 	}
 });

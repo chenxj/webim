@@ -1,0 +1,21 @@
+<html>
+
+	<head>
+	
+		<script type="text/javascript" src="swfobject-2.1.js" ></script>
+		<script type="text/javascript">
+			function senddata(){
+				var s = document.getElementById("imsocket");
+				s.jstest();
+			}
+		</script>
+	</head>
+	<body>
+	<div id="imsocket" style="display:none"></div>
+	<script type="text/javascript">
+		swfobject.embedSWF("imsocket.swf", "imsocket", "600", "400", "9.0.0", null, null, {}, {});
+	</script>
+		<input type="button" onclick="senddata()" value="send">
+
+	</body>
+</html>

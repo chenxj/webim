@@ -124,8 +124,10 @@
 		</ul>
 		<div id="imsocket"></div>
 		<script type="text/javascript">
-
-			swfobject.embedSWF("imsocket.swf", "imsocket", "600", "400", "9.0.0", null, null, {}, {});
+			var fv = {};
+			fv.host = "192.168.66.128";
+			fv.port = "7051";
+			swfobject.embedSWF("imsocket.swf", "imsocket", "600", "400", "9.0.0", null, fv, {}, {});
 		</script>
 	</body>
 </html>

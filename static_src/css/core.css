@@ -62,9 +62,9 @@ a .webim-icon, a .ui-icon{
 .webim-icon-broadcast{
 	background-position:-32px -32px;
 }
-.ui-display{
+.ui-display-b{
 	display:block;
 }
-.ui-display-none{
+.ui-display-n{
 	display:none;
 }

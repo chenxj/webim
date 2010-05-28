@@ -443,6 +443,7 @@ extend(webimUI.prototype, objectExtend, {
 			if(!h) history.load(id);
 			var chat = layout.chat(id);
 			chat.bind("sendMsg", function(msg){
+				/*
 				var send = true;
 				if (!im.lastMsg){
 					im.lastMsg = msg;
@@ -462,6 +463,7 @@ extend(webimUI.prototype, objectExtend, {
 					im.holdMsg = setTimeout(function(){
 						im.sendMsg(im.msgs.join('\n'));},550);
 				}
+				*/
 				im.sendMsg(msg);
 				history.handle(msg);
 			}).bind("select", function(info){

@@ -1,22 +1,14 @@
 <?php
+error_reporting(0);
 session_start();
-error_reporting(E_ALL & ~E_NOTICE);
+//error_reporting(E_ALL & ~E_NOTICE);
 define('WEBIM_ROOT', substr(dirname(__FILE__), 0, -4));
 //API DEFINE
 include_once(WEBIM_ROOT . '/config.php');
-//require_once($_IMC['install_path'].'/config.inc.php');
-define('API_COMMFILE','/include/common.inc.php');
 define('IM_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
-include_once($_IMC['discuz_path'] . API_COMMFILE);
 include_once(WEBIM_ROOT . "/lib/json.php");
-include_once($_IMC['install_path'].'/uc_client/client.php');
 $_SGLOBAL['supe_uid'] =  $_IMC_PLF['uid'];
-$_SGLOBAL['db'] = $db;
-$_SGLOBAL['timestamp'] = time();
-$_SC['gzipcompress'] = true;
-$_SC['tablepre']=$tablepre;
-$_SC['dbcharset'] = UC_DBCHARSET;
-$_SC['charset'] = UC_CHARSET;
+
 
 function my_info(){
 //    return random_my_info();
@@ -51,17 +43,6 @@ function random_my_info(){
 }
 
 
-//DISCUZ API FUN
-if( !function_exists('getspace') ) {
-function getspace($uid){
-	global $db;
-    $db->query("SET NAMES ". UC_DBCHARSET);
-    $space = $db->fetch_first("SELECT username,gender,nickname FROM ".tname('members')." m left join ".tname('memberfields')." mf  on m.uid=mf.uid WHERE m.uid='$uid'");
-	$space['uid']=$uid;
-	$space['nickname']=$space['nickname']?$space['nickname']:$space['username'];
-	return $space;
-}
-}
 if( !function_exists('user_pic') ) {
 function user_pic($uid, $size='small') {
 		return UC_API.'/avatar.php?uid='.$uid.'&size='.$size;
@@ -229,15 +210,6 @@ function im_tname($name){
         return "`webim_".$name."`";
 }
 
-//var_dump($_SGLOBAL['supe_uid']);
-$is_login = false;
-if(empty($_SGLOBAL['supe_uid'])) {
-	$is_login = false;
-} else {
-	$is_login = true;
-	$space = getspace($_SGLOBAL['supe_uid']);
-}
-$groups = getfriendgroup();
 
 function find_buddy($strangers, $friends = array()){
         global $_SGLOBAL,$_IMC, $groups;
@@ -294,6 +266,7 @@ function find_room(){
     $room_id = crc32($_SERVER['PHP_SELF']);
 	$room_list[] = $room_id;
     $rooms = array();
+    if ($room_id < 0) $room_id *= -1;
     foreach($room_list as $room){
 		$subject = "激情星际,永远的传奇!";
 		$rooms[$room_id]=array('id'=>$room_id,'name'=> $subject, 'pic_url'=>"", 'status'=>'','status_time'=>'');

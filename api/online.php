@@ -7,8 +7,6 @@ include_once($configRoot . 'common.php');
 
 
 $space = my_info();
-
-
 /* if $friend_ids or $stranger_ids = Null
  *
  * Change into Array().
@@ -35,8 +33,8 @@ foreach($rooms as $room_id => $value){
 	if(in_array($room_id, $block_list)){
 		$rooms[$room_id]['blocked'] = true;
 	} else {
-        $rooms[$room_id]['pic_url'] = "webim/static/images/group_chat_head.png";
-        $rooms[$room_id]['name'] = "来吧,激情plu!";
+        $rooms[$room_id]['pic_url'] = "images/group_chat_head.png";
+        $rooms[$room_id]['name'] = "NextIM";
     }
     $room_ids[] = $room_id;
 }

@@ -74,7 +74,8 @@ extend(socket.prototype, objectExtend, {
 	//s.send(x);
     },
     _maphost:function(url){
-	if(!/http:\/\/((?:\d{1,3}\.){3}\d{1,3}):(\d+)/.test(url))return {};
+	if (!/http:\/\/(.*):(.*)/.test(url))
+		return {};
 	return {host:RegExp.$1,port:RegExp.$2};	
     },
     connect: function(options){//连接

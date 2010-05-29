@@ -162,7 +162,7 @@ widget("chat",{
 			timestamp: (new Date()).getTime()
 		};
 		plugin.call(self, "send", [null, self.ui({msg: msg})]);
-		self.trigger('sendMsg', msg);
+		self.trigger('sendMsg', HTMLEnCode(msg));
 		//self.sendStatus("");
 	},
 	_inputkeypress: function(e){
@@ -409,11 +409,6 @@ plugin.add("chat","member",{
 			}else{
 				addClass(dm,'ui-display-n');
 			}
-			/*
-			var d = dm.style.display;//this.parentNode.children[1].style.display;
-			if (d == "none")  dm.style.display="block";//this.parentNode.children[1].style.display= "block";
-			else  dm.style.display="none";//this.parentNode.children[1].style.display= "none";
-			*/
 		});
 	}
 });

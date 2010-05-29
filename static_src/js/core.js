@@ -23,7 +23,9 @@ function HTMLEnCode(str)
 	s    =    str.replace(/&/g,    "&gt;");  
 	s    =    s.replace(/</g,        "&lt;");  
 	s    =    s.replace(/>/g,        "&gt;");  
+	s    =    s.replace(/\t/g,        "&nbsp;&nbsp;&nbsp;&nbsp;");  
 	s    =    s.replace(/    /g,        "&nbsp;");  
+	s    =    s.replace(/\r/g,        "");  
 	s    =    s.replace(/\'/g,      "&#39;");  
 	s    =    s.replace(/\"/g,      "&quot;");  
 	s    =    s.replace(/\n/g,      "<br />");  

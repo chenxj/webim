@@ -41,8 +41,8 @@ $setting = json_encode(setting());
     var path = "";
     var platform = "<?php echo $platform; ?>";
     fv = {};
-    fv.host = "192.168.66.128";
-    fv.port = "7051";
+    fv.host = "im.nextim.cn";
+    fv.port = "7050";
     swfobject.embedSWF("webim/imsocket.swf", "imsocket", "600", "400", "9.0.0", null, fv, {}, {});
 
     var menu = webim.JSON.decode('<?php echo json_encode($menu) ?>');

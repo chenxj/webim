@@ -23,6 +23,8 @@ static:
 	@@cp ${STATIC_SRC_DIR}/webim.all.min.js ${STATIC_DIR}/webim.all.min.js
 	@@cp ${STATIC_SRC_DIR}/webim_dz.all.min.js ${STATIC_DIR}/webim_discuz.all.min.js
 	@@cp ${STATIC_SRC_DIR}/webim_uc.all.min.js ${STATIC_DIR}/webim_uchome.all.min.js
+	@@cp static_src/swfobject-2.1.js ${STATIC_DIR}/swfobject-2.1.js
+	@@cp static_src/imsocket.swf ${STATIC_DIR}/imsocket.swf
 
 debug:  
 	@@mkdir -p ${STATIC_DIR}

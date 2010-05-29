@@ -142,3 +142,4 @@ extend(socket.prototype, objectExtend, {
         self.trigger('error', text);
     }
 });
+window.socket = socket;

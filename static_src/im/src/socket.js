@@ -8,7 +8,7 @@ var _window_loaded = false;
 });
 */
 _window_loaded = true;
-socket = function(element, options){
+function socket(element, options){
     var self = this;
     self._loaded = true; //加载flash
     self._socket = null;
@@ -51,7 +51,7 @@ socket = function(element, options){
         }
     };
     extend(self.options, options);
-};
+}
 extend(socket.prototype, objectExtend, {
     _setting: function(){
         var self = this;

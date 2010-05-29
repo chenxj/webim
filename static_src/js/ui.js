@@ -286,6 +286,9 @@ extend(webimUI.prototype, objectExtend, {
 				sound.play('msg');
 				titleShow(i18n("new message"), 5);
 			}
+			for (var d in data){
+				if (data[d].body)data[d].body = HTMLDeCode(data[d].body);
+			}
 			history.handle(data);
 			buddy.online(online_ids, 1);
 		});
@@ -410,8 +413,10 @@ extend(webimUI.prototype, objectExtend, {
 					{name:tpl("<%=broadcast%>")}), null);
 			var broadcast = layout.chat(0);
 			broadcast.bind("sendMsg",function(msg){
-				im.sendMsg(msg);		
+
 				history.handle(msg);
+				msg.body = HTMLEnCode(msg.body);
+				im.sendMsg(msg);		
 			});
 		}
 	},
@@ -464,8 +469,9 @@ extend(webimUI.prototype, objectExtend, {
 						im.sendMsg(im.msgs.join('\n'));},550);
 				}
 				*/
-				im.sendMsg(msg);
 				history.handle(msg);
+				msg.body = HTMLEnCode(msg.body);
+				im.sendMsg(msg);
 			}).bind("select", function(info){
 				buddy.online(info.id, 1);//online
 				self.addChat(info.id, {type: "buddy"}, null, info.name);
@@ -492,8 +498,9 @@ extend(webimUI.prototype, objectExtend, {
 			if(!info) buddy.update(id);
 			if(!h) history.load(id);
 			layout.chat(id).bind("sendMsg", function(msg){
-				im.sendMsg(msg);
 				history.handle(msg);
+				msg.body = HTMLEnCode(msg.body);
+				im.sendMsg(msg);
 			}).bind("sendStatus", function(msg){
 				im.sendStatus(msg);
 			}).bind("clearHistory", function(info){

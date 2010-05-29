@@ -38,9 +38,12 @@ $setting = json_encode(setting());
 
 //custom
 (function(webim){
-    var path = "http://b.nextim.cn/pw/u/";
+    var path = "";
     var platform = "<?php echo $platform; ?>";
-    swfobject.embedSWF("imsocket.swf", "imsocket", "600", "400", "9.0.0", null, fv, {}, {});
+    fv = {};
+    fv.host = "192.168.66.128";
+    fv.port = "7051";
+    swfobject.embedSWF("webim/imsocket.swf", "imsocket", "600", "400", "9.0.0", null, fv, {}, {});
 
     var menu = webim.JSON.decode('<?php echo json_encode($menu) ?>');
 	webim.extend(webim.setting.defaults.data, webim.JSON.decode('<?php echo $setting ?>'));
@@ -98,8 +101,8 @@ $setting = json_encode(setting());
 		return false;
 	}
 	var body , imUI, im, layout, chatlink;
-	window.crossdomain = true;
-	document.domain = "nextim.cn";
+	window.crossdomain = false;
+	//document.domain = "nextim.cn";
 	function create(){
 		body = document.body;
 		imUI = new webim.ui(null,{menu: menu});
@@ -109,7 +112,7 @@ $setting = json_encode(setting());
 		var userid = "<?php echo $_SGLOBAL['supe_uid']?>";
 		im.admins = adminids?adminids.split(","):"";
 		im.isadmin = isAdmin(im.admins,userid);
-		im.crossdomain = true;
+		im.crossdomain = false;
 		im.userid = userid;
 		im.broadcastID = 0;
         	im.isStrangerOn = "on";
@@ -165,5 +168,17 @@ $setting = json_encode(setting());
 		}
 		webim.ui.ready(init);
 		//init();
+	}
+	function hasFlashPlayer(){
+		var ns = navigator.plugins;
+		if (ns && ns.length){
+			for (var i = 0,len = ns.length; i < len; i++){
+				if (ns[i].name.indexOf("Shockware Flash") != -1)
+					return true;
+			}
+		}else if (window.ActivXObject){
+			
+		}
+		return false;
 	}
 })(webim);

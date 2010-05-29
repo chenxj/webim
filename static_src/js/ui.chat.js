@@ -162,7 +162,7 @@ widget("chat",{
 			timestamp: (new Date()).getTime()
 		};
 		plugin.call(self, "send", [null, self.ui({msg: msg})]);
-		self.trigger('sendMsg', HTMLEnCode(msg));
+		self.trigger('sendMsg', msg);
 		//self.sendStatus("");
 	},
 	_inputkeypress: function(e){

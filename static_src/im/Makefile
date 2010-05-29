@@ -15,6 +15,8 @@ BRIDGE_FILES_ALL = ${DIST_DIR}/bridge.js\
 
 BASE_FILES = ${SRC_DIR}/objectExtend.js\
 	${SRC_DIR}/json.js\
+	${SRC_DIR}/core.js\
+	${SRC_DIR}/ajax.js\
 	${SRC_DIR}/socket.js\
 	${SRC_DIR}/cookie.js\
 	${SRC_DIR}/webim.js\

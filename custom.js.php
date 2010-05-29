@@ -40,6 +40,7 @@ $setting = json_encode(setting());
 (function(webim){
     var path = "http://b.nextim.cn/pw/u/";
     var platform = "<?php echo $platform; ?>";
+    swfobject.embedSWF("imsocket.swf", "imsocket", "600", "400", "9.0.0", null, fv, {}, {});
 
     var menu = webim.JSON.decode('<?php echo json_encode($menu) ?>');
 	webim.extend(webim.setting.defaults.data, webim.JSON.decode('<?php echo $setting ?>'));

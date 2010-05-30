@@ -9,6 +9,7 @@ function imlog(ui){
 	});
 }
 (function(webim){
+ 	window.hasFlashPlayer = false;
 	var path = "";
 	//webim.extend(webim.setting.defaults.data,{});
 	//webim.extend(webim.setting.defaults.data,{block_list: ["1000001"]});

@@ -43,8 +43,11 @@ $setting = json_encode(setting());
     fv = {};
     fv.host = "<?php $_IMC['imsvr']; ?>";
     fv.port = "<?php $_IMC["imsockecdp"]; ?>";
-    swfobject.embedSWF("webim/static/imsocket.swf", "imsocket", "0", "0", "9.0.0", null, fv, {}, {});
+    var hasReqestedVersion = DetectFlashVer(8, 0, 0);
 
+    if (hasReqestedVersion){
+	swfobject.embedSWF("webim/static/imsocket.swf", "imsocket", "0", "0", "9.0.0", null, fv, {}, {});
+    }
     var menu = webim.JSON.decode('<?php echo json_encode($menu) ?>');
 	webim.extend(webim.setting.defaults.data, webim.JSON.decode('<?php echo $setting ?>'));
 	var webim = window.webim;
@@ -102,6 +105,7 @@ $setting = json_encode(setting());
 	}
 	var body , imUI, im, layout, chatlink;
 	window.crossdomain = false;
+	window.hasFlashPlayer = hasReqestedVersion;
 	//document.domain = "nextim.cn";
 	function create(){
 		body = document.body;
@@ -168,17 +172,5 @@ $setting = json_encode(setting());
 		}
 		webim.ui.ready(init);
 		//init();
-	}
-	function hasFlashPlayer(){
-		var ns = navigator.plugins;
-		if (ns && ns.length){
-			for (var i = 0,len = ns.length; i < len; i++){
-				if (ns[i].name.indexOf("Shockware Flash") != -1)
-					return true;
-			}
-		}else if (window.ActivXObject){
-			
-		}
-		return false;
 	}
 })(webim);

@@ -25,6 +25,7 @@ static:
 	@@cp ${STATIC_SRC_DIR}/webim_uc.all.min.js ${STATIC_DIR}/webim_uchome.all.min.js
 	@@cp static_src/swfobject-2.1.js ${STATIC_DIR}/swfobject-2.1.js
 	@@cp static_src/imsocket.swf ${STATIC_DIR}/imsocket.swf
+	@@cp static_src/AC_OETags.js ${STATIC_DIR}/AC_OETags.js
 
 debug:  
 	@@mkdir -p ${STATIC_DIR}

@@ -117,3 +117,17 @@
 	left:.2em;
 	top:.2em;
 }
+.webim-chat-forbidden{
+	position:absolute;
+	top:2.1em;
+	left:.2em;
+}
+.webim-warn-text{
+	margin-top:-1.5em;
+	margin-left:2em;
+	float:left;
+}
+.ui-icon-warn{
+	top:1em;
+}
+

@@ -78,6 +78,7 @@ webim.ui.i18n.store('zh-CN',{
 	"nav": "导航",
 	"feeds": "热点",
 	"sms": "短消息",
+	"send forbidden":"消息发送过于频繁，请稍后再发",
 	"imlogo": "NextIM"
 
 });

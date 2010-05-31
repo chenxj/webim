@@ -42,7 +42,7 @@ function HTMLDeCode(str){
 	//s    =    s.replace(/\r/g,        "");  
 	s    =    s.replace(/&#39;/g,      "'");  
 	s    =    s.replace(/&quot;/g,      "\"");  
-	//s    =    s.replace(/<br />/g,      "\n");  
+	s    =    s.replace(/<br \/>/g,      "\n");  
 	return    s;  
 }
 function isUrl(str){

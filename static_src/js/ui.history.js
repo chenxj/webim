@@ -45,11 +45,28 @@ widget("history",{
 		var self = this;
 		logItem = extend({}, logItem);
 		plugin.call(self, "render", [null, self.ui({msg: logItem})]);
-		var  from = logItem.from, to = logItem.to, time = logItem.timestamp, msg = logItem.body, shouldTilte = true, last = self._lastLogItem, markup = [], info = self.options.info, user = self.options.user;
+		
+		var  from = logItem.from, 
+		     to = logItem.to, 
+		     time = logItem.timestamp, 
+		     msg = logItem.body, 
+		     shouldTilte = true, 
+		     last = self._lastLogItem, 
+		     markup = [], info = self.options.info, 
+		     user = self.options.user;
 		var fromSelf = from == user.id;
 		var other = !fromSelf && user.id != to;
 
-		var name = other ? logItem.nick : fromSelf ? user.name : (info.name ? '<a href="' + info.url + '">' + info.name + '</a>' : info.id);
+		var name ;
+		if (logItem.forbidden){
+			name = "";
+		}else{
+			name = 
+			other ? logItem.nick : fromSelf ? 
+				user.name : (info.name ? 
+						'<a href="' + info.url + '">' + info.name + '</a>' 
+						: info.id);
+		}
 		if (last && last.to == to && last.from == from && time - last.timestamp < 60000){
 			shouldTilte = false;
 		}
@@ -57,7 +74,7 @@ widget("history",{
 		if (shouldTilte || logItem.type === "broadcast" || logItem.to == "0") {
 			self._lastLogItem = logItem;
 			var t = (new date(time));
-			markup.push('<h4><span class="webim-gray">');
+			markup.push('<h4><span class="webim-gray ">');
 			markup.push(t.getDay(true));
 			markup.push(" ");
 			markup.push(t.getTime());
@@ -66,9 +83,17 @@ widget("history",{
 			markup.push('</h4>');
 		}
 
-		markup.push('<p>');
+		if (logItem.forbidden)
+			markup.push('<p class="ui-icon ui-icon-warn">');
+		else
+			markup.push('<p>');
 		markup.push(msg);
 		markup.push('</p>');
+		if (logItem.forbidden){
+			markup.push('<span class="webim-warn-text webim-gray">');
+			markup.push(i18n('send forbidden'));
+			markup.push('</span>');
+		}
 		return markup.join("");
 	},
 	_renderDateBreak: function(time){

@@ -40,5 +40,6 @@ webim.ui.i18n.store('en',{
 	"join-channel":" Join group...",
 	"people online":"Online",
 	"broadcast":"BroadCast",
-	"group-notavail":"Failed to join group，please reopen this window."
+	"group-notavail":"Failed to join group，please reopen this window.",
+	"send forbidden":"Send Msg Forbidden"
 });

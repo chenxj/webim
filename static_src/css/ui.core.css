@@ -35,3 +35,4 @@
 
 /* Overlays */
 .ui-widget-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.ui-icon-warn {background-position:0 -142px;}

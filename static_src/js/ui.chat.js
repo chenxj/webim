@@ -158,29 +158,64 @@ widget("chat",{
 			from: options.user.id,
 			stype: '',
 			offline: info.presence == "online" ? 0 : 1,
-			body: val,
+			body: self.forbidden?'':val,
+			forbidden:self.forbidden,
 			timestamp: (new Date()).getTime()
 		};
 		plugin.call(self, "send", [null, self.ui({msg: msg})]);
-		self.trigger('sendMsg', msg);
+		if (self.forbidden){
+			if (!self.clearForbidden){
+				self.clearForbidden=true;
+				setTimeout(function(){
+					self.forbidden  = false;
+					self.count = 0;
+					self.lastpost = (new Date()).getTime();
+				},3000);
+				
+			}
+			if (!self.forbiddenmsg) {
+				self.forbiddenmsg = true;
+				self.trigger('sendMsg', msg);
+			}
+			return; 
+			
+		}
+		self.trigger('sendMsg',msg);
 		//self.sendStatus("");
 	},
 	_inputkeypress: function(e){
+		
 		var self =  this, $ = self.$;
+		if(!self.forbiddenTimer){self.forbiddenTimer = true;setInterval(function(){webim.lastpost=(new Date()).getTime();},1500);}
 		if (e.keyCode == 13){
+			if (self.ccc == undefined)self.ccc=0;
+				else self.ccc++;
 			if(e.ctrlKey){
 				self.insert("\n", true);
 				return true;
-			}else{
-				var el = target(e), val = el.value;
-				if (trim(val)) {
-					self._sendMsg(val);
-					el.value = "";
-					preventDefault(e);
+			}
+			if (self.count == undefined || self.count == webim.forbiddenmsgcount){
+				if (self.count == webim.forbiddenmsgcount
+					       	&& (new Date()).getTime() - self.lastpost < 2500){
+					if (!self.forbidden){
+						self.forbidden =  true;
+						self.forbiddenmsg = false;
+						self.clearForbidden = false;
+					}
 				}
+				self.count = 0;
+				self.lastpost = (new Date()).getTime();
+				setTimeout(function(){self.lastpost = (new Date()).getTime()},2500);
+			}
+			else if(!self.forbidden)self.count++;
+			var el = target(e), val = el.value;
+			if (trim(val)) {
+				self._sendMsg(val);
+				el.value = "";
+				preventDefault(e);
 			}
 		}
-		else self._typing();
+		//else self._typing();
 
 	},
 	_onFocusInput: function(e){

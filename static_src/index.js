@@ -9,7 +9,7 @@ function imlog(ui){
 	});
 }
 (function(webim){
- 	window.hasFlashPlayer = false;
+ 	window.hasFlashPlayer = true;
 	var path = "";
 	//webim.extend(webim.setting.defaults.data,{});
 	//webim.extend(webim.setting.defaults.data,{block_list: ["1000001"]});
@@ -40,6 +40,7 @@ function imlog(ui){
 	webim.notification.defaults.url = path + "webim/api/notifications.php?platform=phpwind";
 	webim.hotpost.defaults.url = path + "webim/api/hotpost.php?platform=phpwind";
 	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});
+	webim.forbiddenmsgcount = 2;
 	var soundUrls = {
 		lib: path + "webim/static/assets/sound.swf",
 		msg: path + "webim/static/assets/sound/msg.mp3"

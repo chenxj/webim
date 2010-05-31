@@ -84,7 +84,7 @@ widget("history",{
 		}
 
 		if (logItem.forbidden)
-			markup.push('<p class="ui-icon ui-icon-warn">');
+			markup.push('<p class="ui-icon-warn ui-icon" >');
 		else
 			markup.push('<p>');
 		markup.push(msg);
@@ -97,7 +97,11 @@ widget("history",{
 		return markup.join("");
 	},
 	_renderDateBreak: function(time){
-		var self = this, last = self._lastLogItem, newDate = new Date(), lastDate = new Date(), markup = [];
+		var self = this, 
+		last = self._lastLogItem, 
+		newDate = new Date(), 
+		lastDate = new Date(), 
+		markup = [];
 		newDate.setTime(time);
 		last && lastDate.setTime(last.timestamp);
 		if(!last || newDate.getDate() != lastDate.getDate() || newDate.getMonth() != lastDate.getMonth()){

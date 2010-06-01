@@ -63,14 +63,21 @@ widget("chatlink",{
 	offline: true
 },{
 	_init: function(){
-		var self = this, element = self.element, ids = {}, options = self.options, filterId = options.filterId, anthors = {}, offline = options.offline;
+		var self = this, 
+		element = self.element, 
+		ids = {}, 
+		options = self.options, 
+		filterId = options.filterId, anthors = {}, 
+		offline = options.offline;
 		var a = document.getElementsByTagName("a"), b;
 
 		a && each(a, function(i, el){
 			var id = filterId(el.href), text = el.innerHTML;
 			if(id &&  children(el).length == 0 && text){
 				ids[id] = true;
-				b = self._temp({id: id, title: i18n('chat with',{name: text}), title2: ""});
+				b = self._temp(
+					{id: id, title: i18n('chat with',{name: text}), title2: ""}
+				);
 				el.parentNode.insertBefore(b, el.nextSibling);
 				anthors[id] ? anthors[id].push(b) :(anthors[id] = [b]);
 			}
@@ -78,7 +85,11 @@ widget("chatlink",{
 		var id = filterId(window.location.href);
 		if(id){
 			ids[id] = true;
-			var el = self._temp({id: id, title: "", title2: "<a href='javascript:void 0'>"+i18n('chat with me')+"</a>" });
+			var el = self._temp(
+					{id: id, 
+					 title: "", 
+					 title2: "<a href='javascript:void 0'>"+i18n('chat with me')+"</a>"
+					 });
 			removeClass(el, "webim-chatlink-disable");
 			b = document.createElement("li");
 			b.className = "webim-chatlink-disable";
@@ -86,11 +97,10 @@ widget("chatlink",{
 			var els = document.getElementsByTagName("*"), l = els.length;
 			for(var i = 0; i < l ; i++){
 				el = els[i], n = el.className;
-				if(n.indexOf("spacemenu_list")!= -1 || n.indexOf("line_list")!= -1)
-					{
-						el.appendChild(b);
-						break;
-					}
+				if(n.indexOf("spacemenu_list")!= -1 || n.indexOf("line_list")!= -1){
+					el.appendChild(b);
+					break;
+				}
 			}
 			anthors[id] ? anthors[id].push(b) :(anthors[id] = [b]);
 		}

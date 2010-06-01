@@ -192,7 +192,11 @@ widget("window", {
 		remove(self.element);
 	},
 	_initEvents:function(){
-		var self = this, element = self.element, $ = self.$, tab = $.tab,options = self.options;
+		var self = this, 
+			element = self.element, 
+			$ = self.$, 
+			tab = $.tab,
+			options = self.options;
 		var stop = function(e){
 			stopPropagation(e);
 			preventDefault(e);

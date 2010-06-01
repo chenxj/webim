@@ -492,14 +492,29 @@ var _countDisplay = function(element, count){
 };
 
 function mapElements(obj){
-	var elements = obj.getElementsByTagName("*"), el, id, need = {}, 
+	var el, id, need = {}, 
 	    pre = ":", preLen = pre.length;
+	var elements = obj.getElementsByTagName("*"); 
 	for(var i = elements.length - 1; i > -1; i--){
 		el = elements[i];
 		id = el.id;
 		if(id && id.indexOf(pre) == 0)need[id.substring(preLen, id.length)] = el;
 	}
+	
+	
 	return need;
+/*
+	var el, id, need = {},tex = "", 
+	    pre = ":", preLen = pre.length;
+	var elements = document.evaluate("*",obj,null,XPathResult.UNORDERED_NODE_ITERATOR_TYPE,null); 
+	while(el = elements.iterateNext()){
+		id = el.id;
+		tex += id;
+		if(id && id.indexOf(pre) == 0)need[id.substring(preLen, id.length)] = el;
+	}
+	
+	return need;
+	*/
 }
 function createElement(str){
 	var el = document.createElement("div");
@@ -585,10 +600,6 @@ function widget(name, defaults, prototype){
 	webimUI[name] = m;
 }
 
-extend(widget.prototype, {
-	_init: function(){
-	}
-});
 function app(name, events){
 	webimUI.apps[name] = events || {};
 }

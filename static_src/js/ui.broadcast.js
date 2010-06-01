@@ -85,7 +85,11 @@ widget("broadcast",{
  },
     
     _init:function(){
-        var self = this,element = self.element,options = self.options,win = self.window = options.window,info = options.info;
+        var self = this,
+		element = self.element,
+		options = self.options,
+		win = self.window = options.window,
+		info = options.info;
         var history = self.history = new webimUI.history(null,{
             user:0,
             info:options.info
@@ -103,7 +107,13 @@ widget("broadcast",{
        self._adjustContent();
     },
 	_initEvents: function(){
-		var self = this, options = self.options,isadmin = options.isadmin, $ = self.$, placeholder = i18n("input notice"), gray = "webim-gray", input = $.input;
+		var self = this, 
+			options = self.options,
+			isadmin = options.isadmin, 
+			$ = self.$, 
+			placeholder = i18n("input notice"), 
+			gray = "webim-gray", 
+			input = $.input;
 
 		self.history.bind("update", function(){
 			self._adjustContent();

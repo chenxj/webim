@@ -30,11 +30,23 @@ var methods = {
 	"new menu": function(){
 		var win = new webimUI.menu();
 	},
+	"new buddy":function(){
+		var buddy = new webimUI.buddy();
+	},
 	"addEvent": function(){
 		addEvent(test2,"click",function(){});
 		//var win = new webimUI.window();
 		//test2.appendChild(win.element);
 		//test2.removeChild(win.element);
+	},
+	"new room":function(){
+		var win = new webimUI.room();
+	},
+	"new setting":function(){
+		var win = new webimUI.setting();
+	},
+	"new broadcast":function(){
+		var win = new webimUI.broadcast();
 	}
 };
 var methods2 = {

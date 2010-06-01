@@ -59,6 +59,7 @@ widget("chat",{
 			user: options.user,
 			info: options.info
 		});
+		self.forbidden = false;
 		self.$.content.insertBefore(history.element, self.$.content.firstChild);
 		//self._initEvents();
 		if(win){
@@ -91,9 +92,9 @@ widget("chat",{
 	},
 	focus: function(){
 		//this.$.input.focus();
-    //fix firefox
-    var item = this.$.input;
-    window.setTimeout(function(){item.focus()},0);
+	        //fix firefox
+   		 var item = this.$.input;
+	   	 window.setTimeout(function(){item.focus()},0);
 	},
 	_noticeTime: null,
 	_noticeTxt:"",
@@ -186,10 +187,7 @@ widget("chat",{
 	_inputkeypress: function(e){
 		
 		var self =  this, $ = self.$;
-		if(!self.forbiddenTimer){self.forbiddenTimer = true;setInterval(function(){webim.lastpost=(new Date()).getTime();},1500);}
 		if (e.keyCode == 13){
-			if (self.ccc == undefined)self.ccc=0;
-				else self.ccc++;
 			if(e.ctrlKey){
 				self.insert("\n", true);
 				return true;
@@ -205,7 +203,11 @@ widget("chat",{
 				}
 				self.count = 0;
 				self.lastpost = (new Date()).getTime();
-				setTimeout(function(){self.lastpost = (new Date()).getTime()},2500);
+				setTimeout(
+					function(){
+						self.lastpost = (new Date()).getTime()
+						},2500
+				);
 			}
 			else if(!self.forbidden)self.count++;
 			var el = target(e), val = el.value;
@@ -281,7 +283,11 @@ widget("chat",{
 		}
 		if(!value) value = "";
 		if(input.setSelectionRange){
-			var val = input.value, rangeStart = input.selectionStart, rangeEnd = input.selectionEnd, tempStr1 = val.substring(0,rangeStart), tempStr2 = val.substring(rangeEnd), len = value.length;  
+			var val = input.value, 
+			    rangeStart = input.selectionStart, 
+			    rangeEnd = input.selectionEnd, 
+			    tempStr1 = val.substring(0,rangeStart), 
+			    tempStr2 = val.substring(rangeEnd), len = value.length;  
 			input.value = tempStr1+value+tempStr2;  
 			input.setSelectionRange(rangeStart+len,rangeStart+len);
 		}else if(document.selection){
@@ -439,10 +445,10 @@ plugin.add("chat","member",{
 		addEvent(shorter,"click",function(e){
 			preventDefault(e);
 			var dm = document.getElementById('webim-memberlist').parentNode;
-			if (hasClass(dm,'ui-display-n')){
-				removeClass(dm,'ui-display-n');
+			if (isShow(dm)){
+				hide(dm);
 			}else{
-				addClass(dm,'ui-display-n');
+				show(dm);
 			}
 		});
 	}

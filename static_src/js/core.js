@@ -119,6 +119,9 @@ function toggleClass(obj, name, is){
 function show(obj){
 	obj && obj.style && (obj.style.display="block")
 }
+function isShow(obj){
+	return obj && obj.style && obj.style != "none";
+}
 function hide(obj){
 	obj && obj.style && (obj.style.display="none")
 }
@@ -195,7 +198,7 @@ function ready(fn){
 
 var isReady = false,isIfmReady = false, readyList = [];
 function triggerReady() {
-	if (crossdomain && !isIfmReady){
+	if (window.crossdomain != undefined && crossdomain && !isIfmReady){
 		var ibridgedoc;
 		if (document.getElementById("webim_bridge"))
 			ibridgedoc = document.getElementById("webim_bridge").contentWindow.document;
@@ -204,7 +207,8 @@ function triggerReady() {
 			triggerReady();
 		}else{
 			if (ibridgedoc.addEventListener){
-				ibridgedoc.addEventListener("DOMContentLoaded",function(){
+				ibridgedoc.addEventListener("DOMContentLoaded",
+					function(){
 						ibridgedoc.removeEventListener("DOMContentLoaded",arguments.callee,false);
 						triggerReady();
 				},false);
@@ -321,3 +325,4 @@ function bindReady() {
 }
 webim.hide = hide;
 webim.show = show;
+webim.isShow = isShow;

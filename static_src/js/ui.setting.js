@@ -25,7 +25,7 @@ widget("setting",{
         _init: function(){
     		 var $ = this.$;
      		 hide($.offline);
-      		show($.online);
+      		 show($.online);
    		//this._initEvents();
         },
 	template: function(){
@@ -42,13 +42,13 @@ widget("setting",{
 		data && each(data, function(key, val){
 			$[key] && self._check_event($[key]);
 		});
-    addEvent($.offline,"click",function(e){
-      preventDefault(e);
-      self.trigger("offline");
+    		addEvent($.offline,"click",function(e){
+      		preventDefault(e);
+      		self.trigger("offline");
     });
     addEvent($.online,"click",function(e){
-      preventDefault(e);
-      self.trigger("online");
+      		preventDefault(e);
+      		self.trigger("online");
     });
 	},
   offline:function(){

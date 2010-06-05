@@ -29,7 +29,7 @@ app("room",{
 		    u = im.data.user, 
 		    layout = ui.layout;
 		var roomUI = ui.room = new webim.ui.room(null).bind("select",function(info){
-			ui.addChat(info.id, {type: "room"});
+			ui.addChat(info.id, {type: "room"},{dragable:true});
 			ui.layout.focusChat(info.id);
 		});
 		layout.addApp(roomUI, {

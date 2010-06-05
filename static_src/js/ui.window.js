@@ -76,7 +76,7 @@ widget("window", {
 		return this.$.content.appendChild(obj);
 	},
 	_init: function(element, options){
-		var self = this, options = self.options, $ = self.$;
+		var self = this, options = extend(self.options,options), $ = self.$;
 		element = self.element;
 		element.window = self;
 		//$.title = $.headerTitle.add($.tabTitle);
@@ -100,6 +100,7 @@ widget("window", {
 		}
 		options.count && self.notifyUser("information", options.count);
 		options.className && addClass(self,options.className);
+		self.dragable = options.dragable;
 		//self._initEvents();
 		//self._fitUI();
 		//setTimeout(function(){self.trigger("ready");},0);
@@ -138,7 +139,8 @@ widget("window", {
 	},
 	_changeState:function(state){
 		var el = this.element, className = state == "restore" ? "normal" : state;
-		replaceClass(el, "webim-window-normal webim-window-maximize webim-window-minimize", "webim-window-" + className);
+		replaceClass(el, 
+			"webim-window-normal webim-window-maximize webim-window-minimize", "webim-window-" + className);
 		this.trigger("displayStateChange", [state]);
 	},
 	active: function(){
@@ -192,7 +194,10 @@ widget("window", {
 		remove(self.element);
 	},
 	_initEvents:function(){
-		var self = this, element = self.element, $ = self.$, tab = $.tab,options = self.options;
+		var self = this, element = self.element,
+	       	$ = self.$, tab = $.tab,
+		options = self.options;
+
 		var stop = function(e){
 			stopPropagation(e);
 			preventDefault(e);
@@ -201,7 +206,14 @@ widget("window", {
 		var minimize = function(e){
 			self.minimize();
 		};
-		addEvent($.header, "click", minimize);
+		if (self.dragable){
+			addEvent($.header, "click", function(e){
+				if(isShow($.content))
+					hide($.content);		
+				else
+					show($.content);
+			});
+		}
 		addEvent(tab, "click", function(e){
 			if(self.isMinimize()){
 				self.restore();
@@ -216,10 +228,126 @@ widget("window", {
 		});
 		addEvent(tab,"mouseout",function(){
 			removeClass(this, "ui-state-hover");
-			this.className.indexOf("ui-state-") == -1 && addClass(this, "ui-state-default");
+			this.className.indexOf("ui-state-") == -1 && 
+				addClass(this, "ui-state-default");
 		});
 		addEvent(tab,"mousedown",stop);
-		disableSelection(tab);
+		
+var Drag = {
+
+	obj : null,
+	init : function(o,or)
+	{
+		o.onmousedown	= Drag.start;
+
+		o.hmode			= true ;
+		o.vmode			= true ;
+
+		o.root = or ;
+
+		if (isNaN(parseInt(o.root.style.left  ))) o.root.style.left   =  "-21px";
+		if (isNaN(parseInt(o.root.style.top   ))) o.root.style.top    = "-218px";
+
+	},
+
+	start : function(e)
+	{
+		var o = Drag.obj = this;
+		e = Drag.fixE(e);
+
+		o.lastMouseX	= e.clientX;
+		o.lastMouseY	= e.clientY;
+
+		document.onmousemove	= Drag.drag;
+		document.onmouseup		= Drag.end;
+
+		return false;
+	},
+
+	drag : function(e)
+	{
+		e = Drag.fixE(e);
+		var o = Drag.obj;
+
+		var ey	= e.clientY;
+		var ex	= e.clientX;
+		var y = parseInt(o.root.style.top );
+		var x = parseInt( o.root.style.left  );
+		var nx, ny;
+		nx = x + ex - o.lastMouseX ;
+		ny = y + ey - o.lastMouseY;
+
+		o.root.style[ "left"] = nx + "px";
+		o.root.style["top"] = ny + "px";
+		o.lastMouseX	= ex;
+		o.lastMouseY	= ey;
+
+		return false;
+	},
+
+	end : function()
+	{
+		document.onmousemove = null;
+		document.onmouseup   = null;
+	},
+
+	fixE : function(e)
+	{
+		if (typeof e == 'undefined') e = window.event;
+		if (typeof e.layerX == 'undefined') e.layerX = e.offsetX;
+		if (typeof e.layerY == 'undefined') e.layerY = e.offsetY;
+		return e;
+	}
+};
+var dragobj;
+if (self.dragable){
+	Drag.init($.header,$.window);
+	$.header.style.cursor = "move";
+	/*
+	var o = $.header;
+	o.root = $.window;
+	o.root.style.position = "absolute";
+	o.style.cursor = "move";
+	o.root.style.display = "block";
+	o.root.style.left = "-21px";
+	o.root.style.top =  "-218px";
+	*/
+}
+
+
+/*
+		self.dragable && addEvent($.header,"mousedown",function(e){
+			stop(e);
+			var o = dragobj = this;
+			
+			o.lastMouseX = e.clientX;
+			o.lastMouseY = e.clientY;
+
+			document.onmouseover = function(e){
+				stop(e);
+				var o = dragobj;//$.header;
+				var ex = e.clientX;
+				var ey = e.clientY;
+				var x = parseInt(o.root.style.left);
+				var y = parseInt(o.root.style.top);
+			
+				var nx = x + (ex - o.lastMouseX) ;
+				var ny = y + (ey - o.lastMouseY) ;
+
+				o.root.style.left = nx + "px";
+				o.root.style.top = ny + "px";
+				o.lastMouseX = ex;
+				o.lastMouseY = ey;
+				return false;
+			};
+			document.onmouseup = function(){
+				document.onmouseover = null;
+				document.onmouseup = null;
+			};
+			return false;
+		});
+*/		
+		//disableSelection(tab);
 
 		each(["minimize", "maximize", "close", "tabClose"], function(n,v){
 			addEvent($[v], "click", function(e){

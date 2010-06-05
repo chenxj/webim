@@ -116,6 +116,9 @@ function toggleClass(obj, name, is){
 	else
 		hasClass(obj, name) ? removeClass(obj,name) : addClass(obj, name);
 }
+function isShow(obj){
+	return obj && obj.style && obj.style.display !== "none";
+}
 function show(obj){
 	obj && obj.style && (obj.style.display="block")
 }

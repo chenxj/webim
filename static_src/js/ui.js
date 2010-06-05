@@ -429,7 +429,10 @@ extend(webimUI.prototype, objectExtend, {
 		if (isroom){
 			chat.bind("select", function(info){
 				buddy.online(info.id, 1);//online
-				self.addChat(info.id, {type: "buddy"}, null, info.name);
+				self.addChat(info.id, 
+					{type: "buddy",className:"webim-chat"}, 
+					null, info.name
+				);
 				layout.focusChat(info.id);
 			}).bind("msgforbidden",function(d){
 			
@@ -480,7 +483,7 @@ var _countDisplay = function(element, count){
 		return parseInt(element.innerHTML);
 	}
 	else if (count){
-		count = (typeof count == "number") ? count : (parseInt(element.innerHTML) + parseInt(count));
+		count = (typeof count == "number")?count:(parseInt(element.innerHTML) + parseInt(count));
 		element.innerHTML = count.toString();
 		show(element);
 	}
@@ -575,7 +578,7 @@ function widget(name, defaults, prototype){
 			self.options.className && addClass(self.element, self.options.className);
 			self.$ = mapElements(self.element);
 		}
-		isFunction(self._init) && self._init();
+		isFunction(self._init) && self._init(null,options);
 		//isFunction(self._initEvents) && setTimeout(function(){self._initEvents()}, 0);
 		isFunction(self._initEvents) && self._initEvents();
 	}

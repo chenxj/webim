@@ -59,6 +59,9 @@ widget("chat",{
 			user: options.user,
 			info: options.info
 		});
+		self.forbidden = false;
+		self.forbiddenmsg = false;
+		self.lastpost = 0;//(new Date()).getTime();
 		self.$.content.insertBefore(history.element, self.$.content.firstChild);
 		//self._initEvents();
 		if(win){
@@ -152,6 +155,9 @@ widget("chat",{
 	},
 	_sendMsg: function(val){
 		var self = this, options = self.options, info = options.info;
+		if (self.forbidden && !self.forbiddenmsg)
+			self.forbiddenmsg = true;
+		else if (self.forbidden)return true;
 		var msg = {
 			type: options.msgType,
 			to: info.id,
@@ -163,51 +169,30 @@ widget("chat",{
 			timestamp: (new Date()).getTime()
 		};
 		plugin.call(self, "send", [null, self.ui({msg: msg})]);
-		if (self.forbidden){
-			if (!self.clearForbidden){
-				self.clearForbidden=true;
-				setTimeout(function(){
-					self.forbidden  = false;
-					self.count = 0;
-					self.lastpost = (new Date()).getTime();
-				},3000);
-				
-			}
-			if (!self.forbiddenmsg) {
-				self.forbiddenmsg = true;
-				self.trigger('sendMsg', msg);
-			}
-			return; 
-			
-		}
+		if (!self.forbidden)self.lastpost = (new Date()).getTime();
 		self.trigger('sendMsg',msg);
 		//self.sendStatus("");
 	},
 	_inputkeypress: function(e){
 		
 		var self =  this, $ = self.$;
-		if(!self.forbiddenTimer){self.forbiddenTimer = true;setInterval(function(){webim.lastpost=(new Date()).getTime();},1500);}
 		if (e.keyCode == 13){
-			if (self.ccc == undefined)self.ccc=0;
-				else self.ccc++;
 			if(e.ctrlKey){
 				self.insert("\n", true);
 				return true;
 			}
-			if (self.count == undefined || self.count == webim.forbiddenmsgcount){
-				if (self.count == webim.forbiddenmsgcount
-					       	&& (new Date()).getTime() - self.lastpost < 2500){
-					if (!self.forbidden){
-						self.forbidden =  true;
-						self.forbiddenmsg = false;
-						self.clearForbidden = false;
-					}
+			if ((new Date()).getTime() - self.lastpost < 300){
+				if (!self.forbidden){
+					self.forbidden =  true;
+					self.forbiddenmsg = false;
 				}
-				self.count = 0;
-				self.lastpost = (new Date()).getTime();
-				setTimeout(function(){self.lastpost = (new Date()).getTime()},2500);
+				setTimeout(function(){
+					self.forbiddenmsg = true;
+					self.lastpost =	(new Date()).getTime();
+					self.forbidden = false;},
+				2500);
 			}
-			else if(!self.forbidden)self.count++;
+			
 			var el = target(e), val = el.value;
 			if (trim(val)) {
 				self._sendMsg(val);
@@ -222,12 +207,14 @@ widget("chat",{
 		var self = this, el = target(e);
 
 		//var val = el.setSelectionRange ? el.value.substring(el.selectionStart, el.selectionEnd) : (window.getSelection ? window.getSelection().toString() : (document.selection ? document.selection.createRange().text : ""));
-		var val = window.getSelection ? window.getSelection().toString() : (document.selection ? document.selection.createRange().text : "");
+		var val = window.getSelection ? 
+			window.getSelection().toString() :
+		       	(document.selection ? document.selection.createRange().text : "");
 		if(!val){
       //self.$.input.focus();
       //fix firefox
-      window.setTimeout(function(){self.$.input.focus();},0);
-    }
+      		window.setTimeout(function(){self.$.input.focus();},0);
+    	}
 	},
 	_initEvents: function(){
 		var self = this, options = self.options, $ = self.$, placeholder = i18n("input notice"), gray = "webim-gray", input = $.input;
@@ -356,7 +343,9 @@ plugin.add("chat","emot",{
 			chat.focus();
 			chat.insert(alt, true);
 		});
-		var trigger = createElement(tpl('<a href="#chat-emot" title="<%=emot%>"><em class="webim-icon webim-icon-emot"></em></a>'));
+		var trigger = 
+		createElement(tpl(
+		'<a href="#chat-emot" title="<%=emot%>"><em class="webim-icon webim-icon-emot"></em></a>'));
 		addEvent(trigger,"click",function(e){
 			preventDefault(e);
 			emot.toggle();

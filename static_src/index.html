@@ -10,7 +10,7 @@
 		<script type="text/javascript" src="im/src/objectExtend.js" ></script>
 		<script type="text/javascript" src="im/src/ajax.js" ></script>
 		<script type="text/javascript" src="im/src/json.js" ></script>
-		<script type="text/javascript" src="im/src/comet.js" ></script>
+		<script type="text/javascript" src="im/src/socket.js" ></script>
 		<script type="text/javascript" src="im/src/socket.js" ></script>
 		<script type="text/javascript" src="im/src/cookie.js" ></script>
 		<script type="text/javascript" src="im/src/log.js" ></script>
@@ -124,7 +124,9 @@
 			</li>
 		</ul>
 		<div id="imsocket"></div>
+		<iframe src="http://b.nextim.cn/pw/u/webim/static_src/iframe.html"></iframe>
 		<script type="text/javascript">
+			document.domain = "nextim.cn";
 			var fv = {};
 			fv.host = "192.168.66.128";
 			fv.port = "7050";

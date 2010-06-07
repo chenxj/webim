@@ -47,7 +47,7 @@ function imlog(ui){
 	};
 
 	var body , imUI, im, layout;
-	window.crossdomain = false;
+	window.crossdomain = true;
 	function create(){
 		body = document.body;
 		var admins = ["25","26","1","6"];

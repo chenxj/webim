@@ -117,7 +117,7 @@ UC_UI_MIN_ALL_JS = ${DIST_DIR}/webim_uc.all.min.js
 
 
 
-all: submake dist copy dzim ucim i18n min 
+all: submake dist copy dzim ucim i18n min makebridge 
 	@@echo "webim build complete."
 submake:
 	cd im && $(MAKE)
@@ -172,8 +172,6 @@ min:
 
 makebridge:
 	@@echo "make bridge"
-	python ${BRIDGE} ${UI_MIN_ALL_JS} > ${WEBIM_BRIDGE_MIN}
-	python ${BRIDGE} ${UC_UI_MIN_ALL_JS} > ${WEBIM_UC_BRIDGE_MIN}
 	python ${BRIDGE} ${DZ_UI_MIN_ALL_JS} > ${WEBIM_DZ_BRIDGE_MIN}
 	@@cp ${WEBIM_BRIDGE} ${DIST_DIR}
 i18n:

@@ -7,7 +7,7 @@ STATIC_SRC_FILES = ${STATIC_SRC_DIR}/images \
 		   ${STATIC_SRC_DIR}/themes \
 		   ${STATIC_SRC_DIR}/i18n 
 
-all: submake static debug
+all: submake static debug bridge
 	@@echo "complete."
 
 submake:
@@ -47,6 +47,5 @@ clean:
 bridge:
 	@@cp ${STATIC_SRC_DIR}/bridge.js ${STATIC_DIR}/webim_bridge.js
 	@@cp ${STATIC_SRC_DIR}/bridge_dz.min.js ${STATIC_DIR}/webim_bridge_dz.min.js
-	@@cp ${STATIC_SRC_DIR}/bridge_uc.min.js ${STATIC_DIR}/webim_bridge_uc.min.js
 
 

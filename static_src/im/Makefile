@@ -13,10 +13,11 @@ BRIDGE_FILES = ${SRC_DIR}/core.js\
 BRIDGE_FILES_ALL = ${DIST_DIR}/bridge.js\
 
 
-BASE_FILES = ${SRC_DIR}/objectExtend.js\
-	${SRC_DIR}/json.js\
-	${SRC_DIR}/core.js\
+BASE_FILES =${SRC_DIR}/core.js\
 	${SRC_DIR}/ajax.js\
+	${SRC_DIR}/inter.js\
+	${SRC_DIR}/objectExtend.js\
+	${SRC_DIR}/json.js\
 	${SRC_DIR}/comet.js\
 	${SRC_DIR}/socket.js\
 	${SRC_DIR}/cookie.js\
@@ -63,7 +64,7 @@ UC_WEBIM_MIN_JS = ${DIST_DIR}/webim_uc.min.js
 DZ_WEBIM_MIN_JS = ${DIST_DIR}/webim_dz.min.js
 
 
-all: dist ucim dzim  min 
+all: dist ucim dzim  min bridge
 	@@echo "webim build complete."
 
 dist:

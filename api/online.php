@@ -73,7 +73,7 @@ $clientnum = $pageData->clientnum;
 $rooms_num = $pageData->roominfo;
 if(is_object($rooms_num)){
 	foreach($rooms_num as $key => $value){
-		$rooms[$key]['count'] = $value;
+		$rooms[$key]['count'] = "2";// + $value + "'";
 	}
 }
 $output = array();

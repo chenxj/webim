@@ -38,7 +38,7 @@ $setting = json_encode(setting());
 
 //custom
 (function(webim){
-    var path = "";
+    var path = "http://b.nextim.cn/pw/u/";
     var platform = "<?php echo $platform; ?>";
     fv = {};
     fv.host = "<?php $_IMC['imsvr']; ?>";
@@ -104,9 +104,9 @@ $setting = json_encode(setting());
 		return false;
 	}
 	var body , imUI, im, layout, chatlink;
-	window.crossdomain = false;
+	window.crossdomain = true;
 	window.hasFlashPlayer = hasReqestedVersion;
-	//document.domain = "nextim.cn";
+	document.domain = "nextim.cn";
 	function create(){
 		body = document.body;
 		imUI = new webim.ui(null,{menu: menu});
@@ -116,7 +116,7 @@ $setting = json_encode(setting());
 		var userid = "<?php echo $_SGLOBAL['supe_uid']?>";
 		im.admins = adminids?adminids.split(","):"";
 		im.isadmin = isAdmin(im.admins,userid);
-		im.crossdomain = false;
+		im.crossdomain = true;
 		im.userid = userid;
 		im.broadcastID = 0;
         	im.isStrangerOn = "on";

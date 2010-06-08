@@ -11,6 +11,7 @@ function imlog(ui){
 (function(webim){
  	window.hasFlashPlayer = true;
 	var path = "";
+	//"http://b.nextim.cn/";
 	//webim.extend(webim.setting.defaults.data,{});
 	//webim.extend(webim.setting.defaults.data,{block_list: ["1000001"]});
 	
@@ -47,7 +48,7 @@ function imlog(ui){
 	};
 
 	var body , imUI, im, layout;
-	window.crossdomain = true;
+	window.crossdomain = false;
 	function create(){
 		body = document.body;
 		var admins = ["25","26","1","6"];

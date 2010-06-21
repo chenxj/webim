@@ -29,7 +29,7 @@ function my_info(){
 	if(!$_SESSION['uid']){
 		$space['uid'] =  _randint();
 		$space['nick'] = "guest" . $space['uid'];
-	//	$_SESSION['uid'] = $space['uid'];
+		$_SESSION['uid'] = $space['uid'];
 	} else {
 		$space['uid'] = $_SESSION['uid'];
 		$space['nick'] = "guest" . $space['uid'];

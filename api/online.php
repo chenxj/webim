@@ -1,5 +1,6 @@
 <?php
 error_reporting(0);
+session_start();
 $configRoot = '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR ;
 include_once($configRoot . 'http_client.php');
 include_once($configRoot . 'common.php');
@@ -20,11 +21,11 @@ $block_list = array();
 $room_ids = array();
 $rooms = find_room();
 foreach($rooms as $room_id => $value){
-	if(in_array($room_id, $block_list)){
-		$rooms[$room_id]['blocked'] = true;
-	} else {
-        $rooms[$room_id]['pic_url'] = "webim/static/images/group_chat_head.png";
-        $rooms[$room_id]['name'] = "Forever StarCraft";
+    if(in_array($room_id, $block_list)){
+	$rooms[$room_id]['blocked'] = true;
+    } else {
+        //$rooms[$room_id]['pic_url'] = "webim/static/images/group_chat_head.png";
+        //$rooms[$room_id]['name'] = "Forever StarCraft";
     }
     $room_ids[] = $room_id;
 }
@@ -46,6 +47,22 @@ $client->post('/presences/online', $param);
 $pageContents = $client->getContent();
 $pageData = json_decode($pageContents);
 
+
+$rooms_num = $pageData->roominfo;
+
+$rooms = array();
+if(is_object($rooms_num)){
+	foreach($rooms_num as $key => $value){
+		$rooms[$key]['count'] = $value;
+        $rooms[$key]['pic_url'] = "webim/static/images/group_chat_head.png";
+        $rooms[$key]['name'] = "Forever StarCraft";
+	$rooms[$key]['id'] = $key;
+	$rooms[$key]['status'] = "";
+	$rooms[$key]['status_time'] = "";
+	}
+}
+
+
 //var_dump($pageData);
 if($client->status !="200"||empty($pageData->ticket)){
         $ticket ="";
@@ -60,12 +77,6 @@ if(empty($ticket)){
 $buddy_online_ids = ids_array($pageData->buddies);//online ids
 //$_SESSION['online_ids'] = $buddy_online_ids;
 $clientnum = $pageData->clientnum;
-$rooms_num = $pageData->roominfo;
-if(is_object($rooms_num)){
-	foreach($rooms_num as $key => $value){
-		$rooms[$key]['count'] = $value;
-	}
-}
 $output = array();
 $output['buddy_online_ids'] = join(",", $buddy_online_ids);
 $output['clientnum'] = $clientnum;

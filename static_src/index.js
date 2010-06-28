@@ -42,6 +42,8 @@ function imlog(ui){
 	webim.hotpost.defaults.url = path + "webim/api/hotpost.php?platform=phpwind";
 	webim.ui.emot.init({"dir": path + "webim/static/images/emot/default"});
 	webim.forbiddenmsgcount = 2;
+	webim.cometpoll = 8000;
+	webim.socketpoll = 7000;
 	var soundUrls = {
 		lib: path + "webim/static/assets/sound.swf",
 		msg: path + "webim/static/assets/sound/msg.mp3"

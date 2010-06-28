@@ -51,7 +51,7 @@ extend(webim.prototype, objectExtend,{
 		self.history = new webim.history();
 		//self.notification = new webim.notification();
                 self.hotpost= new webim.hotpost();
-		self.connection = window.hasFlashPlayer?new socket(null,{}):new comet(null,{jsonp:true});
+		self.connection = window.hasFlashPlayer?new socket(null,{port:webim.socketport}):new comet(null,{port:webim.cometpoll,jsonp:true});
 		self._initEvents();
 		//self.online();
 	},

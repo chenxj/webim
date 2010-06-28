@@ -103,7 +103,6 @@ function GetSwfVer(){
 				}
 			}
 			var flashVer = versionMajor + "." + versionMinor + "." + versionRevision;
-			alert("flashVer="+flashVer);
 		}
 	}
 	// MSN/WebTV 2.6 supports Flash 4

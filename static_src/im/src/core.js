@@ -114,6 +114,7 @@ function extend() {
 }
 
 function each( object, callback, args ) {
+	if (object == undefined)return;
 	var name, i = 0,
 	    length = object.length,
 	    isObj = length === undefined || isFunction(object);

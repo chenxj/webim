@@ -88,6 +88,7 @@ model("history",{
 			for(var i = 0; i < ids.length; i++){
 				self.data[ids[i]] = [];
 			}
+			/*
 			ajax({
 				url: options.urls.load,
 				cache: false,
@@ -96,6 +97,8 @@ model("history",{
 				context: self,
 				success: self.init
 			});
+			*/
+			self.init([]);
 		}
 	}
 

@@ -71,6 +71,8 @@ $setting = json_encode(setting());
     	};
 	webim.buddy.defaults.url = path + "webim/api/user_info.php?platform=" + platform;
 	//webim.notification.defaults.url = path + "webim/api/notifications.php?platform=" + platform;
+	webim.cometpoll = 8000;
+	webim.socketport = 7000;
     
 	if ( platform === "discuz" ){
 		webim.hotpost.defaults.url = path + "webim/api/hotpost.php?platform=" + platform;
